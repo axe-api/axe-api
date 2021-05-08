@@ -9,6 +9,7 @@ import BaseController from "./Controller/BaseController.js";
 import { getDatabaseInstance } from "./Helpers/DatabaseHelpers.js";
 import Config from "./Helpers/ConfigHelpers.js";
 import IoC from "./Core/IoC.js";
+import Logger from "./Core/Logger.js";
 
 class Server {
   constructor(appFolder) {
@@ -32,6 +33,10 @@ class Server {
     });
     IoC.singleton("App", async () => {
       return express();
+    });
+    IoC.singleton("Logger", async () => {
+      const Config = await IoC.use("Config");
+      return new Logger(Config.Application.logLevel);
     });
   }
 

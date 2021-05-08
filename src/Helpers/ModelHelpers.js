@@ -51,6 +51,15 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   const Controller = await IoC.use("Controller");
   const Config = await IoC.use("Config");
   const Database = await IoC.use("Database");
+  const Logger = await IoC.use("Logger");
+
+  const pack = {
+    model,
+    parentModel,
+    Config,
+    Database,
+    Logger,
+  };
 
   const resource = pluralize
     .plural(
@@ -65,22 +74,16 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   if (actions.includes("GET")) {
     App.get(`/api/${parentUrl}${resource}`, (req, res) => {
       Controller.paginate({
+        ...pack,
         request: req,
         response: res,
-        model,
-        parentModel,
-        Config,
-        Database,
       });
     });
     App.get(`/api/${parentUrl}${resource}/:id`, (req, res) => {
       Controller.show({
+        ...pack,
         request: req,
         response: res,
-        model,
-        parentModel,
-        Config,
-        Database,
       });
     });
   }
@@ -88,12 +91,9 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   if (actions.includes("POST")) {
     App.post(`/api/${parentUrl}${resource}`, (req, res) => {
       Controller.store({
+        ...pack,
         request: req,
         response: res,
-        model,
-        parentModel,
-        Config,
-        Database,
       });
     });
   }
@@ -101,12 +101,9 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   if (actions.includes("PUT")) {
     App.put(`/api/${parentUrl}${resource}/:id`, (req, response) => {
       Controller.update({
+        ...pack,
         request: req,
         response: res,
-        model,
-        parentModel,
-        Config,
-        Database,
       });
     });
   }
@@ -114,12 +111,9 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   if (actions.includes("DELETE")) {
     App.delete(`/api/${parentUrl}${resource}/:id`, (req, response) => {
       Controller.delete({
+        ...pack,
         request: req,
         response: res,
-        model,
-        parentModel,
-        Config,
-        Database,
       });
     });
   }
