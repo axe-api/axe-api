@@ -1,6 +1,7 @@
+import pluralize from "pluralize";
 class Model {
   get table() {
-    return null;
+    return pluralize(this.constructor.name.toLowerCase());
   }
 
   get fillable() {
