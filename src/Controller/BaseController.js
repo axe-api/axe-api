@@ -1,6 +1,13 @@
 class BaseController {
-  async paginate({ request, response, model, parentModel, Config, Database }) {
-    console.log(Config);
+  async paginate({
+    request,
+    response,
+    model,
+    parentModel,
+    Config,
+    Database,
+    Logger,
+  }) {
     const result = await Database.select(["id", "name", "email"])
       .from(model.instance.table)
       .where("id", ">", 100)
