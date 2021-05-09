@@ -1,15 +1,16 @@
 import dotenv from "dotenv";
 import express from "express";
+import knex from "knex";
 import {
   getModels,
   createModelTree,
   setRoutes,
 } from "./Helpers/ModelHelpers.js";
 import BaseController from "./Controller/BaseController.js";
-import { getDatabaseInstance } from "./Helpers/DatabaseHelpers.js";
-import Config from "./Helpers/ConfigHelpers.js";
+import Config from "./Core/Config.js";
 import IoC from "./Core/IoC.js";
 import Logger from "./Core/Logger.js";
+import bodyParser from "body-parser";
 
 class Server {
   constructor(appFolder) {
@@ -26,7 +27,7 @@ class Server {
     IoC.singleton("Config", () => new Config());
     IoC.singleton("Database", async () => {
       const Config = await IoC.use("Config");
-      return getDatabaseInstance(Config.Database);
+      return knex(Config.Database);
     });
     IoC.singleton("Controller", async () => {
       return new BaseController();
@@ -48,6 +49,9 @@ class Server {
 
   async _loadExpress() {
     const App = await IoC.use("App");
+    App.use(bodyParser.json());
+    App.use(bodyParser.urlencoded({ extended: true }));
+
     this.instances = await getModels(this.appFolder);
     await setRoutes(createModelTree(this.instances));
 
