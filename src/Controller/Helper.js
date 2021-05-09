@@ -1,7 +1,7 @@
 export const getFormData = (request, fillable) => {
   let fields = fillable;
   if (!Array.isArray(fillable)) {
-    fields = fillable[request.method];
+    fields = fillable[request.method] ? fillable[request.method] : [];
   }
 
   const filtered = {};
