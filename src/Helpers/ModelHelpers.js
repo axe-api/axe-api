@@ -4,6 +4,21 @@ import url from "url";
 import pluralize from "pluralize";
 import IoC from "./../Core/IoC.js";
 
+const ACTION_FUNCTIONS = [
+  "onBeforeCreate",
+  "onBeforeUpdateQuery",
+  "onBeforeUpdate",
+  "onBeforeDelete",
+  "onBeforePaginate",
+  "onBeforeShow",
+  "onAfterCreate",
+  "onAfterUpdateQuery",
+  "onAfterUpdate",
+  "onAfterDelete",
+  "onAfterPaginate",
+  "onAfterShow",
+];
+
 const _getChildrens = (model, map) => {
   const relationNames = model.instance.relations
     .filter((item) => item.type === "HasMany")
@@ -28,6 +43,26 @@ export const createModelTree = (map) => {
   }
 
   return tree;
+};
+
+const toPath = (path) => {
+  return url.pathToFileURL(path).href;
+};
+
+export const setActions = async (directory, models) => {
+  directory = path.join(directory, "Actions");
+  for (const model of models) {
+    model.actions = {};
+    const actionFileName = path.join(directory, `${model.name}Actions.js`);
+    if (fs.existsSync(actionFileName)) {
+      const Action = await import(toPath(actionFileName));
+      for (const functionName of ACTION_FUNCTIONS) {
+        if (Action[functionName]) {
+          model.actions[functionName] = Action[functionName];
+        }
+      }
+    }
+  }
 };
 
 export const getModels = async (directory) => {
