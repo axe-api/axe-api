@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import knex from "knex";
+import { attachPaginate } from "knex-paginate";
 import {
   getModels,
   setHooks,
@@ -9,6 +10,7 @@ import {
 } from "./Helpers/ModelHelpers.js";
 import BaseController from "./Controller/BaseController.js";
 import Config from "./Core/Config.js";
+import QueryParser from "./Core/QueryParser.js";
 import IoC from "./Core/IoC.js";
 import Logger from "./Core/Logger.js";
 import bodyParser from "body-parser";
@@ -28,7 +30,9 @@ class Server {
     IoC.singleton("Config", () => new Config());
     IoC.singleton("Database", async () => {
       const Config = await IoC.use("Config");
-      return knex(Config.Database);
+      const database = knex(Config.Database);
+      attachPaginate();
+      return database;
     });
     IoC.singleton("Controller", async () => {
       return new BaseController();
@@ -39,6 +43,9 @@ class Server {
     IoC.singleton("Logger", async () => {
       const Config = await IoC.use("Config");
       return new Logger(Config.Application.logLevel);
+    });
+    IoC.singleton("QueryParser", async () => {
+      return new QueryParser();
     });
   }
 

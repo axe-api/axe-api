@@ -1,4 +1,4 @@
-import { getFormData, getFormValidation } from "./Helper";
+import { getFormData, getFormValidation, callHooks } from "./Helper";
 
 describe("getFormData", () => {
   test("should be able get form data from an array definition", async () => {
@@ -83,5 +83,32 @@ describe("getFormValidation", () => {
     };
     const result = getFormValidation(request, validations);
     expect(result).toBe(null);
+  });
+});
+
+describe("callHooks", () => {
+  test("should be able call hooks if there is any", async () => {
+    const model = {
+      actions: {
+        onBeforeCreate: jest.fn(),
+      },
+      events: {
+        onBeforeCreate: jest.fn(),
+      },
+    };
+    await callHooks(model, "onBeforeCreate", { id: 13 });
+    expect(model.actions.onBeforeCreate.mock.calls.length).toBe(1);
+    expect(model.events.onBeforeCreate.mock.calls.length).toBe(1);
+
+    expect(model.actions.onBeforeCreate.mock.calls[0][0].id).toBe(13);
+    expect(model.events.onBeforeCreate.mock.calls[0][0].id).toBe(13);
+  });
+
+  test("should not be able call hooks if there is not any hook", async () => {
+    const model = {
+      actions: {},
+      events: {},
+    };
+    await callHooks(model, "onBeforeCreate", { id: 13 });
   });
 });

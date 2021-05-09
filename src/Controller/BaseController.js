@@ -1,21 +1,55 @@
-import { getFormData, getFormValidation } from "./Helper.js";
+import { getFormData, getFormValidation, callHooks } from "./Helper.js";
 import Validator from "validatorjs";
+import { HOOK_FUNCTIONS } from "./../Constants.js";
 
 class BaseController {
-  async paginate({
-    request,
-    response,
-    model,
-    parentModel,
-    Config,
-    Database,
-    Logger,
-  }) {
-    const result = await Database.select("*")
-      .from(model.instance.table)
-      .limit(5);
+  async paginate(pack) {
+    const { request, response, model, Database, QueryParser } = pack;
 
-    response.json(result);
+    // We should parse URL query string to use as condition in Lucid query
+    const conditions = QueryParser.get(request.query);
+
+    // Creating a new database query
+    const query = Database.from(model.instance.table);
+
+    // Users should be able to select some fields to show.
+    QueryParser.applyFields(query, conditions.fields);
+
+    // this.repositoryHelper.addParentIdCondition(
+    //   query,
+    //   params,
+    //   request.adonisx.parent_column
+    // );
+
+    // Users should be able to filter records
+    QueryParser.applyWheres(query, conditions.q);
+
+    // // Users should be able to add relationships to the query
+    // this.queryParser.applyRelations(query, conditions.with);
+
+    await callHooks(model, HOOK_FUNCTIONS.onBeforePaginate, {
+      ...pack,
+      conditions,
+      query,
+    });
+
+    // User should be able to select sorting fields and types
+    QueryParser.applySorting(query, conditions.sort);
+
+    // Executing query
+    const result = await query.paginate({
+      perPage: conditions.per_page,
+      currentPage: conditions.page,
+    });
+
+    await callHooks(model, HOOK_FUNCTIONS.onAfterPaginate, {
+      ...pack,
+      result,
+      conditions,
+      query,
+    });
+
+    return response.json(result);
   }
 
   async show({ request, response, model, parentModel, Config, Database }) {
@@ -48,40 +82,21 @@ class BaseController {
     //     params[request.adonisx.parent_column];
     // }
 
-    if (model.actions.onBeforeCreate) {
-      await model.actions.onBeforeCreate({
-        ...pack,
-        formData,
-      });
-    }
-
-    if (model.events.onBeforeCreate) {
-      model.events.onBeforeCreate({
-        ...pack,
-        formData,
-      });
-    }
+    await callHooks(model, HOOK_FUNCTIONS.onBeforeCreate, {
+      ...pack,
+      formData,
+    });
 
     const [insertId] = await Database(model.instance.table).insert(formData);
     const item = await Database(model.instance.table)
       .where("id", insertId)
       .first();
 
-    if (model.actions.onAfterCreate) {
-      await model.actions.onAfterCreate({
-        ...pack,
-        formData,
-        item,
-      });
-    }
-
-    if (model.events.onAfterCreate) {
-      model.events.onAfterCreate({
-        ...pack,
-        formData,
-        item,
-      });
-    }
+    await callHooks(model, HOOK_FUNCTIONS.onAfterCreate, {
+      ...pack,
+      formData,
+      item,
+    });
 
     response.json(item);
   }
