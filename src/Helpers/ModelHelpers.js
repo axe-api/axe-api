@@ -4,7 +4,7 @@ import url from "url";
 import pluralize from "pluralize";
 import IoC from "./../Core/IoC.js";
 
-const ACTION_FUNCTIONS = [
+const HOOK_FUNCTIONS = [
   "onBeforeCreate",
   "onBeforeUpdateQuery",
   "onBeforeUpdate",
@@ -50,15 +50,19 @@ const toPath = (path) => {
 };
 
 export const setActions = async (directory, models) => {
-  directory = path.join(directory, "Actions");
+  await setHooks("Actions", directory, models);
+};
+
+export const setHooks = async (type, directory, models) => {
+  directory = path.join(directory, type);
   for (const model of models) {
-    model.actions = {};
-    const actionFileName = path.join(directory, `${model.name}Actions.js`);
-    if (fs.existsSync(actionFileName)) {
-      const Action = await import(toPath(actionFileName));
-      for (const functionName of ACTION_FUNCTIONS) {
-        if (Action[functionName]) {
-          model.actions[functionName] = Action[functionName];
+    model[type.toLowerCase()] = {};
+    const fileName = path.join(directory, `${model.name}${type}.js`);
+    if (fs.existsSync(fileName)) {
+      const Hooks = await import(toPath(fileName));
+      for (const hook of HOOK_FUNCTIONS) {
+        if (Hooks[hook]) {
+          model[type.toLowerCase()][hook] = Hooks[hook];
         }
       }
     }

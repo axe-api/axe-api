@@ -50,9 +50,13 @@ class BaseController {
       });
     }
 
-    // this.event.fire(`onBeforeCreate${modelName}`, { request, params, data });
+    if (model.events.onBeforeCreate) {
+      model.events.onBeforeCreate({
+        ...pack,
+        formData,
+      });
+    }
 
-    // // Creating the item
     const [insertId] = await Database(model.instance.table).insert(formData);
     const item = await Database(model.instance.table)
       .where("id", insertId)
@@ -66,12 +70,13 @@ class BaseController {
       });
     }
 
-    // this.event.fire(`onAfterCreate${modelName}`, {
-    //   request,
-    //   params,
-    //   data,
-    //   item,
-    // });
+    if (model.events.onAfterCreate) {
+      model.events.onAfterCreate({
+        ...pack,
+        formData,
+        item,
+      });
+    }
 
     response.json(item);
   }

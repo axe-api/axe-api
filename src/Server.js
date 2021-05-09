@@ -3,7 +3,7 @@ import express from "express";
 import knex from "knex";
 import {
   getModels,
-  setActions,
+  setHooks,
   createModelTree,
   setRoutes,
 } from "./Helpers/ModelHelpers.js";
@@ -54,7 +54,8 @@ class Server {
     App.use(bodyParser.urlencoded({ extended: true }));
 
     this.instances = await getModels(this.appFolder);
-    await setActions(this.appFolder, this.instances);
+    await setHooks("Actions", this.appFolder, this.instances);
+    await setHooks("Events", this.appFolder, this.instances);
     await setRoutes(createModelTree(this.instances));
 
     App.get("/", (req, res) => {
