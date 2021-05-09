@@ -38,6 +38,7 @@
     "express": "^4.17.1",
     "knex": "^0.95.4",
     "mysql": "^2.18.1",
-    "pluralize": "^8.0.0"
+    "pluralize": "^8.0.0",
+    "validatorjs": "^3.22.1"
   }
 }
