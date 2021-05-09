@@ -142,7 +142,7 @@ class BaseController {
   }
 
   async update(pack) {
-    const { request, response, model, Database, QueryParser } = pack;
+    const { request, response, model, Database } = pack;
 
     const query = Database.from(model.instance.table);
 
@@ -208,12 +208,39 @@ class BaseController {
     return response.json(item);
   }
 
-  async delete({ request, response, model, parentModel, Config, Database }) {
-    response.json({
-      name: "delete",
-      model,
-      parentModel,
+  async delete(pack) {
+    const { request, response, model, Database } = pack;
+
+    const query = Database.from(model.instance.table).where(
+      "id",
+      request.params.id
+    );
+
+    // // Appending parent id condition
+    // this.repositoryHelper.addParentIdCondition(
+    //   query,
+    //   params,
+    //   request.adonisx.parent_column
+    // );
+
+    await callHooks(model, HOOK_FUNCTIONS.onBeforeDelete, {
+      ...pack,
+      query,
     });
+
+    let item = await query.first();
+    if (!item) {
+      throw new ApiError(404, `The item is not found on ${model.name}.`);
+    }
+
+    await query.delete();
+
+    await callHooks(model, HOOK_FUNCTIONS.onAfterDelete, {
+      ...pack,
+      item,
+    });
+
+    return response.ok();
   }
 }
 
