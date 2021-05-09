@@ -25,7 +25,8 @@ class BaseController {
     });
   }
 
-  async store({ request, response, model, parentModel, Config, Database }) {
+  async store(pack) {
+    const { request, response, model, parentModel, Config, Database } = pack;
     // We should validate the data
     // await this.validation.validate(
     //   request.method(),
@@ -34,8 +35,7 @@ class BaseController {
     // );
 
     // Preparing the data
-    const data = getFormData(request, model.instance.fillable);
-    console.log(data);
+    const formData = getFormData(request, model.instance.fillable);
 
     // // Binding parent id if there is.
     // if (request.adonisx.parent_column) {
@@ -43,29 +43,28 @@ class BaseController {
     //     params[request.adonisx.parent_column];
     // }
 
-    // // We should call onBeforeCreate action
-    // const modelName = modelPath.replace("App/Models/", "");
-
-    // await this.repositoryHelper.callAction(
-    //   request.adonisx.url,
-    //   "onBeforeCreate",
-    //   { request, params, data }
-    // );
+    if (model.actions.onBeforeCreate) {
+      await model.actions.onBeforeCreate({
+        ...pack,
+        formData,
+      });
+    }
 
     // this.event.fire(`onBeforeCreate${modelName}`, { request, params, data });
 
     // // Creating the item
-    const [insertId] = await Database(model.instance.table).insert(data);
+    const [insertId] = await Database(model.instance.table).insert(formData);
     const item = await Database(model.instance.table)
       .where("id", insertId)
       .first();
 
-    // // We should call onAfterCreate action
-    // await this.repositoryHelper.callAction(
-    //   request.adonisx.url,
-    //   "onAfterCreate",
-    //   { request, params, data, item }
-    // );
+    if (model.actions.onAfterCreate) {
+      await model.actions.onAfterCreate({
+        ...pack,
+        formData,
+        item,
+      });
+    }
 
     // this.event.fire(`onAfterCreate${modelName}`, {
     //   request,
@@ -74,7 +73,6 @@ class BaseController {
     //   item,
     // });
 
-    // Returning response
     response.json(item);
   }
 
