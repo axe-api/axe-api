@@ -5,6 +5,8 @@ import pluralize from "pluralize";
 import IoC from "./../Core/IoC.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 
+let Controller = null;
+
 const _getChildrens = (model, map) => {
   const relationNames = model.instance.relations
     .filter((item) => item.type === "HasMany")
@@ -71,9 +73,27 @@ export const getModels = async (directory) => {
   return instances;
 };
 
+const handleErrors = (req, res, error) => {
+  const status = error.type === "ApiError" ? error.status : 400;
+  res.status(status).json({
+    errors: error.content,
+  });
+};
+
+const callController = async (method, req, res, pack) => {
+  try {
+    await Controller[method]({
+      ...pack,
+      request: req,
+      response: res,
+    });
+  } catch (error) {
+    handleErrors(req, res, error);
+  }
+};
+
 const _createRoutes = async (parentUrl, parentModel, model) => {
   const App = await IoC.use("App");
-  const Controller = await IoC.use("Controller");
   const Config = await IoC.use("Config");
   const Database = await IoC.use("Database");
   const Logger = await IoC.use("Logger");
@@ -99,49 +119,29 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   const actions = model.instance.actions;
 
   if (actions.includes("GET")) {
-    App.get(`/api/${parentUrl}${resource}`, (req, res) => {
-      Controller.paginate({
-        ...pack,
-        request: req,
-        response: res,
-      });
+    App.get(`/api/${parentUrl}${resource}`, async (req, res) => {
+      await callController("paginate", req, res, pack);
     });
-    App.get(`/api/${parentUrl}${resource}/:id`, (req, res) => {
-      Controller.show({
-        ...pack,
-        request: req,
-        response: res,
-      });
+    App.get(`/api/${parentUrl}${resource}/:id`, async (req, res) => {
+      await callController("show", req, res, pack);
     });
   }
 
   if (actions.includes("POST")) {
-    App.post(`/api/${parentUrl}${resource}`, (req, res) => {
-      Controller.store({
-        ...pack,
-        request: req,
-        response: res,
-      });
+    App.post(`/api/${parentUrl}${resource}`, async (req, res) => {
+      await callController("store", req, res, pack);
     });
   }
 
   if (actions.includes("PUT")) {
-    App.put(`/api/${parentUrl}${resource}/:id`, (req, response) => {
-      Controller.update({
-        ...pack,
-        request: req,
-        response: res,
-      });
+    App.put(`/api/${parentUrl}${resource}/:id`, async (req, response) => {
+      await callController("update", req, res, pack);
     });
   }
 
   if (actions.includes("DELETE")) {
-    App.delete(`/api/${parentUrl}${resource}/:id`, (req, response) => {
-      Controller.delete({
-        ...pack,
-        request: req,
-        response: res,
-      });
+    App.delete(`/api/${parentUrl}${resource}/:id`, async (req, response) => {
+      await callController("delete", req, res, pack);
     });
   }
 
@@ -160,6 +160,7 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
 };
 
 export const setRoutes = async (map) => {
+  Controller = await IoC.use("Controller");
   for (const model of map) {
     await _createRoutes("", "", model);
   }
