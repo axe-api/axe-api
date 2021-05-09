@@ -1,4 +1,10 @@
-import { getFormData, getFormValidation, callHooks } from "./Helper.js";
+import { snakeCase } from "change-case";
+import {
+  getFormData,
+  getFormValidation,
+  callHooks,
+  getParentColumn,
+} from "./Helper.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import ApiError from "./../Exceptions/ApiError.js";
@@ -15,6 +21,12 @@ class BaseController {
 
     // Users should be able to select some fields to show.
     QueryParser.applyFields(query, conditions.fields);
+
+    // Binding parent id if there is.
+    const parentColumn = getParentColumn(request);
+    if (parentColumn) {
+      query.where(snakeCase(parentColumn), request.params[parentColumn]);
+    }
 
     // this.repositoryHelper.addParentIdCondition(
     //   query,
@@ -63,11 +75,11 @@ class BaseController {
     // Users should be able to select some fields to show.
     QueryParser.applyFields(query, conditions.fields);
 
-    // this.repositoryHelper.addParentIdCondition(
-    //   query,
-    //   params,
-    //   request.adonisx.parent_column
-    // );
+    // Binding parent id if there is.
+    const parentColumn = getParentColumn(request);
+    if (parentColumn) {
+      query.where(snakeCase(parentColumn), request.params[parentColumn]);
+    }
 
     // Users should be able to filter records
     QueryParser.applyWheres(query, conditions.q);
@@ -115,11 +127,11 @@ class BaseController {
       }
     }
 
-    // // Binding parent id if there is.
-    // if (request.adonisx.parent_column) {
-    //   data[snakeCase(request.adonisx.parent_column)] =
-    //     params[request.adonisx.parent_column];
-    // }
+    // Binding parent id if there is.
+    const parentColumn = getParentColumn(request);
+    if (parentColumn) {
+      formData[snakeCase(parentColumn)] = request.params[parentColumn];
+    }
 
     await callHooks(model, HOOK_FUNCTIONS.onBeforeCreate, {
       ...pack,
@@ -145,11 +157,11 @@ class BaseController {
 
     const query = Database.from(model.instance.table);
 
-    // this.repositoryHelper.addParentIdCondition(
-    //   query,
-    //   params,
-    //   request.adonisx.parent_column
-    // );
+    // Binding parent id if there is.
+    const parentColumn = getParentColumn(request);
+    if (parentColumn) {
+      query.where(snakeCase(parentColumn), request.params[parentColumn]);
+    }
 
     await callHooks(model, HOOK_FUNCTIONS.onBeforeUpdateQuery, {
       ...pack,
@@ -168,12 +180,6 @@ class BaseController {
     });
 
     const formData = getFormData(request, model.instance.fillable);
-
-    // // Binding parent id if there is.
-    // if (request.adonisx.parent_column) {
-    //   data[snakeCase(request.adonisx.parent_column)] =
-    //     params[request.adonisx.parent_column];
-    // }
 
     const formValidationRules = getFormValidation(
       request,
@@ -215,12 +221,11 @@ class BaseController {
       request.params.id
     );
 
-    // // Appending parent id condition
-    // this.repositoryHelper.addParentIdCondition(
-    //   query,
-    //   params,
-    //   request.adonisx.parent_column
-    // );
+    // Binding parent id if there is.
+    const parentColumn = getParentColumn(request);
+    if (parentColumn) {
+      query.where(snakeCase(parentColumn), request.params[parentColumn]);
+    }
 
     await callHooks(model, HOOK_FUNCTIONS.onBeforeDelete, {
       ...pack,
