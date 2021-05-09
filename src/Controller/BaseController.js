@@ -1,4 +1,5 @@
-import { getFormData } from "./Helper.js";
+import { getFormData, getFormValidation } from "./Helper.js";
+import Validator from "validatorjs";
 
 class BaseController {
   async paginate({
@@ -27,15 +28,19 @@ class BaseController {
 
   async store(pack) {
     const { request, response, model, parentModel, Config, Database } = pack;
-    // We should validate the data
-    // await this.validation.validate(
-    //   request.method(),
-    //   request.all(),
-    //   Model.validations
-    // );
 
-    // Preparing the data
     const formData = getFormData(request, model.instance.fillable);
+    const formValidationRules = getFormValidation(
+      request,
+      model.instance.validations
+    );
+
+    if (formValidationRules) {
+      const validation = new Validator(formData, formValidationRules);
+      if (validation.fails()) {
+        return response.status(400).json(validation.errors);
+      }
+    }
 
     // // Binding parent id if there is.
     // if (request.adonisx.parent_column) {
