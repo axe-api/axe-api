@@ -38,3 +38,14 @@ export const callHooks = async (model, type, data) => {
     model.events[type](data);
   }
 };
+
+export const getParentColumn = (request) => {
+  const sections = request.route.path
+    .replace("/api/", "")
+    .split("/")
+    .filter((item) => item !== ":id" && item.indexOf(":") > -1);
+  if (sections.length > 0) {
+    return sections[sections.length - 1].replace(":", "");
+  }
+  return null;
+};
