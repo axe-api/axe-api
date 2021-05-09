@@ -37,7 +37,6 @@ class BaseController {
     // User should be able to select sorting fields and types
     QueryParser.applySorting(query, conditions.sort);
 
-    // Executing query
     const result = await query.paginate({
       perPage: conditions.per_page,
       currentPage: conditions.page,
