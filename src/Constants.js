@@ -5,3 +5,18 @@ export const LOG_LEVEL = {
   INFO: 3,
   ALL: 4,
 };
+
+export const HOOK_FUNCTIONS = {
+  onBeforeCreate: "onBeforeCreate",
+  onBeforeUpdateQuery: "onBeforeUpdateQuery",
+  onBeforeUpdate: "onBeforeUpdate",
+  onBeforeDelete: "onBeforeDelete",
+  onBeforePaginate: "onBeforePaginate",
+  onBeforeShow: "onBeforeShow",
+  onAfterCreate: "onAfterCreate",
+  onAfterUpdateQuery: "onAfterUpdateQuery",
+  onAfterUpdate: "onAfterUpdate",
+  onAfterDelete: "onAfterDelete",
+  onAfterPaginate: "onAfterPaginate",
+  onAfterShow: "onAfterShow",
+};

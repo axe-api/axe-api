@@ -3,21 +3,7 @@ import path from "path";
 import url from "url";
 import pluralize from "pluralize";
 import IoC from "./../Core/IoC.js";
-
-const HOOK_FUNCTIONS = [
-  "onBeforeCreate",
-  "onBeforeUpdateQuery",
-  "onBeforeUpdate",
-  "onBeforeDelete",
-  "onBeforePaginate",
-  "onBeforeShow",
-  "onAfterCreate",
-  "onAfterUpdateQuery",
-  "onAfterUpdate",
-  "onAfterDelete",
-  "onAfterPaginate",
-  "onAfterShow",
-];
+import { HOOK_FUNCTIONS } from "./../Constants.js";
 
 const _getChildrens = (model, map) => {
   const relationNames = model.instance.relations
@@ -60,7 +46,7 @@ export const setHooks = async (type, directory, models) => {
     const fileName = path.join(directory, `${model.name}${type}.js`);
     if (fs.existsSync(fileName)) {
       const Hooks = await import(toPath(fileName));
-      for (const hook of HOOK_FUNCTIONS) {
+      for (const hook of Object.keys(HOOK_FUNCTIONS)) {
         if (Hooks[hook]) {
           model[type.toLowerCase()][hook] = Hooks[hook];
         }
@@ -91,6 +77,7 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   const Config = await IoC.use("Config");
   const Database = await IoC.use("Database");
   const Logger = await IoC.use("Logger");
+  const QueryParser = await IoC.use("QueryParser");
 
   const pack = {
     model,
@@ -98,6 +85,7 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
     Config,
     Database,
     Logger,
+    QueryParser,
   };
 
   const resource = pluralize
