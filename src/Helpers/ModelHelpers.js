@@ -6,6 +6,7 @@ import IoC from "./../Core/IoC.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 
 let Controller = null;
+let Config = null;
 
 const _getChildrens = (model, map) => {
   const relationNames = model.instance.relations
@@ -75,9 +76,21 @@ export const getModels = async (directory) => {
 
 const handleErrors = (req, res, error) => {
   const status = error.type === "ApiError" ? error.status : 400;
-  res.status(status).json({
-    errors: error.content,
-  });
+  let errors = error.content ? error.content : error.message;
+
+  if (Config.Application.env === "production") {
+    errors = "An error occurred!";
+  }
+
+  const result = {
+    errors,
+  };
+
+  if (Config.Application.env === "development") {
+    result.stack = error.stack;
+  }
+
+  res.status(status).json(result);
 };
 
 const callController = async (method, req, res, pack) => {
@@ -94,7 +107,6 @@ const callController = async (method, req, res, pack) => {
 
 const _createRoutes = async (parentUrl, parentModel, model) => {
   const App = await IoC.use("App");
-  const Config = await IoC.use("Config");
   const Database = await IoC.use("Database");
   const Logger = await IoC.use("Logger");
   const QueryParser = await IoC.use("QueryParser");
@@ -161,6 +173,7 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
 
 export const setRoutes = async (map) => {
   Controller = await IoC.use("Controller");
+  Config = await IoC.use("Config");
   for (const model of map) {
     await _createRoutes("", "", model);
   }
