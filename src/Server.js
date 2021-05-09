@@ -7,6 +7,7 @@ import {
   setHooks,
   createModelTree,
   setRoutes,
+  setRelationArrays,
 } from "./Helpers/ModelHelpers.js";
 import BaseController from "./Controller/BaseController.js";
 import Config from "./Core/Config.js";
@@ -61,15 +62,18 @@ class Server {
     App.use(bodyParser.urlencoded({ extended: true }));
 
     this.instances = await getModels(this.appFolder);
+    await setRelationArrays(this.instances);
     await setHooks("Actions", this.appFolder, this.instances);
     await setHooks("Events", this.appFolder, this.instances);
-    await setRoutes(createModelTree(this.instances));
+    const tree = createModelTree(this.instances);
+    await setRoutes(tree);
 
     App.get("/", (req, res) => {
       res.json({
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
+        tree,
       });
     });
 

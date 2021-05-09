@@ -3,14 +3,18 @@ import path from "path";
 import url from "url";
 import pluralize from "pluralize";
 import IoC from "./../Core/IoC.js";
-import { HOOK_FUNCTIONS } from "./../Constants.js";
+import {
+  HOOK_FUNCTIONS,
+  RELATIONSHIPS,
+  DEFAULT_METHODS_OF_MODELS,
+} from "./../Constants.js";
 
 let Controller = null;
 let Config = null;
 
 const _getChildrens = (model, map) => {
   const relationNames = model.instance.relations
-    .filter((item) => item.type === "HasMany")
+    .filter((item) => item.type === RELATIONSHIPS.HAS_MANY)
     .map((item) => item.model);
 
   const children = map.filter((item) => relationNames.indexOf(item.name) > -1);
@@ -23,8 +27,9 @@ const _getChildrens = (model, map) => {
 export const createModelTree = (map) => {
   const tree = map.filter(
     (item) =>
-      item.instance.relations.filter((relation) => relation.type === "HasOne")
-        .length === 0
+      item.instance.relations.filter(
+        (relation) => relation.type === RELATIONSHIPS.HAS_ONE
+      ).length === 0
   );
 
   for (const model of tree) {
@@ -176,5 +181,28 @@ export const setRoutes = async (map) => {
   Config = await IoC.use("Config");
   for (const model of map) {
     await _createRoutes("", "", model);
+  }
+};
+
+const getMethods = (obj) => {
+  let properties = new Set();
+  let currentObj = obj;
+  do {
+    Object.getOwnPropertyNames(currentObj).map((item) => properties.add(item));
+  } while ((currentObj = Object.getPrototypeOf(currentObj)));
+  return [...properties.keys()].filter(
+    (item) => typeof obj[item] === "function"
+  );
+};
+
+export const setRelationArrays = async (models) => {
+  for (const model of models) {
+    const methods = getMethods(model.instance).filter(
+      (method) => !DEFAULT_METHODS_OF_MODELS.includes(method)
+    );
+
+    for (const method of methods) {
+      model.instance.relations.push(model.instance[method]());
+    }
   }
 };
