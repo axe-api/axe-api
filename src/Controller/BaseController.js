@@ -61,7 +61,7 @@ class BaseController {
   }
 
   async store(pack) {
-    const { request, response, model, parentModel, Config, Database } = pack;
+    const { request, response, model, Database } = pack;
 
     const formData = getFormData(request, model.instance.fillable);
     const formValidationRules = getFormValidation(
@@ -98,7 +98,7 @@ class BaseController {
       item,
     });
 
-    response.json(item);
+    return response.json(item);
   }
 
   async update({ request, response, model, parentModel, Config, Database }) {
