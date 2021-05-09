@@ -141,12 +141,71 @@ class BaseController {
     return response.json(item);
   }
 
-  async update({ request, response, model, parentModel, Config, Database }) {
-    response.json({
-      name: "update",
-      model,
-      parentModel,
+  async update(pack) {
+    const { request, response, model, Database, QueryParser } = pack;
+
+    const query = Database.from(model.instance.table);
+
+    // this.repositoryHelper.addParentIdCondition(
+    //   query,
+    //   params,
+    //   request.adonisx.parent_column
+    // );
+
+    await callHooks(model, HOOK_FUNCTIONS.onBeforeUpdateQuery, {
+      ...pack,
+      query,
     });
+
+    let item = await query.where("id", request.params.id).first();
+    if (!item) {
+      throw new ApiError(404, `The item is not found on ${model.name}.`);
+    }
+
+    await callHooks(model, HOOK_FUNCTIONS.onAfterUpdateQuery, {
+      ...pack,
+      item,
+      query,
+    });
+
+    const formData = getFormData(request, model.instance.fillable);
+
+    // // Binding parent id if there is.
+    // if (request.adonisx.parent_column) {
+    //   data[snakeCase(request.adonisx.parent_column)] =
+    //     params[request.adonisx.parent_column];
+    // }
+
+    const formValidationRules = getFormValidation(
+      request,
+      model.instance.validations
+    );
+
+    if (formValidationRules) {
+      const validation = new Validator(formData, formValidationRules);
+      if (validation.fails()) {
+        return response.status(400).json(validation.errors);
+      }
+    }
+
+    await callHooks(model, HOOK_FUNCTIONS.onBeforeUpdate, {
+      ...pack,
+      item,
+      formData,
+      query,
+    });
+
+    await query.where("id", item.id).update(formData);
+    item = await Database(model.instance.table).where("id", item.id).first();
+
+    await callHooks(model, HOOK_FUNCTIONS.onAfterUpdate, {
+      ...pack,
+      item,
+      formData,
+      query,
+    });
+
+    return response.json(item);
   }
 
   async delete({ request, response, model, parentModel, Config, Database }) {

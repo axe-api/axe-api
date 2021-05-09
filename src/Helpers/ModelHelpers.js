@@ -134,13 +134,13 @@ const _createRoutes = async (parentUrl, parentModel, model) => {
   }
 
   if (actions.includes("PUT")) {
-    App.put(`/api/${parentUrl}${resource}/:id`, async (req, response) => {
+    App.put(`/api/${parentUrl}${resource}/:id`, async (req, res) => {
       await callController("update", req, res, pack);
     });
   }
 
   if (actions.includes("DELETE")) {
-    App.delete(`/api/${parentUrl}${resource}/:id`, async (req, response) => {
+    App.delete(`/api/${parentUrl}${resource}/:id`, async (req, res) => {
       await callController("delete", req, res, pack);
     });
   }
