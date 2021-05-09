@@ -1,6 +1,7 @@
 import { getFormData, getFormValidation, callHooks } from "./Helper.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
+import ApiError from "./../Exceptions/ApiError.js";
 
 class BaseController {
   async paginate(pack) {
@@ -52,12 +53,51 @@ class BaseController {
     return response.json(result);
   }
 
-  async show({ request, response, model, parentModel, Config, Database }) {
-    response.json({
-      name: "show",
-      model,
-      parentModel,
+  async show(pack) {
+    const { request, response, model, Database, QueryParser } = pack;
+    // We should parse URL query string to use as condition in Lucid query
+    const conditions = QueryParser.get(request.query);
+
+    // Fetching item
+    const query = Database.from(model.instance.table);
+
+    // Users should be able to select some fields to show.
+    QueryParser.applyFields(query, conditions.fields);
+
+    // this.repositoryHelper.addParentIdCondition(
+    //   query,
+    //   params,
+    //   request.adonisx.parent_column
+    // );
+
+    // Users should be able to filter records
+    QueryParser.applyWheres(query, conditions.q);
+
+    // // Users should be able to add relationships to the query
+    // this.queryParser.applyRelations(query, conditions.with);
+
+    // We should add this condition in here because of performance.
+    query.where("id", request.params.id);
+
+    await callHooks(model, HOOK_FUNCTIONS.onBeforeShow, {
+      ...pack,
+      query,
+      conditions,
     });
+
+    const item = await query.first();
+    if (!item) {
+      throw new ApiError(404, `The item is not found on ${model.name}.`);
+    }
+
+    await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
+      ...pack,
+      query,
+      conditions,
+      item,
+    });
+
+    return response.json(item);
   }
 
   async store(pack) {
