@@ -1,3 +1,17 @@
+const getInputFromBody = (body, field) => {
+  if (!body) {
+    return null;
+  }
+  let value = null;
+  for (const key of Object.keys(body)) {
+    if (key.trim() === field.trim()) {
+      value = body[key];
+      break;
+    }
+  }
+  return value;
+};
+
 export const getFormData = (request, fillable) => {
   let fields = fillable;
   if (!Array.isArray(fillable)) {
@@ -5,9 +19,8 @@ export const getFormData = (request, fillable) => {
   }
 
   const filtered = {};
-
   for (const field of fields) {
-    filtered[field] = request.body[field] ? request.body[field] : null;
+    filtered[field] = getInputFromBody(request.body, field);
   }
 
   return filtered;
