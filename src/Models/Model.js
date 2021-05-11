@@ -22,28 +22,35 @@ class Model {
     return ["GET", "POST", "PUT", "DELETE"];
   }
 
-  hasMany(model, primaryKey = "id", foreignKey) {
+  hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
-      foreignKey = model.toLowerCase();
+      const currentModelName = pluralize.singular(
+        this.constructor.name.toLowerCase()
+      );
+      foreignKey = `${currentModelName}_id`;
     }
     return {
       type: RELATIONSHIPS.HAS_MANY,
-      model,
+      model: relatedModel,
       primaryKey,
       foreignKey,
     };
   }
 
-  hasOne(model, primaryKey = "id", foreignKey) {
+  hasOne(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
-      foreignKey = model.toLowerCase();
+      foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`;
     }
     return {
       type: RELATIONSHIPS.HAS_ONE,
-      model,
+      model: relatedModel,
       primaryKey,
       foreignKey,
     };
+  }
+
+  belongsTo(relatedModel, primaryKey, foreignKey) {
+    return this.hasOne(relatedModel, foreignKey, primaryKey);
   }
 }
 

@@ -2,29 +2,32 @@ import dotenv from "dotenv";
 import express from "express";
 import knex from "knex";
 import { attachPaginate } from "knex-paginate";
-import {
-  getModels,
-  setHooks,
-  createModelTree,
-  setRoutes,
-  setRelationArrays,
-} from "./Helpers/ModelHelpers.js";
-import BaseController from "./Controller/BaseController.js";
 import Config from "./Core/Config.js";
 import QueryParser from "./Core/QueryParser.js";
 import IoC from "./Core/IoC.js";
 import Logger from "./Core/Logger.js";
-import bodyParser from "body-parser";
+import {
+  getModels,
+  getModelTree,
+  setRelations,
+  setHooks,
+  setRoutes,
+} from "./Resolvers/index.js";
 
 class Server {
   constructor(appFolder) {
+    this.app = null;
     this.appFolder = appFolder;
+    this.models = [];
+    this.modelTree = [];
   }
 
   async listen() {
     await this._bindDependencies();
     await this._loadConfigurations();
     await this._loadExpress();
+    await this._analyzeModels();
+    await this._listen();
   }
 
   async _bindDependencies() {
@@ -34,9 +37,6 @@ class Server {
       const database = knex(Config.Database);
       attachPaginate();
       return database;
-    });
-    IoC.singleton("Controller", async () => {
-      return new BaseController();
     });
     IoC.singleton("App", async () => {
       return express();
@@ -48,6 +48,9 @@ class Server {
     IoC.singleton("QueryParser", async () => {
       return new QueryParser();
     });
+    IoC.bind("fs", async () => import("fs"));
+    IoC.bind("path", async () => import("path"));
+    IoC.bind("url", async () => import("url"));
   }
 
   async _loadConfigurations() {
@@ -57,29 +60,32 @@ class Server {
   }
 
   async _loadExpress() {
-    const App = await IoC.use("App");
-    App.use(bodyParser.json());
-    App.use(bodyParser.urlencoded({ extended: true }));
+    this.app = await IoC.use("App");
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json());
+  }
 
-    this.instances = await getModels(this.appFolder);
-    await setRelationArrays(this.instances);
-    await setHooks("Actions", this.appFolder, this.instances);
-    await setHooks("Events", this.appFolder, this.instances);
-    const tree = createModelTree(this.instances);
-    await setRoutes(tree);
+  async _analyzeModels() {
+    this.models = await getModels(this.appFolder);
+    await setRelations(this.models);
+    await setHooks("Actions", this.appFolder, this.models);
+    await setHooks("Events", this.appFolder, this.models);
+    this.modelTree = await getModelTree(this.models);
+    await setRoutes(this.modelTree);
+  }
 
-    App.get("/", (req, res) => {
+  async _listen() {
+    this.app.get("/", (req, res) => {
       res.json({
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
-        tree,
+        modelTree,
       });
     });
 
     const Config = await IoC.use("Config");
-
-    App.listen(Config.Application.port, () => {
+    this.app.listen(Config.Application.port, () => {
       console.log(
         `Example app listening at http://localhost:${Config.Application.port}`
       );

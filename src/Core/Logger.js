@@ -1,4 +1,5 @@
-import { LOG_LEVEL } from "./../Constants.js";
+import { LOG_LEVEL, LOG_COLORS } from "./../Constants.js";
+const { fgRed, fgGreen, fgYellow, fgCyan, fgReset } = LOG_COLORS;
 
 class Logger {
   constructor(level) {
@@ -7,24 +8,36 @@ class Logger {
 
   error(message) {
     if (this.level <= LOG_LEVEL.ERROR) {
-      console.error(message);
+      console.error(fgRed, "[axe]", message, fgReset);
     }
   }
 
   warn(message) {
     if (this.level <= LOG_LEVEL.WARNING) {
-      console.warn(message);
+      console.warn(fgYellow, "[axe]", message, fgReset);
     }
   }
 
   info(message) {
     if (this.level <= LOG_LEVEL.INFO) {
-      console.info(message);
+      console.info(fgCyan, "[axe]", message, fgReset);
+    }
+  }
+
+  success(message) {
+    if (this.level <= LOG_LEVEL.INFO) {
+      console.info(fgGreen, "[axe]", message, fgReset);
     }
   }
 
   log(message) {
-    if (this.level <= LOG_LEVEL.ALL) {
+    if (this.level === LOG_LEVEL.ALL) {
+      console.log(message);
+    }
+  }
+
+  debug(message) {
+    if (this.level === LOG_LEVEL.ALL) {
       console.log(message);
     }
   }
