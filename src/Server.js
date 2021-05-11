@@ -80,7 +80,7 @@ class Server {
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
-        modelTree,
+        modelTree: this.modelTree,
       });
     });
 

@@ -22,6 +22,10 @@ class Model {
     return ["GET", "POST", "PUT", "DELETE"];
   }
 
+  // get features() {
+  //   return [BULK_INSERT];
+  // }
+
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
