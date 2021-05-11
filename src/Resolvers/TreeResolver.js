@@ -1,18 +1,17 @@
 import IoC from "./../Core/IoC.js";
 import { RELATIONSHIPS } from "./../Constants.js";
 
-const _getChildrens = (model, models) => {
+const _setChildrens = (model, models) => {
   const relationNames = model.instance.relations
     .filter((item) => item.type === RELATIONSHIPS.HAS_MANY)
     .map((item) => item.model);
 
-  const children = models.filter(
+  model.children = models.filter(
     (item) => relationNames.indexOf(item.name) > -1
   );
-  for (const child of children) {
-    child.children = _getChildrens(child, models);
+  for (const child of model.children) {
+    _setChildrens(child, models);
   }
-  return children;
 };
 
 export default async (models) => {
@@ -26,7 +25,7 @@ export default async (models) => {
   );
 
   for (const model of tree) {
-    model.children = _getChildrens(model, models);
+    _setChildrens(model, models);
   }
 
   logger.info("Model tree map has been created.");
