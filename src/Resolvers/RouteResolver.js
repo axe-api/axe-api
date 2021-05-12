@@ -92,12 +92,24 @@ const _createRoutes = async (
   }
 };
 
-export default async (map) => {
+export default async (app, map, appDirectory) => {
   Config = await IoC.use("Config");
   const logger = await IoC.use("Logger");
+  const fs = await IoC.use("fs");
+  const path = await IoC.use("path");
+  const url = await IoC.use("url");
 
   for (const model of map) {
     await _createRoutes(model);
+  }
+
+  // Calling the user's custom definitions
+  const customInitFile = path.join(appDirectory, `init.js`);
+  if (fs.existsSync(customInitFile)) {
+    const { default: initter } = await import(
+      url.pathToFileURL(customInitFile).href
+    );
+    await initter({ app });
   }
 
   logger.info("All routes have been created.");

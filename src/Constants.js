@@ -69,10 +69,6 @@ const API_ROUTE_TEMPLATES = {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
     method: HTTP_METHODS.POST,
   },
-  // [CAPABILITIES.ALL]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/all`,
-  //   method: HTTP_METHODS.GET,
-  // },
   [CAPABILITIES.PAGINATE]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
     method: HTTP_METHODS.GET,
@@ -89,6 +85,10 @@ const API_ROUTE_TEMPLATES = {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
     method: HTTP_METHODS.DELETE,
   },
+  // [CAPABILITIES.ALL]: {
+  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/all`,
+  //   method: HTTP_METHODS.GET,
+  // },
   // [CAPABILITIES.COUNT]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/count`,
   //   method: HTTP_METHODS.GET,
