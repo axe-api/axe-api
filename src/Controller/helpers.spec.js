@@ -89,7 +89,7 @@ describe("getFormValidation", () => {
 describe("callHooks", () => {
   test("should be able call hooks if there is any", async () => {
     const model = {
-      actions: {
+      hooks: {
         onBeforeCreate: jest.fn(),
       },
       events: {
@@ -97,16 +97,16 @@ describe("callHooks", () => {
       },
     };
     await callHooks(model, "onBeforeCreate", { id: 13 });
-    expect(model.actions.onBeforeCreate.mock.calls.length).toBe(1);
+    expect(model.hooks.onBeforeCreate.mock.calls.length).toBe(1);
     expect(model.events.onBeforeCreate.mock.calls.length).toBe(1);
 
-    expect(model.actions.onBeforeCreate.mock.calls[0][0].id).toBe(13);
+    expect(model.hooks.onBeforeCreate.mock.calls[0][0].id).toBe(13);
     expect(model.events.onBeforeCreate.mock.calls[0][0].id).toBe(13);
   });
 
   test("should not be able call hooks if there is not any hook", async () => {
     const model = {
-      actions: {},
+      hooks: {},
       events: {},
     };
     await callHooks(model, "onBeforeCreate", { id: 13 });
