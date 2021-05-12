@@ -23,6 +23,10 @@ class Model {
     return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
   }
 
+  get middlewares() {
+    return [];
+  }
+
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(

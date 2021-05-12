@@ -32,7 +32,6 @@ export default async (pack) => {
 
   // // Users should be able to add relationships to the query
   // this.queryParser.applyRelations(query, conditions.with);
-
   await callHooks(model, HOOK_FUNCTIONS.onBeforePaginate, {
     ...pack,
     conditions,

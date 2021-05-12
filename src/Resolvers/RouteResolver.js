@@ -67,7 +67,26 @@ const _createRoutes = async (
       const routeTemplate = API_ROUTE_TEMPLATES[capability];
       const url = routeTemplate.url(urlPrefix, resource);
       logger.debug(`Model routes created: ${url}`);
-      app[routeTemplate.method.toLowerCase()](url, (req, res) => {
+
+      // Detecting filters
+      const middlewares = [];
+      if (model.instance.middlewares.length > 0) {
+        const filtered = model.instance.middlewares
+          .filter(
+            (item) =>
+              typeof item === "function" || item.capability === capability
+          )
+          .map((item) => {
+            if (typeof item === "function") {
+              return item;
+            }
+            return item.middleware;
+          });
+        middlewares.push(...filtered);
+      }
+
+      // Adding the route to the express
+      app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {
         requestHandler(capability, req, res, pack);
       });
     }

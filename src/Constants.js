@@ -45,11 +45,11 @@ const DEFAULT_METHODS_OF_MODELS = [
 
 const CAPABILITIES = {
   INSERT: "store",
-  // ALL: "all",
   PAGINATE: "paginate",
   SHOW: "show",
   UPDATE: "update",
   DELETE: "destroy",
+  // ALL: "all",
   // COUNT: "count",
   // BULK_INSERT: "bulkInsert",
   // BULK_DELETE: "bulkDelete",
