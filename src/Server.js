@@ -68,7 +68,7 @@ class Server {
   async _analyzeModels() {
     this.models = await getModels(this.appFolder);
     await setRelations(this.models);
-    await setHooks("Actions", this.appFolder, this.models);
+    await setHooks("Hooks", this.appFolder, this.models);
     await setHooks("Events", this.appFolder, this.models);
     this.modelTree = await getModelTree(this.models);
     await setRoutes(this.modelTree);

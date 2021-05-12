@@ -1,6 +1,6 @@
 import IoC from "./../Core/IoC.js";
 import pluralize from "pluralize";
-import { RELATIONSHIPS, API_ENDPOINT_SCHEMA } from "./../Constants.js";
+import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../Constants.js";
 import Controller from "./../Controller/index.js";
 
 let Config = null;
@@ -62,16 +62,14 @@ const _createRoutes = async (
     : pluralize.plural(model.name).toLowerCase();
 
   // We create and handle routes by not duplicate so many lines.
-  for (const httpMethod of Object.keys(API_ENDPOINT_SCHEMA)) {
-    if (model.instance.actions.includes(httpMethod)) {
-      for (const definition of API_ENDPOINT_SCHEMA[httpMethod]) {
-        const url = definition.url(urlPrefix, resource);
-        logger.debug(`Model routes created: ${url}`);
-
-        app[httpMethod.toLowerCase()](url, (req, res) => {
-          requestHandler(definition.method, req, res, pack);
-        });
-      }
+  for (const capability of Object.keys(API_ROUTE_TEMPLATES)) {
+    if (model.instance.capabilities.includes(capability)) {
+      const routeTemplate = API_ROUTE_TEMPLATES[capability];
+      const url = routeTemplate.url(urlPrefix, resource);
+      logger.debug(`Model routes created: ${url}`);
+      app[routeTemplate.method.toLowerCase()](url, (req, res) => {
+        requestHandler(capability, req, res, pack);
+      });
     }
   }
 

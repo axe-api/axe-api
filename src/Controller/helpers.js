@@ -43,8 +43,8 @@ export const getFormValidation = (request, validations) => {
 };
 
 export const callHooks = async (model, type, data) => {
-  if (model.actions[type]) {
-    await model.actions[type](data);
+  if (model.hooks[type]) {
+    await model.hooks[type](data);
   }
 
   if (model.events[type]) {

@@ -1,5 +1,6 @@
 import pluralize from "pluralize";
-import { RELATIONSHIPS } from "./../Constants.js";
+import { RELATIONSHIPS, CAPABILITIES } from "./../Constants.js";
+const { ALL, INSERT, SHOW, UPDATE, PAGINATE, DELETE } = CAPABILITIES;
 
 class Model {
   constructor() {
@@ -18,13 +19,9 @@ class Model {
     return null;
   }
 
-  get actions() {
-    return ["GET", "POST", "PUT", "DELETE"];
+  get capabilities() {
+    return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
   }
-
-  // get features() {
-  //   return [BULK_INSERT];
-  // }
 
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
