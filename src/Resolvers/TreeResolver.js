@@ -28,6 +28,21 @@ export default async (models) => {
     _setChildrens(model, models);
   }
 
+  // We should add recursive models
+  models.forEach((model) => {
+    const recursiveRelations = model.instance.relations.filter(
+      (relation) => relation.model === model.name
+    );
+
+    if (recursiveRelations.length === 2) {
+      tree.push({
+        isRecursive: true,
+        children: [],
+        ...model,
+      });
+    }
+  });
+
   logger.info("Model tree map has been created.");
   return tree;
 };

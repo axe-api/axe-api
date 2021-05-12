@@ -40,7 +40,8 @@ const _createRoutes = async (
   model,
   urlPrefix = "",
   parentModel = null,
-  relation = null
+  relation = null,
+  allowRecursive = true
 ) => {
   const logger = await IoC.use("Logger");
   const app = await IoC.use("App");
@@ -108,6 +109,25 @@ const _createRoutes = async (
         relation
       );
     }
+  }
+
+  // Adding recursive model routes
+  if (model.isRecursive && allowRecursive) {
+    // We should different parameter name for child routes
+    const idKey = pluralize.singular(model.name).toLowerCase() + "Id";
+    const relation = model.instance.relations.find(
+      (relation) =>
+        relation.model === model.name &&
+        relation.type === RELATIONSHIPS.HAS_MANY
+    );
+
+    await _createRoutes(
+      model,
+      `${urlPrefix}${resource}/:${idKey}/`,
+      model,
+      relation,
+      false
+    );
   }
 };
 
