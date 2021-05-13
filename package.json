@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AXE API is a simple tool which has been created based on Express and Knex.js to create Rest APIs quickly.",
   "main": "index.js",
   "type": "module",
@@ -10,7 +10,7 @@
   "author": "Özgür Adem Işıklı <i.ozguradem@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:dev": "jest --watch"
   },
   "devDependencies": {
