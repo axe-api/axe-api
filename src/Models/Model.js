@@ -1,6 +1,14 @@
+import pluralize from "pluralize";
+import { RELATIONSHIPS, CAPABILITIES } from "./../Constants.js";
+const { ALL, INSERT, SHOW, UPDATE, PAGINATE, DELETE } = CAPABILITIES;
+
 class Model {
+  constructor() {
+    this.relations = [];
+  }
+
   get table() {
-    return null;
+    return pluralize(this.constructor.name.toLowerCase());
   }
 
   get fillable() {
@@ -11,12 +19,43 @@ class Model {
     return null;
   }
 
-  get relations() {
+  get capabilities() {
+    return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
+  }
+
+  get middlewares() {
     return [];
   }
 
-  get actions() {
-    return ["GET", "POST", "PUT", "DELETE"];
+  hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
+    if (!foreignKey) {
+      const currentModelName = pluralize.singular(
+        this.constructor.name.toLowerCase()
+      );
+      foreignKey = `${currentModelName}_id`;
+    }
+    return {
+      type: RELATIONSHIPS.HAS_MANY,
+      model: relatedModel,
+      primaryKey,
+      foreignKey,
+    };
+  }
+
+  hasOne(relatedModel, primaryKey = "id", foreignKey = null) {
+    if (!foreignKey) {
+      foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`;
+    }
+    return {
+      type: RELATIONSHIPS.HAS_ONE,
+      model: relatedModel,
+      primaryKey,
+      foreignKey,
+    };
+  }
+
+  belongsTo(relatedModel, primaryKey, foreignKey) {
+    return this.hasOne(relatedModel, foreignKey, primaryKey);
   }
 }
 
