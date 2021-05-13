@@ -1,17 +1,14 @@
-const TYPES = {
-  BIND: "BIND",
-  SINGLETON: "SINGLETON",
-};
+import { DEPENDECY_TYPES } from "./../Constants.js";
 
 const items = {};
 
 const IoC = {
   bind(name, callback) {
-    this._add(TYPES.BIND, name, callback);
+    this._add(DEPENDECY_TYPES.BIND, name, callback);
   },
 
   singleton(name, callback) {
-    this._add(TYPES.SINGLETON, name, callback);
+    this._add(DEPENDECY_TYPES.SINGLETON, name, callback);
   },
 
   async use(name) {
@@ -20,7 +17,7 @@ const IoC = {
       throw new Error(`Dependency is not found ${name}`);
     }
 
-    if (item.type === TYPES.BIND) {
+    if (item.type === DEPENDECY_TYPES.BIND) {
       return await item.callback();
     }
 
