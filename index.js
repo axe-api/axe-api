@@ -1,15 +1,7 @@
 import Server from "./src/Server.js";
 import Model from "./src/Models/Model.js";
 import IoC from "./src/Core/IoC.js";
-import { LOG_LEVEL, HOOK_FUNCTIONS, CAPABILITIES } from "./src/Constants.js";
+import { LOG_LEVEL, HOOK_FUNCTIONS, HANDLERS } from "./src/Constants.js";
 import ApiError from "./src/Exceptions/ApiError.js";
 
-export {
-  Server,
-  Model,
-  IoC,
-  ApiError,
-  LOG_LEVEL,
-  HOOK_FUNCTIONS,
-  CAPABILITIES,
-};
+export { Server, Model, IoC, ApiError, LOG_LEVEL, HOOK_FUNCTIONS, HANDLERS };

@@ -1,6 +1,6 @@
 import pluralize from "pluralize";
-import { RELATIONSHIPS, CAPABILITIES } from "./../Constants.js";
-const { ALL, INSERT, SHOW, UPDATE, PAGINATE, DELETE } = CAPABILITIES;
+import { RELATIONSHIPS, HANDLERS } from "./../Constants.js";
+const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
 
 class Model {
   constructor() {
@@ -19,7 +19,7 @@ class Model {
     return null;
   }
 
-  get capabilities() {
+  get handlers() {
     return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
   }
 

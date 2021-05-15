@@ -63,9 +63,9 @@ const _createRoutes = async (
     : pluralize.plural(model.name).toLowerCase();
 
   // We create and handle routes by not duplicate so many lines.
-  for (const capability of Object.keys(API_ROUTE_TEMPLATES)) {
-    if (model.instance.capabilities.includes(capability)) {
-      const routeTemplate = API_ROUTE_TEMPLATES[capability];
+  for (const handler of Object.keys(API_ROUTE_TEMPLATES)) {
+    if (model.instance.handlers.includes(handler)) {
+      const routeTemplate = API_ROUTE_TEMPLATES[handler];
       const url = routeTemplate.url(urlPrefix, resource);
       logger.debug(`Model routes created: ${url}`);
 
@@ -74,8 +74,7 @@ const _createRoutes = async (
       if (model.instance.middlewares.length > 0) {
         const filtered = model.instance.middlewares
           .filter(
-            (item) =>
-              typeof item === "function" || item.capability === capability
+            (item) => typeof item === "function" || item.handler === handler
           )
           .map((item) => {
             if (typeof item === "function") {
@@ -88,7 +87,7 @@ const _createRoutes = async (
 
       // Adding the route to the express
       app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {
-        requestHandler(capability, req, res, pack);
+        requestHandler(handler, req, res, pack);
       });
     }
   }

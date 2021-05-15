@@ -43,18 +43,12 @@ const DEFAULT_METHODS_OF_MODELS = [
   "toLocaleString",
 ];
 
-const CAPABILITIES = {
+const HANDLERS = {
   INSERT: "store",
   PAGINATE: "paginate",
   SHOW: "show",
   UPDATE: "update",
   DELETE: "destroy",
-  // ALL: "all",
-  // COUNT: "count",
-  // BULK_INSERT: "bulkInsert",
-  // BULK_DELETE: "bulkDelete",
-  // BULK_UPDATE: "bulkUpdate",
-  // SOFT_DELETE: "softDelete",
 };
 
 const HTTP_METHODS = {
@@ -65,47 +59,47 @@ const HTTP_METHODS = {
 };
 
 const API_ROUTE_TEMPLATES = {
-  [CAPABILITIES.INSERT]: {
+  [HANDLERS.INSERT]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
     method: HTTP_METHODS.POST,
   },
-  [CAPABILITIES.PAGINATE]: {
+  [HANDLERS.PAGINATE]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
     method: HTTP_METHODS.GET,
   },
-  [CAPABILITIES.SHOW]: {
+  [HANDLERS.SHOW]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
     method: HTTP_METHODS.GET,
   },
-  [CAPABILITIES.UPDATE]: {
+  [HANDLERS.UPDATE]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
     method: HTTP_METHODS.PUT,
   },
-  [CAPABILITIES.DELETE]: {
+  [HANDLERS.DELETE]: {
     url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
     method: HTTP_METHODS.DELETE,
   },
-  // [CAPABILITIES.ALL]: {
+  // [HANDLERS.ALL]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/all`,
   //   method: HTTP_METHODS.GET,
   // },
-  // [CAPABILITIES.COUNT]: {
+  // [HANDLERS.COUNT]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/count`,
   //   method: HTTP_METHODS.GET,
   // },
-  // [CAPABILITIES.BULK_INSERT]: {
+  // [HANDLERS.BULK_INSERT]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
   //   method: HTTP_METHODS.POST,
   // },
-  // [CAPABILITIES.BULK_DELETE]: {
+  // [HANDLERS.BULK_DELETE]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
   //   method: HTTP_METHODS.DELETE,
   // },
-  // [CAPABILITIES.BULK_UPDATE]: {
+  // [HANDLERS.BULK_UPDATE]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
   //   method: HTTP_METHODS.PUT,
   // },
-  // [CAPABILITIES.SOFT_DELETE]: {
+  // [HANDLERS.SOFT_DELETE]: {
   //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id/soft`,
   //   method: HTTP_METHODS.DELETE,
   // },
@@ -137,5 +131,5 @@ export {
   API_ROUTE_TEMPLATES,
   LOG_COLORS,
   DEPENDECY_TYPES,
-  CAPABILITIES,
+  HANDLERS,
 };
