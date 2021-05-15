@@ -15,7 +15,7 @@ export default async (pack) => {
     query.where(relation.foreignKey, request.params[parentColumn]);
   }
 
-  await callHooks(model, HOOK_FUNCTIONS.onBeforeDelete, {
+  await callHooks(model, HOOK_FUNCTIONS.onBeforeDeleteQuery, {
     ...pack,
     query,
   });
@@ -25,6 +25,18 @@ export default async (pack) => {
     throw new ApiError(404, `The item is not found on ${model.name}.`);
   }
 
+  await callHooks(model, HOOK_FUNCTIONS.onAfterDeleteQuery, {
+    ...pack,
+    query,
+    item,
+  });
+
+  await callHooks(model, HOOK_FUNCTIONS.onBeforeDelete, {
+    ...pack,
+    query,
+    item,
+  });
+
   await query.delete();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterDelete, {
@@ -32,5 +44,5 @@ export default async (pack) => {
     item,
   });
 
-  return response.ok();
+  return response.json();
 };
