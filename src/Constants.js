@@ -7,13 +7,13 @@ const LOG_LEVEL = {
 };
 
 const HOOK_FUNCTIONS = {
-  onBeforeCreate: "onBeforeCreate",
+  onBeforeInsert: "onBeforeInsert",
   onBeforeUpdateQuery: "onBeforeUpdateQuery",
   onBeforeUpdate: "onBeforeUpdate",
   onBeforeDelete: "onBeforeDelete",
   onBeforePaginate: "onBeforePaginate",
   onBeforeShow: "onBeforeShow",
-  onAfterCreate: "onAfterCreate",
+  onAfterInsert: "onAfterInsert",
   onAfterUpdateQuery: "onAfterUpdateQuery",
   onAfterUpdate: "onAfterUpdate",
   onAfterDelete: "onAfterDelete",

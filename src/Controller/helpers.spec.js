@@ -90,18 +90,18 @@ describe("callHooks", () => {
   test("should be able call hooks if there is any", async () => {
     const model = {
       hooks: {
-        onBeforeCreate: jest.fn(),
+        onBeforeInsert: jest.fn(),
       },
       events: {
-        onBeforeCreate: jest.fn(),
+        onBeforeInsert: jest.fn(),
       },
     };
-    await callHooks(model, "onBeforeCreate", { id: 13 });
-    expect(model.hooks.onBeforeCreate.mock.calls.length).toBe(1);
-    expect(model.events.onBeforeCreate.mock.calls.length).toBe(1);
+    await callHooks(model, "onBeforeInsert", { id: 13 });
+    expect(model.hooks.onBeforeInsert.mock.calls.length).toBe(1);
+    expect(model.events.onBeforeInsert.mock.calls.length).toBe(1);
 
-    expect(model.hooks.onBeforeCreate.mock.calls[0][0].id).toBe(13);
-    expect(model.events.onBeforeCreate.mock.calls[0][0].id).toBe(13);
+    expect(model.hooks.onBeforeInsert.mock.calls[0][0].id).toBe(13);
+    expect(model.events.onBeforeInsert.mock.calls[0][0].id).toBe(13);
   });
 
   test("should not be able call hooks if there is not any hook", async () => {
@@ -109,6 +109,6 @@ describe("callHooks", () => {
       hooks: {},
       events: {},
     };
-    await callHooks(model, "onBeforeCreate", { id: 13 });
+    await callHooks(model, "onBeforeInsert", { id: 13 });
   });
 });

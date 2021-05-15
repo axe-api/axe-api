@@ -29,7 +29,7 @@ export default async (pack) => {
     formData[relation.foreignKey] = request.params[parentColumn];
   }
 
-  await callHooks(model, HOOK_FUNCTIONS.onBeforeCreate, {
+  await callHooks(model, HOOK_FUNCTIONS.onBeforeInsert, {
     ...pack,
     formData,
   });
@@ -39,7 +39,7 @@ export default async (pack) => {
     .where("id", insertId)
     .first();
 
-  await callHooks(model, HOOK_FUNCTIONS.onAfterCreate, {
+  await callHooks(model, HOOK_FUNCTIONS.onAfterInsert, {
     ...pack,
     formData,
     item,
