@@ -98,7 +98,7 @@ class Server {
 
       this.app.get("/docs/routes", async (req, res) => {
         const docs = await IoC.use("Docs");
-        res.json(docs.get().map((route) => route.url));
+        res.json(docs.get().map((route) => `${route.method} ${route.url}`));
       });
     }
 
