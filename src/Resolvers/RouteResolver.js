@@ -47,6 +47,7 @@ const _createRoutes = async (
   const app = await IoC.use("App");
   const database = await IoC.use("Database");
   const queryParser = await IoC.use("QueryParser");
+  const docs = await IoC.use("Docs");
 
   const pack = {
     model,
@@ -84,6 +85,9 @@ const _createRoutes = async (
           });
         middlewares.push(...filtered);
       }
+
+      // Adding created route to the documentation
+      docs.push(routeTemplate.method, url, model);
 
       // Adding the route to the express
       app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {

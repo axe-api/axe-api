@@ -49,40 +49,31 @@ describe("getFormData", () => {
 
 describe("getFormValidation", () => {
   test("should be able get the validation directly", async () => {
-    const request = {
-      method: "POST",
-    };
     const validations = {
       email: "required",
     };
-    const result = getFormValidation(request, validations);
+    const result = getFormValidation("POST", validations);
     expect(result.email).toBe("required");
   });
 
   test("should be able get the validation by the request method", async () => {
-    const request = {
-      method: "POST",
-    };
     const validations = {
       POST: {
         email: "required",
       },
     };
-    const result = getFormValidation(request, validations);
+    const result = getFormValidation("POST", validations);
     expect(result.email).toBe("required");
   });
 
   test("should be not able get the validation by the wrong request method", async () => {
-    const request = {
-      method: "PUT",
-    };
     const validations = {
       POST: {
         email: "required",
       },
     };
-    const result = getFormValidation(request, validations);
-    expect(result).toBe(null);
+    const result = getFormValidation("PUT", validations);
+    expect(result).toBe(undefined);
   });
 });
 

@@ -5,6 +5,7 @@ import { attachPaginate } from "knex-paginate";
 import Config from "./Core/Config.js";
 import QueryParser from "./Core/QueryParser.js";
 import IoC from "./Core/IoC.js";
+import Docs from "./Core/Docs.js";
 import Logger from "./Core/Logger.js";
 import {
   getModels,
@@ -48,6 +49,7 @@ class Server {
     IoC.singleton("QueryParser", async () => {
       return new QueryParser();
     });
+    IoC.singleton("Docs", async () => new Docs());
     IoC.bind("fs", async () => import("fs"));
     IoC.bind("path", async () => import("path"));
     IoC.bind("url", async () => import("url"));
@@ -75,16 +77,31 @@ class Server {
   }
 
   async _listen() {
+    const Config = await IoC.use("Config");
+
     this.app.get("/", (req, res) => {
       res.json({
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
-        modelTree: this.modelTree,
       });
     });
 
-    const Config = await IoC.use("Config");
+    if (Config.Application.env === "development") {
+      this.app.get("/docs", async (req, res) => {
+        const docs = await IoC.use("Docs");
+        res.json({
+          routes: docs.get(),
+          modelTree: this.modelTree,
+        });
+      });
+
+      this.app.get("/docs/routes", async (req, res) => {
+        const docs = await IoC.use("Docs");
+        res.json(docs.get().map((route) => route.url));
+      });
+    }
+
     this.app.listen(Config.Application.port, () => {
       console.log(
         `Example app listening at http://localhost:${Config.Application.port}`

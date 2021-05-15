@@ -12,7 +12,7 @@ export default async (pack) => {
 
   const formData = getFormData(request, model.instance.fillable);
   const formValidationRules = getFormValidation(
-    request,
+    request.method,
     model.instance.validations
   );
 
