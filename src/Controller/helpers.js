@@ -26,17 +26,17 @@ export const getFormData = (request, fillable) => {
   return filtered;
 };
 
-export const getFormValidation = (request, validations) => {
+export const getFormValidation = (method, validations) => {
   if (!validations) {
-    return null;
+    return undefined;
   }
 
-  if (validations[request.method]) {
-    return validations[request.method];
+  if (validations[method]) {
+    return validations[method];
   }
 
   if (validations.POST || validations.PUT) {
-    return null;
+    return undefined;
   }
 
   return validations;
