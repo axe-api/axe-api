@@ -38,6 +38,7 @@ const requestHandler = async (method, req, res, pack) => {
 
 const _createRoutes = async (
   model,
+  models,
   urlPrefix = "",
   parentModel = null,
   relation = null,
@@ -51,6 +52,7 @@ const _createRoutes = async (
 
   const pack = {
     model,
+    models,
     parentModel,
     relation,
     Config,
@@ -107,6 +109,7 @@ const _createRoutes = async (
       // It should be recursive
       await _createRoutes(
         child,
+        models,
         `${urlPrefix}${resource}/:${idKey}/`,
         model,
         relation
@@ -126,6 +129,7 @@ const _createRoutes = async (
 
     await _createRoutes(
       model,
+      models,
       `${urlPrefix}${resource}/:${idKey}/`,
       model,
       relation,
@@ -134,15 +138,15 @@ const _createRoutes = async (
   }
 };
 
-export default async (app, map, appDirectory) => {
+export default async (app, modelTree, appDirectory, models) => {
   Config = await IoC.use("Config");
   const logger = await IoC.use("Logger");
   const fs = await IoC.use("fs");
   const path = await IoC.use("path");
   const url = await IoC.use("url");
 
-  for (const model of map) {
-    await _createRoutes(model);
+  for (const model of modelTree) {
+    await _createRoutes(model, models);
   }
 
   // Calling the user's custom definitions
