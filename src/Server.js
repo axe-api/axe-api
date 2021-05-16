@@ -73,7 +73,7 @@ class Server {
     await setHooks("Hooks", this.appFolder, this.models);
     await setHooks("Events", this.appFolder, this.models);
     this.modelTree = await getModelTree(this.models);
-    await setRoutes(this.app, this.modelTree, this.appFolder);
+    await setRoutes(this.app, this.modelTree, this.appFolder, this.models);
   }
 
   async _listen() {
