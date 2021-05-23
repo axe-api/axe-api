@@ -3,6 +3,7 @@ import {
   getFormValidation,
   callHooks,
   getParentColumn,
+  filterHiddenFields,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
@@ -44,6 +45,9 @@ export default async (pack) => {
     formData,
     item,
   });
+
+  // Filtering hidden fields from the response data.
+  filterHiddenFields([item], model.instance.hiddens);
 
   return response.json(item);
 };

@@ -1,4 +1,9 @@
-import { callHooks, getParentColumn, getRelatedData } from "./helpers.js";
+import {
+  callHooks,
+  getParentColumn,
+  getRelatedData,
+  filterHiddenFields,
+} from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import ApiError from "./../Exceptions/ApiError.js";
 
@@ -58,6 +63,9 @@ export default async (pack) => {
     conditions,
     item,
   });
+
+  // Filtering hidden fields from the response data.
+  filterHiddenFields([item], model.instance.hiddens);
 
   return response.json(item);
 };
