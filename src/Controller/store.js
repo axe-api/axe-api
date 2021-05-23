@@ -4,9 +4,10 @@ import {
   callHooks,
   getParentColumn,
   filterHiddenFields,
+  bindTimestampValues,
 } from "./helpers.js";
 import Validator from "validatorjs";
-import { HOOK_FUNCTIONS } from "./../Constants.js";
+import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
 
 export default async (pack) => {
   const { request, response, model, database, relation, parentModel } = pack;
@@ -29,6 +30,13 @@ export default async (pack) => {
     const parentColumn = getParentColumn(request);
     formData[relation.foreignKey] = request.params[parentColumn];
   }
+
+  // We should bind the timestamp values
+  bindTimestampValues(
+    formData,
+    [TIMESTAMP_COLUMNS.CREATED_AT, TIMESTAMP_COLUMNS.UPDATED_AT],
+    model
+  );
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeInsert, {
     ...pack,

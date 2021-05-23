@@ -185,3 +185,11 @@ export const filterHiddenFields = (itemArray, hiddens) => {
     });
   });
 };
+
+export const bindTimestampValues = (formData, columnTypes = [], model) => {
+  for (const columnType of columnTypes) {
+    if (model.instance[columnType]) {
+      formData[model.instance[columnType]] = new Date();
+    }
+  }
+};
