@@ -124,6 +124,11 @@ const DEPENDECY_TYPES = {
   SINGLETON: "SINGLETON",
 };
 
+const TIMESTAMP_COLUMNS = {
+  CREATED_AT: "createdAtColumn",
+  UPDATED_AT: "updatedAtColumn",
+};
+
 export {
   LOG_LEVEL,
   HOOK_FUNCTIONS,
@@ -134,4 +139,5 @@ export {
   LOG_COLORS,
   DEPENDECY_TYPES,
   HANDLERS,
+  TIMESTAMP_COLUMNS,
 };

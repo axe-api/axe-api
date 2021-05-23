@@ -31,6 +31,14 @@ class Model {
     return [];
   }
 
+  get createdAtColumn() {
+    return "created_at";
+  }
+
+  get updatedAtColumn() {
+    return "updated_at";
+  }
+
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
