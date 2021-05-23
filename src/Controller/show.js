@@ -1,4 +1,4 @@
-import { callHooks, getParentColumn } from "./helpers.js";
+import { callHooks, getParentColumn, getRelatedData } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import ApiError from "./../Exceptions/ApiError.js";
 
@@ -7,6 +7,7 @@ export default async (pack) => {
     request,
     response,
     model,
+    models,
     queryParser,
     database,
     relation,
@@ -47,6 +48,9 @@ export default async (pack) => {
   if (!item) {
     throw new ApiError(404, `The item is not found on ${model.name}.`);
   }
+
+  // We should try to get related data if there is any
+  await getRelatedData([item], conditions.with, model, models, database);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
     ...pack,
