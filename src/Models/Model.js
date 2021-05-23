@@ -27,6 +27,10 @@ class Model {
     return [];
   }
 
+  get hiddens() {
+    return [];
+  }
+
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
