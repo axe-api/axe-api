@@ -3,6 +3,7 @@ import {
   getParentColumn,
   getRelatedData,
   filterHiddenFields,
+  serializeData,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 
@@ -61,6 +62,9 @@ export default async (pack) => {
     conditions,
     query,
   });
+
+  // Serializing the data by the model's serialize method
+  result.data = serializeData(result.data, model.instance.serialize);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields(result.data, model.instance.hiddens);

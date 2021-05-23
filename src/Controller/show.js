@@ -3,6 +3,7 @@ import {
   getParentColumn,
   getRelatedData,
   filterHiddenFields,
+  serializeData,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import ApiError from "./../Exceptions/ApiError.js";
@@ -49,7 +50,7 @@ export default async (pack) => {
     conditions,
   });
 
-  const item = await query.first();
+  let item = await query.first();
   if (!item) {
     throw new ApiError(404, `The item is not found on ${model.name}.`);
   }
@@ -63,6 +64,9 @@ export default async (pack) => {
     conditions,
     item,
   });
+
+  // Serializing the data by the model's serialize method
+  item = serializeData(item, model.instance.serialize);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

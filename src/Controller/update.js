@@ -5,6 +5,7 @@ import {
   getParentColumn,
   filterHiddenFields,
   bindTimestampValues,
+  serializeData,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
@@ -70,6 +71,9 @@ export default async (pack) => {
     formData,
     query,
   });
+
+  // Serializing the data by the model's serialize method
+  item = serializeData(item, model.instance.serialize);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);
