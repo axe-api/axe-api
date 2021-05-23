@@ -42,7 +42,10 @@ export default async (pack) => {
   // this.queryParser.applyRelations(query, conditions.with);
 
   // We should add this condition in here because of performance.
-  query.where("id", request.params.id);
+  query.where(
+    model.instance.primaryKey,
+    request.params[model.instance.primaryKey]
+  );
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeShow, {
     ...pack,

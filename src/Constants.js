@@ -71,15 +71,18 @@ const API_ROUTE_TEMPLATES = {
     method: HTTP_METHODS.GET,
   },
   [HANDLERS.SHOW]: {
-    url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
+    url: (parentUrl, resource, primaryKey) =>
+      `/api/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.GET,
   },
   [HANDLERS.UPDATE]: {
-    url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
+    url: (parentUrl, resource, primaryKey) =>
+      `/api/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.PUT,
   },
   [HANDLERS.DELETE]: {
-    url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id`,
+    url: (parentUrl, resource, primaryKey) =>
+      `/api/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.DELETE,
   },
   // [HANDLERS.ALL]: {
