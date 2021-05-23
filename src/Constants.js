@@ -33,6 +33,7 @@ const DEFAULT_METHODS_OF_MODELS = [
   "hasMany",
   "hasOne",
   "belongsTo",
+  "serialize",
   "__defineGetter__",
   "__defineSetter__",
   "hasOwnProperty",

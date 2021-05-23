@@ -5,6 +5,7 @@ import {
   getParentColumn,
   filterHiddenFields,
   bindTimestampValues,
+  serializeData,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
@@ -44,15 +45,16 @@ export default async (pack) => {
   });
 
   const [insertId] = await database(model.instance.table).insert(formData);
-  const item = await database(model.instance.table)
-    .where("id", insertId)
-    .first();
+  let item = await database(model.instance.table).where("id", insertId).first();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterInsert, {
     ...pack,
     formData,
     item,
   });
+
+  // Serializing the data by the model's serialize method
+  item = serializeData(item, model.instance.serialize);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

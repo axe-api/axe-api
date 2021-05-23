@@ -145,9 +145,15 @@ export const getRelatedData = async (
     }
 
     // Fetching related records by foreignKey and primary key values.
-    const relatedRecords = await database(foreignModel.instance.table)
+    let relatedRecords = await database(foreignModel.instance.table)
       .select(selectColumns)
       .whereIn(definedRelation[searchField], parentPrimaryKeyValues);
+
+    // We should serialize related data if there is any serialization function
+    relatedRecords = serializeData(
+      relatedRecords,
+      foreignModel.instance.serialize
+    );
 
     // We should try to get child data if there is any on the query
     if (clientQuery.children.length > 0) {
@@ -181,7 +187,9 @@ export const filterHiddenFields = (itemArray, hiddens) => {
 
   itemArray.forEach((item) => {
     hiddens.forEach((hidden) => {
-      delete item[hidden];
+      if (item[hidden]) {
+        delete item[hidden];
+      }
     });
   });
 };
@@ -192,4 +200,16 @@ export const bindTimestampValues = (formData, columnTypes = [], model) => {
       formData[model.instance[columnType]] = new Date();
     }
   }
+};
+
+export const serializeData = (itemArray, serialize) => {
+  if (!serialize) {
+    return itemArray;
+  }
+
+  if (Array.isArray(itemArray)) {
+    return itemArray.map(serialize);
+  }
+
+  return [itemArray].map(serialize)[0];
 };
