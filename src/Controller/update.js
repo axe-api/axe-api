@@ -1,9 +1,9 @@
-import { snakeCase } from "change-case";
 import {
   getFormData,
   getFormValidation,
   callHooks,
   getParentColumn,
+  filterHiddenFields,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
@@ -66,6 +66,9 @@ export default async (pack) => {
     formData,
     query,
   });
+
+  // Filtering hidden fields from the response data.
+  filterHiddenFields([item], model.instance.hiddens);
 
   return response.json(item);
 };

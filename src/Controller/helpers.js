@@ -173,3 +173,15 @@ export const getRelatedData = async (
     });
   }
 };
+
+export const filterHiddenFields = (itemArray, hiddens) => {
+  if (hiddens.length === 0 || itemArray.length === 0) {
+    return;
+  }
+
+  itemArray.forEach((item) => {
+    hiddens.forEach((hidden) => {
+      delete item[hidden];
+    });
+  });
+};
