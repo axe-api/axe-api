@@ -27,7 +27,9 @@ export default async (pack) => {
     query,
   });
 
-  let item = await query.where("id", request.params.id).first();
+  let item = await query
+    .where(model.instance.primaryKey, request.params[model.instance.primaryKey])
+    .first();
   if (!item) {
     throw new ApiError(404, `The item is not found on ${model.name}.`);
   }
@@ -62,8 +64,12 @@ export default async (pack) => {
     query,
   });
 
-  await query.where("id", item.id).update(formData);
-  item = await database(model.instance.table).where("id", item.id).first();
+  await query
+    .where(model.instance.primaryKey, item[model.instance.primaryKey])
+    .update(formData);
+  item = await database(model.instance.table)
+    .where(model.instance.primaryKey, item[model.instance.primaryKey])
+    .first();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterUpdate, {
     ...pack,

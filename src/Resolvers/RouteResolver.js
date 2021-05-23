@@ -36,6 +36,10 @@ const requestHandler = async (method, req, res, pack) => {
   }
 };
 
+const ucFirst = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const _createRoutes = async (
   model,
   models,
@@ -69,7 +73,11 @@ const _createRoutes = async (
   for (const handler of Object.keys(API_ROUTE_TEMPLATES)) {
     if (model.instance.handlers.includes(handler)) {
       const routeTemplate = API_ROUTE_TEMPLATES[handler];
-      const url = routeTemplate.url(urlPrefix, resource);
+      const url = routeTemplate.url(
+        urlPrefix,
+        resource,
+        model.instance.primaryKey
+      );
       logger.debug(`Model routes created: ${url}`);
 
       // Detecting filters
@@ -100,7 +108,9 @@ const _createRoutes = async (
 
   if (model.children.length > 0) {
     // We should different parameter name for child routes
-    const idKey = pluralize.singular(model.name).toLowerCase() + "Id";
+    const primaryKey =
+      pluralize.singular(model.name).toLowerCase() +
+      ucFirst(model.instance.primaryKey);
     const subRelations = model.instance.relations.filter(
       (item) => item.type === RELATIONSHIPS.HAS_MANY
     );
@@ -110,7 +120,7 @@ const _createRoutes = async (
       await _createRoutes(
         child,
         models,
-        `${urlPrefix}${resource}/:${idKey}/`,
+        `${urlPrefix}${resource}/:${primaryKey}/`,
         model,
         relation
       );
@@ -120,7 +130,9 @@ const _createRoutes = async (
   // Adding recursive model routes
   if (model.isRecursive && allowRecursive) {
     // We should different parameter name for child routes
-    const idKey = pluralize.singular(model.name).toLowerCase() + "Id";
+    const primaryKey =
+      pluralize.singular(model.name).toLowerCase() +
+      ucFirst(model.instance.primaryKey);
     const relation = model.instance.relations.find(
       (relation) =>
         relation.model === model.name &&
@@ -130,7 +142,7 @@ const _createRoutes = async (
     await _createRoutes(
       model,
       models,
-      `${urlPrefix}${resource}/:${idKey}/`,
+      `${urlPrefix}${resource}/:${primaryKey}/`,
       model,
       relation,
       false

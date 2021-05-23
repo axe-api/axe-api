@@ -44,8 +44,18 @@ export default async (pack) => {
     formData,
   });
 
-  const [insertId] = await database(model.instance.table).insert(formData);
-  let item = await database(model.instance.table).where("id", insertId).first();
+  let [insertedPrimaryKeyValue] = await database(model.instance.table).insert(
+    formData
+  );
+
+  // If the user use a special primary key value, we should use that value
+  if (insertedPrimaryKeyValue === 0) {
+    insertedPrimaryKeyValue = formData[model.instance.primaryKey];
+  }
+
+  let item = await database(model.instance.table)
+    .where(model.instance.primaryKey, insertedPrimaryKeyValue)
+    .first();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterInsert, {
     ...pack,
