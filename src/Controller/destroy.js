@@ -7,7 +7,10 @@ export default async (pack) => {
 
   const query = database
     .from(model.instance.table)
-    .where("id", request.params.id);
+    .where(
+      model.instance.primaryKey,
+      request.params[model.instance.primaryKey]
+    );
 
   // If there is a relation, we should bind it
   if (relation && parentModel) {

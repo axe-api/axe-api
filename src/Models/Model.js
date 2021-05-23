@@ -7,6 +7,10 @@ class Model {
     this.relations = [];
   }
 
+  get primaryKey() {
+    return "id";
+  }
+
   get table() {
     return pluralize(this.constructor.name.toLowerCase());
   }
