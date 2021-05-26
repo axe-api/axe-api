@@ -18,7 +18,7 @@ export default async (pack) => {
 
   // If there is a relation, we should bind it
   if (relation && parentModel) {
-    const parentColumn = getParentColumn(request);
+    const parentColumn = getParentColumn(relation);
     query.where(relation.foreignKey, request.params[parentColumn]);
   }
 

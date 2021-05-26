@@ -1,4 +1,5 @@
 import { RELATIONSHIPS } from "./../Constants.js";
+import { camelCase } from "change-case";
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -54,15 +55,12 @@ export const callHooks = async (model, type, data) => {
   }
 };
 
-export const getParentColumn = (request) => {
-  const sections = request.route.path
-    .replace("/api/", "")
-    .split("/")
-    .filter((item) => item !== ":id" && item.indexOf(":") > -1);
-  if (sections.length > 0) {
-    return sections[sections.length - 1].replace(":", "");
+export const getParentColumn = (relation) => {
+  if (!relation) {
+    return null;
   }
-  return null;
+
+  return camelCase(relation.foreignKey);
 };
 
 export const getRelatedData = async (
