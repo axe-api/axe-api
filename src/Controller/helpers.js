@@ -153,6 +153,9 @@ export const getRelatedData = async (
       foreignModel.instance.serialize
     );
 
+    // We should hide hidden fields if there is any
+    filterHiddenFields(relatedRecords, foreignModel.instance.hiddens);
+
     // We should try to get child data if there is any on the query
     if (clientQuery.children.length > 0) {
       await getRelatedData(
@@ -185,7 +188,7 @@ export const filterHiddenFields = (itemArray, hiddens) => {
 
   itemArray.forEach((item) => {
     hiddens.forEach((hidden) => {
-      if (item[hidden]) {
+      if (item[hidden] !== undefined) {
         delete item[hidden];
       }
     });
