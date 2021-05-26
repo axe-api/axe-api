@@ -21,5 +21,5 @@ export default async (type, appDirectory, models) => {
     }
   }
 
-  logger.info("All hooks have been mapped.");
+  logger.info(`${type} have been mapped.`);
 };
