@@ -13,6 +13,7 @@ import {
   setRelations,
   setHooks,
   setRoutes,
+  detectTableColumns,
 } from "./Resolvers/index.js";
 
 class Server {
@@ -70,6 +71,7 @@ class Server {
   async _analyzeModels() {
     this.models = await getModels(this.appFolder);
     await setRelations(this.models);
+    await detectTableColumns(this.models);
     await setHooks("Hooks", this.appFolder, this.models);
     await setHooks("Events", this.appFolder, this.models);
     this.modelTree = await getModelTree(this.models);

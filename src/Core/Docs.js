@@ -27,6 +27,7 @@ class Docs {
     this.routes.push({
       model: model.name,
       table: model.instance.table,
+      columns: model.instance.columns,
       method,
       url,
       fillable,
