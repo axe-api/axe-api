@@ -140,6 +140,19 @@ export const getRelatedData = async (
           };
         }),
       ];
+
+      // We should check if the column is defined on the table.
+      const acceptableColumns = foreignModel.instance.columns.map(
+        (item) => item.name
+      );
+      const unacceptableColumns = selectColumns.filter(
+        (column) => !acceptableColumns.includes(column)
+      );
+      if (unacceptableColumns.length > 0) {
+        throw new Error(
+          `Unacceptable columns: ${unacceptableColumns.join(", ")}`
+        );
+      }
     }
 
     // Fetching related records by foreignKey and primary key values.
