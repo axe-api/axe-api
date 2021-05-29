@@ -20,8 +20,6 @@
   </a>
 </h1>
 
-# Axe API
-
 > This project is under development and not ready for production.
 
 Fastest way to create simple Rest API by defining database models and relations.
