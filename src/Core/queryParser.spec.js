@@ -4,6 +4,8 @@ const options = {
   max_per_page: 100,
 };
 
+const model = {};
+
 test("I should be able to override basic options", () => {
   expect(new QueryParser().options.max_per_page).toBe(100);
   expect(new QueryParser({ max_per_page: 25 }).options.max_per_page).toBe(25);
@@ -586,7 +588,7 @@ test("I should be able to parse all sections", () => {
 
 test("I should be able to get query parsing result", () => {
   const parser = new QueryParser();
-  const result = parser.get({});
+  const result = parser.get(model, {});
   expect(result.page).toBe(1);
   expect(result.per_page).toBe(10);
 });
