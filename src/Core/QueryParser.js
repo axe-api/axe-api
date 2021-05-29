@@ -6,7 +6,7 @@ class QueryParser {
       min_per_page: 10,
       max_per_page: 100,
     };
-    this.usedConditionColumns = [];
+    this.usedConditionColumns = new Set();
     Object.assign(this.options, options);
 
     this.options.min_per_page = parseInt(this.options.min_per_page);
@@ -110,7 +110,7 @@ class QueryParser {
     return [
       ...conditions.fields,
       ...conditions.sort.map((item) => item.field),
-      ...this.usedConditionColumns,
+      ...Array.from(this.usedConditionColumns),
     ];
   }
 
@@ -323,7 +323,7 @@ class QueryParser {
     }
 
     this._shouldBeAcceptableColumn(where.field);
-    this.usedConditionColumns.push(where.field);
+    this.usedConditionColumns.add(where.field);
     return where;
   }
 
