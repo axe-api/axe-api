@@ -82,7 +82,10 @@ export const getRelatedData = async (
       (relation) => relation.name === clientQuery.relationship
     );
     if (!definedRelation) {
-      continue;
+      throw new ApiError(
+        400,
+        `Undefined relation: ${clientQuery.relationship}`
+      );
     }
 
     // Find the foreign model by the relationship
@@ -149,7 +152,7 @@ export const getRelatedData = async (
       if (undefinedColumns.length > 0) {
         throw new ApiError(
           400,
-          `Undefined column names: ${undefinedColumns.join(", ")}`
+          `Undefined columns: ${undefinedColumns.join(", ")}`
         );
       }
     }
