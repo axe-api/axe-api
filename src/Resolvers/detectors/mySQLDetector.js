@@ -1,18 +1,12 @@
 export default async ({ knex, schema }) => {
-  const result = await knex.raw(
-    `
-    SELECT * 
-    FROM information_schema.columns
-    WHERE table_schema = ?;
-  `,
-    schema
-  );
+  const columns = await knex
+    .table("information_schema.columns")
+    .where("table_schema", schema);
 
-  if (!result || !result[0]) {
+  if (!columns) {
     throw new Error("Auto-column detection is failed on MySQL!");
   }
 
-  const [columns] = result;
   return columns.map((i) => {
     return {
       name: i.COLUMN_NAME,

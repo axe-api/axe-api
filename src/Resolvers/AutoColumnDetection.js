@@ -27,5 +27,6 @@ export default async (models) => {
     model.instance.columns = columns.filter(
       (column) => column.tableName === model.instance.table
     );
+    model.instance.columnNames = model.instance.columns.map((i) => i.name);
   }
 };

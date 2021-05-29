@@ -14,6 +14,7 @@ import {
   setHooks,
   setRoutes,
   detectTableColumns,
+  checkModelColumns,
 } from "./Resolvers/index.js";
 
 class Server {
@@ -72,6 +73,7 @@ class Server {
     this.models = await getModels(this.appFolder);
     await setRelations(this.models);
     await detectTableColumns(this.models);
+    checkModelColumns(this.models);
     await setHooks("Hooks", this.appFolder, this.models);
     await setHooks("Events", this.appFolder, this.models);
     this.modelTree = await getModelTree(this.models);
