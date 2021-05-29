@@ -6,6 +6,9 @@
   <br>
   Axe API
   <br>
+  <a href="https://badge.fury.io/js/axe-api">
+    <img src="https://badge.fury.io/js/axe-api.svg" alt="npm version" height="18">
+  </a>
   <a href="https://github.com/axe-api/axe-api/actions/workflows/npm-publish.yml" target="_blank">
     <img src="https://github.com/axe-api/axe-api/actions/workflows/npm-publish.yml/badge.svg?branch=master">
   </a>
