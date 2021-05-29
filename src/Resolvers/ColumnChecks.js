@@ -71,12 +71,18 @@ const checkModelColumnsOrFail = (model, modelColumns) => {
 const checkHasManyRelation = (models, model, relation) => {
   checkModelColumnsOrFail(model, [relation.primaryKey]);
   const relatedModel = models.find((item) => item.name === relation.model);
+  if (!relatedModel) {
+    throw new Error(`Undefined related model: ${relation.model}`);
+  }
   checkModelColumnsOrFail(relatedModel, [relation.foreignKey]);
 };
 
 const checkHasOneRelation = (models, model, relation) => {
   checkModelColumnsOrFail(model, [relation.foreignKey]);
   const relatedModel = models.find((item) => item.name === relation.model);
+  if (!relatedModel) {
+    throw new Error(`Undefined related model: ${relation.model}`);
+  }
   checkModelColumnsOrFail(relatedModel, [relation.primaryKey]);
 };
 

@@ -27,6 +27,13 @@ export default async (models) => {
     model.instance.columns = columns.filter(
       (column) => column.tableName === model.instance.table
     );
+
+    if (model.instance.columns.length === 0) {
+      throw new Error(
+        `The "${model.instance.table}" table doesn't have any column. Are you sure about the table name?`
+      );
+    }
+
     model.instance.columnNames = model.instance.columns.map((i) => i.name);
   }
 };
