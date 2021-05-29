@@ -1,5 +1,5 @@
 import IoC from "./../Core/IoC.js";
-import { mySQLDetector } from "./detectors/index.js";
+import { mySQLDetector, sqliteDetector } from "./detectors/index.js";
 
 const getColumns = async () => {
   const Config = await IoC.use("Config");
@@ -7,6 +7,7 @@ const getColumns = async () => {
   const databaseClient = Config.Database.client.toLowerCase();
   const detectors = {
     mysql: mySQLDetector,
+    sqlite3: sqliteDetector,
   };
 
   const detector = detectors[databaseClient];

@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "AXE API is a simple tool which has been created based on Express and Knex.js to create Rest APIs quickly.",
   "main": "index.js",
   "type": "module",
@@ -41,6 +41,7 @@
     "knex-paginate": "^2.1.0",
     "mysql": "^2.18.1",
     "pluralize": "^8.0.0",
+    "sqlite3": "^5.0.2",
     "validatorjs": "^3.22.1"
   }
 }
