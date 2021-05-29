@@ -12,19 +12,21 @@ test("I should be able to override basic options", () => {
 });
 
 test("I should be able to see an error when I try to set unacceptable options", () => {
+  let parser = null;
   /* eslint-disable no-new */
   expect(() => {
-    new QueryParser({ min_per_page: -10 });
+    parser = new QueryParser({ min_per_page: -10 });
   }).toThrow(Error);
   expect(() => {
-    new QueryParser({ max_per_page: 100000 });
+    parser = new QueryParser({ max_per_page: 100000 });
   }).toThrow(Error);
   expect(() => {
-    new QueryParser({ min_per_page: "xxx" });
+    parser = new QueryParser({ min_per_page: "xxx" });
   }).toThrow(Error);
   expect(() => {
-    new QueryParser({ max_per_page: "xxx" });
+    parser = new QueryParser({ max_per_page: "xxx" });
   }).toThrow(Error);
+  expect(parser).toBe(null);
 });
 
 test("I should be able to get an error when I send unacceptable query string", () => {
