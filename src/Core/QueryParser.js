@@ -1,9 +1,12 @@
+import ApiError from "./../Exceptions/ApiError.js";
+
 class QueryParser {
   constructor(options = {}) {
     this.options = {
       min_per_page: 10,
       max_per_page: 100,
     };
+    this.usedConditionColumns = [];
     Object.assign(this.options, options);
 
     this.options.min_per_page = parseInt(this.options.min_per_page);
@@ -86,8 +89,29 @@ class QueryParser {
     }
   }
 
-  get(query) {
-    return this._parseSections(this._getSections(query));
+  get(model, query) {
+    const conditions = this._parseSections(this._getSections(query));
+    const usedColumns = this._getUsedColumns(conditions);
+    const undefinedColumns = usedColumns.filter(
+      (usedColumn) => !model.instance.columnNames.includes(usedColumn)
+    );
+
+    if (undefinedColumns.length > 0) {
+      throw new ApiError(
+        400,
+        `Undefined column names: ${undefinedColumns.join(",")}`
+      );
+    }
+
+    return conditions;
+  }
+
+  _getUsedColumns(conditions) {
+    return [
+      ...conditions.fields,
+      ...conditions.sort.map((item) => item.field),
+      ...this.usedConditionColumns,
+    ];
   }
 
   _applyConditionRule(query, ruleSet) {
@@ -299,7 +323,7 @@ class QueryParser {
     }
 
     this._shouldBeAcceptableColumn(where.field);
-
+    this.usedConditionColumns.push(where.field);
     return where;
   }
 

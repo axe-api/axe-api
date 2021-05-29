@@ -3,7 +3,6 @@ import express from "express";
 import knex from "knex";
 import { attachPaginate } from "knex-paginate";
 import Config from "./Core/Config.js";
-import QueryParser from "./Core/QueryParser.js";
 import IoC from "./Core/IoC.js";
 import Docs from "./Core/Docs.js";
 import Logger from "./Core/Logger.js";
@@ -47,9 +46,6 @@ class Server {
     IoC.singleton("Logger", async () => {
       const Config = await IoC.use("Config");
       return new Logger(Config.Application.logLevel);
-    });
-    IoC.singleton("QueryParser", async () => {
-      return new QueryParser();
     });
     IoC.singleton("Docs", async () => new Docs());
     IoC.bind("fs", async () => import("fs"));
