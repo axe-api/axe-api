@@ -1,3 +1,5 @@
+import { RELATIONSHIPS } from "./../Constants.js";
+
 const getModelFillableColumns = (model) => {
   if (!model.instance.fillable) {
     return [];
@@ -51,7 +53,7 @@ const getTimestampsColumns = (model) => {
   return columns;
 };
 
-const checkOrFailModelColumns = (model, modelColumns) => {
+const checkModelColumnsOrFail = (model, modelColumns) => {
   const undefinedColumns = modelColumns.filter(
     (modelColumn) => !model.instance.columnNames.includes(modelColumn)
   );
@@ -59,18 +61,46 @@ const checkOrFailModelColumns = (model, modelColumns) => {
     throw new Error(
       `${
         model.name
-      } model doesn't have the following columns on the database; ${undefinedColumns.join(
-        ","
-      )}`
+      } model doesn't have the following columns on the database; "${
+        model.instance.table
+      }.${undefinedColumns.join(",")}"`
     );
+  }
+};
+
+const checkHasManyRelation = (models, model, relation) => {
+  checkModelColumnsOrFail(model, [relation.primaryKey]);
+  const relatedModel = models.find((item) => item.name === relation.model);
+  checkModelColumnsOrFail(relatedModel, [relation.foreignKey]);
+};
+
+const checkHasOneRelation = (models, model, relation) => {
+  checkModelColumnsOrFail(model, [relation.foreignKey]);
+  const relatedModel = models.find((item) => item.name === relation.model);
+  checkModelColumnsOrFail(relatedModel, [relation.primaryKey]);
+};
+
+const checkerByRelationTypes = {
+  [RELATIONSHIPS.HAS_MANY]: checkHasManyRelation,
+  [RELATIONSHIPS.HAS_ONE]: checkHasOneRelation,
+};
+
+const checkRelationColumnsOrFail = (models, model) => {
+  for (const relation of model.instance.relations) {
+    const checker = checkerByRelationTypes[relation.type];
+    if (!checker) {
+      throw new Error(`Undefined relation type: ${relation.type}`);
+    }
+    checker(models, model, relation);
   }
 };
 
 export default (models) => {
   models.forEach((model) => {
-    checkOrFailModelColumns(model, getModelFillableColumns(model));
-    checkOrFailModelColumns(model, getModelFormValidationColumns(model));
-    checkOrFailModelColumns(model, getModelHiddenColumns(model));
-    checkOrFailModelColumns(model, getTimestampsColumns(model));
+    checkModelColumnsOrFail(model, getModelFillableColumns(model));
+    checkModelColumnsOrFail(model, getModelFormValidationColumns(model));
+    checkModelColumnsOrFail(model, getModelHiddenColumns(model));
+    checkModelColumnsOrFail(model, getTimestampsColumns(model));
+    checkRelationColumnsOrFail(models, model);
   });
 };
