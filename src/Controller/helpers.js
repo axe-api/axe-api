@@ -1,5 +1,6 @@
 import { RELATIONSHIPS } from "./../Constants.js";
 import { camelCase } from "change-case";
+import ApiError from "./../Exceptions/ApiError.js";
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -142,15 +143,13 @@ export const getRelatedData = async (
       ];
 
       // We should check if the column is defined on the table.
-      const acceptableColumns = foreignModel.instance.columns.map(
-        (item) => item.name
+      const undefinedColumns = selectColumns.filter(
+        (column) => !foreignModel.instance.columnNames.includes(column)
       );
-      const unacceptableColumns = selectColumns.filter(
-        (column) => !acceptableColumns.includes(column)
-      );
-      if (unacceptableColumns.length > 0) {
-        throw new Error(
-          `Unacceptable columns: ${unacceptableColumns.join(", ")}`
+      if (undefinedColumns.length > 0) {
+        throw new ApiError(
+          400,
+          `Undefined column names: ${undefinedColumns.join(", ")}`
         );
       }
     }
