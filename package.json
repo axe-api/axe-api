@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "AXE API is a simple tool which has been created based on Express and Knex.js to create Rest APIs quickly.",
   "main": "index.js",
   "type": "module",
@@ -14,34 +14,32 @@
     "test:dev": "jest --watch"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.14.0",
-    "@babel/node": "^7.13.13",
-    "@babel/preset-env": "^7.14.1",
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
     "@babel/runtime": "^7.14.0",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^27.0.2",
     "babel-loader": "^8.2.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-preset-minify": "^0.5.1",
-    "eslint": "^7.26.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^7.27.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.2",
     "nodemon": "^2.0.7",
     "set-value": ">=4.0.0"
   },
   "dependencies": {
     "change-case": "^4.1.2",
-    "dotenv": "^9.0.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "knex": "^0.95.4",
+    "knex": "^0.95.6",
     "knex-paginate": "^2.1.0",
-    "mysql": "^2.18.1",
     "pluralize": "^8.0.0",
-    "sqlite3": "^5.0.2",
     "validatorjs": "^3.22.1"
   }
 }
