@@ -51,7 +51,6 @@ const _createRoutes = async (
   const logger = await IoC.use("Logger");
   const app = await IoC.use("App");
   const database = await IoC.use("Database");
-  const queryParser = await IoC.use("QueryParser");
   const docs = await IoC.use("Docs");
 
   const pack = {
@@ -62,7 +61,6 @@ const _createRoutes = async (
     Config,
     database,
     logger,
-    queryParser,
   };
 
   const resource = relation

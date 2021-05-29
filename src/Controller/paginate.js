@@ -6,21 +6,15 @@ import {
   serializeData,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
+import QueryParser from "./../Core/QueryParser.js";
 
 export default async (pack) => {
-  const {
-    request,
-    response,
-    model,
-    models,
-    queryParser,
-    database,
-    relation,
-    parentModel,
-  } = pack;
+  const { request, response, model, models, database, relation, parentModel } =
+    pack;
+  const queryParser = new QueryParser();
 
   // We should parse URL query string to use as condition in Lucid query
-  const conditions = queryParser.get(request.query);
+  const conditions = queryParser.get(model, request.query);
 
   // Creating a new database query
   const query = database.from(model.instance.table);
