@@ -1,5 +1,8 @@
 name: NPM Publish
-on: push
+on:
+  push:
+    branches:
+      - master
 jobs:
   publish:
     runs-on: ubuntu-latest
