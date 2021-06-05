@@ -1,17 +1,17 @@
-import getModels from "./modelResolver.js";
-import getModelTree from "./treeResolver.js";
-import setRelations from "./relationResolver.js";
-import setHooks from "./hookResolver.js";
-import setRoutes from "./routeResolver.js";
-import detectTableColumns from "./autoColumnDetection.js";
-import checkModelColumns from "./columnChecks.js";
+import getModelInstanceArray from "./getModelInstanceArray.js";
+import getModelTree from "./getModelTree.js";
+import setModelRelations from "./setModelRelations.js";
+import setModelHooks from "./setModelHooks.js";
+import setExpressRoutes from "./setExpressRoutes.js";
+import detectDbColumns from "./detectDbColumns.js";
+import checkModelColumns from "./checkModelColumns.js";
 
 export {
-  getModels,
+  getModelInstanceArray,
   getModelTree,
-  setRelations,
-  setHooks,
-  setRoutes,
-  detectTableColumns,
+  setModelRelations,
+  setModelHooks,
+  setExpressRoutes,
+  detectDbColumns,
   checkModelColumns,
 };
