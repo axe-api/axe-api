@@ -6,7 +6,7 @@ import {
   serializeData,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
-import QueryParser from "./../Core/QueryParser.js";
+import QueryParser from "./../core/QueryParser.js";
 
 export default async (pack) => {
   const { request, response, model, models, database, relation, parentModel } =

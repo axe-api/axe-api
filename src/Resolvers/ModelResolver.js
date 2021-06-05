@@ -1,4 +1,4 @@
-import IoC from "./../Core/IoC.js";
+import IoC from "./../core/IoC.js";
 
 export default async (appDirectory) => {
   const logger = await IoC.use("Logger");

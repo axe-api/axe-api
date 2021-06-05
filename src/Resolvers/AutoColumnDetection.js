@@ -1,4 +1,4 @@
-import IoC from "./../Core/IoC.js";
+import IoC from "./../core/IoC.js";
 import { mySQLDetector, sqliteDetector } from "./detectors/index.js";
 
 const getColumns = async () => {
