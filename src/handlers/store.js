@@ -8,7 +8,7 @@ import {
   addForeignKeyQuery,
 } from "./helpers.js";
 import Validator from "validatorjs";
-import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
+import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
 
 export default async (context) => {
   const { request, response, model, database, relation, parentModel } = context;

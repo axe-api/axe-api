@@ -5,7 +5,7 @@ import {
   serializeData,
   addForeignKeyQuery,
 } from "./helpers.js";
-import { HOOK_FUNCTIONS } from "./../Constants.js";
+import { HOOK_FUNCTIONS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 import QueryParser from "./../core/QueryParser.js";
 

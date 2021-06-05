@@ -1,5 +1,5 @@
 import { callHooks, addForeignKeyQuery } from "./helpers.js";
-import { HOOK_FUNCTIONS } from "./../Constants.js";
+import { HOOK_FUNCTIONS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (context) => {
