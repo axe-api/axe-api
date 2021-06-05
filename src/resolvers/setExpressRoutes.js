@@ -24,10 +24,10 @@ const handleErrors = (req, res, error) => {
   res.status(status).json(result);
 };
 
-const requestHandler = async (method, req, res, pack) => {
+const requestHandler = async (method, req, res, context) => {
   try {
     await Handlers[method]({
-      ...pack,
+      ...context,
       request: req,
       response: res,
     });
@@ -40,7 +40,86 @@ const ucFirst = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const _createRoutes = async (
+const getResourcePath = (model, relation) => {
+  return relation
+    ? relation.resource
+    : pluralize.plural(model.name).toLowerCase();
+};
+
+const getPrimaryKeyName = (model) => {
+  return (
+    pluralize.singular(model.name).toLowerCase() +
+    ucFirst(model.instance.primaryKey)
+  );
+};
+
+const createChildRoutes = async (model, models, resource, urlPrefix) => {
+  if (model.children.length === 0) {
+    return;
+  }
+
+  // We should different parameter name for child routes
+  const primaryKey = getPrimaryKeyName(model);
+  const subRelations = model.instance.relations.filter(
+    (item) => item.type === RELATIONSHIPS.HAS_MANY
+  );
+  for (const relation of subRelations) {
+    const child = model.children.find((item) => item.name === relation.model);
+    // It should be recursive
+    await createRouteByModel(
+      child,
+      models,
+      `${urlPrefix}${resource}/:${primaryKey}/`,
+      model,
+      relation
+    );
+  }
+};
+
+const createNestedRoutes = async (
+  model,
+  models,
+  allowRecursive,
+  urlPrefix,
+  resource
+) => {
+  if (!model.isRecursive || !allowRecursive) {
+    return;
+  }
+
+  // We should different parameter name for child routes
+  const relation = model.instance.relations.find(
+    (relation) =>
+      relation.model === model.name && relation.type === RELATIONSHIPS.HAS_MANY
+  );
+
+  await createRouteByModel(
+    model,
+    models,
+    `${urlPrefix}${resource}/:${getPrimaryKeyName(model)}/`,
+    model,
+    relation,
+    false
+  );
+};
+
+const getModelMiddlewares = (model, handler) => {
+  const middlewares = [];
+  if (model.instance.middlewares.length > 0) {
+    const filtered = model.instance.middlewares
+      .filter((item) => typeof item === "function" || item.handler === handler)
+      .map((item) => {
+        if (typeof item === "function") {
+          return item;
+        }
+        return item.middleware;
+      });
+    middlewares.push(...filtered);
+  }
+  return middlewares;
+};
+
+const createRouteByModel = async (
   model,
   models,
   urlPrefix = "",
@@ -53,7 +132,7 @@ const _createRoutes = async (
   const database = await IoC.use("Database");
   const docs = await IoC.use("Docs");
 
-  const pack = {
+  const context = {
     model,
     models,
     parentModel,
@@ -63,101 +142,42 @@ const _createRoutes = async (
     logger,
   };
 
-  const resource = relation
-    ? relation.resource
-    : pluralize.plural(model.name).toLowerCase();
+  const resource = getResourcePath(model, relation);
 
   // We create and handle routes by not duplicate so many lines.
   for (const handler of Object.keys(API_ROUTE_TEMPLATES)) {
-    if (model.instance.handlers.includes(handler)) {
-      const routeTemplate = API_ROUTE_TEMPLATES[handler];
-      const url = routeTemplate.url(
-        urlPrefix,
-        resource,
-        model.instance.primaryKey
-      );
-      logger.debug(`Model routes created: ${url}`);
-
-      // Detecting filters
-      const middlewares = [];
-      if (model.instance.middlewares.length > 0) {
-        const filtered = model.instance.middlewares
-          .filter(
-            (item) => typeof item === "function" || item.handler === handler
-          )
-          .map((item) => {
-            if (typeof item === "function") {
-              return item;
-            }
-            return item.middleware;
-          });
-        middlewares.push(...filtered);
-      }
-
-      // Adding created route to the documentation
-      docs.push(routeTemplate.method, url, model);
-
-      // Adding the route to the express
-      app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {
-        requestHandler(handler, req, res, pack);
-      });
+    if (!model.instance.handlers.includes(handler)) {
+      continue;
     }
+
+    const routeTemplate = API_ROUTE_TEMPLATES[handler];
+    const url = routeTemplate.url(
+      urlPrefix,
+      resource,
+      model.instance.primaryKey
+    );
+    logger.debug(`Model routes created: ${url}`);
+
+    // Detecting filters
+    const middlewares = getModelMiddlewares(model, handler);
+
+    // Adding created route to the documentation
+    docs.push(routeTemplate.method, url, model);
+
+    // Adding the route to the express
+    app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {
+      requestHandler(handler, req, res, context);
+    });
   }
 
-  if (model.children.length > 0) {
-    // We should different parameter name for child routes
-    const primaryKey =
-      pluralize.singular(model.name).toLowerCase() +
-      ucFirst(model.instance.primaryKey);
-    const subRelations = model.instance.relations.filter(
-      (item) => item.type === RELATIONSHIPS.HAS_MANY
-    );
-    for (const relation of subRelations) {
-      const child = model.children.find((item) => item.name === relation.model);
-      // It should be recursive
-      await _createRoutes(
-        child,
-        models,
-        `${urlPrefix}${resource}/:${primaryKey}/`,
-        model,
-        relation
-      );
-    }
-  }
-
-  // Adding recursive model routes
-  if (model.isRecursive && allowRecursive) {
-    // We should different parameter name for child routes
-    const primaryKey =
-      pluralize.singular(model.name).toLowerCase() +
-      ucFirst(model.instance.primaryKey);
-    const relation = model.instance.relations.find(
-      (relation) =>
-        relation.model === model.name &&
-        relation.type === RELATIONSHIPS.HAS_MANY
-    );
-
-    await _createRoutes(
-      model,
-      models,
-      `${urlPrefix}${resource}/:${primaryKey}/`,
-      model,
-      relation,
-      false
-    );
-  }
+  await createChildRoutes(model, models, resource, urlPrefix);
+  await createNestedRoutes(model, models, allowRecursive, urlPrefix, resource);
 };
 
-export default async (app, modelTree, appDirectory, models) => {
-  Config = await IoC.use("Config");
-  const logger = await IoC.use("Logger");
+const callAppInit = async (appDirectory, app) => {
   const fs = await IoC.use("fs");
   const path = await IoC.use("path");
   const url = await IoC.use("url");
-
-  for (const model of modelTree) {
-    await _createRoutes(model, models);
-  }
 
   // Calling the user's custom definitions
   const customInitFile = path.join(appDirectory, `init.js`);
@@ -167,6 +187,20 @@ export default async (app, modelTree, appDirectory, models) => {
     );
     await initter({ app });
   }
+};
+
+const createRoutesByModelTree = async (modelTree, models) => {
+  for (const model of modelTree) {
+    await createRouteByModel(model, models);
+  }
+};
+
+export default async (app, modelTree, appDirectory, models) => {
+  Config = await IoC.use("Config");
+  const logger = await IoC.use("Logger");
+
+  await createRoutesByModelTree(modelTree, models);
+  await callAppInit(appDirectory, app);
 
   logger.info("All routes have been created.");
 };
