@@ -11,8 +11,8 @@ import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
-export default async (pack) => {
-  const { request, response, model, database, relation, parentModel } = pack;
+export default async (context) => {
+  const { request, response, model, database, relation, parentModel } = context;
 
   const query = database.from(model.instance.table);
 
@@ -23,7 +23,7 @@ export default async (pack) => {
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeUpdateQuery, {
-    ...pack,
+    ...context,
     query,
   });
 
@@ -35,7 +35,7 @@ export default async (pack) => {
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterUpdateQuery, {
-    ...pack,
+    ...context,
     item,
     query,
   });
@@ -58,7 +58,7 @@ export default async (pack) => {
   bindTimestampValues(formData, [TIMESTAMP_COLUMNS.UPDATED_AT], model);
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeUpdate, {
-    ...pack,
+    ...context,
     item,
     formData,
     query,
@@ -72,7 +72,7 @@ export default async (pack) => {
     .first();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterUpdate, {
-    ...pack,
+    ...context,
     item,
     formData,
     query,

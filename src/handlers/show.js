@@ -9,9 +9,9 @@ import { HOOK_FUNCTIONS } from "./../Constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 import QueryParser from "./../core/QueryParser.js";
 
-export default async (pack) => {
+export default async (context) => {
   const { request, response, model, models, database, relation, parentModel } =
-    pack;
+    context;
   const queryParser = new QueryParser();
 
   // We should parse URL query string to use as condition in Lucid query
@@ -42,7 +42,7 @@ export default async (pack) => {
   );
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeShow, {
-    ...pack,
+    ...context,
     query,
     conditions,
   });
@@ -56,7 +56,7 @@ export default async (pack) => {
   await getRelatedData([item], conditions.with, model, models, database);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
-    ...pack,
+    ...context,
     query,
     conditions,
     item,

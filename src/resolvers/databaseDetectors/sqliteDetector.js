@@ -1,15 +1,20 @@
-export default async ({ knex }) => {
-  const tables = (await knex.table("sqlite_master").where("type", "table")).map(
+const getDatabaseTables = async (knex) => {
+  return (await knex.table("sqlite_master").where("type", "table")).map(
     (item) => item.tbl_name
   );
+};
 
-  const columns = [];
+const getDatabaseColumnsByTable = async (knex, table) => {
+  return await knex.raw(`select * from pragma_table_info("${table}")`);
+};
 
-  for (const table of tables) {
-    const result = await knex.raw(`
-      select * from pragma_table_info("${table}")
-    `);
-    columns.push(
+export default async ({ knex }) => {
+  const databaseTables = await getDatabaseTables(knex);
+  const databaseColumns = [];
+
+  for (const table of databaseTables) {
+    const result = await getDatabaseColumnsByTable(knex, table);
+    databaseColumns.push(
       ...result.map((i) => {
         return {
           name: i.name,
@@ -27,5 +32,5 @@ export default async ({ knex }) => {
     );
   }
 
-  return columns;
+  return databaseColumns;
 };

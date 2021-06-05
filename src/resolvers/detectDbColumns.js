@@ -1,29 +1,31 @@
 import IoC from "./../core/IoC.js";
 import { mySQLDetector, sqliteDetector } from "./databaseDetectors/index.js";
 
-const getColumns = async () => {
+const DATABASE_DETECTORS = {
+  mysql: mySQLDetector,
+  sqlite3: sqliteDetector,
+};
+
+const getDatabaseDetector = (databaseClient) => {
+  const detector = DATABASE_DETECTORS[databaseClient];
+  if (detector) {
+    return detector;
+  }
+  throw new Error(`Unsupported database client: ${databaseClient}`);
+};
+
+const getDatabaseColumns = async () => {
   const Config = await IoC.use("Config");
   const database = await IoC.use("Database");
   const databaseClient = Config.Database.client.toLowerCase();
-  const detectors = {
-    mysql: mySQLDetector,
-    sqlite3: sqliteDetector,
-  };
-
-  const detector = detectors[databaseClient];
-
-  if (!detector) {
-    throw new Error(`Unsupported database client: ${databaseClient}`);
-  }
-
+  const detector = getDatabaseDetector(databaseClient);
   return await detector({
     knex: database,
     schema: Config.Database.connection.database,
   });
 };
 
-export default async (models) => {
-  const columns = await getColumns();
+const bindModelColumns = (models, columns) => {
   for (const model of models) {
     model.instance.columns = columns.filter(
       (column) => column.tableName === model.instance.table
@@ -37,4 +39,9 @@ export default async (models) => {
 
     model.instance.columnNames = model.instance.columns.map((i) => i.name);
   }
+};
+
+export default async (models) => {
+  const columns = await getDatabaseColumns();
+  bindModelColumns(models, columns);
 };

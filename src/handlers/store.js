@@ -10,8 +10,8 @@ import {
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
 
-export default async (pack) => {
-  const { request, response, model, database, relation, parentModel } = pack;
+export default async (context) => {
+  const { request, response, model, database, relation, parentModel } = context;
 
   const formData = getFormData(request, model.instance.fillable);
   const formValidationRules = getFormValidation(
@@ -40,7 +40,7 @@ export default async (pack) => {
   );
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeInsert, {
-    ...pack,
+    ...context,
     formData,
   });
 
@@ -58,7 +58,7 @@ export default async (pack) => {
     .first();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterInsert, {
-    ...pack,
+    ...context,
     formData,
     item,
   });
