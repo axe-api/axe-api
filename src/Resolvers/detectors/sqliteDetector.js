@@ -1,4 +1,4 @@
-export default async ({ knex, schema }) => {
+export default async ({ knex }) => {
   const tables = (await knex.table("sqlite_master").where("type", "table")).map(
     (item) => item.tbl_name
   );
