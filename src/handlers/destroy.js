@@ -1,6 +1,6 @@
 import { callHooks, getParentColumn } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
-import ApiError from "./../Exceptions/ApiError.js";
+import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (pack) => {
   const { request, response, model, database, relation, parentModel } = pack;
@@ -25,7 +25,7 @@ export default async (pack) => {
 
   let item = await query.first();
   if (!item) {
-    throw new ApiError(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterDeleteQuery, {

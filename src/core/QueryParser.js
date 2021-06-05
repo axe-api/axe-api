@@ -1,4 +1,4 @@
-import ApiError from "./../Exceptions/ApiError.js";
+import HttpResponse from "./../core/HttpResponse.js";
 
 class QueryParser {
   constructor(options = {}) {
@@ -97,7 +97,7 @@ class QueryParser {
     );
 
     if (undefinedColumns.length > 0) {
-      throw new ApiError(
+      throw new HttpResponse(
         400,
         `Undefined column names: ${undefinedColumns.join(",")}`
       );
