@@ -56,14 +56,6 @@ export const callHooks = async (model, type, data) => {
   }
 };
 
-export const getParentColumn = (relation) => {
-  if (!relation) {
-    return null;
-  }
-
-  return camelCase(relation.foreignKey);
-};
-
 export const getRelatedData = async (
   data,
   withArray,
@@ -228,4 +220,19 @@ export const serializeData = (itemArray, serialize) => {
   }
 
   return [itemArray].map(serialize)[0];
+};
+
+const getParentColumn = (relation) => {
+  if (!relation) {
+    return null;
+  }
+
+  return camelCase(relation.foreignKey);
+};
+
+export const addForeignKeyQuery = (request, query, relation, parentModel) => {
+  if (relation && parentModel) {
+    const parentColumn = getParentColumn(relation);
+    query.where(relation.foreignKey, request.params[parentColumn]);
+  }
 };
