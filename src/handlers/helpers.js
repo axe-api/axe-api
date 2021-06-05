@@ -1,6 +1,6 @@
 import { RELATIONSHIPS } from "./../Constants.js";
 import { camelCase } from "change-case";
-import ApiError from "./../Exceptions/ApiError.js";
+import HttpResponse from "./../core/HttpResponse.js";
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -82,7 +82,7 @@ export const getRelatedData = async (
       (relation) => relation.name === clientQuery.relationship
     );
     if (!definedRelation) {
-      throw new ApiError(
+      throw new HttpResponse(
         400,
         `Undefined relation: ${clientQuery.relationship}`
       );
@@ -150,7 +150,7 @@ export const getRelatedData = async (
         (column) => !foreignModel.instance.columnNames.includes(column)
       );
       if (undefinedColumns.length > 0) {
-        throw new ApiError(
+        throw new HttpResponse(
           400,
           `Undefined columns: ${undefinedColumns.join(", ")}`
         );

@@ -9,7 +9,7 @@ import {
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
-import ApiError from "./../Exceptions/ApiError.js";
+import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (pack) => {
   const { request, response, model, database, relation, parentModel } = pack;
@@ -31,7 +31,7 @@ export default async (pack) => {
     .where(model.instance.primaryKey, request.params[model.instance.primaryKey])
     .first();
   if (!item) {
-    throw new ApiError(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterUpdateQuery, {
