@@ -1,7 +1,7 @@
 import IoC from "./../Core/IoC.js";
 import pluralize from "pluralize";
 import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../Constants.js";
-import Controller from "./../Controller/index.js";
+import Handlers from "./../handlers/index.js";
 
 let Config = null;
 
@@ -26,7 +26,7 @@ const handleErrors = (req, res, error) => {
 
 const requestHandler = async (method, req, res, pack) => {
   try {
-    await Controller[method]({
+    await Handlers[method]({
       ...pack,
       request: req,
       response: res,
