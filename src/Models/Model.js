@@ -1,78 +1,82 @@
-import pluralize from "pluralize";
-import { RELATIONSHIPS, HANDLERS } from "./../Constants.js";
-const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
+import pluralize from 'pluralize'
+import { RELATIONSHIPS, HANDLERS } from './../Constants.js'
+const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS
 
 class Model {
   constructor() {
-    this.relations = [];
+    this.relations = []
   }
 
   get primaryKey() {
-    return "id";
+    return 'id'
   }
 
   get table() {
-    return pluralize(this.constructor.name.toLowerCase());
+    return pluralize(this.constructor.name.toLowerCase())
   }
 
   get fillable() {
-    return [];
+    return []
   }
 
   get validations() {
-    return null;
+    return null
   }
 
   get handlers() {
-    return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
+    return [INSERT, SHOW, PAGINATE, UPDATE, DELETE]
   }
 
   get middlewares() {
-    return [];
+    return []
   }
 
   get hiddens() {
-    return [];
+    return []
   }
 
   get createdAtColumn() {
-    return "created_at";
+    return 'created_at'
   }
 
   get updatedAtColumn() {
-    return "updated_at";
+    return 'updated_at'
   }
 
-  hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
+  get ignore() {
+    return false
+  }
+
+  hasMany(relatedModel, primaryKey = 'id', foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
         this.constructor.name.toLowerCase()
-      );
-      foreignKey = `${currentModelName}_id`;
+      )
+      foreignKey = `${currentModelName}_id`
     }
     return {
       type: RELATIONSHIPS.HAS_MANY,
       model: relatedModel,
       primaryKey,
       foreignKey,
-    };
+    }
   }
 
-  hasOne(relatedModel, primaryKey = "id", foreignKey = null) {
+  hasOne(relatedModel, primaryKey = 'id', foreignKey = null) {
     if (!foreignKey) {
-      foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`;
+      foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`
     }
     return {
       type: RELATIONSHIPS.HAS_ONE,
       model: relatedModel,
       primaryKey,
       foreignKey,
-    };
+    }
   }
 
   belongsTo(relatedModel, primaryKey, foreignKey) {
-    return this.hasOne(relatedModel, foreignKey, primaryKey);
+    return this.hasOne(relatedModel, foreignKey, primaryKey)
   }
 }
 
-export default Model;
+export default Model
