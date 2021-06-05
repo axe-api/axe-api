@@ -1,13 +1,17 @@
-export default async ({ knex, schema }) => {
-  const columns = await knex
+const getDatabaseColumns = async (knex, schema) => {
+  return await knex
     .table("information_schema.columns")
     .where("table_schema", schema);
+};
 
-  if (!columns) {
+export default async ({ knex, schema }) => {
+  const databaseColumns = await getDatabaseColumns(knex, schema);
+
+  if (!databaseColumns) {
     throw new Error("Auto-column detection is failed on MySQL!");
   }
 
-  return columns.map((i) => {
+  return databaseColumns.map((i) => {
     return {
       name: i.COLUMN_NAME,
       tableName: i.TABLE_NAME,

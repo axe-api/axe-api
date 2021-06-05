@@ -1,33 +1,36 @@
 import IoC from "./../core/IoC.js";
 import { RELATIONSHIPS } from "./../Constants.js";
 
-const _setChildrens = (model, models) => {
-  const relationNames = model.instance.relations
+const getChildModelNames = (model) => {
+  return model.instance.relations
     .filter((item) => item.type === RELATIONSHIPS.HAS_MANY)
     .map((item) => item.model);
+};
 
-  model.children = models.filter(
-    (item) => relationNames.indexOf(item.name) > -1
-  );
+const _setChildrens = (model, models) => {
+  const childModelNames = getChildModelNames(model);
+  model.children = models.filter((item) => childModelNames.includes(item.name));
   for (const child of model.children) {
     _setChildrens(child, models);
   }
 };
 
-export default async (models) => {
-  const logger = await IoC.use("Logger");
-
-  const tree = models.filter(
+const getRootLevelOfTree = (models) => {
+  return models.filter(
     (item) =>
-      item.instance.relations.filter(
+      !item.instance.relations.some(
         (relation) => relation.type === RELATIONSHIPS.HAS_ONE
-      ).length === 0
+      )
   );
+};
 
+const createRecursiveTree = (tree, models) => {
   for (const model of tree) {
     _setChildrens(model, models);
   }
+};
 
+const addNestedRoutes = (tree, models) => {
   // We should add recursive models
   models.forEach((model) => {
     const recursiveRelations = model.instance.relations.filter(
@@ -42,6 +45,14 @@ export default async (models) => {
       });
     }
   });
+};
+
+export default async (models) => {
+  const logger = await IoC.use("Logger");
+
+  const tree = getRootLevelOfTree(models);
+  createRecursiveTree(tree, models);
+  addNestedRoutes(tree, models);
 
   logger.info("Model tree map has been created.");
   return tree;

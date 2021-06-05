@@ -2,8 +2,8 @@ import { callHooks, getParentColumn } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
-export default async (pack) => {
-  const { request, response, model, database, relation, parentModel } = pack;
+export default async (context) => {
+  const { request, response, model, database, relation, parentModel } = context;
 
   const query = database
     .from(model.instance.table)
@@ -19,7 +19,7 @@ export default async (pack) => {
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeDeleteQuery, {
-    ...pack,
+    ...context,
     query,
   });
 
@@ -29,13 +29,13 @@ export default async (pack) => {
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterDeleteQuery, {
-    ...pack,
+    ...context,
     query,
     item,
   });
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeDelete, {
-    ...pack,
+    ...context,
     query,
     item,
   });
@@ -43,7 +43,7 @@ export default async (pack) => {
   await query.delete();
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterDelete, {
-    ...pack,
+    ...context,
     item,
   });
 
