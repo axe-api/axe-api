@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import { RELATIONSHIPS, HANDLERS } from "./../Constants.js";
+import { RELATIONSHIPS, HANDLERS } from "./../constants.js";
 const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
 
 class Model {
