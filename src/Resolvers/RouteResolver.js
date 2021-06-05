@@ -6,7 +6,7 @@ import Handlers from "./../handlers/index.js";
 let Config = null;
 
 const handleErrors = (req, res, error) => {
-  const status = error.type === "ApiError" ? error.status : 400;
+  const status = error.type === "HttpResponse" ? error.status : 400;
   let errors = error.content ? error.content : error.message;
 
   if (Config.Application.env === "production") {

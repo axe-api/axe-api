@@ -6,7 +6,7 @@ import {
   serializeData,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
-import ApiError from "./../Exceptions/ApiError.js";
+import HttpResponse from "./../core/HttpResponse.js";
 import QueryParser from "./../core/QueryParser.js";
 
 export default async (pack) => {
@@ -49,7 +49,7 @@ export default async (pack) => {
 
   let item = await query.first();
   if (!item) {
-    throw new ApiError(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
   }
 
   // We should try to get related data if there is any
