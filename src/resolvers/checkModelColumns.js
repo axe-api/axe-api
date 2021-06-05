@@ -1,4 +1,4 @@
-import { RELATIONSHIPS } from "./../Constants.js";
+import { RELATIONSHIPS } from "./../constants.js";
 
 const getModelFillableColumns = (model) => {
   if (!model.instance.fillable) {

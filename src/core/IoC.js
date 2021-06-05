@@ -1,4 +1,4 @@
-import { DEPENDECY_TYPES } from "./../Constants.js";
+import { DEPENDECY_TYPES } from "./../constants.js";
 
 const items = {};
 

@@ -1,4 +1,4 @@
-import { HTTP_METHODS } from "./../Constants.js";
+import { HTTP_METHODS } from "./../constants.js";
 import { getFormValidation } from "./../handlers/helpers.js";
 
 class Docs {

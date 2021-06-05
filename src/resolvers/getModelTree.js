@@ -1,5 +1,5 @@
 import IoC from "./../core/IoC.js";
-import { RELATIONSHIPS } from "./../Constants.js";
+import { RELATIONSHIPS } from "./../constants.js";
 
 const getChildModelNames = (model) => {
   return model.instance.relations

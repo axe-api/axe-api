@@ -1,5 +1,5 @@
 import IoC from "./../core/IoC.js";
-import { HOOK_FUNCTIONS } from "./../Constants.js";
+import { HOOK_FUNCTIONS } from "./../constants.js";
 
 export default async (type, appDirectory, models) => {
   const logger = await IoC.use("Logger");

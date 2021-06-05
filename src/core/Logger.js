@@ -1,4 +1,4 @@
-import { LOG_LEVEL, LOG_COLORS } from "./../Constants.js";
+import { LOG_LEVEL, LOG_COLORS } from "./../constants.js";
 const { fgRed, fgGreen, fgYellow, fgCyan, fgReset } = LOG_COLORS;
 
 class Logger {
