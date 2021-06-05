@@ -1,9 +1,9 @@
 import {
   callHooks,
-  getParentColumn,
   getRelatedData,
   filterHiddenFields,
   serializeData,
+  addForeignKeyQuery,
 } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
@@ -24,10 +24,7 @@ export default async (context) => {
   queryParser.applyFields(query, conditions.fields);
 
   // If there is a relation, we should bind it
-  if (relation && parentModel) {
-    const parentColumn = getParentColumn(relation);
-    query.where(relation.foreignKey, request.params[parentColumn]);
-  }
+  addForeignKeyQuery(request, query, relation, parentModel);
 
   // Users should be able to filter records
   queryParser.applyWheres(query, conditions.q);

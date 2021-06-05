@@ -1,4 +1,4 @@
-import { callHooks, getParentColumn } from "./helpers.js";
+import { callHooks, addForeignKeyQuery } from "./helpers.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
@@ -13,10 +13,7 @@ export default async (context) => {
     );
 
   // If there is a relation, we should bind it
-  if (relation && parentModel) {
-    const parentColumn = getParentColumn(relation);
-    query.where(relation.foreignKey, request.params[parentColumn]);
-  }
+  addForeignKeyQuery(request, query, relation, parentModel);
 
   await callHooks(model, HOOK_FUNCTIONS.onBeforeDeleteQuery, {
     ...context,
