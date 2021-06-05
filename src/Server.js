@@ -7,14 +7,14 @@ import IoC from "./core/IoC.js";
 import Docs from "./core/Docs.js";
 import Logger from "./core/Logger.js";
 import {
-  getModels,
+  getModelInstanceArray,
   getModelTree,
-  setRelations,
-  setHooks,
-  setRoutes,
-  detectTableColumns,
+  setModelRelations,
+  setModelHooks,
+  setExpressRoutes,
+  detectDbColumns,
   checkModelColumns,
-} from "./Resolvers/index.js";
+} from "./resolvers/index.js";
 
 class Server {
   constructor(appFolder) {
@@ -66,14 +66,19 @@ class Server {
   }
 
   async _analyzeModels() {
-    this.models = await getModels(this.appFolder);
-    await setRelations(this.models);
-    await detectTableColumns(this.models);
+    this.models = await getModelInstanceArray(this.appFolder);
+    await setModelRelations(this.models);
+    await detectDbColumns(this.models);
     checkModelColumns(this.models);
-    await setHooks("Hooks", this.appFolder, this.models);
-    await setHooks("Events", this.appFolder, this.models);
+    await setModelHooks("Hooks", this.appFolder, this.models);
+    await setModelHooks("Events", this.appFolder, this.models);
     this.modelTree = await getModelTree(this.models);
-    await setRoutes(this.app, this.modelTree, this.appFolder, this.models);
+    await setExpressRoutes(
+      this.app,
+      this.modelTree,
+      this.appFolder,
+      this.models
+    );
   }
 
   async _listen() {

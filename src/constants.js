@@ -85,30 +85,6 @@ const API_ROUTE_TEMPLATES = {
       `/api/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.DELETE,
   },
-  // [HANDLERS.ALL]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/all`,
-  //   method: HTTP_METHODS.GET,
-  // },
-  // [HANDLERS.COUNT]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/count`,
-  //   method: HTTP_METHODS.GET,
-  // },
-  // [HANDLERS.BULK_INSERT]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
-  //   method: HTTP_METHODS.POST,
-  // },
-  // [HANDLERS.BULK_DELETE]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
-  //   method: HTTP_METHODS.DELETE,
-  // },
-  // [HANDLERS.BULK_UPDATE]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/bulk`,
-  //   method: HTTP_METHODS.PUT,
-  // },
-  // [HANDLERS.SOFT_DELETE]: {
-  //   url: (parentUrl, resource) => `/api/${parentUrl}${resource}/:id/soft`,
-  //   method: HTTP_METHODS.DELETE,
-  // },
 };
 
 const LOG_COLORS = {
