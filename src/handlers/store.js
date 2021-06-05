@@ -2,10 +2,10 @@ import {
   getFormData,
   getFormValidation,
   callHooks,
-  getParentColumn,
   filterHiddenFields,
   bindTimestampValues,
   serializeData,
+  addForeignKeyQuery,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
@@ -26,11 +26,7 @@ export default async (context) => {
     }
   }
 
-  // Binding parent id if there is.
-  if (relation && parentModel) {
-    const parentColumn = getParentColumn(relation);
-    formData[relation.foreignKey] = request.params[parentColumn];
-  }
+  addForeignKeyQuery(request, query, relation, parentModel);
 
   // We should bind the timestamp values
   bindTimestampValues(
