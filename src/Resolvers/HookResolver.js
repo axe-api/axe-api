@@ -1,4 +1,4 @@
-import IoC from "./../Core/IoC.js";
+import IoC from "./../core/IoC.js";
 import { HOOK_FUNCTIONS } from "./../Constants.js";
 
 export default async (type, appDirectory, models) => {

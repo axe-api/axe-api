@@ -1,4 +1,4 @@
-import IoC from "./../Core/IoC.js";
+import IoC from "./../core/IoC.js";
 import { RELATIONSHIPS } from "./../Constants.js";
 
 const _setChildrens = (model, models) => {

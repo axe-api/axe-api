@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 import express from "express";
 import knex from "knex";
 import { attachPaginate } from "knex-paginate";
-import Config from "./Core/Config.js";
-import IoC from "./Core/IoC.js";
-import Docs from "./Core/Docs.js";
-import Logger from "./Core/Logger.js";
+import Config from "./core/Config.js";
+import IoC from "./core/IoC.js";
+import Docs from "./core/Docs.js";
+import Logger from "./core/Logger.js";
 import {
   getModels,
   getModelTree,

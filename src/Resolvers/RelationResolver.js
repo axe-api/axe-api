@@ -1,4 +1,4 @@
-import IoC from "./../Core/IoC.js";
+import IoC from "./../core/IoC.js";
 import { DEFAULT_METHODS_OF_MODELS } from "./../Constants.js";
 import { paramCase } from "change-case";
 
