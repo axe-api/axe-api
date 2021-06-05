@@ -8,7 +8,7 @@ import {
   addForeignKeyQuery,
 } from "./helpers.js";
 import Validator from "validatorjs";
-import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../Constants.js";
+import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (context) => {

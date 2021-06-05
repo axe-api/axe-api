@@ -1,4 +1,4 @@
-import { RELATIONSHIPS } from "./../Constants.js";
+import { RELATIONSHIPS } from "./../constants.js";
 import { camelCase } from "change-case";
 import HttpResponse from "./../core/HttpResponse.js";
 
