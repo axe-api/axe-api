@@ -1,5 +1,5 @@
 import { HTTP_METHODS } from "./../Constants.js";
-import { getFormValidation } from "./../Controller/helpers.js";
+import { getFormValidation } from "./../handlers/helpers.js";
 
 class Docs {
   constructor() {

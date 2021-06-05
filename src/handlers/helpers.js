@@ -191,7 +191,7 @@ export const getRelatedData = async (
       if (definedRelation.type === RELATIONSHIPS.HAS_ONE) {
         values = values.length > 0 ? values[0] : null;
       }
-      values = row[definedRelation.name] = values;
+      row[definedRelation.name] = values;
     });
   }
 };
