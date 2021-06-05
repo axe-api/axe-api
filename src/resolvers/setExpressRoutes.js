@@ -1,6 +1,6 @@
 import IoC from "./../core/IoC.js";
 import pluralize from "pluralize";
-import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../Constants.js";
+import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../constants.js";
 import Handlers from "./../handlers/index.js";
 
 let Config = null;
