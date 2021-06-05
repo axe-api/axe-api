@@ -43,6 +43,7 @@
     "eslint-plugin-unicorn": "^33.0.1",
     "eslint-watch": "^7.0.0",
     "jest": "^27.0.2",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
     "set-value": ">=4.0.0"
   }
