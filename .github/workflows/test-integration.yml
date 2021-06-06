@@ -14,8 +14,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Start containers
+      - name: Start database containers
         run: docker-compose -f "./tests/integrations/docker-compose.mysql.yml" up -d --build
+      - name: Install integration dependencies
+        run: cd tests/integrations && npm install
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run test:integration:mysql
