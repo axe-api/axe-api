@@ -12,9 +12,9 @@ import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (context) => {
-  const { request, response, model, database, relation, parentModel } = context;
+  const { request, response, model, trx, relation, parentModel } = context;
 
-  const query = database.from(model.instance.table);
+  const query = trx.from(model.instance.table);
 
   // If there is a relation, we should bind it
   addForeignKeyQuery(request, query, relation, parentModel);
@@ -64,7 +64,7 @@ export default async (context) => {
   await query
     .where(model.instance.primaryKey, item[model.instance.primaryKey])
     .update(formData);
-  item = await database(model.instance.table)
+  item = await trx(model.instance.table)
     .where(model.instance.primaryKey, item[model.instance.primaryKey])
     .first();
 
