@@ -5,7 +5,7 @@ describe("Axe API", () => {
     await request("localhost:3000")
       .get("/")
       .expect("Content-Type", /json/)
-      .expect(201, {
+      .expect(200, {
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
