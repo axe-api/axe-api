@@ -13,7 +13,8 @@
     "test": "jest --runInBand",
     "test:dev": "jest --watch",
     "lint": "eslint src/**",
-    "lint:watch": "esw --watch --color"
+    "lint:watch": "esw --watch --color",
+    "test:integration:mysql": "cd ./tests/integrations && node index.js mysql"
   },
   "dependencies": {
     "change-case": "^4.1.2",
