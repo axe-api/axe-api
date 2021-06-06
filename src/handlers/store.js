@@ -26,7 +26,10 @@ export default async (context) => {
     }
   }
 
-  addForeignKeyQuery(request, query, relation, parentModel);
+  if (relation && parentModel) {
+    const parentColumn = getParentColumn(relation);
+    formData[relation.foreignKey] = request.params[parentColumn];
+  }
 
   // We should bind the timestamp values
   bindTimestampValues(
