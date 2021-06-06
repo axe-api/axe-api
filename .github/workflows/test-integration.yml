@@ -1,4 +1,4 @@
-name: MySQL Integration Tests
+name: Integration Tests
 
 on: push
 
@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        database: [mysql]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -15,10 +16,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Start database containers
-        run: docker-compose -f "./tests/integrations/docker-compose.mysql.yml" up -d --build
+        run: docker-compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
       - name: Install integration dependencies
         run: cd tests/integrations && npm install
       - run: npm ci
       - run: npm run build --if-present
-      - name: Run the migrations
-        run: npm run test:integration:mysql
+      - name: Test all scenarions
+        run: npm run test:integration:${{ matrix.database }}
