@@ -1,4 +1,8 @@
-import { getFormData, getFormValidation, callHooks } from "./helpers";
+import {
+  getFormData,
+  getFormValidation,
+  callHooks,
+} from "./../../../src/handlers/helpers";
 
 describe("getFormData", () => {
   test("should be able get form data from an array definition", async () => {

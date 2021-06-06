@@ -1,4 +1,4 @@
-import QueryParser from "./QueryParser.js";
+import QueryParser from "./../../../src/core/QueryParser";
 const options = {
   min_per_page: 10,
   max_per_page: 100,
