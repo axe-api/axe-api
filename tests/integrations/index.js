@@ -19,15 +19,9 @@ const main = async () => {
   const scenarios = await getScenarios();
   await setEnvFile(serveOptions);
 
-  // const composer = DockerComposer.get(database);
-  // await composer.up();
-  // await composer.waitForDatabase();
-
   for (const scenario of scenarios) {
     await executeScenario(serveOptions, scenario);
   }
-
-  // await composer.down();
 
   process.exit(0);
 };
