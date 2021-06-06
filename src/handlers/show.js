@@ -10,7 +10,7 @@ import HttpResponse from "./../core/HttpResponse.js";
 import QueryParser from "./../core/QueryParser.js";
 
 export default async (context) => {
-  const { request, response, model, models, database, relation, parentModel } =
+  const { request, response, model, models, trx, relation, parentModel } =
     context;
   const queryParser = new QueryParser();
 
@@ -18,7 +18,7 @@ export default async (context) => {
   const conditions = queryParser.get(model, request.query);
 
   // Fetching item
-  const query = database.from(model.instance.table);
+  const query = trx.from(model.instance.table);
 
   // Users should be able to select some fields to show.
   queryParser.applyFields(query, conditions.fields);
@@ -50,7 +50,7 @@ export default async (context) => {
   }
 
   // We should try to get related data if there is any
-  await getRelatedData([item], conditions.with, model, models, database);
+  await getRelatedData([item], conditions.with, model, models, trx);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
     ...context,

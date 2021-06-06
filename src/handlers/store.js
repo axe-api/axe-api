@@ -11,7 +11,7 @@ import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
 
 export default async (context) => {
-  const { request, response, model, database, relation, parentModel } = context;
+  const { request, response, model, trx, relation, parentModel } = context;
 
   const formData = getFormData(request, model.instance.fillable);
   const formValidationRules = getFormValidation(
@@ -40,7 +40,7 @@ export default async (context) => {
     formData,
   });
 
-  let [insertedPrimaryKeyValue] = await database(model.instance.table).insert(
+  let [insertedPrimaryKeyValue] = await trx(model.instance.table).insert(
     formData
   );
 
@@ -49,7 +49,7 @@ export default async (context) => {
     insertedPrimaryKeyValue = formData[model.instance.primaryKey];
   }
 
-  let item = await database(model.instance.table)
+  let item = await trx(model.instance.table)
     .where(model.instance.primaryKey, insertedPrimaryKeyValue)
     .first();
 
