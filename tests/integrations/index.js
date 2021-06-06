@@ -1,4 +1,3 @@
-import DockerComposer from "./src/DockerComposer.js";
 import {
   getScenarios,
   setEnvFile,
