@@ -5,12 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "docker:pull": "docker compose pull",
-    "setup": "rm -rf axe-api && git clone git@github.com:axe-api/axe-api.git && npm install",
-    "start": "node index.js",
-    "test": "npm run setup && npm run start",
-    "test:dev": "node index.js",
-    "migrate:up": "knex --esm migrate:up"
+    "docker:mysql": "docker compose -f docker-compose.mysql.yml up -d",
+    "start": "node index.js"
   },
   "dependencies": {
     "axe-api": "file:./../../",
