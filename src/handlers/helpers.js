@@ -52,7 +52,19 @@ export const callHooks = async (model, type, data) => {
   }
 
   if (model.events[type]) {
-    model.events[type](data);
+    const context = {
+      ...data,
+    };
+
+    // Developers shouldn't be able to access transaction in events. Because
+    // we don't await for the events. If the developer uses the transaction and
+    // try to commit something, it would be lost cause the transaction could be
+    // already completed.
+    if (context.trx) {
+      delete context.trx;
+    }
+
+    model.events[type](context);
   }
 };
 
