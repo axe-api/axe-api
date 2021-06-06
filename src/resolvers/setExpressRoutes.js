@@ -24,22 +24,32 @@ const handleErrors = (req, res, error) => {
   res.status(status).json(result);
 };
 
+const setTransactionOption = (option, handler, defaultValue) => {
+  if (Array.isArray(option)) {
+    if (option.some((i) => i.handler === handler)) {
+      defaultValue = option.find((i) => i.handler === handler).transaction;
+    }
+  } else {
+    defaultValue = option;
+  }
+
+  return defaultValue;
+};
+
 const hasTransaction = (config, model, handler) => {
-  const modelOptions = model.instance.transaction;
-  if (modelOptions === null) {
-    return config.Application.transaction;
+  const global = config.Application.transaction;
+  const local = model.instance.transaction;
+  let privilegedOption = false;
+
+  if (global) {
+    privilegedOption = setTransactionOption(global, handler, privilegedOption);
   }
 
-  if (!Array.isArray(modelOptions)) {
-    return modelOptions;
+  if (local !== null) {
+    privilegedOption = setTransactionOption(local, handler, privilegedOption);
   }
 
-  const handlerOption = modelOptions.find((i) => i.handler === handler);
-  if (handlerOption) {
-    return handlerOption.transaction;
-  }
-
-  return config.Application.transaction;
+  return privilegedOption;
 };
 
 const requestHandler = async (handler, req, res, context) => {
