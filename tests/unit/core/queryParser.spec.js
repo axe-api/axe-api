@@ -6,6 +6,13 @@ const options = {
 
 const model = {};
 
+const testParser = (parser, expression, field, condition, value) => {
+  const result = parser._parseCondition(expression);
+  expect(result.field).toBe(field);
+  expect(result.condition).toBe(condition);
+  expect(result.value).toBe(value);
+};
+
 test("I should be able to override basic options", () => {
   expect(new QueryParser().options.max_per_page).toBe(100);
   expect(new QueryParser({ max_per_page: 25 }).options.max_per_page).toBe(25);
@@ -175,53 +182,16 @@ test("I should be able to get an error while parsing unacceptable column in sort
 test("I should be able to parsing query condition", () => {
   const parser = new QueryParser();
 
-  // Simple query
-  let result = parser._parseCondition({ name: "Özgür" });
-  expect(result.field).toBe("name");
-  expect(result.condition).toBe("=");
-  expect(result.value).toBe("Özgür");
+  let result = null;
 
-  // .$not logic tests
-  result = parser._parseCondition({ "id.$not": 1 });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe("<>");
-  expect(result.value).toBe(1);
-
-  // .$gt logic tests
-  result = parser._parseCondition({ "id.$gt": 1 });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe(">");
-  expect(result.value).toBe(1);
-
-  // .$gte logic tests
-  result = parser._parseCondition({ "id.$gte": 1 });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe(">=");
-  expect(result.value).toBe(1);
-
-  // .$lt logic tests
-  result = parser._parseCondition({ "id.$lt": 1 });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe("<");
-  expect(result.value).toBe(1);
-
-  // .$lte logic tests
-  result = parser._parseCondition({ "id.$lte": 1 });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe("<=");
-  expect(result.value).toBe(1);
-
-  // .$like logic tests
-  result = parser._parseCondition({ "name.$like": "John*" });
-  expect(result.field).toBe("name");
-  expect(result.condition).toBe("LIKE");
-  expect(result.value).toBe("John%");
-
-  // .$notLike logic tests
-  result = parser._parseCondition({ "name.$notLike": "John*" });
-  expect(result.field).toBe("name");
-  expect(result.condition).toBe("NOT LIKE");
-  expect(result.value).toBe("John%");
+  testParser(parser, { name: "Özgür" }, "name", "=", "Özgür");
+  testParser(parser, { "id.$not": 1 }, "id", "<>", 1);
+  testParser(parser, { "id.$gt": 1 }, "id", ">", 1);
+  testParser(parser, { "id.$gte": 1 }, "id", ">=", 1);
+  testParser(parser, { "id.$lt": 1 }, "id", "<", 1);
+  testParser(parser, { "id.$lte": 1 }, "id", "<=", 1);
+  testParser(parser, { "name.$like": "John*" }, "name", "LIKE", "John%");
+  testParser(parser, { "name.$notLike": "John*" }, "name", "NOT LIKE", "John%");
 
   // .$in logic tests
   result = parser._parseCondition({ "id.$in": "1,2,3" });
@@ -258,16 +228,10 @@ test("I should be able to parsing query condition", () => {
   expect(result.value[1]).toBe("30");
 
   // .$null logic tests
-  result = parser._parseCondition({ "age.$null": null });
-  expect(result.field).toBe("age");
-  expect(result.condition).toBe("Null");
-  expect(result.value).toBe(null);
+  testParser(parser, { "age.$null": null }, "age", "Null", null);
 
   // .$notNull logic tests
-  result = parser._parseCondition({ "age.$notNull": null });
-  expect(result.field).toBe("age");
-  expect(result.condition).toBe("NotNull");
-  expect(result.value).toBe(null);
+  testParser(parser, { "age.$notNull": null }, "age", "NotNull", null);
 
   // .$or logic tests
   result = parser._parseCondition({ "$or.age.$gt": 18 });
