@@ -1,4 +1,4 @@
-import IoC from "./IoC";
+import IoC from "./../../../src/core/IoC";
 
 describe("IoC", () => {
   test("should be able to bind simple dependency", async () => {
