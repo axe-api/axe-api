@@ -30,16 +30,16 @@ const hasTransaction = (config, model, handler) => {
     return config.Application.transaction;
   }
 
-  if (Array.isArray(modelOptions)) {
-    const handlerOption = modelOptions.find((i) => i.handler === handler);
-    if (handlerOption) {
-      return handlerOption.transaction;
-    }
-
-    return config.Application.transaction;
+  if (!Array.isArray(modelOptions)) {
+    return modelOptions;
   }
 
-  return modelOptions;
+  const handlerOption = modelOptions.find((i) => i.handler === handler);
+  if (handlerOption) {
+    return handlerOption.transaction;
+  }
+
+  return config.Application.transaction;
 };
 
 const requestHandler = async (handler, req, res, context) => {
