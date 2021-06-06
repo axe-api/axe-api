@@ -14,7 +14,8 @@
     "test:dev": "jest --watch",
     "lint": "eslint src/**",
     "lint:watch": "esw --watch --color",
-    "test:integration:mysql": "cd ./tests/integrations && node index.js mysql"
+    "test:integration:mysql8": "cd ./tests/integrations && node index.js mysql8",
+    "test:integration:mysql57": "cd ./tests/integrations && node index.js mysql57"
   },
   "dependencies": {
     "change-case": "^4.1.2",
