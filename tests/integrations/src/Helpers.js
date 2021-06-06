@@ -45,9 +45,8 @@ export const executeScenario = async (serveOptions, scenario) => {
   // App
   const app = new Runner(scenario);
   await waitForIt(2000);
-  try {
-    await testRunner(scenario);
-  } catch (error) {
+  const response = await testRunner(scenario);
+  if (!response.results.success) {
     process.exit(1);
   }
 
