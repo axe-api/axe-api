@@ -24,14 +24,44 @@ const handleErrors = (req, res, error) => {
   res.status(status).json(result);
 };
 
-const requestHandler = async (method, req, res, context) => {
+const hasTransaction = (config, model, handler) => {
+  const modelOptions = model.instance.transaction;
+  if (modelOptions === null) {
+    return config.Application.transaction;
+  }
+
+  if (Array.isArray(modelOptions)) {
+    const handlerOption = modelOptions.find((i) => i.handler === handler);
+    if (handlerOption) {
+      return handlerOption.transaction;
+    }
+
+    return config.Application.transaction;
+  }
+
+  return modelOptions;
+};
+
+const requestHandler = async (handler, req, res, context) => {
   try {
-    await Handlers[method]({
+    context.trx = context.database;
+    if (hasTransaction(Config, context.model, handler)) {
+      context.trx = await context.database.transaction();
+    }
+    await Handlers[handler]({
       ...context,
       request: req,
       response: res,
     });
+
+    if (context.trx.commit) {
+      await context.trx.commit();
+    }
   } catch (error) {
+    if (context.trx.rollback) {
+      await context.trx.rollback();
+    }
+
     handleErrors(req, res, error);
   }
 };

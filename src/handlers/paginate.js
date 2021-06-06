@@ -9,15 +9,16 @@ import { HOOK_FUNCTIONS } from "./../constants.js";
 import QueryParser from "./../core/QueryParser.js";
 
 export default async (context) => {
-  const { request, response, model, models, database, relation, parentModel } =
+  const { request, response, model, models, trx, relation, parentModel } =
     context;
+
   const queryParser = new QueryParser();
 
   // We should parse URL query string to use as condition in Lucid query
   const conditions = queryParser.get(model, request.query);
 
   // Creating a new database query
-  const query = database.from(model.instance.table);
+  const query = trx.from(model.instance.table);
 
   // Users should be able to select some fields to show.
   queryParser.applyFields(query, conditions.fields);
@@ -45,7 +46,7 @@ export default async (context) => {
   });
 
   // We should try to get related data if there is any
-  await getRelatedData(result.data, conditions.with, model, models, database);
+  await getRelatedData(result.data, conditions.with, model, models, trx);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterPaginate, {
     ...context,

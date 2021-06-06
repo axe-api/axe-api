@@ -43,6 +43,10 @@ class Model {
     return "updated_at";
   }
 
+  get transaction() {
+    return null;
+  }
+
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(

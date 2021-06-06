@@ -3,9 +3,9 @@ import { HOOK_FUNCTIONS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 
 export default async (context) => {
-  const { request, response, model, database, relation, parentModel } = context;
+  const { request, response, model, trx, relation, parentModel } = context;
 
-  const query = database
+  const query = trx
     .from(model.instance.table)
     .where(
       model.instance.primaryKey,
