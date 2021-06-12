@@ -1,6 +1,5 @@
 import pluralize from "pluralize";
 import { RELATIONSHIPS, HANDLERS } from "./../constants.js";
-import { Model } from "./../resolvers/setExpressRoutes.js"
 const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
 
 class Model {
