@@ -132,10 +132,6 @@ const createNestedRoutes = async (
     (relation) =>
       relation.model === model.name && relation.type === RELATIONSHIPS.HAS_MANY
   );
-  
-  if (model.instance.ignore) {
-    return;
-  }
 
   await createRouteByModel(
     model,
@@ -185,6 +181,10 @@ const createRouteByModel = async (
     database,
     logger,
   };
+  
+  if (model.instance.ignore) {
+    return;
+  }
 
   const resource = getResourcePath(model, relation);
 
