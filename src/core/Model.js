@@ -3,12 +3,6 @@ import { RELATIONSHIPS, HANDLERS } from "./../constants.js";
 const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
 
 class Model {
-  get ignore() {
-    return false;
-  }
-}
-
-class Model {
   constructor() {
     this.relations = [];
   }
@@ -51,6 +45,10 @@ class Model {
 
   get transaction() {
     return null;
+  }
+  
+  get ignore() {
+    return false;
   }
 
   hasMany(relatedModel, primaryKey = "id", foreignKey = null) {
