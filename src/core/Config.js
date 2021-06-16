@@ -20,6 +20,11 @@ class Config {
 
       if (typeof configuration === "function") {
         configuration = await configuration();
+        configuration.defaultResponse = configuration.defaultResponse || {
+          name: "AXE API",
+          description: "The best API creation tool in the world.",
+          aim: "To kill them all!",
+        };
       }
 
       const key = file.replace(".js", "");
