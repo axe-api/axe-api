@@ -167,6 +167,10 @@ const createRouteByModel = async (
   relation = null,
   allowRecursive = true
 ) => {
+  if (model.instance.ignore) {
+    return;
+  }
+
   const logger = await IoC.use("Logger");
   const app = await IoC.use("App");
   const database = await IoC.use("Database");
@@ -181,10 +185,6 @@ const createRouteByModel = async (
     database,
     logger,
   };
-  
-  if (model.instance.ignore) {
-    return;
-  }
 
   const resource = getResourcePath(model, relation);
 
