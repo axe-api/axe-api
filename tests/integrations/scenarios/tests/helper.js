@@ -48,6 +48,7 @@ const truncateMySQL = async (table) => {
       connection.query(`TRUNCATE TABLE ${table}`, function (err) {
         if (err) throw err;
       });
+      //NOSONAR
     });
   });
 };
