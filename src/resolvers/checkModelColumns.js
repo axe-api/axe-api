@@ -107,6 +107,7 @@ export default (models) => {
     checkModelColumnsOrFail(model, getModelFormValidationColumns(model));
     checkModelColumnsOrFail(model, getModelHiddenColumns(model));
     checkModelColumnsOrFail(model, getTimestampsColumns(model));
+    checkModelColumnsOrFail(model, [model.instance.primaryKey]);
     checkRelationColumnsOrFail(models, model);
   });
 };
