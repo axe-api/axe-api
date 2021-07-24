@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "docker:mysql": "docker compose -f docker-compose.mysql.yml up -d",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest --runInBand",
+    "test:dev": "jest --watch --runInBand"
   },
   "dependencies": {
     "axe-api": "file:./../../",
