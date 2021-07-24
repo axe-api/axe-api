@@ -1,9 +1,5 @@
-import {
-  getScenarios,
-  setEnvFile,
-  getServeOptions,
-  executeScenario,
-} from "./src/Helpers.js";
+/* eslint-disable no-undef */
+import { setEnvFile, getServeOptions, executeScenario } from "./src/Helpers.js";
 
 const main = async () => {
   const database =
@@ -15,13 +11,8 @@ const main = async () => {
   }
 
   const serveOptions = await getServeOptions(database);
-  const scenarios = await getScenarios();
   await setEnvFile(serveOptions);
-
-  for (const scenario of scenarios) {
-    await executeScenario(serveOptions, scenario);
-  }
-
+  await executeScenario(serveOptions);
   process.exit(0);
 };
 

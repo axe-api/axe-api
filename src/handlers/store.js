@@ -5,7 +5,7 @@ import {
   filterHiddenFields,
   bindTimestampValues,
   serializeData,
-  addForeignKeyQuery,
+  getParentColumn,
 } from "./helpers.js";
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
