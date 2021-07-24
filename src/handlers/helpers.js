@@ -234,7 +234,7 @@ export const serializeData = (itemArray, serialize) => {
   return [itemArray].map(serialize)[0];
 };
 
-const getParentColumn = (relation) => {
+export const getParentColumn = (relation) => {
   if (!relation) {
     return null;
   }
