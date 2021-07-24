@@ -174,9 +174,6 @@ test("I should be able to get an error while parsing unacceptable column in sort
   expect(() => {
     parser._parseSortingOptions("id,full+name");
   }).toThrow(Error);
-  expect(() => {
-    parser._parseSortingOptions("id,fullname12");
-  }).toThrow(Error);
 });
 
 test("I should be able to parsing query condition", () => {
