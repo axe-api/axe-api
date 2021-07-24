@@ -45,10 +45,10 @@ const truncateMySQL = async (table) => {
     if (err) throw err;
     connection.query("SET FOREIGN_KEY_CHECKS = 0;", function (err) {
       if (err) throw err;
-      connection.query(`TRUNCATE TABLE ${table}`, function (err) {
+      const sql = `TRUNCATE TABLE ${table}`; //NOSONAR
+      connection.query(sql, function (err) {
         if (err) throw err;
       });
-      //NOSONAR
     });
   });
 };
