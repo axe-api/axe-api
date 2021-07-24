@@ -3,8 +3,8 @@ import { Model } from "axe-api";
 class User extends Model {
   get fillable() {
     return {
-      POST: ["email", "name"],
-      PUT: ["name"],
+      POST: ["email", "name", "surname"],
+      PUT: ["name", "surname"],
     };
   }
 
@@ -14,6 +14,17 @@ class User extends Model {
         email: "required|email",
         name: "required",
       },
+    };
+  }
+
+  posts() {
+    return this.hasMany("Post", "id", "user_id");
+  }
+
+  serialize(item) {
+    return {
+      ...item,
+      fullname: `${item.name} ${item.surname}`,
     };
   }
 }

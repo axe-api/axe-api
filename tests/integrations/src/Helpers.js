@@ -1,19 +1,11 @@
+/* eslint-disable no-undef */
 import knex from "knex";
-import fs, { readdirSync } from "fs";
+import fs from "fs";
 import Runner from "./Runner.js";
 import { testRunner } from "./Tester.js";
 
-const getDirectories = (source) =>
-  readdirSync(source, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
-
 export const waitForIt = (time) => {
   return new Promise((resolve) => setTimeout(resolve, time));
-};
-
-export const getScenarios = async () => {
-  return getDirectories("./scenarios");
 };
 
 export const getServeOptions = async (database) => {
@@ -22,9 +14,7 @@ export const getServeOptions = async (database) => {
   return options[database];
 };
 
-export const executeScenario = async (serveOptions, scenario) => {
-  console.log(`SCENARIO: ${scenario}`);
-
+export const executeScenario = async (serveOptions) => {
   const connection = knex({
     client: serveOptions.DB_CLIENT,
     connection: {
@@ -35,17 +25,17 @@ export const executeScenario = async (serveOptions, scenario) => {
       port: serveOptions.DB_PORT,
     },
     migrations: {
-      directory: `./scenarios/${scenario}/migrations`,
+      directory: `./scenarios/migrations`,
     },
   });
   process.stdout.write("Database is updating...");
-  await connection.migrate.up();
+  await connection.migrate.latest();
   process.stdout.write("SUCCESS!\n");
 
   // App
-  const app = new Runner(scenario);
+  const app = new Runner("");
   await waitForIt(2000);
-  const response = await testRunner(scenario);
+  const response = await testRunner("");
   if (!response.results.success) {
     process.exit(1);
   }
