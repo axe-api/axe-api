@@ -433,7 +433,7 @@ class QueryParser {
   }
 
   _shouldBeAcceptableColumn(field) {
-    const regex = /^[a-zA-Z_.]+$/;
+    const regex = /^[0-9,a-z,A-Z_.]+$/;
     if (!field.match(regex)) {
       throw new Error(`Unacceptable field name: ${field}`);
     }
