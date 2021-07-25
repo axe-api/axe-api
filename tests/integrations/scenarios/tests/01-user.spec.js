@@ -1,5 +1,6 @@
 import { get, post, put, deleteIt, truncate } from "./helper.js";
 import dotenv from "dotenv";
+let userId = null;
 
 describe("Axe API", () => {
   beforeAll(async () => {
@@ -29,6 +30,7 @@ describe("Axe API", () => {
       surname: "Doe",
     };
     const { body } = await post({ url: "/api/users", data, status: 200 });
+    userId = body.id;
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
     expect(body.fullname).toBe("John Doe");
@@ -41,7 +43,7 @@ describe("Axe API", () => {
   });
 
   test("should be able to fetch one user", async () => {
-    const { body } = await get({ url: "/api/users/1", status: 200 });
+    const { body } = await get({ url: `/api/users/${userId}`, status: 200 });
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
     expect(body.fullname).toBe("John Doe");
@@ -52,14 +54,18 @@ describe("Axe API", () => {
       name: "Karl",
       surname: "Popper",
     };
-    const { body } = await put({ url: "/api/users/1", data, status: 200 });
+    const { body } = await put({
+      url: `/api/users/${userId}`,
+      data,
+      status: 200,
+    });
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
     expect(body.fullname).toBe("Karl Popper");
   });
 
   test("should be able to delete the user by id", async () => {
-    await deleteIt({ url: "/api/users/1", status: 200 });
+    await deleteIt({ url: `/api/users/${userId}`, status: 200 });
   });
 
   test("should be able to result users as empty after the delation", async () => {
