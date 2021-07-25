@@ -1,9 +1,14 @@
 import IoC from "./../core/IoC.js";
-import { mySQLDetector, sqliteDetector } from "./databaseDetectors/index.js";
+import {
+  mySQLDetector,
+  sqliteDetector,
+  postgresDetector,
+} from "./databaseDetectors/index.js";
 
 const DATABASE_DETECTORS = {
   mysql: mySQLDetector,
   sqlite3: sqliteDetector,
+  postgres: postgresDetector,
 };
 
 const getDatabaseDetector = (databaseClient) => {
@@ -19,9 +24,19 @@ const getDatabaseColumns = async () => {
   const database = await IoC.use("Database");
   const databaseClient = Config.Database.client.toLowerCase();
   const detector = getDatabaseDetector(databaseClient);
+  let schema = Config.Database.connection.database;
+  if (
+    Config.Database.connection.searchPath &&
+    Config.Database.connection.searchPath.length
+  ) {
+    schema =
+      Config.Database.connection.searchPath[
+        Config.Database.connection.searchPath.length - 1
+      ];
+  }
   return await detector({
     knex: database,
-    schema: Config.Database.connection.database,
+    schema,
   });
 };
 

@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: axeapi
+      POSTGRES_USER: axeapi
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5433:5432"
