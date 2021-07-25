@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.13.0 (2021-07-25)](https://github.com/axe-api/axe-api/compare/0.12.2...0.13.0)
+
+### Features
+
+- PostgreSQL database analyzer and integration tests have been added.
+
 ## [0.12.2 (2021-07-24)](https://github.com/axe-api/axe-api/compare/0.12.1...0.12.2)
 
 ### Fixed

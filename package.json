@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "AXE API is a simple tool which has been created based on Express and Knex.js to create Rest APIs quickly.",
   "main": "index.js",
   "type": "module",
@@ -15,7 +15,8 @@
     "lint": "eslint src/**",
     "lint:watch": "esw --watch --color",
     "test:integration:mysql8": "cd ./tests/integrations && node index.js mysql8",
-    "test:integration:mysql57": "cd ./tests/integrations && node index.js mysql57"
+    "test:integration:mysql57": "cd ./tests/integrations && node index.js mysql57",
+    "test:integration:postgres": "cd ./tests/integrations && node index.js postgres"
   },
   "dependencies": {
     "change-case": "^4.1.2",
@@ -47,6 +48,7 @@
     "jest": "^27.0.6",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.12",
+    "pg": "^8.6.0",
     "set-value": ">=4.0.0"
   }
 }
