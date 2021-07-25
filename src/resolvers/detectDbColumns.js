@@ -25,10 +25,7 @@ const getDatabaseColumns = async () => {
   const databaseClient = Config.Database.client.toLowerCase();
   const detector = getDatabaseDetector(databaseClient);
   let schema = Config.Database.connection.database;
-  if (
-    Config.Database.connection.searchPath &&
-    Config.Database.connection.searchPath.length
-  ) {
+  if (Config.Database.client === "postgres") {
     schema =
       Config.Database.connection.searchPath[
         Config.Database.connection.searchPath.length - 1
