@@ -292,6 +292,11 @@ class QueryParser {
       where.field = where.field.replace("$or.", "");
     }
 
+    if (where.field.indexOf("$and.") === 0) {
+      where.prefix = "and";
+      where.field = where.field.replace("$and.", "");
+    }
+
     this._applySpecialCondition(where, "$not", "<>");
     this._applySpecialCondition(where, "$gt", ">");
     this._applySpecialCondition(where, "$gte", ">=");
