@@ -22,7 +22,7 @@
     "change-case": "^4.1.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "knex": "^0.95.7",
+    "knex": "^0.95.8",
     "knex-paginate": "^2.2.0",
     "pluralize": "^8.0.0",
     "validatorjs": "^3.22.1"
