@@ -16,12 +16,16 @@ const _setChildrens = (model, models) => {
 };
 
 const getRootLevelOfTree = (models) => {
-  return models.filter(
-    (item) =>
-      !item.instance.relations.some(
-        (relation) => relation.type === RELATIONSHIPS.HAS_ONE
-      )
-  );
+  const childModels = [];
+  models.forEach((model) => {
+    childModels.push(
+      ...model.instance.relations
+        .filter((relation) => relation.type === RELATIONSHIPS.HAS_MANY)
+        .map((relation) => relation.model)
+    );
+  });
+
+  return models.filter((model) => !childModels.includes(model.name));
 };
 
 const createRecursiveTree = (tree, models) => {
