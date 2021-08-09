@@ -1,4 +1,5 @@
 import pluralize from "pluralize";
+import { snakeCase } from "snake-case";
 import { RELATIONSHIPS, HANDLERS } from "./../constants.js";
 const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
 
@@ -12,7 +13,7 @@ class Model {
   }
 
   get table() {
-    return pluralize(this.constructor.name.toLowerCase());
+    return pluralize(snakeCase(this.constructor.name));
   }
 
   get fillable() {
@@ -46,7 +47,7 @@ class Model {
   get transaction() {
     return null;
   }
-  
+
   get ignore() {
     return false;
   }
