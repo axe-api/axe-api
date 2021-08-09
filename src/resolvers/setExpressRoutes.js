@@ -143,16 +143,35 @@ const createNestedRoutes = async (
   );
 };
 
+const hasAMiddleware = (definition, handler) => {
+  if (typeof definition === "function") {
+    return true;
+  }
+
+  if (definition.handler === handler) {
+    return true;
+  }
+
+  if (
+    Array.isArray(definition.handler) &&
+    definition.handler.includes(handler)
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
 const getModelMiddlewares = (model, handler) => {
   const middlewares = [];
   if (model.instance.middlewares.length > 0) {
     const filtered = model.instance.middlewares
-      .filter((item) => typeof item === "function" || item.handler === handler)
-      .map((item) => {
-        if (typeof item === "function") {
-          return item;
+      .filter((definition) => hasAMiddleware(definition, handler))
+      .map((definition) => {
+        if (typeof definition === "function") {
+          return definition;
         }
-        return item.middleware;
+        return definition.middleware;
       });
     middlewares.push(...filtered);
   }
