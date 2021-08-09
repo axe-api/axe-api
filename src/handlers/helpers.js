@@ -161,6 +161,15 @@ export const getRelatedData = async (
       }
     }
 
+    // We should add the HAS_ONE relation's foreignKeys incase the developer
+    // wants the related data but didn't set the foreignKey column
+    if (Array.isArray(selectColumns)) {
+      const requiredForeignKeys = foreignModel.instance.relations
+        .filter((item) => item.type === RELATIONSHIPS.HAS_ONE)
+        .map((item) => item.foreignKey);
+      selectColumns.push(...requiredForeignKeys);
+    }
+
     // Fetching related records by foreignKey and primary key values.
     let relatedRecords = await database(foreignModel.instance.table)
       .select(selectColumns)
