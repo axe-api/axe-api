@@ -8,7 +8,10 @@ export default async (appDirectory) => {
 
   appDirectory = path.join(appDirectory, "Models");
   const models = [];
-  const files = fs.readdirSync(appDirectory);
+  const files = fs
+    .readdirSync(appDirectory)
+    .filter((file) => file.split(".").pop() === "js");
+
   for (const file of files) {
     const modelName = file.replace(".js", "");
     const modelFile = url.pathToFileURL(path.join(appDirectory, file)).href;
