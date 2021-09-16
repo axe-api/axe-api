@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import knex from "knex";
-import cors from "cors";
 import { attachPaginate } from "knex-paginate";
 import Config from "./core/Config.js";
 import IoC from "./core/IoC.js";
@@ -84,8 +83,6 @@ class Server {
 
   async _listen() {
     const Config = await IoC.use("Config");
-
-    this.app.use(cors(Config.Application.cors || {}));
 
     this.app.get("/", (req, res) => {
       res.json({
