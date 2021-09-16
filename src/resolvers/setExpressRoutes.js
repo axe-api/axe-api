@@ -237,7 +237,7 @@ const createRouteByModel = async (
   await createNestedRoutes(model, models, allowRecursive, urlPrefix, resource);
 };
 
-const callAppInit = async (appDirectory, app) => {
+const getGeneralHooks = async (appDirectory) => {
   const fs = await IoC.use("fs");
   const path = await IoC.use("path");
   const url = await IoC.use("url");
@@ -245,11 +245,13 @@ const callAppInit = async (appDirectory, app) => {
   // Calling the user's custom definitions
   const customInitFile = path.join(appDirectory, `init.js`);
   if (fs.existsSync(customInitFile)) {
-    const { default: initter } = await import(
+    const { onBeforeInit, onAfterInit } = await import(
       url.pathToFileURL(customInitFile).href
     );
-    await initter({ app });
+    return { onBeforeInit, onAfterInit };
   }
+
+  return { onBeforeInit: null, onAfterInit: null };
 };
 
 const createRoutesByModelTree = async (modelTree, models) => {
@@ -262,8 +264,17 @@ export default async (app, modelTree, appDirectory, models) => {
   Config = await IoC.use("Config");
   const logger = await IoC.use("Logger");
 
+  const { onBeforeInit, onAfterInit } = await getGeneralHooks(appDirectory);
+
+  if (typeof onBeforeInit === "function") {
+    await onBeforeInit({ app });
+  }
+
   await createRoutesByModelTree(modelTree, models);
-  await callAppInit(appDirectory, app);
+
+  if (typeof onAfterInit === "function") {
+    await onAfterInit({ app });
+  }
 
   logger.info("All routes have been created.");
 };

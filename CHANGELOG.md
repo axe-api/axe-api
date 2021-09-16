@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.14.0 (2021-09-15)](https://github.com/axe-api/axe-api/compare/0.14.0...0.13.3)
+
+### Features
+
+- General hooks definition feature has been added. ([#81](https://github.com/axe-api/axe-api/issues/81))
+
 ## [0.13.3 (2021-09-15)](https://github.com/axe-api/axe-api/compare/0.13.2...0.13.3)
 
 ### Fixed
