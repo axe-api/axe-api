@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.13.3 (2021-09-15)](https://github.com/axe-api/axe-api/compare/0.13.2...0.13.3)
+
+### Fixed
+
+- Fixed CORS bugs.
+
 ## [0.13.2 (2021-08-20)](https://github.com/axe-api/axe-api/compare/0.13.1...0.13.2)
 
 ### Fixed
