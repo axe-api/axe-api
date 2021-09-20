@@ -3,8 +3,8 @@ import HttpResponse from "./../core/HttpResponse.js";
 class QueryParser {
   constructor(options = {}) {
     this.options = {
-      min_per_page: 10,
-      max_per_page: 100,
+      min_per_page: 1,
+      max_per_page: 1000,
     };
     this.usedConditionColumns = new Set();
     Object.assign(this.options, options);

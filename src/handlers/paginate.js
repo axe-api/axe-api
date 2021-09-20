@@ -43,6 +43,7 @@ export default async (context) => {
   const result = await query.paginate({
     perPage: conditions.per_page,
     currentPage: conditions.page,
+    isLengthAware: true,
   });
 
   // We should try to get related data if there is any
