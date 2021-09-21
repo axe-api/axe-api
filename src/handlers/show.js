@@ -5,7 +5,7 @@ import {
   serializeData,
   addForeignKeyQuery,
 } from "./helpers.js";
-import { HOOK_FUNCTIONS } from "./../constants.js";
+import { HOOK_FUNCTIONS, HANDLERS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
 import QueryParser from "./../core/QueryParser.js";
 
@@ -47,7 +47,7 @@ export default async (context) => {
   }
 
   // We should try to get related data if there is any
-  await getRelatedData([item], conditions.with, model, models, trx);
+  await getRelatedData([item], conditions.with, model, models, trx, HANDLERS.SHOW);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
     ...context,
@@ -57,7 +57,7 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  item = serializeData(item, model.instance.serialize);
+  item = await serializeData(item, model.instance.serialize, HANDLERS.SHOW);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

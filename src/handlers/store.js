@@ -8,7 +8,7 @@ import {
   getParentColumn,
 } from "./helpers.js";
 import Validator from "validatorjs";
-import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
+import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS, HANDLERS } from "./../constants.js";
 
 export default async (context) => {
   const { request, response, model, trx, relation, parentModel } = context;
@@ -63,7 +63,7 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  item = serializeData(item, model.instance.serialize);
+  item = await serializeData(item, model.instance.serialize, HANDLERS.INSERT);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);
