@@ -1,6 +1,7 @@
 import { RELATIONSHIPS } from "./../constants.js";
 import { camelCase } from "change-case";
 import HttpResponse from "./../core/HttpResponse.js";
+import IoC from '../core/IoC.js';
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -73,7 +74,8 @@ export const getRelatedData = async (
   withArray,
   model,
   models,
-  database
+  database,
+  handler
 ) => {
   if (withArray.length === 0) {
     return;
@@ -176,9 +178,10 @@ export const getRelatedData = async (
       .whereIn(definedRelation[searchField], parentPrimaryKeyValues);
 
     // We should serialize related data if there is any serialization function
-    relatedRecords = serializeData(
+    relatedRecords = await serializeData(
       relatedRecords,
-      foreignModel.instance.serialize
+      foreignModel.instance.serialize,
+      handler
     );
 
     // We should hide hidden fields if there is any
@@ -191,7 +194,8 @@ export const getRelatedData = async (
         clientQuery.children,
         foreignModel,
         models,
-        database
+        database,
+        handler
       );
     }
 
@@ -231,16 +235,56 @@ export const bindTimestampValues = (formData, columnTypes = [], model) => {
   }
 };
 
-export const serializeData = (itemArray, serialize) => {
-  if (!serialize) {
+const serialize = async (data, callback) => {
+  if (!callback) {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(callback);
+  }
+
+  return [data].map(callback)[0];
+}
+
+const globalSerializer = async (itemArray, handler) => {
+  const { Application } = await IoC.use("Config");
+
+  if (!Application.serializers) {
     return itemArray;
   }
 
-  if (Array.isArray(itemArray)) {
-    return itemArray.map(serialize);
-  }
+  let callbacks = [];
+  // Push all runable serializer into callbacks. 
+  Application.serializers.map(configSerializer => {
+    // Serialize data for all requests types.
+    if (typeof configSerializer === "function") {
+      callbacks.push(configSerializer);
+      return
+    }
 
-  return [itemArray].map(serialize)[0];
+    // Serialize data with specific handler like "PAGINATE" or "SHOW".
+    if (typeof configSerializer === "object" && configSerializer.handler.includes(handler)) {
+      // Handle multiple serializer.
+      if (Array.isArray(configSerializer.serializer)) {
+        configSerializer.serializer.forEach(fn => callbacks.push(fn));
+        return
+      }
+      callbacks.push(configSerializer.serializer)
+      return
+    }
+  })
+
+  while (callbacks.length !== 0) {
+    itemArray = await serialize(itemArray, callbacks.shift());
+  }
+  return itemArray;
+};
+
+export const serializeData = async (itemArray, modelSerializer, handler) => {
+  itemArray = await serialize(itemArray, modelSerializer);
+  itemArray = await globalSerializer(itemArray, handler);
+  return itemArray;
 };
 
 export const getParentColumn = (relation) => {
