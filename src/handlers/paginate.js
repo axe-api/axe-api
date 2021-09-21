@@ -5,7 +5,7 @@ import {
   serializeData,
   addForeignKeyQuery,
 } from "./helpers.js";
-import { HOOK_FUNCTIONS } from "./../constants.js";
+import { HOOK_FUNCTIONS, HANDLERS } from "./../constants.js";
 import QueryParser from "./../core/QueryParser.js";
 
 export default async (context) => {
@@ -45,7 +45,7 @@ export default async (context) => {
   });
 
   // We should try to get related data if there is any
-  await getRelatedData(result.data, conditions.with, model, models, trx);
+  await getRelatedData(result.data, conditions.with, model, models, trx, HANDLERS.PAGINATE);
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterPaginate, {
     ...context,
@@ -55,7 +55,7 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  result.data = serializeData(result.data, model.instance.serialize);
+  result.data = await serializeData(result.data, model.instance.serialize, HANDLERS.PAGINATE);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields(result.data, model.instance.hiddens);
