@@ -89,6 +89,9 @@ class Server {
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
+        docs: `http://localhost:${Config.Application.port}/docs`,
+        routes: `http://localhost:${Config.Application.port}/docs/routes`,
+        "learn-more": "https://axe-api.github.io",
       };
       res.json(Object.keys(Config.Application).includes('defaultResponse') ? Config.Application.defaultResponse : defaultAxeResponse);
     });
