@@ -6,5 +6,8 @@ export default async () => {
     port: process.env.APP_PORT,
     logLevel: LOG_LEVEL.INFO,
     transaction: false,
+    defaultResponse: {
+      status: "OK",
+    },
   };
 };

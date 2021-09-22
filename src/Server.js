@@ -85,11 +85,12 @@ class Server {
     const Config = await IoC.use("Config");
 
     this.app.get("/", (req, res) => {
-      res.json({
+      const defaultAxeResponse = {
         name: "AXE API",
         description: "The best API creation tool in the world.",
         aim: "To kill them all!",
-      });
+      };
+      res.json(Object.keys(Config.Application).includes('defaultResponse') ? Config.Application.defaultResponse : defaultAxeResponse);
     });
 
     if (Config.Application.env === "development") {
