@@ -30,6 +30,14 @@ export const getFormData = (request, fillable) => {
   return filtered;
 };
 
+export const getMergedFormData = (request, item, fillableFormData) => {
+  const formData = { ...item };
+  Object.keys(request.body).forEach((key) => {
+    formData[key] = fillableFormData[key];
+  });
+  return formData;
+};
+
 export const getFormValidation = (method, validations) => {
   if (!validations) {
     return undefined;
