@@ -52,6 +52,7 @@ const HANDLERS = {
   SHOW: "show",
   UPDATE: "update",
   DELETE: "destroy",
+  AUTOSAVE: "autosave",
 };
 
 const HTTP_METHODS = {
@@ -78,6 +79,11 @@ const API_ROUTE_TEMPLATES = {
   [HANDLERS.UPDATE]: {
     url: (parentUrl, resource, primaryKey) =>
       `/api/${parentUrl}${resource}/:${primaryKey}`,
+    method: HTTP_METHODS.PUT,
+  },
+  [HANDLERS.AUTOSAVE]: {
+    url: (parentUrl, resource, primaryKey) =>
+      `/api/${parentUrl}${resource}/:${primaryKey}/autosave`,
     method: HTTP_METHODS.PUT,
   },
   [HANDLERS.DELETE]: {
