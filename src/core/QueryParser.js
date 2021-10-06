@@ -32,7 +32,7 @@ class QueryParser {
     // Users should be able to select some fields to show.
     if (!Array.isArray(fields)) {
       query.select(`${this.model.instance.table}.${fields}`);
-    } else if (fields.length > 0 && fields !== "*") {
+    } else if (fields.length > 0 && fields != "*") {
       const fullPathFields = fields.map((field) => {
         if (field.includes(".") === false) {
           return `${this.model.instance.table}.${field}`;
