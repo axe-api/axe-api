@@ -15,7 +15,7 @@ import {
   detectDbColumns,
   checkModelColumns,
 } from "./resolvers/index.js";
-
+import { getDefaultApiResponse } from "./handlers/helpers.js";
 class Server {
   constructor(appFolder) {
     this.app = null;
@@ -84,16 +84,8 @@ class Server {
   async _listen() {
     const Config = await IoC.use("Config");
 
-    this.app.get("/", (req, res) => {
-      const defaultAxeResponse = {
-        name: "AXE API",
-        description: "The best API creation tool in the world.",
-        aim: "To kill them all!",
-        docs: `http://localhost:${Config.Application.port}/docs`,
-        routes: `http://localhost:${Config.Application.port}/docs/routes`,
-        "learn-more": "https://axe-api.github.io",
-      };
-      res.json(Object.keys(Config.Application).includes('defaultResponse') ? Config.Application.defaultResponse : defaultAxeResponse);
+    this.app.get("/", async (req, res) => {
+      res.json(await getDefaultApiResponse(req, res));
     });
 
     if (Config.Application.env === "development") {

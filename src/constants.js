@@ -109,6 +109,12 @@ const TIMESTAMP_COLUMNS = {
   UPDATED_AT: "updatedAtColumn",
 };
 
+const DEFAULT_API_RESPONSE = {
+  name: "AXE API",
+  description: "The best API creation tool in the world.",
+  aim: "To kill them all!",
+};
+
 export {
   LOG_LEVEL,
   HOOK_FUNCTIONS,
@@ -120,4 +126,5 @@ export {
   DEPENDECY_TYPES,
   HANDLERS,
   TIMESTAMP_COLUMNS,
+  DEFAULT_API_RESPONSE,
 };

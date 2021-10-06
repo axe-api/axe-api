@@ -1,6 +1,7 @@
-import { RELATIONSHIPS } from "./../constants.js";
-import { camelCase } from "change-case";
+import IoC from "../core/IoC.js";
 import HttpResponse from "./../core/HttpResponse.js";
+import { RELATIONSHIPS, DEFAULT_API_RESPONSE } from "./../constants.js";
+import { camelCase } from "change-case";
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -257,3 +258,13 @@ export const addForeignKeyQuery = (request, query, relation, parentModel) => {
     query.where(relation.foreignKey, request.params[parentColumn]);
   }
 };
+
+export const getDefaultApiResponse = async (req, res) => {
+  const Config = await IoC.use("Config");
+
+  if (!Object.keys(Config.Application).includes('defaultResponse')) {
+    return DEFAULT_API_RESPONSE;
+  }
+
+  return typeof Config.Application.defaultResponse === 'function' ? await Config.Application.defaultResponse(req, res) : Config.Application.defaultResponse; 
+}
