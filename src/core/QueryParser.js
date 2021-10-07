@@ -1,16 +1,19 @@
 import HttpResponse from "./../core/HttpResponse.js";
+import { RELATIONSHIPS } from "../constants.js";
+
+const DEFAULT_OPTIONS = {
+  min_per_page: 1,
+  max_per_page: 1000,
+};
 
 class QueryParser {
-  constructor(options = {}) {
-    this.options = {
-      min_per_page: 1,
-      max_per_page: 1000,
-    };
+  constructor({ model, models, options = {} }) {
+    this.model = model;
+    this.models = models;
+    this.createdJoins = [];
+    this.relationColumns = [];
     this.usedConditionColumns = new Set();
-    Object.assign(this.options, options);
-
-    this.options.min_per_page = parseInt(this.options.min_per_page);
-    this.options.max_per_page = parseInt(this.options.max_per_page);
+    this.options = { ...DEFAULT_OPTIONS, ...options };
 
     if (isNaN(this.options.min_per_page) || this.options.min_per_page < 1) {
       throw new Error(
@@ -27,8 +30,18 @@ class QueryParser {
 
   applyFields(query, fields) {
     // Users should be able to select some fields to show.
-    if (fields.length > 0 && fields !== "*") {
-      query.select(fields);
+    if (!Array.isArray(fields)) {
+      query.select(`${this.model.instance.table}.${fields}`);
+    } else if (fields.length > 0 && fields != "*") {
+      const fullPathFields = fields.map((field) => {
+        if (field.includes(".") === false) {
+          return `${this.model.instance.table}.${field}`;
+        }
+        return field;
+      });
+      query.select([...fullPathFields, ...this.relationColumns]);
+    } else {
+      query.select(`${this.model.instance.table}.*`);
     }
   }
 
@@ -71,30 +84,21 @@ class QueryParser {
     }
   }
 
-  applyRelations(query, relationships) {
-    for (const item of relationships) {
-      if (item.fields.length === 0 && item.children.length === 0) {
-        query.with(item.relationship);
-      } else {
-        query.with(item.relationship, (builder) => {
-          if (item.fields.length > 0) {
-            builder.select(item.fields);
-          }
-
-          if (item.children.length > 0) {
-            this.applyRelations(builder, item.children);
-          }
-        });
-      }
-    }
-  }
-
-  get(model, query) {
+  get(query) {
     const conditions = this._parseSections(this._getSections(query));
     const usedColumns = this._getUsedColumns(conditions);
-    const undefinedColumns = usedColumns.filter(
-      (usedColumn) => !model.instance.columnNames.includes(usedColumn)
-    );
+    const undefinedColumns = usedColumns.filter((columnName) => {
+      let currentModel = this.model;
+      let realColumName = columnName;
+      if (columnName.includes(".")) {
+        const [table, splittedColumnName] = columnName.split(".");
+        currentModel = this.models.find(
+          (model) => model.instance.table === table
+        );
+        realColumName = splittedColumnName;
+      }
+      return !currentModel.instance.columnNames.includes(realColumName);
+    });
 
     if (undefinedColumns.length > 0) {
       throw new HttpResponse(
@@ -119,18 +123,35 @@ class QueryParser {
     const zeroArguments = ["Null", "NotNull"];
     const oneArguments = ["In", "NotIn", "Between", "NotBetween"];
 
+    const fullFieldPath = `${ruleSet.table}.${ruleSet.field}`;
+    if (ruleSet.table !== this.model.instance.table) {
+      this._addJoinOnce(query, ruleSet);
+    }
+
     if (zeroArguments.indexOf(ruleSet.condition) > -1) {
-      return query[`${method}${ruleSet.condition}`](ruleSet.field);
+      return query[`${method}${ruleSet.condition}`](fullFieldPath);
     }
 
     if (oneArguments.indexOf(ruleSet.condition) > -1) {
       return query[`${method}${ruleSet.condition}`](
-        ruleSet.field,
+        fullFieldPath,
         ruleSet.value
       );
     }
 
-    return query[method](ruleSet.field, ruleSet.condition, ruleSet.value);
+    return query[method](fullFieldPath, ruleSet.condition, ruleSet.value);
+  }
+
+  _addJoinOnce(query, { model, relation }) {
+    if (this.createdJoins.includes(relation.name)) {
+      return;
+    }
+
+    const tableName = model.instance.table;
+    const primaryKey = `${model.instance.table}.${relation.primaryKey}`;
+    const foreignKey = `${this.model.instance.table}.${relation.foreignKey}`;
+    query.leftJoin(tableName, primaryKey, foreignKey);
+    this.createdJoins.push(relation.name);
   }
 
   _getSections(query) {
@@ -177,6 +198,8 @@ class QueryParser {
     sections.sort = this._parseSortingOptions(sections.sort);
     sections.q = this._parseCondition(sections.q);
     sections.with = this._parseWith(this._parseWithSections(sections.with));
+    this._addRelationColumns(sections.with);
+
     return sections;
   }
 
@@ -277,6 +300,8 @@ class QueryParser {
 
     const where = {
       prefix: null,
+      model: this.model,
+      table: this.model.instance.table,
       field: null,
       condition: "=",
       value: null,
@@ -325,6 +350,33 @@ class QueryParser {
 
     if (where.condition === "LIKE" || where.condition === "NOT LIKE") {
       where.value = where.value.replace(/\*/g, "%");
+    }
+
+    // This means that the condition is related with another table
+    if (where.field.includes(".")) {
+      const [relationName, field] = where.field.split(".");
+
+      const relation = this.model.instance.relations.find(
+        (item) =>
+          item.name === relationName && item.type === RELATIONSHIPS.HAS_ONE
+      );
+
+      if (!relation) {
+        throw new Error(`Unacceptable query field: ${relationName}.${field}`);
+      }
+
+      const relatedModel = this.models.find(
+        (item) => item.name === relation.model
+      );
+
+      if (!relatedModel) {
+        throw new Error(`Undefined model name: ${relation.model}`);
+      }
+
+      where.model = relatedModel;
+      where.table = relatedModel.instance.table;
+      where.relation = relation;
+      where.field = field;
     }
 
     this._shouldBeAcceptableColumn(where.field);
@@ -416,6 +468,21 @@ class QueryParser {
       where.field = where.field.replace(structure, "");
       where.condition = condition;
     }
+  }
+
+  _addRelationColumns(withs) {
+    withs.forEach((item) => {
+      const relation = this.model.instance.relations.find(
+        (i) => i.name === item.relationship
+      );
+      if (!relation) {
+        throw new Error(`Undefined relation: ${item.relationship}`);
+      }
+
+      this.relationColumns.push(
+        `${this.model.instance.table}.${relation.foreignKey}`
+      );
+    });
   }
 
   _getConditionMethodName(ruleSet) {
