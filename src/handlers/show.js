@@ -12,10 +12,10 @@ import QueryParser from "./../core/QueryParser.js";
 export default async (context) => {
   const { request, response, model, models, trx, relation, parentModel } =
     context;
-  const queryParser = new QueryParser();
+  const queryParser = new QueryParser({ model, models });
 
   // We should parse URL query string to use as condition in Lucid query
-  const conditions = queryParser.get(model, request.query);
+  const conditions = queryParser.get(request.query);
 
   // Fetching item
   const query = trx.from(model.instance.table);
@@ -28,9 +28,6 @@ export default async (context) => {
 
   // Users should be able to filter records
   queryParser.applyWheres(query, conditions.q);
-
-  // // Users should be able to add relationships to the query
-  // this.queryParser.applyRelations(query, conditions.with);
 
   // We should add this condition in here because of performance.
   query.where(

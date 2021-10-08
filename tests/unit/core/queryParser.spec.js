@@ -4,7 +4,16 @@ const options = {
   max_per_page: 100,
 };
 
-const model = {};
+const model = {
+  instance: {
+    table: "users",
+    relations: [
+      {
+        name: "users",
+      },
+    ],
+  },
+};
 
 const testParser = (parser, expression, field, condition, value) => {
   const result = parser._parseCondition(expression);
@@ -14,30 +23,32 @@ const testParser = (parser, expression, field, condition, value) => {
 };
 
 test("I should be able to override basic options", () => {
-  expect(new QueryParser().options.max_per_page).toBe(1000);
-  expect(new QueryParser({ max_per_page: 25 }).options.max_per_page).toBe(25);
+  expect(new QueryParser({ model }).options.max_per_page).toBe(1000);
+  expect(
+    new QueryParser({ options: { max_per_page: 25 } }).options.max_per_page
+  ).toBe(25);
 });
 
 test("I should be able to see an error when I try to set unacceptable options", () => {
   let parser = null;
   /* eslint-disable no-new */
   expect(() => {
-    parser = new QueryParser({ min_per_page: -10 });
+    parser = new QueryParser({ options: { min_per_page: -10 } });
   }).toThrow(Error);
   expect(() => {
-    parser = new QueryParser({ max_per_page: 100000 });
+    parser = new QueryParser({ options: { max_per_page: 100000 } });
   }).toThrow(Error);
   expect(() => {
-    parser = new QueryParser({ min_per_page: "xxx" });
+    parser = new QueryParser({ options: { min_per_page: "xxx" } });
   }).toThrow(Error);
   expect(() => {
-    parser = new QueryParser({ max_per_page: "xxx" });
+    parser = new QueryParser({ options: { max_per_page: "xxx" } });
   }).toThrow(Error);
   expect(parser).toBe(null);
 });
 
 test("I should be able to get an error when I send unacceptable query string", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(() => {
     parser._getSections(null);
   }).toThrow(Error);
@@ -53,7 +64,7 @@ test("I should be able to get an error when I send unacceptable query string", (
 });
 
 test("I should be able to split queries to different sections", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const query = {
     q: '{"salary": {"$gt": 10000}}',
     page: "1",
@@ -72,7 +83,7 @@ test("I should be able to split queries to different sections", () => {
 });
 
 test("I should be able to split queries when I don`t send full sections", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const result = parser._getSections({});
 
   expect(result.q).toBe(null);
@@ -84,7 +95,7 @@ test("I should be able to split queries when I don`t send full sections", () => 
 });
 
 test("I should be able to split queries when I don`t send partly sections", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const query = {
     page: "1",
     fields: "id,name,surname",
@@ -100,7 +111,7 @@ test("I should be able to split queries when I don`t send partly sections", () =
 });
 
 test("I should be able to parse the page parameter", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(parser._parsePage("1")).toBe(1);
   expect(parser._parsePage("12")).toBe(12);
   expect(parser._parsePage("123")).toBe(123);
@@ -112,7 +123,7 @@ test("I should be able to parse the page parameter", () => {
 });
 
 test("I should be able to parse the per_page parameter", () => {
-  const parser = new QueryParser(options);
+  const parser = new QueryParser({ model, options });
   expect(parser._parsePerPage("10")).toBe(10);
   expect(parser._parsePerPage("12")).toBe(12);
   expect(parser._parsePerPage("as")).toBe(10);
@@ -122,7 +133,7 @@ test("I should be able to parse the per_page parameter", () => {
 });
 
 test("I should be able to parse the fields", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   let result = parser._parseFields("id,email");
   expect(result.length).toBe(2);
   expect(result[0]).toBe("id");
@@ -134,7 +145,7 @@ test("I should be able to parse the fields", () => {
 });
 
 test("I should be able to get an error while parsing unacceptable column name", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   // Acceptable exceptions
   expect(parser._parseFields("full_name").length).toBe(1);
   expect(parser._parseFields("id,users.name").length).toBe(2);
@@ -152,7 +163,7 @@ test("I should be able to get an error while parsing unacceptable column name", 
 });
 
 test("I should be able to parsing sorting options", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const result = parser._parseSortingOptions("id,-name,+surname");
   expect(result.length).toBe(3);
   expect(result[0].field).toBe("id");
@@ -164,7 +175,7 @@ test("I should be able to parsing sorting options", () => {
 });
 
 test("I should be able to get an error while parsing unacceptable column in sorting", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(parser._parseSortingOptions("id,full_name")[1].field).toBe(
     "full_name"
   );
@@ -177,7 +188,7 @@ test("I should be able to get an error while parsing unacceptable column in sort
 });
 
 test("I should be able to parsing query condition", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
 
   let result = null;
 
@@ -239,7 +250,7 @@ test("I should be able to parsing query condition", () => {
 });
 
 test("I should be able to parsing all conditions", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const result = parser._parseConditions([
     { name: "Özgür" },
     { "$or.surname": "Işıklı" },
@@ -258,7 +269,7 @@ test("I should be able to parsing all conditions", () => {
 });
 
 test("I should be able to parse recursive queries", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const result = parser._parseConditions([
     [{ name: "Özgür" }, { "$or.surname": "Işıklı" }],
     [{ "$or.id.$gt": 1 }, { "age.$gt": 18 }],
@@ -275,7 +286,7 @@ test("I should be able to parse recursive queries", () => {
 });
 
 test("I should be not able to add unacceptable field to query", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(() => {
     parser._parseCondition({ "full-name": "Özgür" });
   }).toThrow(Error);
@@ -292,27 +303,29 @@ test("I should be able to apply general queries", () => {
   query.where = jest.fn(() => {});
   query.orWhere = jest.fn(() => {});
 
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applyWheres(query, {
     prefix: null,
+    table: "users",
     field: "name",
     condition: "=",
     value: "Özgür",
   });
   parser.applyWheres(query, {
     prefix: "or",
+    table: "users",
     field: "name",
     condition: "=",
     value: "Özgür",
   });
 
   expect(query.where.mock.calls.length).toBe(1);
-  expect(query.where.mock.calls[0][0]).toBe("name");
+  expect(query.where.mock.calls[0][0]).toBe("users.name");
   expect(query.where.mock.calls[0][1]).toBe("=");
   expect(query.where.mock.calls[0][2]).toBe("Özgür");
 
   expect(query.orWhere.mock.calls.length).toBe(1);
-  expect(query.orWhere.mock.calls[0][0]).toBe("name");
+  expect(query.orWhere.mock.calls[0][0]).toBe("users.name");
   expect(query.orWhere.mock.calls[0][1]).toBe("=");
   expect(query.orWhere.mock.calls[0][2]).toBe("Özgür");
 });
@@ -321,17 +334,18 @@ test("I should be able to apply one argument queries", () => {
   const query = {};
   query.whereIn = jest.fn(() => {});
 
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   const value = ["Foo", "Bar"];
   parser.applyWheres(query, {
     prefix: null,
+    table: "users",
     field: "name",
     condition: "In",
     value,
   });
 
   expect(query.whereIn.mock.calls.length).toBe(1);
-  expect(query.whereIn.mock.calls[0][0]).toBe("name");
+  expect(query.whereIn.mock.calls[0][0]).toBe("users.name");
   expect(query.whereIn.mock.calls[0][1]).toBe(value);
 });
 
@@ -339,16 +353,17 @@ test("I should be able to apply zero argument queries", () => {
   const query = {};
   query.whereNull = jest.fn(() => {});
 
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applyWheres(query, {
     prefix: null,
+    table: "users",
     field: "name",
     condition: "Null",
     value: null,
   });
 
   expect(query.whereNull.mock.calls.length).toBe(1);
-  expect(query.whereNull.mock.calls[0][0]).toBe("name");
+  expect(query.whereNull.mock.calls[0][0]).toBe("users.name");
 });
 
 test("I should be able to apply multiple conditions", () => {
@@ -356,17 +371,29 @@ test("I should be able to apply multiple conditions", () => {
   query.where = jest.fn(() => {});
   query.whereNull = jest.fn(() => {});
 
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applyWheres(query, [
-    { prefix: null, field: "name", condition: "Null", value: null },
-    { prefix: null, field: "surname", condition: "=", value: "Işıklı" },
+    {
+      prefix: null,
+      table: "users",
+      field: "name",
+      condition: "Null",
+      value: null,
+    },
+    {
+      prefix: null,
+      table: "users",
+      field: "surname",
+      condition: "=",
+      value: "Işıklı",
+    },
   ]);
 
   expect(query.whereNull.mock.calls.length).toBe(1);
-  expect(query.whereNull.mock.calls[0][0]).toBe("name");
+  expect(query.whereNull.mock.calls[0][0]).toBe("users.name");
 
   expect(query.where.mock.calls.length).toBe(1);
-  expect(query.where.mock.calls[0][0]).toBe("surname");
+  expect(query.where.mock.calls[0][0]).toBe("users.surname");
   expect(query.where.mock.calls[0][1]).toBe("=");
   expect(query.where.mock.calls[0][2]).toBe("Işıklı");
 });
@@ -388,15 +415,27 @@ test("I should be able to apply recursive conditions", () => {
     sub(sub2);
   });
 
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applyWheres(query, [
     [
-      { prefix: null, field: "name", condition: "Null", value: null },
-      { prefix: null, field: "surname", condition: "=", value: "Işıklı" },
+      {
+        prefix: null,
+        table: "users",
+        field: "name",
+        condition: "Null",
+        value: null,
+      },
+      {
+        prefix: null,
+        table: "users",
+        field: "surname",
+        condition: "=",
+        value: "Işıklı",
+      },
     ],
     [
-      { prefix: "or", field: "id", condition: ">=", value: 0 },
-      { prefix: null, field: "age", condition: ">", value: 18 },
+      { prefix: "or", table: "users", field: "id", condition: ">=", value: 0 },
+      { prefix: null, table: "users", field: "age", condition: ">", value: 18 },
     ],
   ]);
 
@@ -407,25 +446,25 @@ test("I should be able to apply recursive conditions", () => {
   expect(typeof query.orWhere.mock.calls[0][0]).toBe("function");
 
   expect(sub1.whereNull.mock.calls.length).toBe(1);
-  expect(sub1.whereNull.mock.calls[0][0]).toBe("name");
+  expect(sub1.whereNull.mock.calls[0][0]).toBe("users.name");
   expect(sub1.where.mock.calls.length).toBe(1);
-  expect(sub1.where.mock.calls[0][0]).toBe("surname");
+  expect(sub1.where.mock.calls[0][0]).toBe("users.surname");
   expect(sub1.where.mock.calls[0][1]).toBe("=");
   expect(sub1.where.mock.calls[0][2]).toBe("Işıklı");
 
   expect(sub2.orWhere.mock.calls.length).toBe(1);
-  expect(sub2.orWhere.mock.calls[0][0]).toBe("id");
+  expect(sub2.orWhere.mock.calls[0][0]).toBe("users.id");
   expect(sub2.orWhere.mock.calls[0][1]).toBe(">=");
   expect(sub2.orWhere.mock.calls[0][2]).toBe(0);
 
   expect(sub2.where.mock.calls.length).toBe(1);
-  expect(sub2.where.mock.calls[0][0]).toBe("age");
+  expect(sub2.where.mock.calls[0][0]).toBe("users.age");
   expect(sub2.where.mock.calls[0][1]).toBe(">");
   expect(sub2.where.mock.calls[0][2]).toBe(18);
 });
 
 test("I should be able to parse with to sections", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(parser._parseWithSections("posts").length).toBe(1);
   expect(parser._parseWithSections("posts,users").length).toBe(2);
   expect(parser._parseWithSections("post{id|title},user{name}").length).toBe(2);
@@ -441,7 +480,7 @@ test("I should be able to parse with to sections", () => {
 
 test("I should be able to parse with to sections", () => {
   let result = null;
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   expect(parser._parseWith(["posts", "users"]).length).toBe(2);
   expect(parser._parseWith(["post.comments"]).length).toBe(1);
 
@@ -485,7 +524,7 @@ test("I should be able to parse with to sections", () => {
 });
 
 test("I should be able to split with recursive string", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   let result = parser._splitWithRecursive("id|comments{id|reports{id}}");
   expect(result.length).toBe(2);
   expect(result[0]).toBe("id");
@@ -509,7 +548,7 @@ test("I should be able to split with recursive string", () => {
 });
 
 test("I should be able to parse all sections", () => {
-  const parser = new QueryParser(options);
+  const parser = new QueryParser({ model, options });
   const sections = {
     q: '{"id":10}',
     page: "1",
@@ -550,35 +589,26 @@ test("I should be able to parse all sections", () => {
 });
 
 test("I should be able to get query parsing result", () => {
-  const parser = new QueryParser();
-  const result = parser.get(model, {});
+  const parser = new QueryParser({ model });
+  const result = parser.get({});
   expect(result.page).toBe(1);
   expect(result.per_page).toBe(1);
 });
 
-test("I should be able to apply my field selections to qeuery", () => {
+test("I should be able to apply my field selections to query", () => {
   const query = {};
   query.select = jest.fn(() => {});
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applyFields(query, "MyFields");
 
   expect(query.select.mock.calls.length).toBe(1);
-  expect(query.select.mock.calls[0][0]).toBe("MyFields");
-});
-
-test("I should be able to not see calling to select mehtod when I don`t have any field selection", () => {
-  const query = {};
-  query.select = jest.fn(() => {});
-  const parser = new QueryParser();
-  parser.applyFields(query, []);
-
-  expect(query.select.mock.calls.length).toBe(0);
+  expect(query.select.mock.calls[0][0]).toBe("users.MyFields");
 });
 
 test("I should be able to apply sorting selection to the query", () => {
   const query = {};
   query.orderBy = jest.fn(() => {});
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applySorting(query, [{ field: "id", type: "ASC" }]);
 
   expect(query.orderBy.mock.calls.length).toBe(1);
@@ -589,115 +619,10 @@ test("I should be able to apply sorting selection to the query", () => {
 test("I should be able to apply see not using order by method when I don`t have any ordering option", () => {
   const query = {};
   query.orderBy = jest.fn(() => {});
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
   parser.applySorting(query, []);
 
   expect(query.orderBy.mock.calls.length).toBe(0);
-});
-
-test("I should be able to apply single relationship to query", () => {
-  const parser = new QueryParser();
-  const relationships = [
-    {
-      relationship: "users",
-      fields: [],
-      children: [],
-    },
-  ];
-
-  const query = {};
-  query.with = jest.fn(() => {});
-
-  parser.applyRelations(query, relationships);
-  expect(query.with.mock.calls.length).toBe(1);
-  expect(query.with.mock.calls[0][0]).toBe("users");
-});
-
-test("I should be able to apply multiple relationships to query", () => {
-  const parser = new QueryParser();
-  const relationships = [
-    {
-      relationship: "users",
-      fields: [],
-      children: [],
-    },
-    {
-      relationship: "posts",
-      fields: [],
-      children: [],
-    },
-  ];
-
-  const query = {};
-  query.with = jest.fn(() => {});
-
-  parser.applyRelations(query, relationships);
-  expect(query.with.mock.calls.length).toBe(2);
-  expect(query.with.mock.calls[0][0]).toBe("users");
-  expect(query.with.mock.calls[1][0]).toBe("posts");
-});
-
-test("I should be able to apply relationship fields to the query", () => {
-  const parser = new QueryParser();
-  const relationships = [
-    {
-      relationship: "users",
-      fields: ["id"],
-      children: [],
-    },
-  ];
-
-  const subQuery = {};
-  subQuery.select = jest.fn(() => {});
-
-  const query = {};
-  query.with = jest.fn((name, callback) => {
-    callback(subQuery);
-  });
-
-  parser.applyRelations(query, relationships);
-  expect(query.with.mock.calls.length).toBe(1);
-  expect(query.with.mock.calls[0][0]).toBe("users");
-  expect(typeof query.with.mock.calls[0][1]).toBe("function");
-
-  expect(subQuery.select.mock.calls.length).toBe(1);
-  expect(subQuery.select.mock.calls[0][0]).toBe(relationships[0].fields);
-});
-
-test("I should be able to apply relationship with its children to the query", () => {
-  const parser = new QueryParser();
-  const relationships = [
-    {
-      relationship: "users",
-      fields: [],
-      children: [
-        {
-          relationship: "posts",
-          fields: ["id", "title"],
-          children: [],
-        },
-      ],
-    },
-  ];
-
-  const query = {};
-  query.with = jest.fn((name, callback) => {
-    callback(query);
-  });
-  query.select = jest.fn(() => {});
-
-  parser.applyRelations(query, relationships);
-  expect(query.with.mock.calls.length).toBe(2);
-  expect(query.with.mock.calls[0][0]).toBe("users");
-  expect(typeof query.with.mock.calls[0][1]).toBe("function");
-
-  expect(query.with.mock.calls[1][0]).toBe("posts");
-  expect(typeof query.with.mock.calls[1][1]).toBe("function");
-
-  expect(query.select.mock.calls.length).toBe(1);
-  expect(query.select.mock.calls[0][0]).toBe(
-    relationships[0].children[0].fields
-  );
 });
 
 test("I should not be able to send unacceptable query structure", () => {
@@ -716,7 +641,7 @@ test("I should not be able to send unacceptable query structure", () => {
 });
 
 test("I should be able to see like selector has been replaced", () => {
-  const parser = new QueryParser();
+  const parser = new QueryParser({ model });
 
   const result = parser._parseCondition({ "name.$like": "*John*" });
   expect(result.field).toBe("name");
