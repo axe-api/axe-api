@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.17.2 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.2...0.17.1)
+
+### Fixed
+
+- Fixed table join on the related table filter.
+
 ## [0.17.1 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.1...0.17.0)
 
 ### Fixed

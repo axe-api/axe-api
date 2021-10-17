@@ -1,7 +1,13 @@
-export default async ({ app }) => {
-  app.get("/api/health", (req, res) => {
-    res.json({
-      status: true,
-    });
-  });
+import cors from "cors";
+
+const onBeforeInit = async ({ app }) => {
+  app.use(
+    cors({
+      origin: true,
+    })
+  );
 };
+
+const onAfterInit = async () => {};
+
+export { onBeforeInit, onAfterInit };
