@@ -380,7 +380,8 @@ class QueryParser {
     }
 
     this._shouldBeAcceptableColumn(where.field);
-    this.usedConditionColumns.add(where.field);
+    this.usedConditionColumns.add(`${where.table}.${where.field}`);
+
     return where;
   }
 
