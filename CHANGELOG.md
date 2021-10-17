@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.17.1 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.1...0.17.0)
+
+### Fixed
+
+- Query bug on child models [#93](https://github.com/axe-api/axe-api/issues/93)
+
 ## [0.17.0 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.0...0.16.0)
 
 ### Fixed
