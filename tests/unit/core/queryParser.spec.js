@@ -319,20 +319,16 @@ test("I should be able to apply general queries", () => {
     value: "Özgür",
   });
 
-  expect(query.where.mock.calls.length).toBe(1);
-  expect(query.where.mock.calls[0][0]).toBe("users.name");
-  expect(query.where.mock.calls[0][1]).toBe("=");
-  expect(query.where.mock.calls[0][2]).toBe("Özgür");
-
-  expect(query.orWhere.mock.calls.length).toBe(1);
-  expect(query.orWhere.mock.calls[0][0]).toBe("users.name");
-  expect(query.orWhere.mock.calls[0][1]).toBe("=");
-  expect(query.orWhere.mock.calls[0][2]).toBe("Özgür");
+  expect(query.where.mock.calls.length).toBe(2);
+  expect(typeof query.where.mock.calls[0][0]).toBe("function");
 });
 
 test("I should be able to apply one argument queries", () => {
   const query = {};
   query.whereIn = jest.fn(() => {});
+  query.where = jest.fn((callback) => {
+    callback(query);
+  });
 
   const parser = new QueryParser({ model });
   const value = ["Foo", "Bar"];
@@ -352,6 +348,9 @@ test("I should be able to apply one argument queries", () => {
 test("I should be able to apply zero argument queries", () => {
   const query = {};
   query.whereNull = jest.fn(() => {});
+  query.where = jest.fn((callback) => {
+    callback(query);
+  });
 
   const parser = new QueryParser({ model });
   parser.applyWheres(query, {
@@ -368,8 +367,12 @@ test("I should be able to apply zero argument queries", () => {
 
 test("I should be able to apply multiple conditions", () => {
   const query = {};
-  query.where = jest.fn(() => {});
   query.whereNull = jest.fn(() => {});
+  query.where = jest.fn((callback) => {
+    if (typeof callback === "function") {
+      callback(query);
+    }
+  });
 
   const parser = new QueryParser({ model });
   parser.applyWheres(query, [
@@ -392,75 +395,10 @@ test("I should be able to apply multiple conditions", () => {
   expect(query.whereNull.mock.calls.length).toBe(1);
   expect(query.whereNull.mock.calls[0][0]).toBe("users.name");
 
-  expect(query.where.mock.calls.length).toBe(1);
-  expect(query.where.mock.calls[0][0]).toBe("users.surname");
-  expect(query.where.mock.calls[0][1]).toBe("=");
-  expect(query.where.mock.calls[0][2]).toBe("Işıklı");
-});
-
-test("I should be able to apply recursive conditions", () => {
-  const query = {};
-  const sub1 = {};
-  const sub2 = {};
-
-  sub1.where = jest.fn(() => {});
-  sub1.whereNull = jest.fn(() => {});
-  sub2.orWhere = jest.fn(() => {});
-  sub2.where = jest.fn(() => {});
-
-  query.where = jest.fn((sub) => {
-    sub(sub1);
-  });
-  query.orWhere = jest.fn((sub) => {
-    sub(sub2);
-  });
-
-  const parser = new QueryParser({ model });
-  parser.applyWheres(query, [
-    [
-      {
-        prefix: null,
-        table: "users",
-        field: "name",
-        condition: "Null",
-        value: null,
-      },
-      {
-        prefix: null,
-        table: "users",
-        field: "surname",
-        condition: "=",
-        value: "Işıklı",
-      },
-    ],
-    [
-      { prefix: "or", table: "users", field: "id", condition: ">=", value: 0 },
-      { prefix: null, table: "users", field: "age", condition: ">", value: 18 },
-    ],
-  ]);
-
-  expect(query.where.mock.calls.length).toBe(1);
-  expect(typeof query.where.mock.calls[0][0]).toBe("function");
-
-  expect(query.orWhere.mock.calls.length).toBe(1);
-  expect(typeof query.orWhere.mock.calls[0][0]).toBe("function");
-
-  expect(sub1.whereNull.mock.calls.length).toBe(1);
-  expect(sub1.whereNull.mock.calls[0][0]).toBe("users.name");
-  expect(sub1.where.mock.calls.length).toBe(1);
-  expect(sub1.where.mock.calls[0][0]).toBe("users.surname");
-  expect(sub1.where.mock.calls[0][1]).toBe("=");
-  expect(sub1.where.mock.calls[0][2]).toBe("Işıklı");
-
-  expect(sub2.orWhere.mock.calls.length).toBe(1);
-  expect(sub2.orWhere.mock.calls[0][0]).toBe("users.id");
-  expect(sub2.orWhere.mock.calls[0][1]).toBe(">=");
-  expect(sub2.orWhere.mock.calls[0][2]).toBe(0);
-
-  expect(sub2.where.mock.calls.length).toBe(1);
-  expect(sub2.where.mock.calls[0][0]).toBe("users.age");
-  expect(sub2.where.mock.calls[0][1]).toBe(">");
-  expect(sub2.where.mock.calls[0][2]).toBe(18);
+  expect(query.where.mock.calls.length).toBe(2);
+  expect(query.where.mock.calls[1][0]).toBe("users.surname");
+  expect(query.where.mock.calls[1][1]).toBe("=");
+  expect(query.where.mock.calls[1][2]).toBe("Işıklı");
 });
 
 test("I should be able to parse with to sections", () => {
