@@ -55,7 +55,7 @@ class QueryParser {
     });
   }
 
-  applyWheresInsideGroup(query, sub, ruleSet) {
+  applyWheresInsideGroup(sub, ruleSet) {
     // If there is not any query, we don't have to filter the data.
     if (!ruleSet) {
       return;
@@ -65,7 +65,7 @@ class QueryParser {
       for (const item of ruleSet) {
         // If the item is not an array, it means that it is a standard condition
         if (Array.isArray(item) === false) {
-          this._applyConditionRule(query, sub, item);
+          this._applyConditionRule(sub, item);
         } else {
           // If the item is an array, we should create the query recursively.
           if (item[0].prefix === "or") {
@@ -80,14 +80,16 @@ class QueryParser {
         }
       }
     } else {
-      this._applyConditionRule(query, sub, ruleSet);
+      this._applyConditionRule(sub, ruleSet);
     }
   }
 
   applyWheres(query, ruleSet) {
     query.where((sub) => {
-      this.applyWheresInsideGroup(query, sub, ruleSet);
+      this.applyWheresInsideGroup(sub, ruleSet);
     });
+
+    this._applyRelatedQueryJoins(query, ruleSet);
   }
 
   get(query) {
@@ -124,15 +126,12 @@ class QueryParser {
     ];
   }
 
-  _applyConditionRule(query, sub, ruleSet) {
+  _applyConditionRule(sub, ruleSet) {
     const method = this._getConditionMethodName(ruleSet);
     const zeroArguments = ["Null", "NotNull"];
     const oneArguments = ["In", "NotIn", "Between", "NotBetween"];
 
     const fullFieldPath = `${ruleSet.table}.${ruleSet.field}`;
-    if (ruleSet.table !== this.model.instance.table) {
-      this._addJoinOnce(query, ruleSet);
-    }
 
     if (zeroArguments.indexOf(ruleSet.condition) > -1) {
       return sub[`${method}${ruleSet.condition}`](fullFieldPath);
@@ -143,6 +142,31 @@ class QueryParser {
     }
 
     return sub[method](fullFieldPath, ruleSet.condition, ruleSet.value);
+  }
+
+  _applyRelatedQueryJoins(query, ruleSet) {
+    if (!ruleSet) {
+      return;
+    }
+
+    if (Array.isArray(ruleSet)) {
+      for (const item of ruleSet) {
+        // If the item is not an array, it means that it is a standard condition
+        if (Array.isArray(item) === false) {
+          this._applyJoinIfNecessary(query, item);
+        } else {
+          this._applyRelatedQueryJoins(query, item);
+        }
+      }
+    } else {
+      this._applyJoinIfNecessary(query, ruleSet);
+    }
+  }
+
+  _applyJoinIfNecessary(query, ruleSet) {
+    if (ruleSet.table !== this.model.instance.table) {
+      this._addJoinOnce(query, ruleSet);
+    }
   }
 
   _addJoinOnce(query, { model, relation }) {
