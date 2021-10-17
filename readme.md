@@ -39,6 +39,32 @@ Fastest way to create simple Rest API by defining database models and relations.
 - Multiple database support (Postgres, MSSQL, MySQL, MariaDB, SQLite3, Oracle, and Amazon Redshift)
 - Well documented
 
+## How To Run Integration Tests
+
+> You have to have **Docker** and **Docker Compose** on your local development environment to run integration tests.
+
+Execute the following commands to prepare the integration app
+
+```sh
+cd tests/integrations && npm install
+npm ci
+npm run build --if-present
+```
+
+Execute the following commands to prepare the database;
+
+```sh
+docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build
+```
+
+> To down the database, you can use the following command; `docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build`
+
+You can execute the following command to execute tests;
+
+```sh
+npm run test:integration:mysql8
+```
+
 ## License
 
 [MIT License](LICENSE)
