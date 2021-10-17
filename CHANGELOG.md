@@ -1,10 +1,14 @@
 # Release Notes
 
-## [0.16.1 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.16.1...0.16.0)
+## [0.17.0 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.0...0.16.0)
 
 ### Fixed
 
 - Related query column name check bug has been fixed.
+
+### Features
+
+- Global serializer for HTTP results [#37](https://github.com/axe-api/axe-api/issues/37)
 
 ## [0.16.0 (2021-10-06)](https://github.com/axe-api/axe-api/compare/0.16.0...0.15.0)
 
