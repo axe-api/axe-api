@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
+let studentId = null;
+
 describe("Students", () => {
   beforeAll(async () => {
     dotenv.config();
@@ -25,6 +27,8 @@ describe("Students", () => {
       phone: "5551112233",
     });
 
+    studentId = student.id;
+
     const { data: lesson } = await axios.post("/lessons", {
       name: "Computer Science",
     });
@@ -33,14 +37,11 @@ describe("Students", () => {
       name: "Teacher 1",
     });
 
-    const { data: studentLesson } = await axios.post("/students/1/lessons", {
-      student_id: student.id,
+    await axios.post(`/students/${studentId}/lessons`, {
       lesson_id: lesson.id,
       teacher_id: teacher.id,
       hour_per_month: 10,
     });
-
-    expect(studentLesson.id).toBe(1);
   });
 
   /**
@@ -50,26 +51,26 @@ describe("Students", () => {
    * should be able to work properly.
    */
   test("should be able to fetch data with related records by query options", async () => {
-    const { data: response } = await axios.get("/students/1/lessons", {
-      params: {
-        q: JSON.stringify([
-          {
-            "hour_per_month.$like": "*e*",
-          },
-          {
-            "$or.lesson.name.$like": "*e*",
-          },
-          {
-            "$or.teacher.name.$like": "*e*",
-          },
-        ]),
-        with: "lesson{name},teacher{name}",
-      },
-    });
+    const { data: response } = await axios.get(
+      `/students/${studentId}/lessons`,
+      {
+        params: {
+          q: JSON.stringify([
+            {
+              "$or.lesson.name.$like": "*e*",
+            },
+            {
+              "$or.teacher.name.$like": "*e*",
+            },
+          ]),
+          with: "lesson{name},teacher{name}",
+        },
+      }
+    );
     expect(response.pagination.total).toBe(1);
 
     const studentLesson = response.data[0];
-    expect(studentLesson.id).toBe(1);
+    expect(studentLesson.student_id).toBe(studentId);
     expect(studentLesson.hour_per_month).toBe(10);
     expect(studentLesson.lesson?.name).toBe("Computer Science");
     expect(studentLesson.teacher?.name).toBe("Teacher 1");
