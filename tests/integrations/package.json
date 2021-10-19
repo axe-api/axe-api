@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "axe-api": "file:./../../",
+    "axios": "^0.23.0",
+    "cors": "^2.8.5",
     "dotenv": "^9.0.1",
     "knex": "^0.95.4",
     "mysql": "^2.18.1",

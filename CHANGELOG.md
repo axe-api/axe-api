@@ -1,5 +1,27 @@
 # Release Notes
 
+## [0.17.2 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.2...0.17.1)
+
+### Fixed
+
+- Fixed table join on the related table filter.
+
+## [0.17.1 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.1...0.17.0)
+
+### Fixed
+
+- Query bug on child models [#93](https://github.com/axe-api/axe-api/issues/93)
+
+## [0.17.0 (2021-10-17)](https://github.com/axe-api/axe-api/compare/0.17.0...0.16.0)
+
+### Fixed
+
+- Related query column name check bug has been fixed.
+
+### Features
+
+- Global serializer for HTTP results [#37](https://github.com/axe-api/axe-api/issues/37)
+
 ## [0.16.0 (2021-10-06)](https://github.com/axe-api/axe-api/compare/0.16.0...0.15.0)
 
 ### Features
