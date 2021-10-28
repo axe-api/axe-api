@@ -1,5 +1,6 @@
 import IoC from "./../core/IoC.js";
 import pluralize from "pluralize";
+import { paramCase } from "change-case";
 import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../constants.js";
 import Handlers from "./../handlers/index.js";
 
@@ -83,7 +84,7 @@ const ucFirst = (string) => {
 const getResourcePath = (model, relation) => {
   return relation
     ? relation.resource
-    : pluralize.plural(model.name).toLowerCase();
+    : paramCase(pluralize.plural(model.name)).toLowerCase();
 };
 
 const getPrimaryKeyName = (model) => {
