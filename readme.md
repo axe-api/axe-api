@@ -46,9 +46,7 @@ Fastest way to create simple Rest API by defining database models and relations.
 Execute the following commands to prepare the integration app
 
 ```sh
-cd tests/integrations && npm install
-npm ci
-npm run build --if-present
+cd tests/integrations && npm install && npm ci && npm run build --if-present
 ```
 
 Execute the following commands to prepare the database;
