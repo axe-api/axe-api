@@ -10,12 +10,14 @@ let studentId = null;
 describe("Students", () => {
   beforeAll(async () => {
     dotenv.config();
+    await truncate("student_lessons");
     await truncate("lessons");
     await truncate("teachers");
     return await truncate("students");
   });
 
   afterAll(async () => {
+    await truncate("student_lessons");
     await truncate("lessons");
     await truncate("teachers");
     return await truncate("students");
