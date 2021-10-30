@@ -1,4 +1,4 @@
-import { Model } from "axe-api";
+import { Model, DEFAULT_HANDLERS, HANDLERS } from "axe-api";
 
 class User extends Model {
   get fillable() {
@@ -15,6 +15,10 @@ class User extends Model {
         name: "required",
       },
     };
+  }
+
+  get handlers() {
+    return [...DEFAULT_HANDLERS, HANDLERS.AUTOSAVE];
   }
 
   posts() {

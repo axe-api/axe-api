@@ -64,6 +64,19 @@ describe("Axe API", () => {
     expect(body.fullname).toBe("Karl Popper");
   });
 
+  test("should be able to update the user with autosave by id", async () => {
+    const data = {
+      name: "Karl",
+    };
+    const { body } = await put({
+      url: `/api/users/${userId}/autosave`,
+      data,
+      status: 200,
+    });
+    expect(body.email).toBe("foo@bar.com");
+    expect(body.fullname).toBe("Karl Popper");
+  });
+
   test("should be able to delete the user by id", async () => {
     await deleteIt({ url: `/api/users/${userId}`, status: 200 });
   });
