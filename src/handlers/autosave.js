@@ -78,7 +78,7 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  item = serializeData(item, model.instance.serialize);
+  item = await serializeData(item, model.instance.serialize);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);
