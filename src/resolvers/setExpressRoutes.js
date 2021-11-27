@@ -6,25 +6,6 @@ import Handlers from "./../handlers/index.js";
 
 let Config = null;
 
-const handleErrors = (req, res, error) => {
-  const status = error.type === "HttpResponse" ? error.status : 400;
-  let errors = error.content ? error.content : error.message;
-
-  if (Config.Application.env === "production") {
-    errors = "An error occurred!";
-  }
-
-  const result = {
-    errors,
-  };
-
-  if (Config.Application.env === "development") {
-    result.stack = error.stack;
-  }
-
-  res.status(status).json(result);
-};
-
 const setTransactionOption = (option, handler, defaultValue) => {
   if (Array.isArray(option)) {
     if (option.some((i) => i.handler === handler)) {
@@ -53,7 +34,7 @@ const hasTransaction = (config, model, handler) => {
   return privilegedOption;
 };
 
-const requestHandler = async (handler, req, res, context) => {
+const requestHandler = async (handler, req, res, next, context) => {
   try {
     context.trx = context.database;
     if (hasTransaction(Config, context.model, handler)) {
@@ -73,7 +54,7 @@ const requestHandler = async (handler, req, res, context) => {
       await context.trx.rollback();
     }
 
-    handleErrors(req, res, error);
+    next(error);
   }
 };
 
@@ -229,9 +210,13 @@ const createRouteByModel = async (
     docs.push(routeTemplate.method, url, model);
 
     // Adding the route to the express
-    app[routeTemplate.method.toLowerCase()](url, middlewares, (req, res) => {
-      requestHandler(handler, req, res, context);
-    });
+    app[routeTemplate.method.toLowerCase()](
+      url,
+      middlewares,
+      (req, res, next) => {
+        requestHandler(handler, req, res, next, context);
+      }
+    );
   }
 
   await createChildRoutes(model, models, resource, urlPrefix);
