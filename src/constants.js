@@ -72,31 +72,31 @@ const HTTP_METHODS = {
 
 const API_ROUTE_TEMPLATES = {
   [HANDLERS.INSERT]: {
-    url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
+    url: (prefix, parentUrl, resource) => `/${prefix}/${parentUrl}${resource}`,
     method: HTTP_METHODS.POST,
   },
   [HANDLERS.PAGINATE]: {
-    url: (parentUrl, resource) => `/api/${parentUrl}${resource}`,
+    url: (prefix, parentUrl, resource) => `/${prefix}/${parentUrl}${resource}`,
     method: HTTP_METHODS.GET,
   },
   [HANDLERS.SHOW]: {
-    url: (parentUrl, resource, primaryKey) =>
-      `/api/${parentUrl}${resource}/:${primaryKey}`,
+    url: (prefix, parentUrl, resource, primaryKey) =>
+      `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.GET,
   },
   [HANDLERS.UPDATE]: {
-    url: (parentUrl, resource, primaryKey) =>
-      `/api/${parentUrl}${resource}/:${primaryKey}`,
+    url: (prefix, parentUrl, resource, primaryKey) =>
+      `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.PUT,
   },
   [HANDLERS.AUTOSAVE]: {
-    url: (parentUrl, resource, primaryKey) =>
-      `/api/${parentUrl}${resource}/:${primaryKey}/autosave`,
+    url: (prefix, parentUrl, resource, primaryKey) =>
+      `/${prefix}/${parentUrl}${resource}/:${primaryKey}/autosave`,
     method: HTTP_METHODS.PUT,
   },
   [HANDLERS.DELETE]: {
-    url: (parentUrl, resource, primaryKey) =>
-      `/api/${parentUrl}${resource}/:${primaryKey}`,
+    url: (prefix, parentUrl, resource, primaryKey) =>
+      `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.DELETE,
   },
 };

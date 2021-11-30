@@ -45,7 +45,15 @@ export default async (context) => {
   });
 
   // We should try to get related data if there is any
-  await getRelatedData(result.data, conditions.with, model, models, trx, HANDLERS.PAGINATE);
+  await getRelatedData(
+    result.data,
+    conditions.with,
+    model,
+    models,
+    trx,
+    HANDLERS.PAGINATE,
+    request
+  );
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterPaginate, {
     ...context,
@@ -55,7 +63,12 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  result.data = await serializeData(result.data, model.instance.serialize, HANDLERS.PAGINATE);
+  result.data = await serializeData(
+    result.data,
+    model.instance.serialize,
+    HANDLERS.PAGINATE,
+    request
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields(result.data, model.instance.hiddens);

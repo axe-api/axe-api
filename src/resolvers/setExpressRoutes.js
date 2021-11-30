@@ -54,6 +54,10 @@ const requestHandler = async (handler, req, res, next, context) => {
       await context.trx.rollback();
     }
 
+    if (error.type === "HttpResponse") {
+      return res.status(error.status).json(error.content);
+    }
+
     next(error);
   }
 };
@@ -160,6 +164,13 @@ const getModelMiddlewares = (model, handler) => {
   return middlewares;
 };
 
+const getRootPrefix = () => {
+  if (Config.Application.prefix) {
+    return Config.Application.prefix.replace(/^\/|\/$/g, "");
+  }
+  return "api";
+};
+
 const createRouteByModel = async (
   model,
   models,
@@ -197,6 +208,7 @@ const createRouteByModel = async (
 
     const routeTemplate = API_ROUTE_TEMPLATES[handler];
     const url = routeTemplate.url(
+      getRootPrefix(),
       urlPrefix,
       resource,
       model.instance.primaryKey
