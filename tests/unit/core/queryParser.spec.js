@@ -1,9 +1,4 @@
 import QueryParser from "./../../../src/core/QueryParser";
-const options = {
-  min_per_page: 10,
-  max_per_page: 100,
-};
-
 const model = {
   instance: {
     table: "users",
@@ -16,36 +11,17 @@ const model = {
 };
 
 const testParser = (parser, expression, field, condition, value) => {
-  const result = parser._parseCondition(expression);
+  let result = parser._parseCondition(expression);
+  if (Array.isArray(result) && result.length === 1) {
+    result = result[0];
+  } else {
+    console.log(result);
+  }
+
   expect(result.field).toBe(field);
   expect(result.condition).toBe(condition);
   expect(result.value).toBe(value);
 };
-
-test("I should be able to override basic options", () => {
-  expect(new QueryParser({ model }).options.max_per_page).toBe(1000);
-  expect(
-    new QueryParser({ options: { max_per_page: 25 } }).options.max_per_page
-  ).toBe(25);
-});
-
-test("I should be able to see an error when I try to set unacceptable options", () => {
-  let parser = null;
-  /* eslint-disable no-new */
-  expect(() => {
-    parser = new QueryParser({ options: { min_per_page: -10 } });
-  }).toThrow(Error);
-  expect(() => {
-    parser = new QueryParser({ options: { max_per_page: 100000 } });
-  }).toThrow(Error);
-  expect(() => {
-    parser = new QueryParser({ options: { min_per_page: "xxx" } });
-  }).toThrow(Error);
-  expect(() => {
-    parser = new QueryParser({ options: { max_per_page: "xxx" } });
-  }).toThrow(Error);
-  expect(parser).toBe(null);
-});
 
 test("I should be able to get an error when I send unacceptable query string", () => {
   const parser = new QueryParser({ model });
@@ -123,13 +99,13 @@ test("I should be able to parse the page parameter", () => {
 });
 
 test("I should be able to parse the per_page parameter", () => {
-  const parser = new QueryParser({ model, options });
+  const parser = new QueryParser({ model });
   expect(parser._parsePerPage("10")).toBe(10);
   expect(parser._parsePerPage("12")).toBe(12);
   expect(parser._parsePerPage("as")).toBe(10);
-  expect(parser._parsePerPage("5")).toBe(10);
+  expect(parser._parsePerPage("5")).toBe(5);
   expect(parser._parsePerPage(100)).toBe(100);
-  expect(parser._parsePerPage(110)).toBe(100);
+  expect(parser._parsePerPage(100000)).toBe(10);
 });
 
 test("I should be able to parse the fields", () => {
@@ -203,50 +179,58 @@ test("I should be able to parsing query condition", () => {
 
   // .$in logic tests
   result = parser._parseCondition({ "id.$in": "1,2,3" });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe("In");
-  expect(result.value.length).toBe(3);
-  expect(result.value[0]).toBe("1");
-  expect(result.value[1]).toBe("2");
-  expect(result.value[2]).toBe("3");
+  expect(result[0].field).toBe("id");
+  expect(result[0].condition).toBe("In");
+  expect(result[0].value.length).toBe(3);
+  expect(result[0].value[0]).toBe("1");
+  expect(result[0].value[1]).toBe("2");
+  expect(result[0].value[2]).toBe("3");
 
   // .$notIn logic tests
   result = parser._parseCondition({ "id.$notIn": "1,2,3" });
-  expect(result.field).toBe("id");
-  expect(result.condition).toBe("NotIn");
-  expect(result.value.length).toBe(3);
-  expect(result.value[0]).toBe("1");
-  expect(result.value[1]).toBe("2");
-  expect(result.value[2]).toBe("3");
+  expect(result[0].field).toBe("id");
+  expect(result[0].condition).toBe("NotIn");
+  expect(result[0].value.length).toBe(3);
+  expect(result[0].value[0]).toBe("1");
+  expect(result[0].value[1]).toBe("2");
+  expect(result[0].value[2]).toBe("3");
 
   // .$between logic tests
   result = parser._parseCondition({ "age.$between": "18:30" });
-  expect(result.field).toBe("age");
-  expect(result.condition).toBe("Between");
-  expect(result.value.length).toBe(2);
-  expect(result.value[0]).toBe("18");
-  expect(result.value[1]).toBe("30");
+  expect(result[0].field).toBe("age");
+  expect(result[0].condition).toBe("Between");
+  expect(result[0].value.length).toBe(2);
+  expect(result[0].value[0]).toBe("18");
+  expect(result[0].value[1]).toBe("30");
 
   // .$notBetween logic tests
   result = parser._parseCondition({ "age.$notBetween": "18:30" });
-  expect(result.field).toBe("age");
-  expect(result.condition).toBe("NotBetween");
-  expect(result.value.length).toBe(2);
-  expect(result.value[0]).toBe("18");
-  expect(result.value[1]).toBe("30");
+  expect(result[0].field).toBe("age");
+  expect(result[0].condition).toBe("NotBetween");
+  expect(result[0].value.length).toBe(2);
+  expect(result[0].value[0]).toBe("18");
+  expect(result[0].value[1]).toBe("30");
 
   // .$null logic tests
-  testParser(parser, { "age.$null": null }, "age", "Null", null);
+  testParser(parser, { age: null }, "age", "Null", null);
 
   // .$notNull logic tests
-  testParser(parser, { "age.$notNull": null }, "age", "NotNull", null);
+  testParser(parser, { "age.$not": null }, "age", "NotNull", null);
 
   // .$or logic tests
   result = parser._parseCondition({ "$or.age.$gt": 18 });
-  expect(result.prefix).toBe("or");
-  expect(result.field).toBe("age");
-  expect(result.condition).toBe(">");
-  expect(result.value).toBe(18);
+  expect(result[0].prefix).toBe("or");
+  expect(result[0].field).toBe("age");
+  expect(result[0].condition).toBe(">");
+  expect(result[0].value).toBe(18);
+
+  // multiple logic in the same object
+  result = parser._parseCondition({ id: 1, type: "User" });
+  expect(result.length).toBe(2);
+  expect(result[0].field).toBe("id");
+  expect(result[1].field).toBe("type");
+  expect(result[0].value).toBe(1);
+  expect(result[1].value).toBe("User");
 });
 
 test("I should be able to parsing all conditions", () => {
@@ -257,15 +241,15 @@ test("I should be able to parsing all conditions", () => {
   ]);
 
   expect(result.length).toBe(2);
-  expect(result[0].prefix).toBe(null);
-  expect(result[0].field).toBe("name");
-  expect(result[0].condition).toBe("=");
-  expect(result[0].value).toBe("Özgür");
+  expect(result[0][0].prefix).toBe(null);
+  expect(result[0][0].field).toBe("name");
+  expect(result[0][0].condition).toBe("=");
+  expect(result[0][0].value).toBe("Özgür");
 
-  expect(result[1].prefix).toBe("or");
-  expect(result[1].field).toBe("surname");
-  expect(result[1].condition).toBe("=");
-  expect(result[1].value).toBe("Işıklı");
+  expect(result[1][0].prefix).toBe("or");
+  expect(result[1][0].field).toBe("surname");
+  expect(result[1][0].condition).toBe("=");
+  expect(result[1][0].value).toBe("Işıklı");
 });
 
 test("I should be able to parse recursive queries", () => {
@@ -277,12 +261,12 @@ test("I should be able to parse recursive queries", () => {
 
   expect(result.length).toBe(2);
   expect(result[0].length).toBe(2);
-  expect(result[0][0].field).toBe("name");
-  expect(result[0][1].field).toBe("surname");
+  expect(result[0][0][0].field).toBe("name");
+  expect(result[0][1][0].field).toBe("surname");
 
   expect(result[1].length).toBe(2);
-  expect(result[1][0].field).toBe("id");
-  expect(result[1][1].field).toBe("age");
+  expect(result[1][0][0].field).toBe("id");
+  expect(result[1][1][0].field).toBe("age");
 });
 
 test("I should be not able to add unacceptable field to query", () => {
@@ -486,7 +470,7 @@ test("I should be able to split with recursive string", () => {
 });
 
 test("I should be able to parse all sections", () => {
-  const parser = new QueryParser({ model, options });
+  const parser = new QueryParser({ model });
   const sections = {
     q: '{"id":10}',
     page: "1",
@@ -515,10 +499,10 @@ test("I should be able to parse all sections", () => {
   expect(result.sort[1].type).toBe("DESC");
 
   // Query selections
-  expect(result.q.prefix).toBe(null);
-  expect(result.q.field).toBe("id");
-  expect(result.q.condition).toBe("=");
-  expect(result.q.value).toBe(10);
+  expect(result.q[0].prefix).toBe(null);
+  expect(result.q[0].field).toBe("id");
+  expect(result.q[0].condition).toBe("=");
+  expect(result.q[0].value).toBe(10);
 
   // With selections
   expect(result.with.length).toBe(1);
@@ -530,7 +514,7 @@ test("I should be able to get query parsing result", () => {
   const parser = new QueryParser({ model });
   const result = parser.get({});
   expect(result.page).toBe(1);
-  expect(result.per_page).toBe(1);
+  expect(result.per_page).toBe(10);
 });
 
 test("I should be able to apply my field selections to query", () => {
@@ -564,7 +548,7 @@ test("I should be able to apply see not using order by method when I don`t have 
 });
 
 test("I should not be able to send unacceptable query structure", () => {
-  const parser = new QueryParser(options);
+  const parser = new QueryParser({});
   const sections = {
     q: "id",
     page: null,
@@ -582,7 +566,7 @@ test("I should be able to see like selector has been replaced", () => {
   const parser = new QueryParser({ model });
 
   const result = parser._parseCondition({ "name.$like": "*John*" });
-  expect(result.field).toBe("name");
-  expect(result.condition).toBe("LIKE");
-  expect(result.value).toBe("%John%");
+  expect(result[0].field).toBe("name");
+  expect(result[0].condition).toBe("LIKE");
+  expect(result[0].value).toBe("%John%");
 });

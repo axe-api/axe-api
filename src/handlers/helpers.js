@@ -1,7 +1,7 @@
 import { RELATIONSHIPS } from "./../constants.js";
 import { camelCase } from "change-case";
 import HttpResponse from "./../core/HttpResponse.js";
-import IoC from '../core/IoC.js';
+import IoC from "../core/IoC.js";
 
 const getInputFromBody = (body, field) => {
   if (!body) {
@@ -83,7 +83,8 @@ export const getRelatedData = async (
   model,
   models,
   database,
-  handler
+  handler,
+  request
 ) => {
   if (withArray.length === 0) {
     return;
@@ -96,10 +97,9 @@ export const getRelatedData = async (
       (relation) => relation.name === clientQuery.relationship
     );
     if (!definedRelation) {
-      throw new HttpResponse(
-        400,
-        `Undefined relation: ${clientQuery.relationship}`
-      );
+      throw new HttpResponse(400, {
+        message: `Undefined relation: ${clientQuery.relationship}`,
+      });
     }
 
     // Find the foreign model by the relationship
@@ -164,10 +164,9 @@ export const getRelatedData = async (
         (column) => !foreignModel.instance.columnNames.includes(column)
       );
       if (undefinedColumns.length > 0) {
-        throw new HttpResponse(
-          400,
-          `Undefined columns: ${undefinedColumns.join(", ")}`
-        );
+        throw new HttpResponse(400, {
+          message: `Undefined columns: ${undefinedColumns.join(", ")}`,
+        });
       }
     }
 
@@ -189,7 +188,8 @@ export const getRelatedData = async (
     relatedRecords = await serializeData(
       relatedRecords,
       foreignModel.instance.serialize,
-      handler
+      handler,
+      request
     );
 
     // We should hide hidden fields if there is any
@@ -203,7 +203,8 @@ export const getRelatedData = async (
         foreignModel,
         models,
         database,
-        handler
+        handler,
+        request
       );
     }
 
@@ -243,19 +244,19 @@ export const bindTimestampValues = (formData, columnTypes = [], model) => {
   }
 };
 
-const serialize = async (data, callback) => {
+const serialize = async (data, callback, request) => {
   if (!callback) {
     return data;
   }
 
   if (Array.isArray(data)) {
-    return data.map(callback);
+    return data.map((item) => callback(item, request));
   }
 
-  return [data].map(callback)[0];
-}
+  return callback(data, request);
+};
 
-const globalSerializer = async (itemArray, handler) => {
+const globalSerializer = async (itemArray, handler, request) => {
   const { Application } = await IoC.use("Config");
 
   if (!Application.serializers) {
@@ -263,35 +264,43 @@ const globalSerializer = async (itemArray, handler) => {
   }
 
   let callbacks = [];
-  // Push all runable serializer into callbacks. 
-  Application.serializers.map(configSerializer => {
+  // Push all runable serializer into callbacks.
+  Application.serializers.map((configSerializer) => {
     // Serialize data for all requests types.
     if (typeof configSerializer === "function") {
       callbacks.push(configSerializer);
-      return
+      return;
     }
 
     // Serialize data with specific handler like "PAGINATE" or "SHOW".
-    if (typeof configSerializer === "object" && configSerializer.handler.includes(handler)) {
+    if (
+      typeof configSerializer === "object" &&
+      configSerializer.handler.includes(handler)
+    ) {
       // Handle multiple serializer.
       if (Array.isArray(configSerializer.serializer)) {
-        configSerializer.serializer.forEach(fn => callbacks.push(fn));
-        return
+        configSerializer.serializer.forEach((fn) => callbacks.push(fn));
+        return;
       }
-      callbacks.push(configSerializer.serializer)
-      return
+      callbacks.push(configSerializer.serializer);
+      return;
     }
-  })
+  });
 
   while (callbacks.length !== 0) {
-    itemArray = await serialize(itemArray, callbacks.shift());
+    itemArray = serialize(itemArray, callbacks.shift(), request);
   }
   return itemArray;
 };
 
-export const serializeData = async (itemArray, modelSerializer, handler) => {
-  itemArray = await serialize(itemArray, modelSerializer);
-  itemArray = await globalSerializer(itemArray, handler);
+export const serializeData = async (
+  itemArray,
+  modelSerializer,
+  handler,
+  request
+) => {
+  itemArray = serialize(itemArray, modelSerializer, request);
+  itemArray = await globalSerializer(itemArray, handler, request);
   return itemArray;
 };
 

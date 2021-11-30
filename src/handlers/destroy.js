@@ -22,7 +22,9 @@ export default async (context) => {
 
   let item = await query.first();
   if (!item) {
-    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, {
+      message: `The item is not found on ${model.name}.`,
+    });
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterDeleteQuery, {

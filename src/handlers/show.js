@@ -43,11 +43,21 @@ export default async (context) => {
 
   let item = await query.first();
   if (!item) {
-    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, {
+      message: `The item is not found on ${model.name}.`,
+    });
   }
 
   // We should try to get related data if there is any
-  await getRelatedData([item], conditions.with, model, models, trx, HANDLERS.SHOW);
+  await getRelatedData(
+    [item],
+    conditions.with,
+    model,
+    models,
+    trx,
+    HANDLERS.SHOW,
+    request
+  );
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterShow, {
     ...context,
@@ -57,7 +67,12 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  item = await serializeData(item, model.instance.serialize, HANDLERS.SHOW);
+  item = await serializeData(
+    item,
+    model.instance.serialize,
+    HANDLERS.SHOW,
+    request
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);
