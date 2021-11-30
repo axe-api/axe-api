@@ -11,6 +11,7 @@ import {
 import Validator from "validatorjs";
 import { HOOK_FUNCTIONS, TIMESTAMP_COLUMNS } from "./../constants.js";
 import HttpResponse from "./../core/HttpResponse.js";
+import { HANDLERS } from "./../constants.js";
 
 export default async (context) => {
   const { request, response, model, trx, relation, parentModel } = context;
@@ -29,7 +30,9 @@ export default async (context) => {
     .where(model.instance.primaryKey, request.params[model.instance.primaryKey])
     .first();
   if (!item) {
-    throw new HttpResponse(404, `The item is not found on ${model.name}.`);
+    throw new HttpResponse(404, {
+      message: `The item is not found on ${model.name}.`,
+    });
   }
 
   await callHooks(model, HOOK_FUNCTIONS.onAfterUpdateQuery, {
@@ -78,7 +81,12 @@ export default async (context) => {
   });
 
   // Serializing the data by the model's serialize method
-  item = await serializeData(item, model.instance.serialize);
+  item = await serializeData(
+    item,
+    model.instance.serialize,
+    HANDLERS.AUTOSAVE,
+    request
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

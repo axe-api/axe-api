@@ -1,31 +1,13 @@
 import HttpResponse from "./../core/HttpResponse.js";
 import { RELATIONSHIPS } from "../constants.js";
 
-const DEFAULT_OPTIONS = {
-  min_per_page: 1,
-  max_per_page: 1000,
-};
-
 class QueryParser {
-  constructor({ model, models, options = {} }) {
+  constructor({ model, models }) {
     this.model = model;
     this.models = models;
     this.createdJoins = [];
     this.relationColumns = [];
     this.usedConditionColumns = new Set();
-    this.options = { ...DEFAULT_OPTIONS, ...options };
-
-    if (isNaN(this.options.min_per_page) || this.options.min_per_page < 1) {
-      throw new Error(
-        `You set unacceptable query parse option (min_per_page): ${this.options.min_per_page}`
-      );
-    }
-
-    if (isNaN(this.options.max_per_page) || this.options.max_per_page > 10000) {
-      throw new Error(
-        `You set unacceptable query parse option (max_per_page): ${this.options.max_per_page}`
-      );
-    }
   }
 
   applyFields(query, fields) {
@@ -109,10 +91,9 @@ class QueryParser {
     });
 
     if (undefinedColumns.length > 0) {
-      throw new HttpResponse(
-        400,
-        `Undefined column names: ${undefinedColumns.join(",")}`
-      );
+      throw new HttpResponse(400, {
+        message: `Undefined column names: ${undefinedColumns.join(",")}`,
+      });
     }
 
     return conditions;
@@ -215,7 +196,9 @@ class QueryParser {
       try {
         sections.q = JSON.parse(queryContent);
       } catch (err) {
-        throw new Error(`Unacceptable query string: \n ${queryContent}`);
+        throw new HttpResponse(400, {
+          message: `Unacceptable query string: ${queryContent}`,
+        });
       }
     }
 
@@ -247,16 +230,8 @@ class QueryParser {
   _parsePerPage(content) {
     const value = parseInt(content);
 
-    if (isNaN(value)) {
-      return this.options.min_per_page;
-    }
-
-    if (value <= this.options.min_per_page) {
-      return this.options.min_per_page;
-    }
-
-    if (value > this.options.max_per_page) {
-      return this.options.max_per_page;
+    if (isNaN(value) || value <= 1 || value > 10000) {
+      return 10;
     }
 
     return value;
@@ -325,18 +300,23 @@ class QueryParser {
       return null;
     }
 
+    const wheres = [];
+    for (const key in content) {
+      wheres.push(this._parseConditionObject(content, key));
+    }
+
+    return wheres;
+  }
+
+  _parseConditionObject(content, key) {
     const where = {
       prefix: null,
       model: this.model,
       table: this.model.instance.table,
-      field: null,
+      field: key,
       condition: "=",
-      value: null,
+      value: content[key],
     };
-
-    const key = Object.keys(content)[0];
-    where.field = key;
-    where.value = content[key];
 
     // Sometimes we can have basic OR operations for queries
     if (where.field.indexOf("$or.") === 0) {
@@ -349,19 +329,30 @@ class QueryParser {
       where.field = where.field.replace("$and.", "");
     }
 
-    this._applySpecialCondition(where, "$not", "<>");
-    this._applySpecialCondition(where, "$gt", ">");
-    this._applySpecialCondition(where, "$gte", ">=");
-    this._applySpecialCondition(where, "$lt", "<");
-    this._applySpecialCondition(where, "$lte", "<=");
-    this._applySpecialCondition(where, "$like", "LIKE");
-    this._applySpecialCondition(where, "$notLike", "NOT LIKE");
-    this._applySpecialCondition(where, "$in", "In");
-    this._applySpecialCondition(where, "$notIn", "NotIn");
-    this._applySpecialCondition(where, "$between", "Between");
-    this._applySpecialCondition(where, "$notBetween", "NotBetween");
-    this._applySpecialCondition(where, "$null", "Null");
-    this._applySpecialCondition(where, "$notNull", "NotNull");
+    // If there is not any value, it means that we should check nullable values
+    if (where.value === null) {
+      // If the client wants to see not nullable values
+      if (this._hasSpecialStructure(where.field, ".$not")) {
+        where.field = where.field.replace(".$not", "");
+        where.condition = "NotNull";
+      } else {
+        // So, it means that the clients wants to see null valus
+        where.condition = "Null";
+      }
+    } else {
+      // If there is value, we should check it
+      this._applySpecialCondition(where, "$not", "<>");
+      this._applySpecialCondition(where, "$gt", ">");
+      this._applySpecialCondition(where, "$gte", ">=");
+      this._applySpecialCondition(where, "$lt", "<");
+      this._applySpecialCondition(where, "$lte", "<=");
+      this._applySpecialCondition(where, "$like", "LIKE");
+      this._applySpecialCondition(where, "$notLike", "NOT LIKE");
+      this._applySpecialCondition(where, "$in", "In");
+      this._applySpecialCondition(where, "$notIn", "NotIn");
+      this._applySpecialCondition(where, "$between", "Between");
+      this._applySpecialCondition(where, "$notBetween", "NotBetween");
+    }
 
     if (where.condition === "In" || where.condition === "NotIn") {
       where.value = where.value.split(",");
@@ -369,10 +360,6 @@ class QueryParser {
 
     if (where.condition === "Between" || where.condition === "NotBetween") {
       where.value = where.value.split(":");
-    }
-
-    if (where.condition === "Null" || where.condition === "NotNull") {
-      where.value = null;
     }
 
     if (where.condition === "LIKE" || where.condition === "NOT LIKE") {
@@ -389,7 +376,9 @@ class QueryParser {
       );
 
       if (!relation) {
-        throw new Error(`Unacceptable query field: ${relationName}.${field}`);
+        throw new HttpResponse(400, {
+          message: `Unacceptable query field: ${relationName}.${field}`,
+        });
       }
 
       const relatedModel = this.models.find(
@@ -397,7 +386,9 @@ class QueryParser {
       );
 
       if (!relatedModel) {
-        throw new Error(`Undefined model name: ${relation.model}`);
+        throw new HttpResponse(400, {
+          message: `Undefined model name: ${relation.model}`,
+        });
       }
 
       where.model = relatedModel;
@@ -504,7 +495,9 @@ class QueryParser {
         (i) => i.name === item.relationship
       );
       if (!relation) {
-        throw new Error(`Undefined relation: ${item.relationship}`);
+        throw new HttpResponse(400, {
+          message: `Undefined relation: ${item.relationship}`,
+        });
       }
 
       this.relationColumns.push(
@@ -535,11 +528,15 @@ class QueryParser {
   _shouldBeAcceptableColumn(field) {
     const regex = /^[0-9,a-z,A-Z_.]+$/;
     if (!field.match(regex)) {
-      throw new Error(`Unacceptable field name: ${field}`);
+      throw new HttpResponse(400, {
+        message: `Unacceptable field name: ${field}`,
+      });
     }
 
     if (field.indexOf(".") === 0 || field.indexOf(".") === field.length - 1) {
-      throw new Error(`You have to define the column specefically: ${field}`);
+      throw new HttpResponse(400, {
+        message: `You have to define the column specefically: ${field}`,
+      });
     }
   }
 }
