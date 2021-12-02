@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.18.1 (2021-12-02)](https://github.com/axe-api/axe-api/compare/0.18.1...0.18.0)
+
+### Fixed
+
+- [#117](https://github.com/axe-api/axe-api/issues/117)
+
 ## [0.18.0 (2021-11-30)](https://github.com/axe-api/axe-api/compare/0.18.0...0.17.5)
 
 ### Fixed

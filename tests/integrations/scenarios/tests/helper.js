@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import request from "supertest";
 import mysql from "mysql";
+import axios from "axios";
 import { Pool } from "pg";
 
 export const get = async ({ url, status }) => {
@@ -81,3 +82,22 @@ export const truncate = async (table) => {
       throw new Error(`Unknown DB client: ${process.env.DB_CLIENT}`);
   }
 };
+
+const axiosRequest = async (method, url, data) => {
+  try {
+    return await axios[method](url, data);
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const axiosPost = async (url, data) =>
+  await axiosRequest("post", url, data);
+export const axiosGet = async (url, data) =>
+  await axiosRequest("get", url, data);
+export const axiosPut = async (url, data) =>
+  await axiosRequest("put", url, data);
+export const axiosPatch = async (url, data) =>
+  await axiosRequest("patch", url, data);
+export const axiosDelete = async (url, data) =>
+  await axiosRequest("delete", url, data);

@@ -62,13 +62,14 @@ describe("Axe API", () => {
     expect(emptyUserPaginate.data[0].posts[0].title).toBe("My Post");
 
     const { body: postPaginate } = await get({
-      url: `/api/users/${userId}/posts?with=user{name|surname}`,
+      url: `/api/users/${userId}/posts?with=user{name|surname|password_salt}`,
       status: 200,
     });
     expect(postPaginate.data.length).toBe(1);
     expect(postPaginate.data[0].title).toBe("My Post");
     expect(postPaginate.data[0].user.fullname).toBe("John Doe");
     expect(postPaginate.data[0].user.created_at).toBeUndefined();
+    expect(postPaginate.data[0].user.password_salt).toBe(undefined);
 
     const { body: updatedPost } = await put({
       url: `/api/users/${userId}/posts/${postId}`,

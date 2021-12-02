@@ -47,6 +47,8 @@ describe("Axe API", () => {
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
     expect(body.fullname).toBe("John Doe");
+    expect(body.password_salt).toBe(undefined);
+    expect(body.password_hash).toBe(undefined);
   });
 
   test("should be able to update the user by id", async () => {
