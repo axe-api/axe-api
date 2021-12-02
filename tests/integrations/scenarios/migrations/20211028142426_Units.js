@@ -1,6 +1,6 @@
 export const up = function (knex) {
   return knex.schema.createTable("units", function (table) {
-    table.uuid("uuid").primary().defaultTo(knex.raw("(UUID())"));
+    table.uuid("uuid").primary();
     table.string("title").nullable();
   });
 };
