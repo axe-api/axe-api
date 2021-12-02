@@ -1,6 +1,6 @@
 import IoC from "./../core/IoC.js";
 import pluralize from "pluralize";
-import { paramCase } from "change-case";
+import { paramCase, camelCase } from "change-case";
 import { RELATIONSHIPS, API_ROUTE_TEMPLATES } from "./../constants.js";
 import Handlers from "./../handlers/index.js";
 
@@ -122,7 +122,7 @@ const createNestedRoutes = async (
   await createRouteByModel(
     model,
     models,
-    `${urlPrefix}${resource}/:${getPrimaryKeyName(model)}/`,
+    `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
     model,
     relation,
     false

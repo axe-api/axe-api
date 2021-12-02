@@ -21,7 +21,19 @@ class User extends Model {
     return [...DEFAULT_HANDLERS, HANDLERS.AUTOSAVE];
   }
 
+  get hiddens() {
+    return ["password_salt", "password_hash"];
+  }
+
   posts() {
+    return this.hasMany("Post", "id", "user_id");
+  }
+
+  ownedPosts() {
+    return this.hasMany("Post", "id", "user_id");
+  }
+
+  suggestedPosts() {
     return this.hasMany("Post", "id", "user_id");
   }
 
