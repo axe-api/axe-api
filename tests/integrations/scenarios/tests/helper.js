@@ -27,6 +27,18 @@ export const put = async ({ url, data, status }) => {
     .expect(status);
 };
 
+export const patch = async ({ url, data, status }) => {
+  try {
+    return await request("localhost:3000")
+      .patch(url)
+      .send(data)
+      .expect("Content-Type", /json/)
+      .expect(status);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteIt = async ({ url, status }) => {
   return await request("localhost:3000")
     .delete(url)
