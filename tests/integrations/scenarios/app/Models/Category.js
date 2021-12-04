@@ -1,8 +1,12 @@
-import { Model } from "axe-api";
+import { Model, DEFAULT_HANDLERS, HANDLERS } from "axe-api";
 
 class Category extends Model {
   get fillable() {
     return ["title"];
+  }
+
+  get handlers() {
+    return [...DEFAULT_HANDLERS, HANDLERS.ALL];
   }
 
   categories() {

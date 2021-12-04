@@ -1,4 +1,4 @@
-import { get, post, put, deleteIt, truncate } from "./helper.js";
+import { get, post, put, deleteIt, truncate, patch } from "./helper.js";
 import dotenv from "dotenv";
 
 describe("Axe API", () => {
@@ -81,6 +81,16 @@ describe("Axe API", () => {
     });
     expect(updatedPost.title).toBe("My Post Title");
 
+    const { body: patchedPost } = await patch({
+      url: `/api/users/${userId}/posts/${postId}`,
+      data: {
+        content: "Patched content",
+      },
+      status: 200,
+    });
+    expect(patchedPost.title).toBe("My Post Title");
+    expect(patchedPost.content).toBe("Patched content");
+
     const { body: onePost } = await get({
       url: `/api/users/${userId}/posts/${postId}`,
       status: 200,
@@ -92,11 +102,4 @@ describe("Axe API", () => {
       status: 200,
     });
   });
-
-  // test("should not be able to get the post if the post has been deleted", async () => {
-  //   await get({
-  //     url: "/api/users/1/posts/666",
-  //     status: 404,
-  //   });
-  // });
 });

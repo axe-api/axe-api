@@ -1,4 +1,4 @@
-import { get, post, put, deleteIt, truncate } from "./helper.js";
+import { get, post, put, patch, deleteIt, truncate } from "./helper.js";
 import dotenv from "dotenv";
 let userId = null;
 
@@ -66,12 +66,12 @@ describe("Axe API", () => {
     expect(body.fullname).toBe("Karl Popper");
   });
 
-  test("should be able to update the user with autosave by id", async () => {
+  test("should be able to update the user with patch by id", async () => {
     const data = {
       name: "Karl",
     };
-    const { body } = await put({
-      url: `/api/users/${userId}/autosave`,
+    const { body } = await patch({
+      url: `/api/users/${userId}`,
       data,
       status: 200,
     });

@@ -84,7 +84,7 @@ export default async (context) => {
   item = await serializeData(
     item,
     model.instance.serialize,
-    HANDLERS.AUTOSAVE,
+    HANDLERS.PATCH,
     request
   );
 

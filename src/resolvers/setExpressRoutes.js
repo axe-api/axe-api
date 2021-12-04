@@ -166,6 +166,7 @@ const getModelMiddlewares = (model, handler) => {
 
 const getRootPrefix = () => {
   if (Config.Application.prefix) {
+    // NOSONAR
     return Config.Application.prefix.replace(/^\/|\/$/g, "");
   }
   return "api";
