@@ -18,7 +18,7 @@ class User extends Model {
   }
 
   get handlers() {
-    return [...DEFAULT_HANDLERS, HANDLERS.AUTOSAVE];
+    return [...DEFAULT_HANDLERS, HANDLERS.PATCH];
   }
 
   get hiddens() {

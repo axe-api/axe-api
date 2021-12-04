@@ -13,6 +13,7 @@ const HOOK_FUNCTIONS = {
   onBeforeDeleteQuery: "onBeforeDeleteQuery",
   onBeforeDelete: "onBeforeDelete",
   onBeforePaginate: "onBeforePaginate",
+  onBeforeAll: "onBeforeAll",
   onBeforeShow: "onBeforeShow",
   onAfterInsert: "onAfterInsert",
   onAfterUpdateQuery: "onAfterUpdateQuery",
@@ -20,6 +21,7 @@ const HOOK_FUNCTIONS = {
   onAfterDeleteQuery: "onAfterDeleteQuery",
   onAfterDelete: "onAfterDelete",
   onAfterPaginate: "onAfterPaginate",
+  onAfterAll: "onAfterAll",
   onAfterShow: "onAfterShow",
 };
 
@@ -52,7 +54,8 @@ const HANDLERS = {
   SHOW: "show",
   UPDATE: "update",
   DELETE: "destroy",
-  AUTOSAVE: "autosave",
+  PATCH: "patch",
+  ALL: "all",
 };
 
 const DEFAULT_HANDLERS = [
@@ -60,6 +63,7 @@ const DEFAULT_HANDLERS = [
   HANDLERS.PAGINATE,
   HANDLERS.SHOW,
   HANDLERS.UPDATE,
+  HANDLERS.PATCH,
   HANDLERS.DELETE,
 ];
 
@@ -68,6 +72,7 @@ const HTTP_METHODS = {
   GET: "GET",
   PUT: "PUT",
   DELETE: "DELETE",
+  PATCH: "PATCH",
 };
 
 const API_ROUTE_TEMPLATES = {
@@ -77,6 +82,11 @@ const API_ROUTE_TEMPLATES = {
   },
   [HANDLERS.PAGINATE]: {
     url: (prefix, parentUrl, resource) => `/${prefix}/${parentUrl}${resource}`,
+    method: HTTP_METHODS.GET,
+  },
+  [HANDLERS.ALL]: {
+    url: (prefix, parentUrl, resource) =>
+      `/${prefix}/${parentUrl}${resource}/all`,
     method: HTTP_METHODS.GET,
   },
   [HANDLERS.SHOW]: {
@@ -89,10 +99,10 @@ const API_ROUTE_TEMPLATES = {
       `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
     method: HTTP_METHODS.PUT,
   },
-  [HANDLERS.AUTOSAVE]: {
+  [HANDLERS.PATCH]: {
     url: (prefix, parentUrl, resource, primaryKey) =>
-      `/${prefix}/${parentUrl}${resource}/:${primaryKey}/autosave`,
-    method: HTTP_METHODS.PUT,
+      `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
+    method: HTTP_METHODS.PATCH,
   },
   [HANDLERS.DELETE]: {
     url: (prefix, parentUrl, resource, primaryKey) =>

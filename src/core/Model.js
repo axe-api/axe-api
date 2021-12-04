@@ -1,7 +1,6 @@
 import pluralize from "pluralize";
 import { snakeCase } from "snake-case";
-import { RELATIONSHIPS, HANDLERS } from "./../constants.js";
-const { INSERT, SHOW, UPDATE, PAGINATE, DELETE } = HANDLERS;
+import { RELATIONSHIPS, DEFAULT_HANDLERS } from "./../constants.js";
 
 class Model {
   constructor() {
@@ -25,7 +24,7 @@ class Model {
   }
 
   get handlers() {
-    return [INSERT, SHOW, PAGINATE, UPDATE, DELETE];
+    return [...DEFAULT_HANDLERS];
   }
 
   get middlewares() {
