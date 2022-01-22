@@ -43,9 +43,10 @@ export default async (context) => {
     formData,
   });
 
-  let [insertedPrimaryKeyValue] = await trx(model.instance.table)
+  const [returningResult] = await trx(model.instance.table)
     .insert(formData)
     .returning(model.instance.primaryKey);
+  let insertedPrimaryKeyValue = returningResult[model.instance.primaryKey];
 
   // If the user use a special primary key value, we should use that value
   if (insertedPrimaryKeyValue === 0) {
