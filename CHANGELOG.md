@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.19.1 (2022-01-22)](https://github.com/axe-api/axe-api/compare/0.19.1...0.19.0)
+
+### Fixed
+
+- knex.js version update.
+
 ## [0.19.0 (2021-12-05)](https://github.com/axe-api/axe-api/compare/0.19.0...0.18.1)
 
 ### Fixed
