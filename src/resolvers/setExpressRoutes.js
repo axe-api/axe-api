@@ -164,12 +164,19 @@ const getModelMiddlewares = (model, handler) => {
   return middlewares;
 };
 
-const getRootPrefix = () => {
-  if (Config.Application.prefix) {
-    // NOSONAR
-    return Config.Application.prefix.replace(/^\/|\/$/g, "");
+export const getRootPrefix = async () => {
+  const config = await IoC.use("Config");
+  let prefix = config?.Application?.prefix || "api";
+
+  if (prefix.substr(0, 1) === "/") {
+    prefix = prefix.substr(1);
   }
-  return "api";
+
+  if (prefix.substr(prefix.length - 1) === "/") {
+    prefix = prefix.substr(0, prefix.length - 1);
+  }
+
+  return prefix;
 };
 
 const createRouteByModel = async (
@@ -209,7 +216,7 @@ const createRouteByModel = async (
 
     const routeTemplate = API_ROUTE_TEMPLATES[handler];
     const url = routeTemplate.url(
-      getRootPrefix(),
+      await getRootPrefix(),
       urlPrefix,
       resource,
       model.instance.primaryKey
