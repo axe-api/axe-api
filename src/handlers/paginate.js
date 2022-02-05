@@ -26,14 +26,14 @@ export default async (context) => {
   // Binding parent id if there is.
   addForeignKeyQuery(request, query, relation, parentModel);
 
-  // Users should be able to filter records
-  queryParser.applyWheres(query, conditions.q);
-
   await callHooks(model, HOOK_FUNCTIONS.onBeforePaginate, {
     ...context,
     conditions,
     query,
   });
+
+  // Users should be able to filter records
+  queryParser.applyWheres(query, conditions.q);
 
   // User should be able to select sorting fields and types
   queryParser.applySorting(query, conditions.sort);

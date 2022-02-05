@@ -26,9 +26,6 @@ export default async (context) => {
   // If there is a relation, we should bind it
   addForeignKeyQuery(request, query, relation, parentModel);
 
-  // Users should be able to filter records
-  queryParser.applyWheres(query, conditions.q);
-
   // We should add this condition in here because of performance.
   query.where(
     model.instance.primaryKey,
@@ -40,6 +37,9 @@ export default async (context) => {
     query,
     conditions,
   });
+
+  // Users should be able to filter records
+  queryParser.applyWheres(query, conditions.q);
 
   let item = await query.first();
   if (!item) {
