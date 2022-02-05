@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.19.2 (2022-01-22)](https://github.com/axe-api/axe-api/compare/0.19.2...0.19.1)
+
+### Fixed
+
+- Fixed the calling `onBeforePaginate` and `onBeforeShow` hooks bug.
+
 ## [0.19.1 (2022-01-22)](https://github.com/axe-api/axe-api/compare/0.19.1...0.19.0)
 
 ### Fixed
