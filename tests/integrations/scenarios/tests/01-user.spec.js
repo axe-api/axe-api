@@ -12,11 +12,6 @@ describe("Axe API", () => {
     return await truncate("users");
   });
 
-  test("should be able to accept requests", async () => {
-    const { body } = await get({ url: "/", status: 200 });
-    expect(body.name).toBe("AXE API");
-  });
-
   test("should be able to get user list as empty", async () => {
     const { body } = await get({ url: "/api/users", status: 200 });
     expect(body.data.length).toBe(0);

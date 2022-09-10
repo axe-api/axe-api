@@ -1,4 +1,4 @@
-export const up = function (knex) {
+const up = function (knex) {
   return knex.schema.createTable("users", function (table) {
     table.increments();
     table.string("email").unique();
@@ -10,6 +10,8 @@ export const up = function (knex) {
   });
 };
 
-export const down = function (knex) {
+const down = function (knex) {
   return knex.schema.dropTable("users");
 };
+
+module.exports = { up, down };

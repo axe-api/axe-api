@@ -1,20 +1,21 @@
 /* eslint-disable no-undef */
-import knex from "knex";
-import fs from "fs";
-import Runner from "./Runner.js";
-import { testRunner } from "./Tester.js";
+const knex = require("knex");
+const path = require("path");
+const fs = require("fs");
+const Runner = require("./Runner.js");
+const { testRunner } = require("./Tester.js");
 
-export const waitForIt = (time) => {
+const waitForIt = (time) => {
   return new Promise((resolve) => setTimeout(resolve, time));
 };
 
-export const getServeOptions = async (database) => {
+const getServeOptions = async (database) => {
   const content = fs.readFileSync("./serve-options.json", "utf-8");
   const options = JSON.parse(content);
   return options[database];
 };
 
-export const executeScenario = async (serveOptions) => {
+const executeScenario = async (serveOptions) => {
   const connection = knex({
     client: serveOptions.DB_CLIENT,
     connection: {
@@ -35,8 +36,8 @@ export const executeScenario = async (serveOptions) => {
 
   // App
   const app = new Runner("");
-  await waitForIt(2000);
-  const response = await testRunner("");
+  await waitForIt(5000);
+  const response = await testRunner();
   if (!response.results.success) {
     process.exit(1);
   }
@@ -48,7 +49,7 @@ export const executeScenario = async (serveOptions) => {
   app.kill();
 };
 
-export const setEnvFile = async (serveOption) => {
+const setEnvFile = async (serveOption) => {
   console.log(`SERVER: ${serveOption._title}`);
   let content = "";
   for (const key of Object.keys(serveOption)) {
@@ -57,5 +58,17 @@ export const setEnvFile = async (serveOption) => {
     }
     content += `${key}=${serveOption[key]}\n`;
   }
-  await fs.writeFileSync("./.env", content);
+  const buildPath = path.join(__dirname, "..", "build", ".env");
+  await fs.writeFileSync(buildPath, content);
+
+  const testPath = path.join(__dirname, "..", ".env");
+  await fs.writeFileSync(testPath, content);
+  console.log(".env file has been created on: ", testPath, buildPath);
+};
+
+module.exports = {
+  waitForIt,
+  getServeOptions,
+  executeScenario,
+  setEnvFile,
 };

@@ -1,4 +1,4 @@
-export const up = function (knex) {
+const up = function (knex) {
   const items = [
     { name: "Math" },
     { name: "Computer Science" },
@@ -8,4 +8,6 @@ export const up = function (knex) {
   return knex.table("lessons").insert(items);
 };
 
-export const down = function (knex) {};
+const down = function (knex) {};
+
+module.exports = { up, down };
