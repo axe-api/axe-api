@@ -1,4 +1,4 @@
-export const up = function (knex) {
+const up = function (knex) {
   return knex.schema.createTable("posts", function (table) {
     table.increments();
     table.integer("user_id").nullable().unsigned();
@@ -14,6 +14,8 @@ export const up = function (knex) {
   });
 };
 
-export const down = function (knex) {
+const down = function (knex) {
   return knex.schema.dropTable("posts");
 };
+
+module.exports = { up, down };

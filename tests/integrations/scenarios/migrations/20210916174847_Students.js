@@ -1,4 +1,4 @@
-export const up = function (knex) {
+const up = function (knex) {
   return knex.schema.createTable("students", function (table) {
     table.increments();
     table.string("name", 100).notNullable();
@@ -7,6 +7,8 @@ export const up = function (knex) {
   });
 };
 
-export const down = function (knex) {
+const down = function (knex) {
   return knex.schema.dropTable("students");
 };
+
+module.exports = { up, down };

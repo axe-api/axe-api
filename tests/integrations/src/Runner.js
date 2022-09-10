@@ -1,9 +1,13 @@
-import { spawn } from "child_process";
+const { spawn } = require("child_process");
+const path = require("path");
 
 class Runner {
-  constructor(name) {
-    console.log("runner", name);
-    this.child = spawn("node", ["serve.js", name]);
+  constructor() {
+    // eslint-disable-next-line no-undef
+    const fullPath = path.join(__dirname, "..", "build", "serve.js");
+    console.log("runner", fullPath);
+
+    this.child = spawn("node", [fullPath]);
     this.child.stdout.on("data", (data) => {
       process.stdout.write(`${data}`);
     });
@@ -18,4 +22,4 @@ class Runner {
   }
 }
 
-export default Runner;
+module.exports = Runner;

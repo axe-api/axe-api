@@ -1,6 +1,6 @@
-export default async () => {
+module.exports = async () => {
   return {
-    rootDir: `scenarios`,
+    rootDir: `build/scenarios`,
     testSequencer: "./../testSequencer.cjs",
   };
 };

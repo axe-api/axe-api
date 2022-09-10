@@ -1,13 +1,18 @@
-import jest from "jest";
+const jest = require("jest");
+const path = require("path");
 
-export const testRunner = async (path) => {
+const testRunner = async (fullpath = "") => {
   return await jest.runCLI(
     {
-      rootDir: `scenarios/${path}`,
+      rootDir: path.join("scenarios", fullpath),
       runInBand: true,
       bail: 1,
-      testSequencer: "./../testSequencer.cjs",
+      testSequencer: path.join("..", "testSequencer.cjs"),
     },
     ["."]
   );
+};
+
+module.exports = {
+  testRunner,
 };

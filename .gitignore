@@ -1,1 +1,5 @@
 node_modules
+./build
+*.tgz
+./test/integrations/build
+./test/integrations/node_modules
