@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "type": "module",
   "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
     "docker:mysql": "docker compose -f docker-compose.mysql.yml up -d",
     "start": "node index.js",
     "start:dev": "nodemon serve-dev.js",
@@ -13,10 +14,10 @@
   },
   "dependencies": {
     "axe-api": "file:./../../",
-    "axios": "^0.25.0",
+    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^14.2.0",
-    "knex": "^1.0.1",
+    "knex": "^2.3.0",
     "mysql": "^2.18.1",
     "uuid": "^8.3.2"
   },
@@ -26,6 +27,7 @@
     "@babel/node": "^7.13.13",
     "@babel/preset-env": "^7.14.1",
     "@babel/runtime": "^7.14.0",
+    "@types/cors": "^2.8.12",
     "babel-loader": "^8.2.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-preset-minify": "^0.5.1",

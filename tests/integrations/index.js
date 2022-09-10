@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
-import { setEnvFile, getServeOptions, executeScenario } from "./src/Helpers.js";
+const {
+  setEnvFile,
+  getServeOptions,
+  executeScenario,
+} = require("./src/Helpers.js");
 
 const main = async () => {
   const database =

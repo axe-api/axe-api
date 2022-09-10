@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 17.x]
+        node-version: [14.x, 16.x, 17.x, 18.x]
         database: [mysql8, mysql57, "postgres"]
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +21,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Start database containers
         run: docker-compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
+      - name: Build the Axe API
+        run: npm install && npm run build
       - name: Install integration test dependencies
-        run: cd tests/integrations && npm install
+        run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
       - run: npm ci
-      - run: npm run build --if-present
       - name: Testing all scenarions
         run: npm run test:integration:${{ matrix.database }}
