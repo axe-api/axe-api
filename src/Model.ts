@@ -86,7 +86,12 @@ class Model {
   }
 
   getValidationRules(methodType: HttpMethods): Record<string, string> | null {
+    if (this.hasStringValue()) {
+      return this.validations as Record<string, string>;
+    }
+
     const values: IMethodBaseValidations = this.validations;
+
     switch (methodType) {
       case HttpMethods.POST:
         return values.POST || null;
@@ -166,6 +171,19 @@ class Model {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   serialize(data: any, request: Request) {
     return data;
+  }
+
+  private hasStringValue() {
+    const tester: Record<string, any> = this.validations;
+    let status = false;
+
+    for (const key of Object.keys(tester)) {
+      if (typeof tester[key] === "string") {
+        status = true;
+      }
+    }
+
+    return status;
   }
 }
 
