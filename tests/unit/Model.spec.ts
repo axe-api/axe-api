@@ -57,7 +57,8 @@ describe("Models", () => {
     expect(validations).toBe(null);
 
     validations = new Author().getValidationRules(HttpMethods.DELETE);
-    console.log(validations);
+    expect(validations).not.toBe(null);
+    expect((validations as any).name).toBe("required");
   });
 
   test(".getMiddlewares() should be able to return all middlewares by HandlerType", () => {

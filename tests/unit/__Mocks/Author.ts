@@ -28,7 +28,9 @@ class Author extends Model {
   }
 
   get validations(): Record<string, string> {
-    return {};
+    return {
+      name: "required",
+    };
   }
 }
 
