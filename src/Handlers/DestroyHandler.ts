@@ -19,7 +19,7 @@ export default async (pack: IRequestPack) => {
     query,
   } as unknown as IHookParameter);
 
-  let item = await query.first();
+  const item = await query.first();
   if (!item) {
     throw new ApiError(`The item is not found on ${model.name}.`);
   }

@@ -12,8 +12,6 @@ import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
 
 class Model {
-  constructor() {}
-
   get primaryKey(): string {
     return "id";
   }
@@ -131,11 +129,7 @@ class Model {
     return results;
   }
 
-  hasMany(
-    relatedModel: string,
-    primaryKey: string = "id",
-    foreignKey: string = ""
-  ): IRelation {
+  hasMany(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
         this.constructor.name.toLowerCase()
@@ -151,11 +145,7 @@ class Model {
     };
   }
 
-  hasOne(
-    relatedModel: string,
-    primaryKey: string = "id",
-    foreignKey: string = ""
-  ): IRelation {
+  hasOne(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
     if (foreignKey === "") {
       foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`;
     }
@@ -173,6 +163,7 @@ class Model {
     return this.hasOne(relatedModel, foreignKey, primaryKey);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   serialize(data: any, request: Request) {
     return data;
   }

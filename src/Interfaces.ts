@@ -18,23 +18,8 @@ export interface IColumn extends Column {
   table_name: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IConfig {}
-
-interface IConnectionConfig {
-  host: string;
-  user: string;
-  password: string;
-  database: string;
-}
-
-interface IPoolConfig {
-  min: number;
-  max: number;
-}
-
-interface IMigrationConfig {
-  tableName: "knex_migrations";
-}
 
 export interface IHandlerBasedTransactionConfig {
   handler: HandlerTypes | HandlerTypes[];
@@ -60,7 +45,7 @@ export interface IApplicationConfig extends IConfig {
     | IHandlerBasedSerializer[];
 }
 
-export interface IDatabaseConfig extends Knex.Config {}
+export type IDatabaseConfig = Knex.Config;
 
 export interface IFolders {
   App: string;
@@ -198,7 +183,7 @@ export interface IWhere {
   relation: IRelation | null;
 }
 
-export interface NestedWhere extends Array<NestedWhere | IWhere> {}
+export type NestedWhere = Array<NestedWhere | IWhere>;
 
 export interface IDependency {
   type: DependencyTypes;
