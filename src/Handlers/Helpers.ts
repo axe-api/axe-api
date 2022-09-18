@@ -139,7 +139,7 @@ const globalSerializer = async (
     return itemArray;
   }
 
-  let callbacks: ((data: any, request: Request) => void)[] = [];
+  const callbacks: ((data: any, request: Request) => void)[] = [];
   // Push all runable serializer into callbacks.
   Application.serializers.map((configSerializer) => {
     // Serialize data for all requests types.
@@ -270,37 +270,10 @@ export const getRelatedData = async (
         (item) => item.name
       );
 
-      // Deteching the other relations
-      const workList = selectColumns.filter((column) =>
-        possibleThirthLevelRelations.includes(column)
-      );
-
       // Removing relationship values from the select column list
       selectColumns = selectColumns.filter(
         (column) => !possibleThirthLevelRelations.includes(column)
       );
-
-      // Adding relationship request as the child objects
-      // TODO: We should review this part.
-      // clientQuery.children = [
-      //   ...clientQuery.children,
-      //   ...workList.map((relationship) => {
-      //     return {
-      //       relationship,
-      //       fields: [],
-      //       children: [],
-      //     };
-      //   }),
-      // ];
-      // console.log([
-      //   ...workList.map((relationship) => {
-      //     return {
-      //       relationship,
-      //       fields: [],
-      //       children: [],
-      //     };
-      //   }),
-      // ]);
 
       // We should check if the column is defined on the table.
       const undefinedColumns = selectColumns.filter(
