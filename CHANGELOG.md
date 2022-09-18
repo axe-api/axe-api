@@ -1,5 +1,37 @@
 # Release Notes
 
+## [0.20.0 (2022-09-20)](https://github.com/axe-api/axe-api/compare/0.20.0...0.19.2)
+
+In the whole application, TypeScript becomes the new language except for migration files and it's structure. You can read the documentation about how to migrate from `0.19.2` to `0.20.0`.
+
+### Breaking Changes
+
+#### Naming Changes
+
+- File extensions: `User.js` to `User.ts`
+- `LOG_LEVELS` constant variable has been changed with `LogLevels` enum.
+- `HANDLERS` constant variable has been changed with `HandlerTypes` enum.
+- `IoC` service has been renamed as `IoCService`.
+- Hooks and Event files' names should be singular;
+  - `UserHooks.js` => `UserHook.ts`
+  - `UserEvents.js` => `UserEvent.ts`
+
+#### Interface Changes
+
+- `validations()` getter should return `IMethodBaseValidations` interface.
+- In hook functions, `IHookParameter` interface should be used as the parameter type.
+- Init functions (`onBeforeInit`, `onAfterInit`) should be use the `Express` type;
+  - `const onBeforeInit = async ({ app }) => {` => `const onBeforeInit = async (app: Express) => {`
+  - `const onAfterInit = async ({ app }) => {` => `const onAfterInit = async (app: Express) => {`
+- Application config should be implemented `IApplicationConfig` interface.
+
+#### Implementation Changes
+
+- Starting server part has been changed;
+  - `const server = new Server(appFolder)` => `const server = new Server()`
+  - `server.listen()` => `server.start(__dirname);`
+- `knexfile.js` should not use the `app/Application/Config.js` anymore.
+
 ## [0.19.2 (2022-01-22)](https://github.com/axe-api/axe-api/compare/0.19.2...0.19.1)
 
 ### Fixed
