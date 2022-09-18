@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { HandlerTypes, HttpMethods, Relationships } from "../../src/Enums";
 import { IRelation } from "../../src/Interfaces";
 import User from "./__Mocks/User";
@@ -11,9 +11,7 @@ let fillable: string[] = [];
 let validations: Record<string, string> | null = {};
 
 describe("Models", () => {
-  beforeEach(() => {});
-
-  test(".fillable() should be able to return fillable fields by the HttpMethod", () => {
+  test(".fillable() should be able to return fillablexx fields by the HttpMethod", () => {
     fillable = new User().getFillableFields(HttpMethods.POST);
     expect(fillable.length).toBe(2);
     expect(fillable[0]).toBe("name");
