@@ -1,4 +1,10 @@
-import { Model, DEFAULT_HANDLERS, HandlerTypes } from "axe-api";
+import {
+  Model,
+  DEFAULT_HANDLERS,
+  HandlerTypes,
+  IMethodBaseValidations,
+  HttpMethods,
+} from "axe-api";
 
 class User extends Model {
   get fillable() {
@@ -8,9 +14,9 @@ class User extends Model {
     };
   }
 
-  get validations() {
+  get validations(): IMethodBaseValidations {
     return {
-      POST: {
+      [HttpMethods.POST]: {
         email: "required|email",
         name: "required",
       },

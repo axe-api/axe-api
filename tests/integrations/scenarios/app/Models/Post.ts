@@ -1,4 +1,4 @@
-import { Model, IMethodBaseValidations, HttpMethods } from "axe-api";
+import { Model } from "axe-api";
 
 class Post extends Model {
   get table() {
@@ -9,14 +9,9 @@ class Post extends Model {
     return ["title", "content"];
   }
 
-  get validations(): IMethodBaseValidations {
+  get validations(): Record<string, string> {
     return {
-      [HttpMethods.POST]: {
-        title: "required|max:100",
-      },
-      [HttpMethods.PUT]: {
-        title: "required|max:100",
-      },
+      title: "required|max:100",
     };
   }
 
