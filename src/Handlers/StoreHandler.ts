@@ -2,7 +2,6 @@ import Validator from "validatorjs";
 import { IRequestPack, IHookParameter } from "../Interfaces";
 import {
   getMergedFormData,
-  addForeignKeyQuery,
   getParentColumn,
   serializeData,
   filterHiddenFields,

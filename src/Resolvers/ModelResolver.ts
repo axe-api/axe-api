@@ -104,7 +104,7 @@ class ModelResolver {
     const hooks = await fileResolver.resolveContent(folder);
 
     for (const model of modelList.get()) {
-      const hookFileName: string = `${model.name}${hookType
+      const hookFileName = `${model.name}${hookType
         .toString()
         .replace("s", "")}`;
 

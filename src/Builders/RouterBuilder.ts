@@ -2,7 +2,7 @@ import pluralize from "pluralize";
 import { StatusCodes } from "http-status-codes";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
-import { paramCase, camelCase, snakeCase } from "change-case";
+import { paramCase, camelCase } from "change-case";
 import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
 import {
   IGeneralHooks,
@@ -55,10 +55,10 @@ class RouterBuilder {
   private async createRouteByModel(
     model: IModelService,
     modelList: ModelListService,
-    urlPrefix: string = "",
+    urlPrefix = "",
     parentModel: IModelService | null = null,
     relation: IRelation | null = null,
-    allowRecursive: boolean = true
+    allowRecursive = true
   ) {
     if (model.instance.ignore) {
       return;
@@ -233,7 +233,7 @@ class RouterBuilder {
     relation: IRelation | null
   ) {
     let trx: Knex.Transaction | null = null;
-    let hasTransaction: boolean = false;
+    let hasTransaction = false;
 
     try {
       const factory = await IoCService.useByType<HandlerFactory>(
@@ -275,6 +275,7 @@ class RouterBuilder {
 
     switch (type) {
       case "ApiError":
+        // eslint-disable-next-line no-case-declarations
         const apiError: ApiError = error as ApiError;
         res.status(apiError.status).json({
           error: apiError.message,
