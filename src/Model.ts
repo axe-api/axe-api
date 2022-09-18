@@ -24,7 +24,7 @@ class Model {
     return [];
   }
 
-  get validations(): IMethodBaseValidations {
+  get validations(): IMethodBaseValidations | Record<string, string> {
     return {};
   }
 

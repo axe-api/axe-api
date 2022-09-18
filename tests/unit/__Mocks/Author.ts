@@ -1,5 +1,8 @@
 import { HandlerTypes } from "../../../src/Enums";
-import { IHandlerBasedTransactionConfig } from "../../../src/Interfaces";
+import {
+  IHandlerBasedTransactionConfig,
+  IMethodBaseValidations,
+} from "../../../src/Interfaces";
 import Model from "../../../src/Model";
 
 class Author extends Model {
@@ -22,6 +25,10 @@ class Author extends Model {
         transaction: false,
       },
     ];
+  }
+
+  get validations(): Record<string, string> {
+    return {};
   }
 }
 
