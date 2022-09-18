@@ -55,6 +55,9 @@ describe("Models", () => {
     // There can not be any validation for DELETE method
     validations = new Post().getValidationRules(HttpMethods.DELETE);
     expect(validations).toBe(null);
+
+    validations = new Author().getValidationRules(HttpMethods.DELETE);
+    console.log(validations);
   });
 
   test(".getMiddlewares() should be able to return all middlewares by HandlerType", () => {
