@@ -1,7 +1,7 @@
 <h1 align="center">
   <br>
   <a href="https://axe-api.github.io/">
-    <img src="https://axe-api.github.io/logo.png" alt="Markdownify" width="200">
+    <img src="https://axe-api.github.io/axe.png" alt="Markdownify" width="200">
   </a>
   <br>
   Axe API
@@ -23,45 +23,76 @@
   </a>
 </h1>
 
-The fastest way to create Rest API, by defining database models and relations.
+Next Generation Rest API Framework
 
 > Axe API has great documentation. Please [check it out in here](https://axe-api.github.io/).
 
 ## What Is Axe API?
 
-**Axe API** is the _fastest_ way to create **Rest API** by defining only database models and relationships between them. It is built on [Knex.js](http://knexjs.org), and its awesome active records pattern. On the other hand, you have another familiar thing, [Express](https://expressjs.com/).
+Axe API is a [Node.js](https://nodejs.org/) framework that helps you create a **Rest API** in a declarative way quickly. :axe:
 
-You are going to be able to develop an API **10 times faster** with **Axe API**!
+It has been written with [TypeScript](https://www.typescriptlang.org/) and built on [Express](https://expressjs.com/) and [Knex.js](https://knexjs.org/).
 
-## How It Works?
+## Motivation
 
-[Express](https://expressjs.com/) and [Knex.js](http://knexjs.org) are great tools to create [Node.js](https://nodejs.org) based applications. But usually, we code too much the same things to design an API. We aim to reduce code duplication and give you speed by using Axe API.
+You would understand easily what you are going to code when you look at a bunch of database tables and their relations with each other, more or less. Because, as a developer, you already know that _Rest API_ best practices.
 
-Axe API provides you the ability to separate your common tasks to build an API from your business logic. **Axe API** expects model definitions to analyze your routing structure. After you created your models and their relations between them, Axe API can handle all _well-known_ API requests. Creating an API with 5 tables takes almost 15 minutes.
+Therefore I asked a simple question more than two years ago;
 
-Shortly, **Axe API** performs three basic functions;
+**_"Can we create a Rest API in a declarative way, and handle all endpoints automatically?"_**
 
-- **Analyzes** your models and their relationships to create routes.
-- **Handles** all HTTP requests.
-- **Separate** your business logic from API best practices.
+As a result of our work, we have a framework called Axe API that provides a solution to analyze your API definitions and handle all of the endpoints.
 
-Let's assume that you have a model like this;
+Basically, you define your models which are your API definitions, and Axe API analyzes them and processes all of your endpoints instead of you.
 
-```js
-import { Model } from "axe-api";
+## Showcase
 
-class User extends Model {}
+Let's look at an example!
+
+You have two database tables; `users` and `posts`. These tables are related to each other and we aim that create a **Rest API** for basic **CRUD** endpoints.
+
+The only thing to do is creating models like the following example;
+
+```ts
+class User extends Model {
+  get fillable(): string[] {
+    return ["email", "name", "surname"];
+  }
+
+  posts(): IRelation {
+    return this.hasMany("Post", "id", "user_id");
+  }
+}
 ```
 
-With this model, you will have all of the basic API routes for **User** resources. **Axe API** will create **CRUD** routes for you in the _booting_ process and these routes would be completely ready to be handled and processed by Axe API. The following routes will be handled automatically;
+```ts
+class Post extends Model {
+  get fillable(): string[] {
+    return ["title", "description"];
+  }
 
-- `POST api/users`
-- `GET api/users`
-- `GET api/users/:id`
-- `PUT api/users/:id`
-- `DELETE api/users/:id`
+  user(): IRelation {
+    return this.belongsTo("User", "user_id", "id");
+  }
+}
+```
 
-This is the magic of **Axe API**!
+Tada! :tada:
+
+Your API is ready to process all of the following endpoints after those model definitions are done.
+
+- [GET] `api/users`
+- [POST] `api/users`
+- [GET] `api/users/:id`
+- [PUT] `api/users/:id`
+- [DELETE] `api/users/:id`
+- [GET] `api/users/:userId/posts`
+- [POST] `api/users/:userId/posts`
+- [GET] `api/users/:userId/posts/:id`
+- [PUT] `api/users/:userId/posts/:id`
+- [DELETE] `api/users/:userId/posts/:id`
+
+This is the main power of Axe API. Nevertheless, it is not limited only to this power. There are many more features are waiting to discover. :bulb:
 
 ## Installation
 
@@ -95,8 +126,6 @@ To serve this application, you can execute the following command;
 ```bash
 $ npm run start:dev
 ```
-
-> `start:dev` command use [nodemon](https://www.npmjs.com/package/nodemon). If you haven't installed it yet, we suggest you install it first.
 
 After that, your first **Axe API** application will be running in `localhost:3000`.
 
@@ -143,10 +172,3 @@ npm run test:integration:mysql8
 ## License
 
 [MIT License](LICENSE)
-
-## Prerelease
-
-- Update package.json, set version to a prerelease version, e.g. 2.0.0-rc1, 3.1.5-rc4, ...
-- Run npm pack to create package
-- Run npm publish <package>.tgz --tag next to publish the package under the next tag
-- Run npm install --save package@next to install prerelease package
