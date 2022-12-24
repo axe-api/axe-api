@@ -1,6 +1,6 @@
 # Release Notes
 
-## [0.20.2 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.2...0.20.0)
+## [0.20.3 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.3...0.20.0)
 
 ### Fixed
 
