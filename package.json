@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "0.20.0-rc28",
+  "version": "0.20.0",
   "description": "AXE API is a simple tool which has been created based on Express and Knex.js to create Rest APIs quickly.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -11,7 +11,7 @@
     "test": "tests"
   },
   "author": "Özgür Adem Işıklı <i.ozguradem@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc -w",
@@ -26,13 +26,13 @@
     "test:integration:postgres": "cd ./tests/integrations && node index.js postgres"
   },
   "dependencies": {
-    "@types/express": "^4.17.13",
+    "@types/express": "^4.17.15",
     "change-case": "^4.1.2",
     "dotenv": "^14.2.0",
-    "express": "^4.17.2",
+    "express": "^4.18.2",
     "http-status-codes": "^2.2.0",
     "knex": "^2.3.0",
-    "knex-paginate": "^3.0.1",
+    "knex-paginate": "^3.0.2",
     "knex-schema-inspector": "^2.0.4",
     "pluralize": "^8.0.0",
     "validatorjs": "^3.22.1"
