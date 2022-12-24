@@ -1,6 +1,6 @@
 # Release Notes
 
-## [0.20.0 (2022-09-20)](https://github.com/axe-api/axe-api/compare/0.20.0...0.19.2)
+## [0.20.0 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.0...0.19.2)
 
 In the whole application, TypeScript becomes the new language except for migration files and it's structure. You can read the documentation about how to migrate from `0.19.2` to `0.20.0`.
 
