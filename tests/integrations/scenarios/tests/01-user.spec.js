@@ -1,6 +1,11 @@
+/* eslint-disable no-undef */
 import { get, post, put, patch, deleteIt, truncate } from "./helper.js";
+import axios from "axios";
 import dotenv from "dotenv";
 let userId = null;
+
+axios.defaults.baseURL = "http://localhost:3000/api";
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 describe("Axe API", () => {
   beforeAll(async () => {
@@ -82,5 +87,28 @@ describe("Axe API", () => {
     const { body } = await get({ url: "/api/users", status: 200 });
     expect(body.data.length).toBe(0);
     expect(body.pagination.total).toBe(0);
+  });
+
+  test("should be able to query items when the query field is not the field list", async () => {
+    const data = {
+      email: `foo1@bar.com`,
+      name: "John",
+      surname: "Doe",
+    };
+    await post({ url: "/api/users", data, status: 200 });
+
+    const { data: response } = await axios.get(`/users`, {
+      params: {
+        q: JSON.stringify([
+          {
+            name: "John",
+          },
+        ]),
+        fields: "email,surname",
+        page: 1,
+        per_page: 300,
+      },
+    });
+    expect(response.pagination.total).toBe(1);
   });
 });

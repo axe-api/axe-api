@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import { truncate } from "./helper.js";
 import dotenv from "dotenv";
