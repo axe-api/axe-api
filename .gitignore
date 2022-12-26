@@ -3,3 +3,6 @@ build
 *.tgz
 ./test/integrations/build
 ./test/integrations/node_modules
+dev-kit
+.env
+dev-kit.ts
