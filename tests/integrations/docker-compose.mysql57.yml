@@ -3,8 +3,13 @@ version: "3.9"
 services:
   database:
     image: mysql:5.7
-    command: 
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_general_ci', --default-authentication-plugin=mysql_native_password]
+    platform: linux/x86_64
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_general_ci",
+        --default-authentication-plugin=mysql_native_password,
+      ]
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: axeapi
@@ -12,5 +17,3 @@ services:
       MYSQL_PASSWORD: 123456
     ports:
       - "3307:3306"
-
-      
