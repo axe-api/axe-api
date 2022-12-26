@@ -24,9 +24,9 @@
     "lint": "eslint src/**",
     "lint:watch": "esw --watch --color",
     "prepare:integration": "nodemon --ignore \"./tests/**\" ./scripts/run-integration-test.js",
-    "test:integration:mysql8": "cd ./tests/integrations && node index.js mysql8",
-    "test:integration:mysql57": "cd ./tests/integrations && node index.js mysql57",
-    "test:integration:postgres": "cd ./tests/integrations && node index.js postgres"
+    "test:postgres": "sh ./scripts/test-postgres.sh",
+    "test:mysql5": "sh ./scripts/test-mysql5.sh",
+    "test:mysql8": "sh ./scripts/test-mysql8.sh"
   },
   "dependencies": {
     "@types/express": "^4.17.15",
