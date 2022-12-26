@@ -1,4 +1,4 @@
-echo "MySQL-5 Tests have been started."
+echo "MySQL-5.7 Tests have been started."
 
 echo "Setting up MySQL container images"
 docker-compose -f "./tests/integrations/docker-compose.mysql57.yml" down
