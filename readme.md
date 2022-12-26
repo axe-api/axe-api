@@ -1,7 +1,7 @@
 <h1 align="center">
   <br>
-  <a href="https://axe-api.github.io/">
-    <img src="https://axe-api.github.io/axe.png" alt="Markdownify" width="200">
+  <a href="https://axe-api.com/">
+    <img src="https://axe-api.com/axe.png" alt="Markdownify" width="200">
   </a>
   <br>
   Axe API
@@ -25,7 +25,7 @@
 
 Next Generation Rest API Framework
 
-> Axe API has great documentation. Please [check it out in here](https://axe-api.github.io/).
+> Axe API has great documentation. Please [check it out in here](https://axe-api.com/).
 
 ## What Is Axe API?
 
@@ -143,7 +143,7 @@ If you can see that response, it means that your project is running properly.
 
 ## Documentation
 
-Axe API has great documentation. Please [check it out in here](https://axe-api.github.io/).
+Axe API has great documentation. Please [check it out in here](https://axe-api.com/).
 
 ## How To Run Integration Tests
 
