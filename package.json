@@ -17,6 +17,8 @@
     "build:watch": "tsc -w",
     "dev": "ts-node-dev --respawn --clear index.ts",
     "dev-kit": "ts-node-dev --respawn --clear dev-kit.ts",
+    "dev-kit:install": "sh ./scripts/dev-kit-install.sh",
+    "dev-kit:remove": "sh ./scripts/dev-kit-remove.sh",
     "test": "jest --runInBand",
     "test:dev": "jest --watch",
     "lint": "eslint src/**",

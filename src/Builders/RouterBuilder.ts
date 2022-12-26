@@ -37,10 +37,11 @@ class RouterBuilder {
 
     await this.createRoutesByModelTree(modelTree, modelList);
 
+    logger.info("Express routes have been created.");
+
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);
     }
-    logger.info("Express routes have been created.");
   }
 
   private async createRoutesByModelTree(
