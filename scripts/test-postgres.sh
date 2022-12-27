@@ -4,6 +4,8 @@ echo "Setting up MySQL container images"
 docker-compose -f "./tests/integrations/docker-compose.postgres.yml" down
 docker-compose -f "./tests/integrations/docker-compose.postgres.yml" up -d --build
 
+npm run build
+
 echo "Waiting for 10 seconds"
 sleep 10
 
