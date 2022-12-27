@@ -4,6 +4,8 @@ echo "Setting up MySQL container images"
 docker-compose -f "./tests/integrations/docker-compose.mysql57.yml" down
 docker-compose -f "./tests/integrations/docker-compose.mysql57.yml" up -d --build
 
+npm run build
+
 echo "Waiting for 15 seconds"
 sleep 15
 
