@@ -1,5 +1,13 @@
 # Release Notes
 
+## [0.20.4 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.4...0.20.3)
+
+### Fixed
+
+- Fixed [#124](https://github.com/axe-api/axe-api/issues/124)
+- Throwing errors in the `development` environment has been fixed.
+- Unbuilt integration test issue has been fixed.
+
 ## [0.20.3 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.3...0.20.0)
 
 ### Fixed
