@@ -291,10 +291,14 @@ class RouterBuilder {
         break;
 
       default:
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-          error: "An error occurred.",
-        });
-        break;
+        // We should not show the real errors on production
+        if (process.env.NODE_ENV === "production") {
+          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            error: "An error occurredxx.",
+          });
+        }
+
+        throw error;
     }
   }
 
