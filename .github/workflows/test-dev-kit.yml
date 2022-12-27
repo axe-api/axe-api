@@ -1,0 +1,27 @@
+name: dev-kit
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 17.x, 18.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install and remove the dev-kit
+        run: |
+          npm install
+          npm i -g ts-node-dev typescript knex
+          npm run dev-kit:install
+          timeout 10 npm run dev-kit || [[ $? -eq 124 ]]
+          npm run dev-kit:remove

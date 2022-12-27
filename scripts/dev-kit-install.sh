@@ -15,7 +15,7 @@ fi
 git clone https://github.com/axe-api/dev-kit.git temp-kit
 
 # Moving files to the correct location
-mv temp-kit/dev-kit.sh ./dev-kit.sh
+mv temp-kit/dev-kit.ts ./dev-kit.ts
 mv temp-kit/.env ./.env
 mv temp-kit/dev-kit ./dev-kit
 
