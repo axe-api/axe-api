@@ -24,6 +24,10 @@ export default async (pack: IRequestPack) => {
   const validationRules = model.instance.getValidationRules(requestMethod);
 
   if (validationRules) {
+    // The validation language should be set
+    Validator.useLang(req.language);
+
+    // Validate the data
     const validation = new Validator(formData, validationRules);
     if (validation.fails()) {
       return res.status(400).json(validation.errors);
