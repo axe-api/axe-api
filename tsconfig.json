@@ -8,10 +8,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@core": ["./core/index"]
-    }
+    "typeRoots": ["./types"],
+    "baseUrl": "."
   },
   "include": ["src/**/*", "index.ts", "dev-kit.ts", "dev-kit/**/*"]
 }

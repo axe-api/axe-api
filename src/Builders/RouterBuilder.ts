@@ -20,6 +20,7 @@ import {
   IoCService,
   ModelListService,
 } from "../Services";
+import { acceptLanguageMiddleware } from "../Middlewares";
 
 class RouterBuilder {
   async build() {
@@ -80,8 +81,14 @@ class RouterBuilder {
         resource,
         model.instance.primaryKey
       );
-      // Detecting filters
-      const middlewares = model.instance.getMiddlewares(handlerType);
+
+      // Creating the middleware list for the route. As default, we support some
+      // internal middlewares such as `Accept Language Middleware` which parse
+      // the "accept-language" header to use in the application general.
+      const middlewares = [
+        acceptLanguageMiddleware,
+        ...model.instance.getMiddlewares(handlerType),
+      ];
 
       // Adding the route to the express
       await this.addExpressRoute(
