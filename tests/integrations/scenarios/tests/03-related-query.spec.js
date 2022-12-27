@@ -78,4 +78,15 @@ describe("Students", () => {
     expect(studentLesson.lesson?.name).toBe("Computer Science");
     expect(studentLesson.teacher?.name).toBe("Teacher 1");
   });
+
+  test("should be able to fetch data when the fields does not have foreign/primary keys", async () => {
+    const { data } = await axios.get(`/users`, {
+      params: {
+        fields: "email",
+        with: "posts{title}",
+      },
+    });
+    // Does not matter the record count. It should not return an error.
+    expect(data.pagination.total).toBe(0);
+  });
 });
