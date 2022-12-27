@@ -457,9 +457,17 @@ class QueryService {
         throw new ApiError(`Undefined relation: ${item.relationship}`);
       }
 
-      this.relationColumns.push(
-        `${this.model.instance.table}.${relation.foreignKey}`
-      );
+      // We should add the field by the relation type. Otherwise it can cause
+      // an error something like this; `users.user_id`. Foreign and primary keys
+      // are relative.
+      let columnName = "";
+      if (relation.type === Relationships.HAS_MANY) {
+        columnName = relation.primaryKey;
+      } else {
+        columnName = relation.foreignKey;
+      }
+
+      this.relationColumns.push(`${this.model.instance.table}.${columnName}`);
     });
   }
 
