@@ -43,7 +43,19 @@ export interface IApplicationConfig extends IConfig {
   serializers:
     | ((data: any, request: Request) => void)[]
     | IHandlerBasedSerializer[];
+  supportedLanguages: string[];
   defaultLanguage: string;
+}
+
+export interface ILanguage {
+  title: string;
+  language: string;
+  region?: string | null;
+}
+
+export interface IAcceptedLanguage {
+  language: ILanguage;
+  quality: number;
 }
 
 export type IDatabaseConfig = Knex.Config;

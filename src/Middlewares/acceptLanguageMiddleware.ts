@@ -1,26 +1,23 @@
 import { Request, Response, NextFunction } from "express";
-import parser from "accept-language-parser";
 import { IoCService } from "../Services";
 import { IApplicationConfig } from "../Interfaces";
+import { AcceptLanguageResolver } from "../Resolvers";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   // Application configuration is need for the default setting.
   const configs = await IoCService.use("Config");
   const application = configs.Application as IApplicationConfig;
-  const { defaultLanguage } = application;
+  const { supportedLanguages, defaultLanguage } = application;
 
-  // Parsing the `accept-language` value
-  req.acceptedLanguages = parser.parse(
-    req.headers["accept-language"] || defaultLanguage
+  // Setting the current language by the supported, default and the client prefences
+  req.currentLanguage = AcceptLanguageResolver.resolve(
+    req.get("accept-language") || "",
+    supportedLanguages || ["en"],
+    defaultLanguage || "en"
   );
 
-  // Getting the current language by the accept-langauge and the default language
-  // value. This values can be used anywhere in the API because the values would
-  // be carried by Express.Request
-  req.language =
-    req.acceptedLanguages.length > 0
-      ? req.acceptedLanguages.at(0)?.code || defaultLanguage
-      : defaultLanguage;
+  // Adding the `Content-Language` header to the response object
+  res.setHeader("Content-Language", req.currentLanguage.title);
 
   next();
 };

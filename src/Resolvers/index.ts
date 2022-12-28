@@ -1,3 +1,4 @@
+import AcceptLanguageResolver from "./AcceptLanguageResolver";
 import FileResolver from "./FileResolver";
 import FolderResolver from "./FolderResolver";
 import GeneralHookResolver from "./GeneralHookResolver";
@@ -6,6 +7,7 @@ import TransactionResolver from "./TransactionResolver";
 import WithQueryResolver from "./WithQueryResolver";
 
 export {
+  AcceptLanguageResolver,
   FileResolver,
   FolderResolver,
   GeneralHookResolver,

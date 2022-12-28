@@ -25,7 +25,7 @@ export default async (pack: IRequestPack) => {
 
   if (validationRules) {
     // The validation language should be set
-    Validator.useLang(req.language);
+    Validator.useLang(req.currentLanguage.language);
 
     // Validate the data
     const validation = new Validator(formData, validationRules);
