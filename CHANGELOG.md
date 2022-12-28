@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.21.0 (2022-12-28)](https://github.com/axe-api/axe-api/compare/0.21.0...0.20.4)
+
+### Features
+
+- Added `i18n` support. [#44](https://github.com/axe-api/axe-api/issues/44)
+
 ## [0.20.4 (2022-12-24)](https://github.com/axe-api/axe-api/compare/0.20.4...0.20.3)
 
 ### Fixed

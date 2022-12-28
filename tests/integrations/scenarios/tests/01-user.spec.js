@@ -111,4 +111,29 @@ describe("Axe API", () => {
     });
     expect(response.pagination.total).toBe(1);
   });
+
+  test("should be able to return form validation messages in German", async () => {
+    let validationError = false;
+    try {
+      await axios.post(
+        "/users",
+        {},
+        {
+          headers: {
+            "Accept-Language": "de;q=0.9, en;q=0.8",
+          },
+        }
+      );
+    } catch (error) {
+      validationError = true;
+      expect(error?.response?.data?.errors?.email).not.toBe(undefined);
+      expect(error.response.data.errors.email.length).toBe(1);
+      expect(error.response.data.errors.email[0]).toBe(
+        "Das email Feld muss ausgefüllt sein."
+      );
+      expect(error.response.headers["content-language"]).toBe("de");
+    }
+
+    expect(validationError).toBe(true);
+  });
 });

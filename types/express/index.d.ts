@@ -1,12 +1,11 @@
-import { Language } from "accept-language-parser";
+import { ILanguage } from "../Interfaces";
 
 export {};
 
 declare global {
   namespace Express {
     export interface Request {
-      language: string;
-      acceptedLanguages: Language[];
+      currentLanguage: ILanguage;
     }
   }
 }
