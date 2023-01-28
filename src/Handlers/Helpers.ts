@@ -5,6 +5,7 @@ import {
   IRelation,
   IApplicationConfig,
   IHookParameter,
+  IQuery,
 } from "../Interfaces";
 import { Knex } from "knex";
 import { IWith } from "../Interfaces";
@@ -201,6 +202,18 @@ export const filterHiddenFields = (
   });
 };
 
+export const addSoftDeleteQuery = (
+  model: IModelService,
+  conditions: IQuery | null,
+  query: Knex.QueryBuilder
+) => {
+  // TODO: Trashed feature will be implemented later
+  // (conditions === null || conditions?.trashed === false)
+  if (model.instance.deletedAtColumn) {
+    query.whereNull(model.instance.deletedAtColumn);
+  }
+};
+
 export const getRelatedData = async (
   data: any[],
   withArray: IWith[],
@@ -295,10 +308,20 @@ export const getRelatedData = async (
 
     selectColumns = uniqueByMap(selectColumns);
 
+    const foreignModelQuery = database(foreignModel.instance.table).select(
+      selectColumns
+    );
+
+    // If the model is supported soft-delete we should check the data.
+    if (foreignModel.instance.deletedAtColumn) {
+      foreignModelQuery.whereNull(foreignModel.instance.deletedAtColumn);
+    }
+
     // Fetching related records by foreignKey and primary key values.
-    let relatedRecords = await database(foreignModel.instance.table)
-      .select(selectColumns)
-      .whereIn(searchFieldKey, parentPrimaryKeyValues);
+    let relatedRecords = await foreignModelQuery.whereIn(
+      searchFieldKey,
+      parentPrimaryKeyValues
+    );
 
     // We should serialize related data if there is any serialization function
     relatedRecords = await serializeData(

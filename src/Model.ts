@@ -51,6 +51,10 @@ class Model {
     return "updated_at";
   }
 
+  get deletedAtColumn(): string | null {
+    return null;
+  }
+
   get transaction():
     | boolean
     | IHandlerBasedTransactionConfig

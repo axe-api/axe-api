@@ -102,6 +102,10 @@ class SchemaValidatorService {
       columns.push(model.instance.updatedAtColumn);
     }
 
+    if (model.instance.deletedAtColumn) {
+      columns.push(model.instance.deletedAtColumn);
+    }
+
     return columns;
   };
 

@@ -1,6 +1,6 @@
 import { Knex } from "knex";
 import { IRequestPack, IHookParameter } from "../Interfaces";
-import { addForeignKeyQuery, callHooks, addSoftDeleteQuery } from "./Helpers";
+import { addForeignKeyQuery, callHooks } from "./Helpers";
 import { HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 
@@ -12,12 +12,16 @@ export default async (pack: IRequestPack) => {
     .where(model.instance.primaryKey, req.params[model.instance.primaryKey]);
 
   // If there is a deletedAtColumn, it means that this table support soft-delete
-  addSoftDeleteQuery(model, null, query);
+  if (model.instance.deletedAtColumn === null) {
+    throw new ApiError(
+      "You can use force delete only soft-delete supported models."
+    );
+  }
 
   // If there is a relation, we should bind it
   addForeignKeyQuery(req, query, relation, parentModel);
 
-  await callHooks(model, HookFunctionTypes.onBeforeDeleteQuery, {
+  await callHooks(model, HookFunctionTypes.onBeforeForceDeleteQuery, {
     ...pack,
     query,
   } as unknown as IHookParameter);
@@ -27,28 +31,21 @@ export default async (pack: IRequestPack) => {
     throw new ApiError(`The item is not found on ${model.name}.`);
   }
 
-  await callHooks(model, HookFunctionTypes.onAfterDeleteQuery, {
+  await callHooks(model, HookFunctionTypes.onAfterForceDeleteQuery, {
     ...pack,
     query,
     item,
   } as unknown as IHookParameter);
 
-  await callHooks(model, HookFunctionTypes.onBeforeDelete, {
+  await callHooks(model, HookFunctionTypes.onBeforeForceDelete, {
     ...pack,
     query,
     item,
   } as unknown as IHookParameter);
 
-  // If there is a deletedAtColumn, it means that this table support soft-delete
-  if (model.instance.deletedAtColumn) {
-    await query.update({
-      [model.instance.deletedAtColumn]: new Date(),
-    });
-  } else {
-    await query.delete();
-  }
+  await query.delete();
 
-  await callHooks(model, HookFunctionTypes.onAfterDelete, {
+  await callHooks(model, HookFunctionTypes.onAfterForceDelete, {
     ...pack,
     item,
   } as unknown as IHookParameter);

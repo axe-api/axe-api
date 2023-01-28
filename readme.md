@@ -145,30 +145,6 @@ If you can see that response, it means that your project is running properly.
 
 Axe API has great documentation. Please [check it out in here](https://axe-api.com/).
 
-## How To Run Integration Tests
-
-> You have to have **Docker** and **Docker Compose** on your local development environment to run integration tests.
-
-Execute the following commands to prepare the integration app
-
-```sh
-cd tests/integrations && npm install && npm ci && npm run build --if-present
-```
-
-Execute the following commands to prepare the database;
-
-```sh
-docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build
-```
-
-> To down the database, you can use the following command; `docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build`
-
-You can execute the following command to execute tests;
-
-```sh
-npm run test:integration:mysql8
-```
-
 ## License
 
 [MIT License](LICENSE)
