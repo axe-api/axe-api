@@ -163,6 +163,7 @@ export interface IRawQuery {
   sort: string | null;
   fields: string | null;
   with: string | null;
+  trashed: string | null;
 }
 
 export interface ISortField {
@@ -184,6 +185,7 @@ export interface IQuery {
   sort: ISortField[];
   fields: string[];
   with: IWith[];
+  trashed: boolean;
 }
 
 export interface IWhere {

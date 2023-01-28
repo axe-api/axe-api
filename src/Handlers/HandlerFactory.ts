@@ -1,6 +1,7 @@
 import { IRequestPack } from "../Interfaces";
 import AllHandler from "./AllHandler";
 import DestroyHandler from "./DestroyHandler";
+import ForceDestroyHandler from "./ForceDestroyHandler";
 import PaginateHandler from "./PaginateHandler";
 import PatchHandler from "./PatchHandler";
 import UpdateHandler from "./UpdateHandler";
@@ -15,6 +16,8 @@ class HandlerFactory {
         return AllHandler;
       case HandlerTypes.DELETE:
         return DestroyHandler;
+      case HandlerTypes.FORCE_DELETE:
+        return ForceDestroyHandler;
       case HandlerTypes.INSERT:
         return StoreHandler;
       case HandlerTypes.PAGINATE:

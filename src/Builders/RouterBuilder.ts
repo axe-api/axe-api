@@ -206,6 +206,10 @@ class RouterBuilder {
         app.delete(url, middlewares, handler);
         docs.push(HttpMethods.DELETE, url, model);
         break;
+      case HandlerTypes.FORCE_DELETE:
+        app.delete(url, middlewares, handler);
+        docs.push(HttpMethods.DELETE, url, model);
+        break;
       case HandlerTypes.INSERT:
         app.post(url, middlewares, handler);
         docs.push(HttpMethods.POST, url, model);

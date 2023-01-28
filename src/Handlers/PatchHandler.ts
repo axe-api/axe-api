@@ -7,6 +7,7 @@ import {
   filterHiddenFields,
   bindTimestampValues,
   callHooks,
+  addSoftDeleteQuery,
 } from "./Helpers";
 import {
   HandlerTypes,
@@ -24,6 +25,9 @@ export default async (pack: IRequestPack) => {
 
   // If there is a relation, we should bind it
   addForeignKeyQuery(req, query, relation, parentModel);
+
+  // If there is a deletedAtColumn, it means that this table support soft-delete
+  addSoftDeleteQuery(model, null, query);
 
   await callHooks(model, HookFunctionTypes.onBeforeUpdateQuery, {
     ...pack,

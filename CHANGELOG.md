@@ -1,5 +1,15 @@
 # Release Notes
 
+## [0.22.0 (2023-01-29)](https://github.com/axe-api/axe-api/compare/0.22.0...0.21.0)
+
+### Features
+
+- Added Soft-Deleting feature [#41](https://github.com/axe-api/axe-api/issues/41)
+
+### Fixed
+
+- Fixed model relation route URLs [#141](https://github.com/axe-api/axe-api/issues/141)
+
 ## [0.21.0 (2022-12-28)](https://github.com/axe-api/axe-api/compare/0.21.0...0.20.4)
 
 ### Features

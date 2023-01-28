@@ -46,6 +46,7 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "hiddens",
   "createdAtColumn",
   "updatedAtColumn",
+  "deletedAtColumn",
   "transaction",
   "ignore",
   "getFillableFields",
@@ -89,4 +90,10 @@ export const API_ROUTE_TEMPLATES = {
     resource: string,
     primaryKey: string
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
+  [HandlerTypes.FORCE_DELETE]: (
+    prefix: string,
+    parentUrl: string,
+    resource: string,
+    primaryKey: string
+  ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}/force`,
 };

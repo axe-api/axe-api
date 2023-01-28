@@ -223,6 +223,9 @@ class QueryService {
       sort: this.parseSortingOptions(sections.sort),
       q: this.parseCondition(sections.q),
       with: withQueryResolver.resolve(sections?.with || ""),
+      trashed: sections?.trashed
+        ? sections.trashed.trim() === "true" || sections.trashed.trim() === "1"
+        : false,
     };
 
     this.addRelationColumns(query.with);

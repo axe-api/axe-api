@@ -5,6 +5,7 @@ import {
   serializeData,
   filterHiddenFields,
   callHooks,
+  addSoftDeleteQuery,
 } from "./Helpers";
 import { HandlerTypes, HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
@@ -24,6 +25,9 @@ export default async (pack: IRequestPack) => {
 
   // Fetching item
   const query = (database as Knex).from(model.instance.table);
+
+  // If there is a deletedAtColumn, it means that this table support soft-delete
+  addSoftDeleteQuery(model, conditions, query);
 
   // Users should be able to select some fields to show.
   queryParser.applyFields(query, conditions.fields);
