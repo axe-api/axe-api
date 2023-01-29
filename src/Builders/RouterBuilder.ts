@@ -152,7 +152,6 @@ class RouterBuilder {
     }
 
     // We should different parameter name for child routes
-    const primaryKey = this.getPrimaryKeyName(model);
     const subRelations = model.relations.filter(
       (item) => item.type === Relationships.HAS_MANY
     );
@@ -163,7 +162,7 @@ class RouterBuilder {
         await this.createRouteByModel(
           child,
           modelList,
-          `${urlPrefix}${resource}/:${primaryKey}/`,
+          `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
           model,
           relation
         );
