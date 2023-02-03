@@ -66,12 +66,7 @@ export default async (pack: IRequestPack) => {
   } as unknown as IHookParameter);
 
   // Serializing the data by the model's serialize method
-  result = await serializeData(
-    result,
-    model.instance.serialize,
-    HandlerTypes.ALL,
-    req
-  );
+  result = await serializeData(result, model.serialize, HandlerTypes.ALL, req);
 
   // Filtering hidden fields from the response data.
   filterHiddenFields(result, model.instance.hiddens);

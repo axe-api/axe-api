@@ -72,7 +72,7 @@ export default async (pack: IRequestPack) => {
   // Serializing the data by the model's serialize method
   result.data = await serializeData(
     result.data,
-    model.instance.serialize,
+    model.serialize,
     HandlerTypes.PAGINATE,
     req
   );

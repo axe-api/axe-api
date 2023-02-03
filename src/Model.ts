@@ -172,11 +172,6 @@ class Model {
     return this.hasOne(relatedModel, foreignKey, primaryKey);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  serialize(data: any, request: Request) {
-    return data;
-  }
-
   private hasStringValue() {
     const tester: Record<string, any> = this.validations;
     let status = false;

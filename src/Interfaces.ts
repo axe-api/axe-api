@@ -13,6 +13,7 @@ import {
   DependencyTypes,
 } from "./Enums";
 import Model from "./Model";
+import { SerializationFunction } from "./Types";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -67,6 +68,7 @@ export interface IFolders {
   Hooks: string;
   Middlewares: string;
   Models: string;
+  Serialization: string;
 }
 
 export interface IGeneralHooks {
@@ -119,6 +121,7 @@ export interface IModelService {
   events: Record<HookFunctionTypes, (params: IHookParameter) => void>;
   isRecursive: boolean;
   children: IModelService[];
+  serialize: SerializationFunction | null;
 
   setColumns(columns: IColumn[]): void;
   setExtensions(
@@ -126,6 +129,7 @@ export interface IModelService {
     hookFunctionType: HookFunctionTypes,
     data: (params: IHookParameter) => void
   ): void;
+  setSerialization(callback: SerializationFunction): void;
 }
 
 export interface IRelation {

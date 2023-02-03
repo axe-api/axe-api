@@ -10,6 +10,7 @@ class FolderResolver {
       Hooks: path.join(appFolder, "app", "Hooks"),
       Middlewares: path.join(appFolder, "app", "Middlewares"),
       Models: path.join(appFolder, "app", "Models"),
+      Serialization: path.join(appFolder, "app", "Serialization"),
     };
   }
 }
