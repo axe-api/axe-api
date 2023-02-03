@@ -42,13 +42,6 @@ class User extends Model {
   suggestedPosts() {
     return this.hasMany("Post", "id", "user_id");
   }
-
-  serialize(item: any) {
-    return {
-      ...item,
-      fullname: `${item.name} ${item.surname}`,
-    };
-  }
 }
 
 export default User;

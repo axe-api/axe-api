@@ -6,6 +6,7 @@ import {
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
+import { SerializationFunction } from "../Types";
 
 class ModelService implements IModelService {
   name: string;
@@ -19,6 +20,7 @@ class ModelService implements IModelService {
     {} as Record<HookFunctionTypes, (params: IHookParameter) => void>;
   children: IModelService[];
   isRecursive: boolean;
+  serialize: SerializationFunction | null;
 
   constructor(name: string, instance: Model) {
     this.name = name;
@@ -28,6 +30,7 @@ class ModelService implements IModelService {
     this.columnNames = [];
     this.children = [];
     this.isRecursive = false;
+    this.serialize = null;
   }
 
   setColumns(columns: IColumn[]) {
@@ -47,6 +50,10 @@ class ModelService implements IModelService {
     } else {
       throw new Error("Undefined hook type.");
     }
+  }
+
+  setSerialization(callback: SerializationFunction) {
+    this.serialize = callback;
   }
 
   private setHooks(

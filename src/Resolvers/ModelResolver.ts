@@ -12,6 +12,7 @@ import {
   ModelListService,
 } from "../Services";
 import { DEFAULT_METHODS_OF_MODELS } from "../constants";
+import { SerializationFunction } from "../Types";
 
 class ModelResolver {
   async resolve() {
@@ -21,6 +22,7 @@ class ModelResolver {
     await this.setDatabaseColumns(modelList);
     await this.setModelHooks(modelList, Extensions.Hooks);
     await this.setModelHooks(modelList, Extensions.Events);
+    await this.setModelSerializations(modelList);
     IoCService.singleton("ModelListService", () => modelList);
     logger.info("All models have been resolved.");
   }
@@ -120,6 +122,21 @@ class ModelResolver {
             hooks[hookFileName][key]
           );
         });
+      }
+    }
+  }
+
+  private async setModelSerializations(modelList: ModelListService) {
+    const folders = (await IoCService.use("Folders")) as IFolders;
+    const fileResolver = new FileResolver();
+    const folder = folders.Serialization;
+    const serializations = await fileResolver.resolveContent(folder);
+
+    for (const model of modelList.get()) {
+      const fileName = `${model.name}Serialization`;
+      if (serializations[fileName]) {
+        const file = serializations[fileName];
+        model.setSerialization(file.default as any as SerializationFunction);
       }
     }
   }
