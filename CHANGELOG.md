@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.30.0 (???)](https://github.com/axe-api/axe-api/compare/0.30.0...?)
+
+### Breaking Changes
+
+- Added new Serizaliation folder [#125](https://github.com/axe-api/axe-api/issues/125)
+
 ## [0.22.0 (2023-01-29)](https://github.com/axe-api/axe-api/compare/0.22.0...0.21.0)
 
 ### Features

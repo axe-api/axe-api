@@ -26,7 +26,6 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "hasMany",
   "hasOne",
   "belongsTo",
-  "serialize",
   "__defineGetter__",
   "__defineSetter__",
   "hasOwnProperty",

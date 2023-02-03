@@ -17,6 +17,7 @@ import {
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { IoCService, ModelListService } from "../Services";
+import { SerializationFunction } from "../Types";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -115,7 +116,7 @@ const uniqueByMap = <T>(array: T[]): T[] => {
 
 const serialize = (
   data: any[] | any,
-  callback: (data: any, request: Request) => void,
+  callback: SerializationFunction | null,
   request: Request
 ): any[] | any => {
   if (!callback) {
@@ -172,7 +173,7 @@ const globalSerializer = async (
 
 export const serializeData = async (
   itemArray: any[] | any,
-  modelSerializer: (data: any, request: Request) => void,
+  modelSerializer: SerializationFunction | null,
   handler: HandlerTypes,
   request: Request
 ): Promise<any[]> => {
@@ -326,7 +327,7 @@ export const getRelatedData = async (
     // We should serialize related data if there is any serialization function
     relatedRecords = await serializeData(
       relatedRecords,
-      foreignModel.instance.serialize,
+      foreignModel.serialize,
       handler,
       request
     );
