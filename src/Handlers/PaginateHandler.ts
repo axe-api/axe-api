@@ -9,14 +9,11 @@ import {
   addSoftDeleteQuery,
 } from "./Helpers";
 import { HandlerTypes, HookFunctionTypes } from "../Enums";
-import { IoCService, QueryService, ModelListService } from "../Services";
+import { QueryService } from "../Services";
 
 export default async (pack: IRequestPack) => {
-  const modelList = await IoCService.useByType<ModelListService>(
-    "ModelListService"
-  );
-  const { model, req, database, relation, parentModel } = pack;
-  const queryParser = new QueryService(model, modelList.get());
+  const { version, model, req, database, relation, parentModel } = pack;
+  const queryParser = new QueryService(model, version.modelList.get());
 
   // We should parse URL query string to use as condition in Lucid query
   const conditions = queryParser.get(req.query);
@@ -53,10 +50,11 @@ export default async (pack: IRequestPack) => {
 
   // We should try to get related data if there is any
   await getRelatedData(
+    version,
     result.data,
     conditions.with,
     model,
-    modelList,
+    version.modelList,
     database,
     HandlerTypes.PAGINATE,
     req
@@ -71,6 +69,7 @@ export default async (pack: IRequestPack) => {
 
   // Serializing the data by the model's serialize method
   result.data = await serializeData(
+    version,
     result.data,
     model.serialize,
     HandlerTypes.PAGINATE,

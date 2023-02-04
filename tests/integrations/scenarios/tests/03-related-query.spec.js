@@ -25,22 +25,22 @@ describe("Students", () => {
   });
 
   test("should be able to create data", async () => {
-    const { data: student } = await axios.post("/students", {
+    const { data: student } = await axios.post("/v1/students", {
       name: "Student 1",
       phone: "5551112233",
     });
 
     studentId = student.id;
 
-    const { data: lesson } = await axios.post("/lessons", {
+    const { data: lesson } = await axios.post("/v1/lessons", {
       name: "Computer Science",
     });
 
-    const { data: teacher } = await axios.post("/teachers", {
+    const { data: teacher } = await axios.post("/v1/teachers", {
       name: "Teacher 1",
     });
 
-    await axios.post(`/students/${studentId}/lessons`, {
+    await axios.post(`/v1/students/${studentId}/lessons`, {
       lesson_id: lesson.id,
       teacher_id: teacher.id,
       hour_per_month: 10,
@@ -55,7 +55,7 @@ describe("Students", () => {
    */
   test("should be able to fetch data with related records by query options", async () => {
     const { data: response } = await axios.get(
-      `/students/${studentId}/lessons`,
+      `/v1/students/${studentId}/lessons`,
       {
         params: {
           q: JSON.stringify([
@@ -80,7 +80,7 @@ describe("Students", () => {
   });
 
   test("should be able to fetch data when the fields does not have foreign/primary keys", async () => {
-    const { data } = await axios.get(`/users`, {
+    const { data } = await axios.get(`/v1/users`, {
       params: {
         fields: "email",
         with: "posts{title}",

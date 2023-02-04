@@ -2,10 +2,19 @@ import { IModelService, IRouteDocumentation } from "../Interfaces";
 import { HttpMethods } from "../Enums";
 
 class DocumentationService {
-  routes: IRouteDocumentation[];
+  private static instance: DocumentationService;
+  private routes: IRouteDocumentation[];
 
   constructor() {
     this.routes = [];
+  }
+
+  static getInstance(): DocumentationService {
+    if (!DocumentationService.instance) {
+      DocumentationService.instance = new DocumentationService();
+    }
+
+    return DocumentationService.instance;
   }
 
   push(method: HttpMethods, url: string, model: IModelService) {

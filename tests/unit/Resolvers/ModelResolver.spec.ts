@@ -2,19 +2,27 @@ import path from "path";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import { describe, expect, test, beforeEach, jest } from "@jest/globals";
 import { ModelResolver } from "../../../src/Resolvers";
-import { IoCService, ModelListService } from "../../../src/Services";
-
-const LogServiceMock = {
-  info: jest.fn(),
-};
-
-const FoldersMock = {
-  Models: path.join(__dirname, "..", "__Mocks"),
-  Hooks: path.join(__dirname, "..", "__Mocks", "hooks"),
-  Events: path.join(__dirname, "..", "__Mocks", "hooks"),
-};
+import { IoCService, LogService } from "../../../src/Services";
+import { IVersion } from "../../../src/Interfaces";
+import { LogLevels } from "../../../src/Enums";
 
 const DBMock = {};
+
+const VersionMock = {
+  name: "v1",
+  config: {
+    transaction: [],
+    serializers: [],
+    supportedLanguages: ["en"],
+    defaultLanguage: "en",
+  },
+  folders: {
+    root: path.join(__dirname, "..", "__Mocks"),
+    models: path.join(__dirname, "..", "__Mocks", "app", "v1", "Models"),
+  },
+  modelTree: [],
+  modelList: [],
+} as unknown as IVersion;
 
 const SchemaInspectorMock = () => {
   return {
@@ -45,18 +53,15 @@ const SchemaInspectorMock = () => {
 
 describe("ModelResolver", () => {
   beforeEach(() => {
-    IoCService.singleton("LogService", () => LogServiceMock);
-    IoCService.singleton("Folders", () => FoldersMock);
+    LogService.setInstance(LogLevels.ERROR);
     IoCService.singleton("Database", () => DBMock);
     IoCService.singleton("SchemaInspector", () => SchemaInspectorMock);
   });
 
   test(".resolve() should be able to prepare ModelListService", async () => {
-    const resolver = new ModelResolver();
+    const resolver = new ModelResolver(VersionMock);
     await resolver.resolve();
-    const modelList = await IoCService.useByType<ModelListService>(
-      "ModelListService"
-    );
+    const modelList = VersionMock.modelList;
     expect(modelList.get().length).toBe(6);
 
     const service = modelList.find("User");

@@ -7,16 +7,13 @@ import {
   callHooks,
   addSoftDeleteQuery,
 } from "./Helpers";
-import { IoCService, QueryService, ModelListService } from "../Services";
+import { QueryService } from "../Services";
 import { HandlerTypes, HookFunctionTypes } from "../Enums";
 import { Knex } from "knex";
 
 export default async (pack: IRequestPack) => {
-  const modelList = await IoCService.useByType<ModelListService>(
-    "ModelListService"
-  );
-  const { model, req, res, database, relation, parentModel } = pack;
-  const queryParser = new QueryService(model, modelList.get());
+  const { version, model, req, res, database, relation, parentModel } = pack;
+  const queryParser = new QueryService(model, version.modelList.get());
 
   // We should parse URL query string to use as condition in Lucid query
   const conditions = queryParser.get(req.query);
@@ -49,10 +46,11 @@ export default async (pack: IRequestPack) => {
 
   // We should try to get related data if there is any
   await getRelatedData(
+    version,
     result,
     conditions.with,
     model,
-    modelList,
+    version.modelList,
     database,
     HandlerTypes.ALL,
     req
@@ -66,7 +64,13 @@ export default async (pack: IRequestPack) => {
   } as unknown as IHookParameter);
 
   // Serializing the data by the model's serialize method
-  result = await serializeData(result, model.serialize, HandlerTypes.ALL, req);
+  result = await serializeData(
+    version,
+    result,
+    model.serialize,
+    HandlerTypes.ALL,
+    req
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields(result, model.instance.hiddens);
