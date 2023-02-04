@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
-import { HandlerTypes, HttpMethods } from "../../../src/Enums";
+import { HandlerTypes, HttpMethods } from "../../../../../../src/Enums";
 import {
   IHandlerBasedTransactionConfig,
   IHandlerBaseMiddleware,
   IMethodBaseConfig,
   IMethodBaseValidations,
-} from "../../../src/Interfaces";
-import Model from "../../../src/Model";
+} from "../../../../../../src/Interfaces";
+import Model from "../../../../../../src/Model";
 
 class Post extends Model {
   get fillable(): IMethodBaseConfig {
@@ -30,7 +28,9 @@ class Post extends Model {
   get middlewares(): IHandlerBaseMiddleware {
     return {
       handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-      middleware: () => {},
+      middleware: (req: Request, res: Response, next: NextFunction) => {
+        next();
+      },
     };
   }
 

@@ -7,11 +7,11 @@ const onBeforeInit = async (app: Express) => {
       origin: true,
     })
   );
-  app.get("/health/v1", (req, res) => res.json({ health: true }));
+  app.get("/health/before", (req, res) => res.json({ health: true }));
 };
 
 const onAfterInit = async (app: Express) => {
-  app.get("/health/v2", (req, res) => res.json({ health: true }));
+  app.get("/health/after", (req, res) => res.json({ health: true }));
 };
 
 export { onBeforeInit, onAfterInit };

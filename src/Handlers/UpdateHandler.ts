@@ -19,7 +19,7 @@ import ApiError from "../Exceptions/ApiError";
 import { Knex } from "knex";
 
 export default async (pack: IRequestPack) => {
-  const { model, req, res, database, relation, parentModel } = pack;
+  const { version, model, req, res, database, relation, parentModel } = pack;
 
   const query = (database as Knex).from(model.instance.table);
 
@@ -89,7 +89,13 @@ export default async (pack: IRequestPack) => {
   } as unknown as IHookParameter);
 
   // Serializing the data by the model's serialize method
-  item = await serializeData(item, model.serialize, HandlerTypes.UPDATE, req);
+  item = await serializeData(
+    version,
+    item,
+    model.serialize,
+    HandlerTypes.UPDATE,
+    req
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

@@ -1,4 +1,5 @@
 import pluralize from "pluralize";
+import path from "path";
 import { StatusCodes } from "http-status-codes";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
@@ -9,6 +10,7 @@ import {
   IModelService,
   IRelation,
   IRequestPack,
+  IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
 import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
@@ -18,45 +20,45 @@ import {
   LogService,
   DocumentationService,
   IoCService,
-  ModelListService,
+  APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
 
 class RouterBuilder {
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
+  }
+
   async build() {
     const app = await IoCService.useByType<Express>("App");
-    const logger = await IoCService.useByType<LogService>("LogService");
-    const modelTree = await IoCService.useByType<IModelService[]>("ModelTree");
-    const modelList = await IoCService.useByType<ModelListService>(
-      "ModelListService"
-    );
-    const generalHooks: IGeneralHooks = await GeneralHookResolver.resolve();
+    const logger = LogService.getInstance();
+    const generalHooks: IGeneralHooks = await new GeneralHookResolver(
+      this.version
+    ).resolve();
 
     if (generalHooks.onBeforeInit) {
       generalHooks.onBeforeInit(app);
     }
 
-    await this.createRoutesByModelTree(modelTree, modelList);
+    await this.createRoutesByModelTree();
 
-    logger.info("Express routes have been created.");
+    logger.info(`[${this.version.name}] Express routes have been created.`);
 
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);
     }
   }
 
-  private async createRoutesByModelTree(
-    modelTree: IModelService[],
-    modelList: ModelListService
-  ) {
-    for (const model of modelTree) {
-      await this.createRouteByModel(model, modelList);
+  private async createRoutesByModelTree() {
+    for (const model of this.version.modelTree) {
+      await this.createRouteByModel(model);
     }
   }
 
   private async createRouteByModel(
     model: IModelService,
-    modelList: ModelListService,
     urlPrefix = "",
     parentModel: IModelService | null = null,
     relation: IRelation | null = null,
@@ -76,7 +78,7 @@ class RouterBuilder {
 
       const urlCreator = API_ROUTE_TEMPLATES[handlerType];
       const url = urlCreator(
-        await this.getRootPrefix(),
+        path.join(await this.getRootPrefix(), this.version.name),
         urlPrefix,
         resource,
         model.instance.primaryKey
@@ -101,19 +103,12 @@ class RouterBuilder {
       );
     }
 
-    await this.createChildRoutes(model, modelList, resource, urlPrefix);
-    await this.createNestedRoutes(
-      model,
-      modelList,
-      allowRecursive,
-      urlPrefix,
-      resource
-    );
+    await this.createChildRoutes(model, resource, urlPrefix);
+    await this.createNestedRoutes(model, allowRecursive, urlPrefix, resource);
   }
 
   private async createNestedRoutes(
     model: IModelService,
-    modelList: ModelListService,
     allowRecursive: boolean,
     urlPrefix: string,
     resource: string
@@ -132,7 +127,6 @@ class RouterBuilder {
     if (relation) {
       await this.createRouteByModel(
         model,
-        modelList,
         `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
         model,
         relation,
@@ -143,7 +137,6 @@ class RouterBuilder {
 
   private async createChildRoutes(
     model: IModelService,
-    modelList: ModelListService,
     resource: string,
     urlPrefix: string
   ) {
@@ -161,7 +154,6 @@ class RouterBuilder {
       if (child) {
         await this.createRouteByModel(
           child,
-          modelList,
           `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
           model,
           relation
@@ -189,9 +181,7 @@ class RouterBuilder {
     parentModel: IModelService | null,
     relation: IRelation | null
   ) {
-    const docs = await IoCService.useByType<DocumentationService>(
-      "DocumentationService"
-    );
+    const docs = DocumentationService.getInstance();
     const app = await IoCService.useByType<Express>("App");
     const handler = (req: Request, res: Response) => {
       this.requestHandler(handlerType, req, res, model, parentModel, relation);
@@ -247,18 +237,21 @@ class RouterBuilder {
     let hasTransaction = false;
 
     try {
-      const factory = await IoCService.useByType<HandlerFactory>(
-        "HandlerFactory"
-      );
       const database = (await IoCService.use("Database")) as Knex;
+      const api = APIService.getInstance();
 
-      hasTransaction = await TransactionResolver.resolve(model, handlerType);
+      hasTransaction = await new TransactionResolver(this.version).resolve(
+        model,
+        handlerType
+      );
       if (hasTransaction) {
         trx = await database.transaction();
       }
 
-      const handler = factory.get(handlerType);
+      const handler = HandlerFactory.get(handlerType);
       const pack: IRequestPack = {
+        api,
+        version: this.version,
         req,
         res,
         handlerType,
@@ -312,8 +305,8 @@ class RouterBuilder {
   }
 
   private getRootPrefix = async (): Promise<string> => {
-    const config = await IoCService.use("Config");
-    let prefix = config?.Application?.prefix || "api";
+    const api = APIService.getInstance();
+    let prefix = api.config.prefix || "api";
 
     if (prefix.substr(0, 1) === "/") {
       prefix = prefix.substr(1);

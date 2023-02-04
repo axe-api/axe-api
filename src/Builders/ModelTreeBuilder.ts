@@ -1,22 +1,26 @@
 import { Relationships } from "../Enums";
-import { IModelService } from "../Interfaces";
-import { LogService, IoCService, ModelListService } from "../Services";
+import { IModelService, IVersion } from "../Interfaces";
+import { LogService } from "../Services";
 
 class ModelTreeBuilder {
-  async build() {
-    const logger = await IoCService.useByType<LogService>("LogService");
-    const modelList: ModelListService =
-      await IoCService.useByType<ModelListService>("ModelListService");
-    const tree = this.getRootLevelOfTree(modelList);
-    this.createRecursiveTree(tree, modelList);
-    this.addNestedRoutes(tree, modelList);
-    IoCService.singleton("ModelTree", () => tree);
-    logger.info("Model tree has been created.");
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
   }
 
-  private getRootLevelOfTree(modelList: ModelListService): IModelService[] {
+  async build() {
+    const logger = LogService.getInstance();
+    const tree = this.getRootLevelOfTree();
+    this.createRecursiveTree(tree);
+    this.addNestedRoutes(tree);
+    this.version.modelTree = tree;
+    logger.info(`[${this.version.name}] Model tree has been created.`);
+  }
+
+  private getRootLevelOfTree(): IModelService[] {
     const childModels: string[] = [];
-    modelList.get().forEach((model) => {
+    this.version.modelList.get().forEach((model) => {
       childModels.push(
         ...model.relations
           .filter((relation) => relation.type === Relationships.HAS_MANY)
@@ -24,25 +28,24 @@ class ModelTreeBuilder {
       );
     });
 
-    return modelList.get().filter((model) => !childModels.includes(model.name));
+    return this.version.modelList
+      .get()
+      .filter((model) => !childModels.includes(model.name));
   }
 
-  private createRecursiveTree(
-    tree: IModelService[],
-    modelList: ModelListService
-  ) {
+  private createRecursiveTree(tree: IModelService[]) {
     for (const model of tree) {
-      this.setChildrens(model, modelList);
+      this.setChildrens(model);
     }
   }
 
-  private setChildrens(model: IModelService, modelList: ModelListService) {
+  private setChildrens(model: IModelService) {
     const childModelNames = this.getChildModelNames(model);
-    model.children = modelList
+    model.children = this.version.modelList
       .get()
       .filter((item) => childModelNames.includes(item.name));
     for (const child of model.children) {
-      this.setChildrens(child, modelList);
+      this.setChildrens(child);
     }
   }
 
@@ -52,9 +55,9 @@ class ModelTreeBuilder {
       .map((item) => item.model);
   }
 
-  private addNestedRoutes(tree: IModelService[], modelList: ModelListService) {
+  private addNestedRoutes(tree: IModelService[]) {
     // We should add recursive models
-    modelList.get().forEach((model) => {
+    this.version.modelList.get().forEach((model) => {
       const recursiveRelations = model.relations.filter(
         (relation) => relation.model === model.name
       );

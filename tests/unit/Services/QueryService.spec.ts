@@ -7,9 +7,9 @@ import {
   IModelService,
   IQuery,
 } from "../../../src/Interfaces";
-import User from "../__Mocks/User";
-import Post from "../__Mocks/Post";
-import Comment from "../__Mocks/Comment";
+import User from "../__Mocks/app/v1/Models/User";
+import Post from "../__Mocks/app/v1/Models/Post";
+import Comment from "../__Mocks/app/v1/Models/Comment";
 
 const userService = new ModelService("User", new User());
 userService.columnNames = ["name", "surname"];

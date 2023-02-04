@@ -1,19 +1,24 @@
-import { Relationships } from "../Enums";
+import AxeError from "../Exceptions/AxeError";
+import { AxeErrorCode, Relationships } from "../Enums";
 import {
   IRelation,
   IMethodBaseConfig,
   IMethodBaseValidations,
   IModelService,
+  IVersion,
 } from "../Interfaces";
-import { LogService, IoCService, ModelListService } from "../Services";
+import { LogService, ModelListService } from "../Services";
 
 class SchemaValidatorService {
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
+  }
+
   async validate() {
-    const logger = await IoCService.useByType<LogService>("LogService");
-    const modelList = await IoCService.useByType<ModelListService>(
-      "ModelListService"
-    );
-    modelList.get().forEach((model) => {
+    const logger = LogService.getInstance();
+    this.version.modelList.get().forEach((model) => {
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
       this.checkModelColumnsOrFail(
         model,
@@ -22,9 +27,9 @@ class SchemaValidatorService {
       this.checkModelColumnsOrFail(model, this.getModelHiddenColumns(model));
       this.checkModelColumnsOrFail(model, this.getTimestampsColumns(model));
       this.checkModelColumnsOrFail(model, [model.instance.primaryKey]);
-      this.checkRelationColumnsOrFail(modelList, model);
+      this.checkRelationColumnsOrFail(this.version.modelList, model);
     });
-    logger.info("Database schema has been validated.");
+    logger.info(`[${this.version.name}] Database schema has been validated.`);
   }
 
   private checkModelColumnsOrFail(
@@ -35,7 +40,8 @@ class SchemaValidatorService {
       (modelColumn) => !model.columnNames.includes(modelColumn)
     );
     if (undefinedColumns.length > 0) {
-      throw new Error(
+      throw new AxeError(
+        AxeErrorCode.UNDEFINED_COLUMN,
         `${
           model.name
         } model doesn't have the following columns on the database; "${
@@ -132,7 +138,10 @@ class SchemaValidatorService {
     this.checkModelColumnsOrFail(model, [relation.primaryKey]);
     const relatedModel = modelList.find(relation.model);
     if (!relatedModel) {
-      throw new Error(`Undefined related model: ${relation.model}`);
+      throw new AxeError(
+        AxeErrorCode.UNDEFINED_RELATION_MODEL,
+        `Undefined related model: ${relation.model} (${model.name}.${relation.name})`
+      );
     }
     this.checkModelColumnsOrFail(relatedModel, [relation.foreignKey]);
   };

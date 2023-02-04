@@ -1,8 +1,4 @@
-import {
-  IHandlerBasedTransactionConfig,
-  IMethodBaseConfig,
-} from "../../../src/Interfaces";
-import Model from "../../../src/Model";
+import Model from "../../../../../../src/Model";
 
 class User extends Model {
   get fillable(): string[] {

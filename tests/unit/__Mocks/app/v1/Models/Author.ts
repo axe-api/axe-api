@@ -1,9 +1,6 @@
-import { HandlerTypes } from "../../../src/Enums";
-import {
-  IHandlerBasedTransactionConfig,
-  IMethodBaseValidations,
-} from "../../../src/Interfaces";
-import Model from "../../../src/Model";
+import { HandlerTypes } from "../../../../../../src/Enums";
+import { IHandlerBasedTransactionConfig } from "../../../../../../src/Interfaces";
+import Model from "../../../../../../src/Model";
 
 class Author extends Model {
   get table(): string {

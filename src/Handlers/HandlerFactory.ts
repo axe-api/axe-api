@@ -10,7 +10,7 @@ import StoreHandler from "./StoreHandler";
 import { HandlerTypes } from "../Enums";
 
 class HandlerFactory {
-  get(handleType: HandlerTypes): (pack: IRequestPack) => void {
+  static get(handleType: HandlerTypes): (pack: IRequestPack) => void {
     switch (handleType) {
       case HandlerTypes.ALL:
         return AllHandler;

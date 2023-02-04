@@ -1,14 +1,17 @@
-import path from "path";
-import { IGeneralHooks, IFolders } from "../Interfaces";
-import { IoCService } from "../Services";
+import { IGeneralHooks, IVersion } from "../Interfaces";
 import { FileResolver } from ".";
 
 class GeneralHookResolver {
-  public static async resolve(): Promise<IGeneralHooks> {
-    const folders = (await IoCService.use("Folders")) as IFolders;
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
+  }
+
+  public async resolve(): Promise<IGeneralHooks> {
     const fileResolver = new FileResolver();
     const content = await fileResolver.resolveContent(
-      path.join(folders.App, "app")
+      this.version.folders.root
     );
 
     if (content && content.init) {

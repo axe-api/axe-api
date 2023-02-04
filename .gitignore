@@ -6,4 +6,3 @@ build
 dev-kit
 .env
 dev-kit.ts
-migrations

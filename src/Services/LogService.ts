@@ -4,10 +4,19 @@ import { LOG_COLORS } from "../constants";
 const { fgRed, fgGreen, fgYellow, fgCyan, fgReset } = LOG_COLORS;
 
 class LogService {
-  level: LogLevels;
+  private static instance: LogService;
+  private level: LogLevels;
 
   constructor(level: LogLevels) {
     this.level = level;
+  }
+
+  static setInstance(level: LogLevels) {
+    LogService.instance = new LogService(level);
+  }
+
+  static getInstance(): LogService {
+    return LogService.instance;
   }
 
   error(message: string) {

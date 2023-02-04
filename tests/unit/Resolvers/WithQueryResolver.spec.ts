@@ -1,13 +1,13 @@
 import { describe, expect, test, beforeEach } from "@jest/globals";
-import { IModelService, IWith } from "../../../src/Interfaces";
+import { IModelService } from "../../../src/Interfaces";
 import { ModelService } from "../../../src/Services";
 import WithQueryResolver from "../../../src/Resolvers/WithQueryResolver";
-import User from "../__Mocks/User";
-import Post from "../__Mocks/Post";
-import PostLike from "../__Mocks/PostLike";
-import Login from "../__Mocks/Login";
-import Comment from "../__Mocks/Comment";
-import Author from "../__Mocks/Author";
+import User from "../__Mocks/app/v1/Models/User";
+import Post from "../__Mocks/app/v1/Models/Post";
+import PostLike from "../__Mocks/app/v1/Models/PostLike";
+import Login from "../__Mocks/app/v1/Models/Login";
+import Comment from "../__Mocks/app/v1/Models/Comment";
+import Author from "../__Mocks/app/v1/Models/Author";
 
 const userInstance = new User();
 const postInstance = new Post();

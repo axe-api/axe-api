@@ -1,14 +1,12 @@
-import { describe, expect, test, beforeEach } from "@jest/globals";
-import { IoCService, ModelService } from "../../../src/Services";
-import User from "../__Mocks/User";
+import { describe, expect, test } from "@jest/globals";
+import { IoCService } from "../../../src/Services";
+import User from "../__Mocks/app/v1/Models/User";
 
 const waitForIt = async (time) => {
   return new Promise((resolve) => setTimeout(resolve, time));
 };
 
 describe("IoCService", () => {
-  beforeEach(() => {});
-
   test(".bind() should be able to create new instance for each time", async () => {
     IoCService.bind("my-class", () => Date.now());
     const first = await IoCService.use("my-class");

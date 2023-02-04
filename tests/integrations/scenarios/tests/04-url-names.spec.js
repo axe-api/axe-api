@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import dotenv from "dotenv";
 
@@ -9,10 +10,8 @@ describe("URL Name", () => {
     dotenv.config();
   });
 
-  afterAll(async () => {});
-
   test("should be able to created as param-case", async () => {
-    const { status } = await axios.get("/exam-lesson-defaults");
+    const { status } = await axios.get("/v1/exam-lesson-defaults");
     expect(status).toBe(200);
   });
 });
