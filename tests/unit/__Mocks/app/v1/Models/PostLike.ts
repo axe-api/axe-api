@@ -1,4 +1,4 @@
-import Model from "../../../src/Model";
+import Model from "../../../../../../src/Model";
 
 class PostLike extends Model {}
 

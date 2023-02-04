@@ -1,19 +1,13 @@
-import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import { Extensions, HookFunctionTypes, LogLevels } from "../../../src/Enums";
+import { describe, expect, jest, test } from "@jest/globals";
+import { Extensions, HookFunctionTypes } from "../../../src/Enums";
 import { ModelService } from "../../../src/Services";
-import {
-  IColumn,
-  IHookParameter,
-  IModelService,
-} from "../../../src/Interfaces";
-import User from "../__Mocks/User";
+import { IColumn, IHookParameter } from "../../../src/Interfaces";
+import User from "../__Mocks/app/v1/Models/User";
 
 const user = new User();
 const userService = new ModelService("User", user);
 
 describe("ModelListService", () => {
-  beforeEach(() => {});
-
   test(".setColumns() should be able to set columns and columnNames", async () => {
     const columns: IColumn[] = [
       {

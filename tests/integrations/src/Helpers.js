@@ -24,8 +24,8 @@ const executeScenario = async (serveOptions) => {
       password: serveOptions.DB_PASSWORD,
       database: serveOptions.DB_DATABASE,
       port: serveOptions.DB_PORT,
-      searchPath: [process.env.DB_USER, "public"],
     },
+    searchPath: [process.env.DB_USER, "public"],
     migrations: {
       directory: `./scenarios/migrations`,
     },

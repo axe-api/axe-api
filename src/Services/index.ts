@@ -1,3 +1,4 @@
+import APIService from "./APIService";
 import DocumentationService from "./DocumentationService";
 import IoCService from "./IoCService";
 import LogService from "./LogService";
@@ -8,6 +9,7 @@ import SchemaValidatorService from "./SchemaValidatorService";
 
 export {
   DocumentationService,
+  APIService,
   IoCService,
   LogService,
   ModelListService,

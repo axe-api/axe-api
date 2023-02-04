@@ -1,11 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
 import { HandlerTypes, HttpMethods, Relationships } from "../../src/Enums";
 import { IRelation } from "../../src/Interfaces";
-import User from "./__Mocks/User";
-import Post from "./__Mocks/Post";
-import Author from "./__Mocks/Author";
-import Login from "./__Mocks/Login";
-import Comment from "./__Mocks/Comment";
+import User from "./__Mocks/app/v1/Models/User";
+import Post from "./__Mocks/app/v1/Models/Post";
+import Author from "./__Mocks/app/v1/Models/Author";
+import Login from "./__Mocks/app/v1/Models/Login";
+import Comment from "./__Mocks/app/v1/Models/Comment";
 
 let fillable: string[] = [];
 let validations: Record<string, string> | null = {};
@@ -77,8 +77,8 @@ describe("Models", () => {
     expect(new Login().getMiddlewares(HandlerTypes.DELETE).length).toBe(0);
 
     // Checking Comment model's middlewares
-    expect(new Comment().getMiddlewares(HandlerTypes.PAGINATE).length).toBe(2);
-    expect(new Comment().getMiddlewares(HandlerTypes.DELETE).length).toBe(2);
+    expect(new Comment().getMiddlewares(HandlerTypes.PAGINATE).length).toBe(1);
+    expect(new Comment().getMiddlewares(HandlerTypes.DELETE).length).toBe(1);
   });
 
   test("relation creation methods should be able to return a valid IReleation data", () => {

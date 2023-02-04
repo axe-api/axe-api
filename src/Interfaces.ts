@@ -14,6 +14,7 @@ import {
 } from "./Enums";
 import Model from "./Model";
 import { SerializationFunction } from "./Types";
+import { ModelListService } from "./Services";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -32,11 +33,7 @@ interface IHandlerBasedSerializer {
   serializer: ((data: any, request: Request) => void)[];
 }
 
-export interface IApplicationConfig extends IConfig {
-  env: string;
-  port: number;
-  logLevel: LogLevels;
-  prefix: string;
+export interface IVersionConfig {
   transaction:
     | boolean
     | IHandlerBasedTransactionConfig
@@ -46,6 +43,14 @@ export interface IApplicationConfig extends IConfig {
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
+}
+
+export interface IApplicationConfig extends IConfig {
+  env: string;
+  port: number;
+  logLevel: LogLevels;
+  prefix: string;
+  database: IDatabaseConfig;
 }
 
 export interface ILanguage {
@@ -61,14 +66,29 @@ export interface IAcceptedLanguage {
 
 export type IDatabaseConfig = Knex.Config;
 
-export interface IFolders {
-  App: string;
-  Config: string;
-  Events: string;
-  Hooks: string;
-  Middlewares: string;
-  Models: string;
-  Serialization: string;
+export interface IVersionFolder {
+  root: string;
+  config: string;
+  events: string;
+  hooks: string;
+  middlewares: string;
+  models: string;
+  serialization: string;
+}
+
+export interface IVersion {
+  name: string;
+  config: IVersionConfig;
+  folders: IVersionFolder;
+  modelList: ModelListService;
+  modelTree: IModelService[];
+}
+
+export interface IAPI {
+  rootFolder: string;
+  appFolder: string;
+  versions: IVersion[];
+  config: IApplicationConfig;
 }
 
 export interface IGeneralHooks {
@@ -141,6 +161,8 @@ export interface IRelation {
 }
 
 export interface IRequestPack {
+  api: IAPI;
+  version: IVersion;
   req: Request;
   res: Response;
   handlerType: HandlerTypes;

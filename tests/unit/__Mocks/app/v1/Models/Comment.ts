@@ -1,9 +1,5 @@
-import {
-  IHandlerBasedTransactionConfig,
-  IRelation,
-} from "../../../src/Interfaces";
 import { Request, Response, NextFunction } from "express";
-import Model from "../../../src/Model";
+import Model from "../../../../../../src/Model";
 
 class Comment extends Model {
   get middlewares(): ((
@@ -11,7 +7,11 @@ class Comment extends Model {
     res: Response,
     next: NextFunction
   ) => void)[] {
-    return [() => {}, () => {}];
+    return [
+      (req: Request, res: Response, next: NextFunction) => {
+        next();
+      },
+    ];
   }
 
   get transaction(): null {

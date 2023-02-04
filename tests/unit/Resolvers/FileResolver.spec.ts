@@ -1,13 +1,11 @@
 import path from "path";
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { FileResolver } from "../../../src/Resolvers";
 import Model from "../../../src/Model";
 
-const directory = path.join(__dirname, "..", "__Mocks");
+const directory = path.join(__dirname, "..", "__Mocks", "app", "v1", "Models");
 
 describe("FileResolver", () => {
-  beforeEach(() => {});
-
   test(".resolve() should be able to resolve models by the directory", async () => {
     const resolver = new FileResolver();
     const items: Record<string, Model> = await resolver.resolve<Model>(

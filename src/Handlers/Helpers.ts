@@ -6,6 +6,7 @@ import {
   IApplicationConfig,
   IHookParameter,
   IQuery,
+  IVersion,
 } from "../Interfaces";
 import { Knex } from "knex";
 import { IWith } from "../Interfaces";
@@ -44,7 +45,7 @@ export const getMergedFormData = (
   fillables: string[]
 ): Record<string, any> => {
   const formData: Record<string, any> = {};
-  Object.keys(req.body).forEach((key) => {
+  Object.keys(req?.body || {}).forEach((key) => {
     if (fillables.includes(key)) {
       formData[key] = req.body[key];
     }
@@ -131,19 +132,18 @@ const serialize = (
 };
 
 const globalSerializer = async (
+  version: IVersion,
   itemArray: any[] | any,
   handler: HandlerTypes,
   request: Request
 ) => {
-  const Application = await IoCService.useByType<IApplicationConfig>("Config");
-
-  if (!Application.serializers) {
+  if (!version.config.serializers) {
     return itemArray;
   }
 
   const callbacks: ((data: any, request: Request) => void)[] = [];
   // Push all runable serializer into callbacks.
-  Application.serializers.map((configSerializer) => {
+  version.config.serializers.map((configSerializer) => {
     // Serialize data for all requests types.
     if (typeof configSerializer === "function") {
       callbacks.push(
@@ -172,13 +172,14 @@ const globalSerializer = async (
 };
 
 export const serializeData = async (
+  version: IVersion,
   itemArray: any[] | any,
   modelSerializer: SerializationFunction | null,
   handler: HandlerTypes,
   request: Request
 ): Promise<any[]> => {
   itemArray = serialize(itemArray, modelSerializer, request);
-  itemArray = await globalSerializer(itemArray, handler, request);
+  itemArray = await globalSerializer(version, itemArray, handler, request);
   return itemArray;
 };
 
@@ -216,6 +217,7 @@ export const addSoftDeleteQuery = (
 };
 
 export const getRelatedData = async (
+  version: IVersion,
   data: any[],
   withArray: IWith[],
   model: IModelService,
@@ -326,6 +328,7 @@ export const getRelatedData = async (
 
     // We should serialize related data if there is any serialization function
     relatedRecords = await serializeData(
+      version,
       relatedRecords,
       foreignModel.serialize,
       handler,
@@ -338,6 +341,7 @@ export const getRelatedData = async (
     // We should try to get child data if there is any on the query
     if (clientQuery.children.length > 0) {
       await getRelatedData(
+        version,
         relatedRecords,
         clientQuery.children,
         foreignModel,

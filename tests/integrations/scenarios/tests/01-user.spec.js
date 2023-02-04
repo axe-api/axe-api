@@ -18,7 +18,7 @@ describe("Axe API", () => {
   });
 
   test("should be able to get user list as empty", async () => {
-    const { body } = await get({ url: "/api/users", status: 200 });
+    const { body } = await get({ url: "/api/v1/users", status: 200 });
     expect(body.data.length).toBe(0);
     expect(body.pagination.total).toBe(0);
   });
@@ -29,7 +29,7 @@ describe("Axe API", () => {
       name: "John",
       surname: "Doe",
     };
-    const { body } = await post({ url: "/api/users", data, status: 200 });
+    const { body } = await post({ url: "/api/v1/users", data, status: 200 });
     userId = body.id;
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
@@ -37,13 +37,13 @@ describe("Axe API", () => {
   });
 
   test("should be able to paginate users", async () => {
-    const { body } = await get({ url: "/api/users", status: 200 });
+    const { body } = await get({ url: "/api/v1/users", status: 200 });
     expect(body.data.length).toBe(1);
     expect(body.pagination.total).toBe(1);
   });
 
   test("should be able to fetch one user", async () => {
-    const { body } = await get({ url: `/api/users/${userId}`, status: 200 });
+    const { body } = await get({ url: `/api/v1/users/${userId}`, status: 200 });
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
     expect(body.fullname).toBe("John Doe");
@@ -57,7 +57,7 @@ describe("Axe API", () => {
       surname: "Popper",
     };
     const { body } = await put({
-      url: `/api/users/${userId}`,
+      url: `/api/v1/users/${userId}`,
       data,
       status: 200,
     });
@@ -71,7 +71,7 @@ describe("Axe API", () => {
       name: "Karl",
     };
     const { body } = await patch({
-      url: `/api/users/${userId}`,
+      url: `/api/v1/users/${userId}`,
       data,
       status: 200,
     });
@@ -80,11 +80,11 @@ describe("Axe API", () => {
   });
 
   test("should be able to delete the user by id", async () => {
-    await deleteIt({ url: `/api/users/${userId}`, status: 200 });
+    await deleteIt({ url: `/api/v1/users/${userId}`, status: 200 });
   });
 
   test("should be able to result users as empty after the delation", async () => {
-    const { body } = await get({ url: "/api/users", status: 200 });
+    const { body } = await get({ url: "/api/v1/users", status: 200 });
     expect(body.data.length).toBe(0);
     expect(body.pagination.total).toBe(0);
   });
@@ -95,9 +95,9 @@ describe("Axe API", () => {
       name: "John",
       surname: "Doe",
     };
-    await post({ url: "/api/users", data, status: 200 });
+    await post({ url: "/api/v1/users", data, status: 200 });
 
-    const { data: response } = await axios.get(`/users`, {
+    const { data: response } = await axios.get(`/v1/users`, {
       params: {
         q: JSON.stringify([
           {
@@ -116,7 +116,7 @@ describe("Axe API", () => {
     let validationError = false;
     try {
       await axios.post(
-        "/users",
+        "/v1/users",
         {},
         {
           headers: {

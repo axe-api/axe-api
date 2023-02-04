@@ -1,10 +1,10 @@
 import { Knex } from "knex";
 import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspector";
 import { Column } from "knex-schema-inspector/lib/types/column";
-import { IFolders, IModelService, IColumn, IRelation } from "../Interfaces";
+import { IModelService, IColumn, IRelation, IVersion } from "../Interfaces";
 import FileResolver from "./FileResolver";
 import Model from "../Model";
-import { HookFunctionTypes, Extensions } from "../Enums";
+import { HookFunctionTypes, Extensions, AxeErrorCode } from "../Enums";
 import {
   ModelService,
   LogService,
@@ -13,18 +13,28 @@ import {
 } from "../Services";
 import { DEFAULT_METHODS_OF_MODELS } from "../constants";
 import { SerializationFunction } from "../Types";
+import AxeError from "../Exceptions/AxeError";
 
 class ModelResolver {
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
+  }
+
   async resolve() {
-    const logger = await IoCService.useByType<LogService>("LogService");
+    const logger = LogService.getInstance();
+
     const modelList = new ModelListService(await this.getModelList());
     await this.setModelRelations(modelList);
     await this.setDatabaseColumns(modelList);
     await this.setModelHooks(modelList, Extensions.Hooks);
     await this.setModelHooks(modelList, Extensions.Events);
     await this.setModelSerializations(modelList);
-    IoCService.singleton("ModelListService", () => modelList);
-    logger.info("All models have been resolved.");
+
+    this.version.modelList = modelList;
+
+    logger.info(`[${this.version.name}] All models have been resolved.`);
   }
 
   private async setModelRelations(modelList: ModelListService) {
@@ -50,9 +60,10 @@ class ModelResolver {
 
   private async getModelList(): Promise<IModelService[]> {
     const list: IModelService[] = [];
-    const folders = (await IoCService.use("Folders")) as IFolders;
     const fileResolver = new FileResolver();
-    const models = await fileResolver.resolve<Model>(folders.Models);
+    const models = await fileResolver.resolve<Model>(
+      this.version.folders.models
+    );
 
     for (const key in models) {
       list.push(new ModelService(key, models[key]));
@@ -86,8 +97,9 @@ class ModelResolver {
       );
 
       if (modelColumns.length === 0) {
-        throw new Error(
-          `The "${model.instance.table}" table doesn't have any column. Are you sure about the table name?`
+        throw new AxeError(
+          AxeErrorCode.TABLE_DOESNT_HAVE_ANY_COLUMN,
+          `The "${model.instance.table}" table doesn't have any column.`
         );
       }
 
@@ -99,10 +111,11 @@ class ModelResolver {
     modelList: ModelListService,
     hookType: Extensions
   ) {
-    const folders = (await IoCService.use("Folders")) as IFolders;
     const fileResolver = new FileResolver();
     const folder =
-      hookType === Extensions.Hooks ? folders.Hooks : folders.Events;
+      hookType === Extensions.Hooks
+        ? this.version.folders.hooks
+        : this.version.folders.events;
     const hooks = await fileResolver.resolveContent(folder);
 
     for (const model of modelList.get()) {
@@ -127,10 +140,10 @@ class ModelResolver {
   }
 
   private async setModelSerializations(modelList: ModelListService) {
-    const folders = (await IoCService.use("Folders")) as IFolders;
     const fileResolver = new FileResolver();
-    const folder = folders.Serialization;
-    const serializations = await fileResolver.resolveContent(folder);
+    const serializations = await fileResolver.resolveContent(
+      this.version.folders.serialization
+    );
 
     for (const model of modelList.get()) {
       const fileName = `${model.name}Serialization`;

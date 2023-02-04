@@ -1,18 +1,22 @@
 import {
   IModelService,
-  IApplicationConfig,
   IHandlerBasedTransactionConfig,
+  IVersion,
 } from "../Interfaces";
 import { HandlerTypes } from "../Enums";
-import { IoCService } from "../Services";
 
 class TransactionResolver {
-  public static async resolve(
+  private version: IVersion;
+
+  constructor(version: IVersion) {
+    this.version = version;
+  }
+
+  public async resolve(
     model: IModelService,
     handlerType: HandlerTypes
   ): Promise<boolean> {
-    const config = await IoCService.use("Config");
-    const global = (config.Application as IApplicationConfig).transaction;
+    const global = this.version.config.transaction;
     const local = model.instance.transaction;
     let privilegedOption = false;
 

@@ -9,16 +9,13 @@ import {
 } from "./Helpers";
 import { HandlerTypes, HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
-import { IoCService, QueryService, ModelListService } from "../Services";
+import { QueryService } from "../Services";
 import { Knex } from "knex";
 
 export default async (pack: IRequestPack) => {
-  const modelList = await IoCService.useByType<ModelListService>(
-    "ModelListService"
-  );
-  const { model, req, res, database, relation, parentModel } = pack;
+  const { version, model, req, res, database, relation, parentModel } = pack;
 
-  const queryParser = new QueryService(model, modelList.get());
+  const queryParser = new QueryService(model, version.modelList.get());
 
   // We should parse URL query string to use as condition in Lucid query
   const conditions = queryParser.get(req.query);
@@ -54,10 +51,11 @@ export default async (pack: IRequestPack) => {
 
   // We should try to get related data if there is any
   await getRelatedData(
+    version,
     [item],
     conditions.with,
     model,
-    modelList,
+    version.modelList,
     database,
     HandlerTypes.ALL,
     req
@@ -71,7 +69,13 @@ export default async (pack: IRequestPack) => {
   } as unknown as IHookParameter);
 
   // Serializing the data by the model's serialize method
-  item = await serializeData(item, model.serialize, HandlerTypes.SHOW, req);
+  item = await serializeData(
+    version,
+    item,
+    model.serialize,
+    HandlerTypes.SHOW,
+    req
+  );
 
   // Filtering hidden fields from the response data.
   filterHiddenFields([item], model.instance.hiddens);

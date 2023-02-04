@@ -1,12 +1,13 @@
+import path from "path";
 import { describe, expect, jest, test, beforeAll } from "@jest/globals";
 import { ModelTreeBuilder } from "../../../src/Builders";
-import { IoCService, ModelService } from "../../../src/Services";
-import { IModelService, IRelation } from "../../../src/Interfaces";
-import { Relationships } from "../../../src/Enums";
-import User from "../__Mocks/User";
-import Post from "../__Mocks/Post";
-import PostLike from "../__Mocks/PostLike";
-import Comment from "../__Mocks/Comment";
+import { IoCService, LogService, ModelService } from "../../../src/Services";
+import { IModelService, IRelation, IVersion } from "../../../src/Interfaces";
+import { LogLevels, Relationships } from "../../../src/Enums";
+import User from "../__Mocks/app/v1/Models/User";
+import Post from "../__Mocks/app/v1/Models/Post";
+import PostLike from "../__Mocks/app/v1/Models/PostLike";
+import Comment from "../__Mocks/app/v1/Models/Comment";
 
 const userService = new ModelService("User", new User());
 userService.relations = [
@@ -52,17 +53,32 @@ const ModelListServiceMock = {
   get: () => modelList,
 };
 
+const VersionMock = {
+  name: "v1",
+  config: {
+    transaction: [],
+    serializers: [],
+    supportedLanguages: ["en"],
+    defaultLanguage: "en",
+  },
+  folders: {
+    root: path.join(__dirname, "..", "__Mocks"),
+    models: path.join(__dirname, "..", "__Mocks", "v1", "Models"),
+  },
+  modelTree: modelList,
+  modelList: ModelListServiceMock,
+} as unknown as IVersion;
+
 describe("ModelTreeBuilder", () => {
   beforeAll(() => {
-    IoCService.singleton("LogService", () => LogServiceMock);
-    IoCService.singleton("ModelListService", () => ModelListServiceMock);
+    LogService.setInstance(LogLevels.ERROR);
   });
 
   test("should be able to create model tree", async () => {
-    const builder = new ModelTreeBuilder();
+    const builder = new ModelTreeBuilder(VersionMock);
     await builder.build();
 
-    const root = await IoCService.useByType<IModelService[]>("ModelTree");
+    const root = VersionMock.modelTree;
     expect(root.length).toBe(1);
 
     const user = root[0];

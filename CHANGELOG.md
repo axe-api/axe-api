@@ -5,6 +5,7 @@
 ### Breaking Changes
 
 - Added new Serizaliation folder [#125](https://github.com/axe-api/axe-api/issues/125)
+- Added multiple version support [#137](https://github.com/axe-api/axe-api/issues/137)
 
 ## [0.22.0 (2023-01-29)](https://github.com/axe-api/axe-api/compare/0.22.0...0.21.0)
 
