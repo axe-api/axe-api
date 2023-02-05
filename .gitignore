@@ -4,5 +4,6 @@ build
 ./test/integrations/build
 ./test/integrations/node_modules
 dev-kit
+__dev-kit
 .env
 dev-kit.ts
