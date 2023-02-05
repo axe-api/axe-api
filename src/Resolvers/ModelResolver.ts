@@ -1,4 +1,7 @@
 import { Knex } from "knex";
+import path from "path";
+import fs from "fs";
+import { readdir } from "fs/promises";
 import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspector";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import { IModelService, IColumn, IRelation, IVersion } from "../Interfaces";
@@ -111,31 +114,83 @@ class ModelResolver {
     modelList: ModelListService,
     hookType: Extensions
   ) {
+    // What kind of hooks that we can have
+    const hookList = Object.keys(HookFunctionTypes);
     const fileResolver = new FileResolver();
+    // Basic hook/event folder path
     const folder =
       hookType === Extensions.Hooks
         ? this.version.folders.hooks
         : this.version.folders.events;
-    const hooks = await fileResolver.resolveContent(folder);
 
-    for (const model of modelList.get()) {
-      const hookFileName = `${model.name}${hookType
-        .toString()
-        .replace("s", "")}`;
+    // We should check the old-style hooks files
+    await this.checkOldStyleHookFiles(folder);
 
-      if (hooks[hookFileName]) {
-        const keys: string[] = Object.keys(hooks[hookFileName]);
-        keys.forEach((key: string) => {
-          const strEnum = key as unknown as HookFunctionTypes;
-          const hookFunctionType: HookFunctionTypes =
-            HookFunctionTypes[strEnum];
-          model.setExtensions(
-            hookType,
-            hookFunctionType,
-            hooks[hookFileName][key]
-          );
-        });
+    // Get model-based subfolders
+    const hookSubfolders = await this.getDirectories(folder);
+
+    // For each subfolder, we can have many different hook file
+    for (const hookSubfolder of hookSubfolders) {
+      // Full path of the subfolder
+      const subfolderPath = path.join(folder, hookSubfolder);
+
+      // Determining which model we are working on by subfolder
+      const currentModel = modelList.find(hookSubfolder);
+      // If we can't find a model, it means that the developer are using wrong name
+      if (!currentModel) {
+        throw new AxeError(
+          AxeErrorCode.UNDEFINED_HOOK_MODEL_RELATION,
+          `Undefined model relation: ${subfolderPath}`
+        );
       }
+
+      // Loading all hooks files in the subfolder
+      const hooks = await fileResolver.resolveContent(subfolderPath);
+      for (const hookName of hookList) {
+        // If we have an acceptable hook
+        if (hooks[hookName]) {
+          // We bind the hook with the model
+          currentModel.setExtensions(
+            hookType,
+            hookName as HookFunctionTypes,
+            hooks[hookName].default
+          );
+        }
+      }
+    }
+  }
+
+  private async getDirectories(source: string) {
+    if (!fs.existsSync(source)) {
+      return [];
+    }
+    return (await readdir(source, { withFileTypes: true }))
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
+  }
+
+  private async checkOldStyleHookFiles(source: string) {
+    if (!fs.existsSync(source)) {
+      return;
+    }
+
+    // We are fetching the root-level file list
+    const files = (await readdir(source, { withFileTypes: true }))
+      .filter((dirent) => !dirent.isDirectory())
+      .map((dirent) => dirent.name)
+      .filter((filename) => filename !== ".gitignore");
+
+    // If there is any hook or event file in the root level
+    const hasHookorEvent = files.some(
+      (file) => file.includes("Hook.ts") || file.includes("Event.ts")
+    );
+
+    // Throwing an exception
+    if (hasHookorEvent) {
+      throw new AxeError(
+        AxeErrorCode.UNACCEPTABLE_HOOK_FILE,
+        `All hook or event files should be located under a model folder: ${source}`
+      );
     }
   }
 

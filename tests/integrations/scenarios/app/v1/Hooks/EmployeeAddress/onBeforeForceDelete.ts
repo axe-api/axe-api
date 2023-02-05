@@ -1,7 +1,5 @@
 import { ApiError } from "axe-api";
 
-const onBeforeForceDelete = async () => {
+export default async () => {
   throw new ApiError("This is just a test message.");
 };
-
-export { onBeforeForceDelete };
