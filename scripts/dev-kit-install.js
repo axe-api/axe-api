@@ -51,10 +51,4 @@ execSync(
 );
 
 // Everything is done
-execSync("echo dev-kit has been installed.", (err, stdout, stderr) => {
-  if (err) {
-    console.log(err);
-    process.exit();
-  }
-});
 console.log("dev-kit has been installed.\n");
