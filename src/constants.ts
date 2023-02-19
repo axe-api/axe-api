@@ -1,4 +1,11 @@
-import { HandlerTypes } from "./Enums";
+import {
+  ConditionTypes,
+  HandlerTypes,
+  QueryFeature,
+  Relationships,
+} from "./Enums";
+import { IVersionConfig } from "./Interfaces";
+import { allow, deny } from "./Services/LimitService";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -48,6 +55,7 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "deletedAtColumn",
   "transaction",
   "ignore",
+  "limits",
   "getFillableFields",
   "getValidationRules",
 ];
@@ -95,4 +103,47 @@ export const API_ROUTE_TEMPLATES = {
     resource: string,
     primaryKey: string
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}/force`,
+};
+
+export const ConditionQueryFeatureMap: Record<ConditionTypes, QueryFeature> = {
+  [ConditionTypes.NotNull]: QueryFeature.WhereNotNull,
+  [ConditionTypes.Null]: QueryFeature.WhereNull,
+  [ConditionTypes["="]]: QueryFeature.WhereEqual,
+  [ConditionTypes["<>"]]: QueryFeature.WhereNotEqual,
+  [ConditionTypes[">"]]: QueryFeature.WhereGt,
+  [ConditionTypes[">="]]: QueryFeature.WhereGte,
+  [ConditionTypes["<"]]: QueryFeature.WhereLt,
+  [ConditionTypes["<="]]: QueryFeature.WhereLte,
+  [ConditionTypes["LIKE"]]: QueryFeature.WhereLike,
+  [ConditionTypes["NOT LIKE"]]: QueryFeature.WhereNotLike,
+  [ConditionTypes["In"]]: QueryFeature.WhereIn,
+  [ConditionTypes["NotIn"]]: QueryFeature.WhereNotIn,
+  [ConditionTypes["Between"]]: QueryFeature.WhereBetween,
+  [ConditionTypes["NotBetween"]]: QueryFeature.WhereNotBetween,
+};
+
+export const RelationQueryFeatureMap: Record<Relationships, QueryFeature> = {
+  [Relationships.HAS_ONE]: QueryFeature.WithHasOne,
+  [Relationships.HAS_MANY]: QueryFeature.WithHasMany,
+};
+
+export const DEFAULT_VERSION_CONFIG: IVersionConfig = {
+  transaction: false,
+  serializers: [],
+  supportedLanguages: ["en"],
+  defaultLanguage: "en",
+  query: {
+    limits: [
+      allow(QueryFeature.All),
+      deny(QueryFeature.WithHasMany),
+      deny(QueryFeature.WhereLike),
+      deny(QueryFeature.WhereNotLike),
+      deny(QueryFeature.Trashed),
+    ],
+    defaults: {
+      perPage: 10,
+      minPerPage: 1,
+      maxPerPage: 100,
+    },
+  },
 };

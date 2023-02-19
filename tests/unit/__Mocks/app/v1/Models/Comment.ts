@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { QueryFeature } from "../../../../../../src/Enums";
 import Model from "../../../../../../src/Model";
+import { allow } from "../../../../../../src/Services";
 
 class Comment extends Model {
   get middlewares(): ((
@@ -16,6 +18,10 @@ class Comment extends Model {
 
   get transaction(): null {
     return null;
+  }
+
+  get limits() {
+    return [allow(QueryFeature.All)];
   }
 
   author() {

@@ -7,6 +7,7 @@ import {
   IMethodBaseValidations,
   IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
+  IQueryLimitConfig,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
@@ -65,6 +66,10 @@ class Model {
 
   get ignore(): boolean {
     return false;
+  }
+
+  get limits(): Array<IQueryLimitConfig[]> {
+    return [];
   }
 
   getFillableFields(methodType: HttpMethods): string[] {
