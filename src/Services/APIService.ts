@@ -63,6 +63,9 @@ class APIService {
         serializers: [],
         supportedLanguages: ["en"],
         defaultLanguage: "en",
+        query: {
+          limits: [],
+        },
       },
       folders: {
         root,

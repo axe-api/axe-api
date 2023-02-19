@@ -15,10 +15,13 @@ import {
   Relationships,
   HookFunctionTypes,
   TimestampColumns,
+  QueryFeature,
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { IoCService, ModelListService } from "../Services";
 import { SerializationFunction } from "../Types";
+import { valideteQueryFeature } from "../Services/LimitService";
+import { RelationQueryFeatureMap } from "../constants";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -209,8 +212,11 @@ export const addSoftDeleteQuery = (
   conditions: IQuery | null,
   query: Knex.QueryBuilder
 ) => {
-  // TODO: Trashed feature will be implemented later
-  // (conditions === null || conditions?.trashed === false)
+  if (conditions !== null && conditions?.trashed === true) {
+    valideteQueryFeature(model, QueryFeature.Trashed);
+    return;
+  }
+
   if (model.instance.deletedAtColumn) {
     query.whereNull(model.instance.deletedAtColumn);
   }
@@ -249,6 +255,14 @@ export const getRelatedData = async (
     if (!foreignModel) {
       continue;
     }
+
+    // Validating the query limit
+    valideteQueryFeature(
+      model,
+      RelationQueryFeatureMap[definedRelation.type],
+      `${model.instance.table}.${definedRelation.name}`,
+      `${model.instance.table}.${definedRelation.name}`
+    );
 
     let dataField = "primaryKey";
     let searchField = "foreignKey";
@@ -363,4 +377,18 @@ export const getRelatedData = async (
       row[camelCase(definedRelation.name)] = values;
     });
   }
+};
+
+export const isBoolean = (value: any): boolean => {
+  if (value === undefined || value === null) {
+    return false;
+  }
+
+  value = ((value || "") as string).trim().toLocaleLowerCase();
+
+  if (value === "true" || value === "1" || value === "on" || value === "yes") {
+    return true;
+  }
+
+  return false;
 };

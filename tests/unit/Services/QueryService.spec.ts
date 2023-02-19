@@ -1,15 +1,22 @@
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import { ConditionTypes, Relationships, SortTypes } from "../../../src/Enums";
-import { ModelService, QueryService } from "../../../src/Services";
+import {
+  ConditionTypes,
+  QueryFeature,
+  Relationships,
+  SortTypes,
+} from "../../../src/Enums";
+import { allow, ModelService, QueryService } from "../../../src/Services";
 import {
   IRelation,
   IWhere,
   IModelService,
   IQuery,
+  IVersionConfig,
 } from "../../../src/Interfaces";
 import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import Comment from "../__Mocks/app/v1/Models/Comment";
+import { DEFAULT_VERSION_CONFIG } from "../../../src/constants";
 
 const userService = new ModelService("User", new User());
 userService.columnNames = ["name", "surname"];
@@ -22,15 +29,25 @@ userService.relations = [
     foreignKey: "user_id",
   },
 ] as IRelation[];
+userService.queryLimits = [
+  allow(QueryFeature.FieldsAll),
+  allow(QueryFeature.WhereIn),
+  allow(QueryFeature.WhereNull),
+  allow(QueryFeature.WhereLike),
+  allow(QueryFeature.Limits),
+].flat();
 
 const postService = new ModelService("Post", new Post());
 const commentService = new ModelService("Comment", new Comment());
 const models: IModelService[] = [userService, postService, commentService];
-let service = new QueryService(userService, models);
+const config: IVersionConfig = {
+  ...DEFAULT_VERSION_CONFIG,
+};
+let service = new QueryService(userService, models, config);
 
 describe("QueryService", () => {
   beforeEach(() => {
-    service = new QueryService(userService, models);
+    service = new QueryService(userService, models, config);
   });
 
   test(".get() should be able to return the defaults", async () => {

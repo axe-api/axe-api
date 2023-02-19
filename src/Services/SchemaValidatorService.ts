@@ -1,5 +1,5 @@
 import AxeError from "../Exceptions/AxeError";
-import { AxeErrorCode, Relationships } from "../Enums";
+import { AxeErrorCode, QueryFeature, Relationships } from "../Enums";
 import {
   IRelation,
   IMethodBaseConfig,
@@ -8,6 +8,29 @@ import {
   IVersion,
 } from "../Interfaces";
 import { LogService, ModelListService } from "../Services";
+
+const COLUMN_BASED_QUERY_LIMITS: QueryFeature[] = [
+  QueryFeature.Sorting,
+  QueryFeature.WhereEqual,
+  QueryFeature.WhereNotEqual,
+  QueryFeature.WhereGt,
+  QueryFeature.WhereGte,
+  QueryFeature.WhereLt,
+  QueryFeature.WhereLte,
+  QueryFeature.WhereLike,
+  QueryFeature.WhereNotLike,
+  QueryFeature.WhereIn,
+  QueryFeature.WhereNotIn,
+  QueryFeature.WhereBetween,
+  QueryFeature.WhereNotBetween,
+  QueryFeature.WhereNull,
+  QueryFeature.WhereNotNull,
+];
+
+const RELATION_BASED_QUERY_LIMITS: QueryFeature[] = [
+  QueryFeature.WithHasMany,
+  QueryFeature.WithHasOne,
+];
 
 class SchemaValidatorService {
   private version: IVersion;
@@ -18,6 +41,7 @@ class SchemaValidatorService {
 
   async validate() {
     const logger = LogService.getInstance();
+
     this.version.modelList.get().forEach((model) => {
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
       this.checkModelColumnsOrFail(
@@ -26,9 +50,12 @@ class SchemaValidatorService {
       );
       this.checkModelColumnsOrFail(model, this.getModelHiddenColumns(model));
       this.checkModelColumnsOrFail(model, this.getTimestampsColumns(model));
+      this.checkModelColumnsOrFail(model, this.getQueryLimitColumns(model));
       this.checkModelColumnsOrFail(model, [model.instance.primaryKey]);
+      this.checkRelationNamesOrFail(model, this.getQueryLimitRelations(model));
       this.checkRelationColumnsOrFail(this.version.modelList, model);
     });
+
     logger.info(`[${this.version.name}] Database schema has been validated.`);
   }
 
@@ -50,6 +77,48 @@ class SchemaValidatorService {
       );
     }
   }
+
+  private checkRelationNamesOrFail(model: IModelService, names: string[]) {
+    const undefinedRelationNames = names.filter((name) => {
+      return !model.relations.map((relation) => relation.name).includes(name);
+    });
+
+    if (undefinedRelationNames.length > 0) {
+      throw new AxeError(
+        AxeErrorCode.UNDEFINED_RELATION_NAME,
+        `${
+          model.name
+        } model doesn't have a valid relation name that is defined in query limits; "${undefinedRelationNames.join(
+          ","
+        )}"`
+      );
+    }
+  }
+
+  private getQueryLimitRelations = (model: IModelService): string[] => {
+    return this.getQueryLimitKeyByFilter(model, RELATION_BASED_QUERY_LIMITS);
+  };
+
+  private getQueryLimitColumns = (model: IModelService): string[] => {
+    return this.getQueryLimitKeyByFilter(model, COLUMN_BASED_QUERY_LIMITS);
+  };
+
+  private getQueryLimitKeyByFilter = (
+    model: IModelService,
+    filter: QueryFeature[]
+  ): string[] => {
+    const items = model.queryLimits
+      .filter((limit) => limit.key && filter.includes(limit.feature))
+      .map((limit) => limit.key)
+      .map((key) => {
+        if (!key) {
+          return "";
+        }
+        const [, field] = key?.split(".");
+        return field;
+      });
+    return items;
+  };
 
   private getModelFillableColumns = (model: IModelService): string[] => {
     const fillable = model.instance.fillable;

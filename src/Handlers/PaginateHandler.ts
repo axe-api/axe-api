@@ -13,7 +13,11 @@ import { QueryService } from "../Services";
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, database, relation, parentModel } = pack;
-  const queryParser = new QueryService(model, version.modelList.get());
+  const queryParser = new QueryService(
+    model,
+    version.modelList.get(),
+    version.config
+  );
 
   // We should parse URL query string to use as condition in Lucid query
   const conditions = queryParser.get(req.query);

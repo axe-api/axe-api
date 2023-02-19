@@ -1,6 +1,7 @@
 import APIService from "./APIService";
 import DocumentationService from "./DocumentationService";
 import IoCService from "./IoCService";
+import { allow, deny } from "./LimitService";
 import LogService from "./LogService";
 import ModelListService from "./ModelListService";
 import ModelService from "./ModelService";
@@ -16,4 +17,6 @@ export {
   ModelService,
   QueryService,
   SchemaValidatorService,
+  allow,
+  deny,
 };

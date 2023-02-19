@@ -1,4 +1,9 @@
-import { Relationships, ConditionTypes, SortTypes } from "../Enums";
+import {
+  Relationships,
+  ConditionTypes,
+  SortTypes,
+  QueryFeature,
+} from "../Enums";
 import {
   IRawQuery,
   IQuery,
@@ -7,10 +12,14 @@ import {
   IWhere,
   IWith,
   IModelService,
+  IVersionConfig,
 } from "../Interfaces";
 import { Knex } from "knex";
 import ApiError from "../Exceptions/ApiError";
 import { WithQueryResolver } from "../Resolvers";
+import { ConditionQueryFeatureMap, DEFAULT_VERSION_CONFIG } from "../constants";
+import { valideteQueryFeature } from "./LimitService";
+import { isBoolean } from "../Handlers/Helpers";
 
 class QueryService {
   model: IModelService;
@@ -18,10 +27,16 @@ class QueryService {
   usedConditionColumns: string[];
   relationColumns: string[];
   createdJoins: string[];
+  config: IVersionConfig;
 
-  constructor(model: IModelService, models: IModelService[]) {
+  constructor(
+    model: IModelService,
+    models: IModelService[],
+    config: IVersionConfig
+  ) {
     this.model = model;
     this.models = models;
+    this.config = config;
     this.createdJoins = [];
     this.relationColumns = [];
     this.usedConditionColumns = [];
@@ -30,6 +45,7 @@ class QueryService {
   applyFields(query: Knex.QueryBuilder, fields: string[]) {
     // Users should be able to select some fields to show.
     if (fields.length === 0 || (fields.length === 1 && fields[0] === "*")) {
+      valideteQueryFeature(this.model, QueryFeature.FieldsAll);
       query.select(`${this.model.instance.table}.*`);
     } else {
       const fullPathFields = fields.map((field) => {
@@ -47,7 +63,14 @@ class QueryService {
       return;
     }
 
+    valideteQueryFeature(this.model, QueryFeature.Sorting);
+
     sort.forEach((item) => {
+      valideteQueryFeature(
+        this.model,
+        QueryFeature.Sorting,
+        `${this.model.instance.table}.${item.name}`
+      );
       query.orderBy(item.name, item.type);
     });
   }
@@ -223,10 +246,16 @@ class QueryService {
       sort: this.parseSortingOptions(sections.sort),
       q: this.parseCondition(sections.q),
       with: withQueryResolver.resolve(sections?.with || ""),
-      trashed: sections?.trashed
-        ? sections.trashed.trim() === "true" || sections.trashed.trim() === "1"
-        : false,
+      trashed: sections?.trashed ? isBoolean(sections.trashed) : false,
     };
+
+    const configPerPage =
+      this.config?.query.defaults?.perPage ||
+      DEFAULT_VERSION_CONFIG.query?.defaults?.perPage ||
+      10;
+    if (query.per_page !== configPerPage) {
+      valideteQueryFeature(this.model, QueryFeature.Limits);
+    }
 
     this.addRelationColumns(query.with);
 
@@ -248,10 +277,29 @@ class QueryService {
   }
 
   private parsePerPage(content: any) {
-    const value = parseInt(content);
+    const value = parseInt(
+      content ||
+        this.config.query?.defaults?.perPage ||
+        DEFAULT_VERSION_CONFIG.query.defaults?.perPage ||
+        10
+    );
 
-    if (isNaN(value) || value <= 1 || value > 10000) {
-      return 10;
+    const minPerPage =
+      this.config.query?.defaults?.minPerPage ||
+      DEFAULT_VERSION_CONFIG.query.defaults?.minPerPage ||
+      1;
+
+    const maxPerPage =
+      this.config.query?.defaults?.maxPerPage ||
+      DEFAULT_VERSION_CONFIG.query.defaults?.maxPerPage ||
+      100;
+
+    if (isNaN(value) || value <= minPerPage || value > maxPerPage) {
+      return (
+        this.config.query?.defaults?.perPage ||
+        DEFAULT_VERSION_CONFIG.query.defaults?.perPage ||
+        10
+      );
     }
 
     return value;
@@ -432,6 +480,12 @@ class QueryService {
       where.relation = relation;
       where.field = field;
     }
+
+    valideteQueryFeature(
+      this.model,
+      ConditionQueryFeatureMap[where.condition],
+      `${where.table}.${where.field}`
+    );
 
     this.shouldBeAcceptableColumn(where.field);
     this.usedConditionColumns.push(`${where.table}.${where.field}`);
