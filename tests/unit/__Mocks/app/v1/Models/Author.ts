@@ -1,6 +1,7 @@
-import { HandlerTypes } from "../../../../../../src/Enums";
+import { HandlerTypes, QueryFeature } from "../../../../../../src/Enums";
 import { IHandlerBasedTransactionConfig } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
+import { allow } from "../../../../../../src/Services";
 
 class Author extends Model {
   get table(): string {
@@ -28,6 +29,10 @@ class Author extends Model {
     return {
       name: "required",
     };
+  }
+
+  get limits() {
+    return [allow(QueryFeature.All)];
   }
 }
 

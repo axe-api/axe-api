@@ -15,6 +15,9 @@ const VersionMock = {
     serializers: [],
     supportedLanguages: ["en"],
     defaultLanguage: "en",
+    query: {
+      limits: [],
+    },
   },
   folders: {
     root: path.join(__dirname, "..", "__Mocks"),

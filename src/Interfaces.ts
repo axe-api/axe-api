@@ -11,6 +11,8 @@ import {
   SortTypes,
   ConditionTypes,
   DependencyTypes,
+  QueryFeature,
+  QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
 import { SerializationFunction } from "./Types";
@@ -33,6 +35,23 @@ interface IHandlerBasedSerializer {
   serializer: ((data: any, request: Request) => void)[];
 }
 
+export interface IQueryLimitConfig {
+  feature: QueryFeature;
+  type: QueryFeatureType;
+  key: string | null;
+}
+
+export interface IQueryDefaultConfig {
+  perPage?: number;
+  minPerPage?: number;
+  maxPerPage?: number;
+}
+
+export interface IQueryConfig {
+  limits: Array<IQueryLimitConfig[]>;
+  defaults?: IQueryDefaultConfig;
+}
+
 export interface IVersionConfig {
   transaction:
     | boolean
@@ -43,6 +62,7 @@ export interface IVersionConfig {
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
+  query: IQueryConfig;
 }
 
 export interface IApplicationConfig extends IConfig {
@@ -141,6 +161,7 @@ export interface IModelService {
   events: Record<HookFunctionTypes, (params: IHookParameter) => void>;
   isRecursive: boolean;
   children: IModelService[];
+  queryLimits: IQueryLimitConfig[];
   serialize: SerializationFunction | null;
 
   setColumns(columns: IColumn[]): void;
@@ -149,6 +170,7 @@ export interface IModelService {
     hookFunctionType: HookFunctionTypes,
     data: (params: IHookParameter) => void
   ): void;
+  setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;
 }
 

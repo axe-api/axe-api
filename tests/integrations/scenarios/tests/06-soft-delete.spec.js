@@ -61,12 +61,10 @@ describe("Axe API Soft Delete", () => {
     );
     expect(response4.data.pagination.total).toBe(1);
 
-    // TODO: This feature will be implemented later
-    // pagination with trashed
-    // const trashedResponse = await axios.get(
-    //   `/customers/${response1.data.id}/children?trashed=true`
-    // );
-    // expect(trashedResponse.data.pagination.total).toBe(2);
+    const trashedResponse = await axios.get(
+      `/v1/customers/${response1.data.id}/children?trashed=true`
+    );
+    expect(trashedResponse.data.pagination.total).toBe(2);
 
     // all
     const response5 = await axios.get(

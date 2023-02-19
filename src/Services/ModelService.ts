@@ -3,6 +3,7 @@ import {
   IColumn,
   IHookParameter,
   IModelService,
+  IQueryLimitConfig,
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
@@ -20,6 +21,7 @@ class ModelService implements IModelService {
     {} as Record<HookFunctionTypes, (params: IHookParameter) => void>;
   children: IModelService[];
   isRecursive: boolean;
+  queryLimits: IQueryLimitConfig[];
   serialize: SerializationFunction | null;
 
   constructor(name: string, instance: Model) {
@@ -30,6 +32,7 @@ class ModelService implements IModelService {
     this.columnNames = [];
     this.children = [];
     this.isRecursive = false;
+    this.queryLimits = [];
     this.serialize = null;
   }
 
@@ -50,6 +53,10 @@ class ModelService implements IModelService {
     } else {
       throw new Error("Undefined hook type.");
     }
+  }
+
+  setQueryLimits(limits: IQueryLimitConfig[]) {
+    this.queryLimits = limits;
   }
 
   setSerialization(callback: SerializationFunction) {

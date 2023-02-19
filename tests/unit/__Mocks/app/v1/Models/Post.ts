@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { HandlerTypes, HttpMethods } from "../../../../../../src/Enums";
+import {
+  HandlerTypes,
+  HttpMethods,
+  QueryFeature,
+} from "../../../../../../src/Enums";
 import {
   IHandlerBasedTransactionConfig,
   IHandlerBaseMiddleware,
@@ -7,6 +11,7 @@ import {
   IMethodBaseValidations,
 } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
+import { allow } from "../../../../../../src/Services";
 
 class Post extends Model {
   get fillable(): IMethodBaseConfig {
@@ -39,6 +44,10 @@ class Post extends Model {
       handler: HandlerTypes.INSERT,
       transaction: true,
     };
+  }
+
+  get limits() {
+    return [allow(QueryFeature.All)];
   }
 
   comments() {
