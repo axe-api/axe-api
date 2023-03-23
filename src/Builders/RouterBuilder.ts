@@ -1,6 +1,5 @@
 import pluralize from "pluralize";
 import path from "path";
-import { StatusCodes } from "http-status-codes";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
@@ -13,7 +12,12 @@ import {
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
-import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
+import {
+  HandlerTypes,
+  Relationships,
+  HttpMethods,
+  StatusCodes,
+} from "../Enums";
 import HandlerFactory from "../Handlers/HandlerFactory";
 import ApiError from "../Exceptions/ApiError";
 import {
