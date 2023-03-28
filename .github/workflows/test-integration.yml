@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 17.x, 18.x]
+        node-version: [14.x, 16.x, 17.x, 18.x, 19.x]
         database: [mysql8, mysql57, "postgres"]
     steps:
       - uses: actions/checkout@v2
