@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - master
+      - rc
 jobs:
   publish:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
