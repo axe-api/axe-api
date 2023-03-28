@@ -1,6 +1,6 @@
 # Release Notes
 
-## [0.30.0 (???)](https://github.com/axe-api/axe-api/compare/0.30.0...?)
+## [0.30.0 (2023-04-01)](https://github.com/axe-api/axe-api/compare/0.30.0...0.22.0)
 
 ### Breaking Changes
 
@@ -8,6 +8,7 @@
 - Added multiple version support [#137](https://github.com/axe-api/axe-api/issues/137)
 - New hook/event folder structure [#146](https://github.com/axe-api/axe-api/issues/146)
 - Limiting query features by configurations [#38](https://github.com/axe-api/axe-api/issues/38)
+- Removing external dependencies from axe-core [#151](https://github.com/axe-api/axe-api/issues/151)
 
 ## [0.22.0 (2023-01-29)](https://github.com/axe-api/axe-api/compare/0.22.0...0.21.0)
 
