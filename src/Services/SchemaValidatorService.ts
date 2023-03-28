@@ -114,7 +114,7 @@ class SchemaValidatorService {
         if (!key) {
           return "";
         }
-        const [, field] = key?.split(".");
+        const [, field] = key.split(".");
         return field;
       });
     return items;
