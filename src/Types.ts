@@ -1,3 +1,3 @@
-import { Request } from "express";
+import { IRequest } from "./Interfaces";
 
-export type SerializationFunction = (item: any, request: Request) => any;
+export type SerializationFunction = (item: any, request: IRequest) => any;

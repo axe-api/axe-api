@@ -90,6 +90,11 @@ export enum TimestampColumns {
   UPDATED_AT = "updatedAtColumn",
 }
 
+export enum Frameworks {
+  Express = "express",
+  Fastify = "fastify",
+}
+
 export enum AxeErrorCode {
   UNACCEPTABLE_VERSION_NAME = "UNACCEPTABLE_VERSION_NAME",
   VERSION_CONFIG_NOT_FOUND = "VERSION_CONFIG_NOT_FOUND",

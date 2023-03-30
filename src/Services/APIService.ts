@@ -1,5 +1,5 @@
 import path from "path";
-import { LogLevels } from "../Enums";
+import { Frameworks, LogLevels } from "../Enums";
 import { IAPI, IApplicationConfig, IVersion } from "../Interfaces";
 import ModelListService from "./ModelListService";
 
@@ -17,6 +17,7 @@ class APIService {
         port: 3000,
         logLevel: LogLevels.INFO,
         prefix: "/api",
+        framework: Frameworks.Fastify, // FIXME: dinamik olarak framework okunmalı
         database: {},
       },
     };

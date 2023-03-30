@@ -1,5 +1,4 @@
 import path from "path";
-import { Request, Response } from "express";
 import { describe, expect, jest, test, beforeAll } from "@jest/globals";
 import { RouterBuilder } from "../../../src/Builders";
 import {
@@ -12,7 +11,9 @@ import {
   IModelService,
   IRelation,
   IRequestPack,
-  IVersion,
+  IVersion, 
+  IRequest,
+  IResponse,
 } from "../../../src/Interfaces";
 import { HandlerTypes, LogLevels, Relationships } from "../../../src/Enums";
 import User from "../__Mocks/app/v1/Models/User";
@@ -122,8 +123,8 @@ describe("RouteBuilder", () => {
 
     // Example handler
     const handler = AppMock.post.mock.calls[0][2] as (
-      req: Request,
-      res: Response
+      req: IRequest,
+      res: IResponse
     ) => void;
 
     // Response mock

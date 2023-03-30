@@ -6,7 +6,6 @@ import {
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
-import express from "express";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
 import { attachPaginate } from "knex-paginate";
@@ -17,6 +16,9 @@ import {
   APIService,
   SchemaValidatorService,
 } from "./Services";
+import { Frameworks } from "./Enums";
+import ExpressFramework from "./Frameworks/ExpressFramework";
+import FastifyFramework from "./Frameworks/FastifyFramework";
 import DocsHandler from "./Handlers/DocsHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
 import { consoleAxeError } from "./Helpers";
@@ -28,7 +30,7 @@ class Server {
     try {
       await this.bindDependencies(rootFolder);
       await this.loadGeneralConfiguration();
-      await this.loadExpress();
+      await this.loadFramework();
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
@@ -43,22 +45,51 @@ class Server {
   private async bindDependencies(rootFolder: string) {
     APIService.setInsance(rootFolder);
     const api = APIService.getInstance();
+    LogService.setInstance(api.config.logLevel);
+
+    IoCService.singleton("Framework", async () => {
+      let framework = null, f = null;
+      const frameworkName = api.config.framework;
+      switch (frameworkName) {
+        case Frameworks.Fastify:
+          f = (await import('fastify')).default;
+          framework = new FastifyFramework(f);
+          break;
+        default:
+        case Frameworks.Express:
+          // Express is default fremework
+          f = (await import('express')).default;
+          framework = new ExpressFramework(f);
+      }
+      return framework;
+    });
+    IoCService.singleton("App", async () => await IoCService.use("Framework"));
     IoCService.singleton("SchemaInspector", () => schemaInspector);
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
       attachPaginate();
       return database;
     });
-    IoCService.singleton("App", async () => {
-      return express();
-    });
-    LogService.setInstance(api.config.logLevel);
   }
 
-  private async loadExpress() {
+  private async loadFramework() {
     const app = await IoCService.use("App");
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
+    const framework = await IoCService.use("Framework");
+
+    // Set global framework middlewares for axe-api
+    switch (framework._name) {
+      default:
+      case Frameworks.Express:
+        // eslint-disable-next-line no-case-declarations
+        const { urlencoded, json } = await import("express");
+        app.use(urlencoded({ extended: true }));
+        app.use(json());
+        break;
+      case Frameworks.Fastify:
+        break;
+    }
+    const logger = LogService.getInstance();
+    logger.info(`${app._name} has been initialized`);
   }
 
   private async analyzeVersions() {

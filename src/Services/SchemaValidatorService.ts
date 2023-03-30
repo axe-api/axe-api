@@ -41,7 +41,6 @@ class SchemaValidatorService {
 
   async validate() {
     const logger = LogService.getInstance();
-
     this.version.modelList.get().forEach((model) => {
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
       this.checkModelColumnsOrFail(
@@ -114,7 +113,11 @@ class SchemaValidatorService {
         if (!key) {
           return "";
         }
+<<<<<<< HEAD
+        const [, field] = key?.split(".");
+=======
         const [, field] = key.split(".");
+>>>>>>> ed13d3c159aef45bbc27c656fddefd4040ad4527
         return field;
       });
     return items;

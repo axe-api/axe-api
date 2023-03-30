@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction } from "express";
 import {
   HandlerTypes,
   HttpMethods,
@@ -9,6 +9,8 @@ import {
   IHandlerBaseMiddleware,
   IMethodBaseConfig,
   IMethodBaseValidations,
+  IRequest,
+  IResponse,
 } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
@@ -33,7 +35,7 @@ class Post extends Model {
   get middlewares(): IHandlerBaseMiddleware {
     return {
       handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-      middleware: (req: Request, res: Response, next: NextFunction) => {
+      middleware: (req: IRequest, res: IResponse, next: NextFunction) => {
         next();
       },
     };

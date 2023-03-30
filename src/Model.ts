@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction } from "express";
 import { snakeCase } from "snake-case";
 import {
   IRelation,
@@ -7,6 +7,8 @@ import {
   IMethodBaseValidations,
   IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
+  IRequest,
+  IResponse,
   IQueryLimitConfig,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
@@ -34,7 +36,7 @@ class Model {
   }
 
   get middlewares():
-    | ((req: Request, res: Response, next: NextFunction) => void)[]
+    | ((req: IRequest, res: IResponse, next: NextFunction) => void)[]
     | IHandlerBaseMiddleware[]
     | IHandlerBaseMiddleware {
     return [];
@@ -114,10 +116,10 @@ class Model {
 
   getMiddlewares(
     handlerType: HandlerTypes
-  ): ((req: Request, res: Response, next: NextFunction) => void)[] {
+  ): ((req: IRequest, res: IResponse, next: NextFunction) => void)[] {
     const results: ((
-      req: Request,
-      res: Response,
+      req: IRequest,
+      res: IResponse,
       next: NextFunction
     ) => void)[] = [];
     const middlewares = this.middlewares;

@@ -1,5 +1,6 @@
 import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
+import { NextFunction, Express } from "express";
+// import { FastifyRequest, FastifyReply } from "fastify";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
@@ -11,6 +12,7 @@ import {
   SortTypes,
   ConditionTypes,
   DependencyTypes,
+  Frameworks,
   QueryFeature,
   QueryFeatureType,
 } from "./Enums";
@@ -32,7 +34,60 @@ export interface IHandlerBasedTransactionConfig {
 
 interface IHandlerBasedSerializer {
   handler: HandlerTypes[];
-  serializer: ((data: any, request: Request) => void)[];
+  serializer: ((data: any, request: IRequest) => void)[];
+}
+
+export interface IQueryLimitConfig {
+  feature: QueryFeature;
+  type: QueryFeatureType;
+  key: string | null;
+}
+
+export interface IQueryConfig {
+  limits: Array<IQueryLimitConfig[]>;
+}
+
+export interface IVersionConfig {
+  transaction:
+    | boolean
+    | IHandlerBasedTransactionConfig
+    | IHandlerBasedTransactionConfig[];
+  serializers:
+    | ((data: any, request: IRequest) => void)[]
+    | IHandlerBasedSerializer[];
+  supportedLanguages: string[];
+  defaultLanguage: string;
+  query: IQueryConfig;
+}
+
+export interface IQueryLimitConfig {
+  feature: QueryFeature;
+  type: QueryFeatureType;
+  key: string | null;
+}
+
+export interface IQueryDefaultConfig {
+  perPage?: number;
+  minPerPage?: number;
+  maxPerPage?: number;
+}
+
+export interface IQueryConfig {
+  limits: Array<IQueryLimitConfig[]>;
+  defaults?: IQueryDefaultConfig;
+}
+
+export interface IVersionConfig {
+  transaction:
+    | boolean
+    | IHandlerBasedTransactionConfig
+    | IHandlerBasedTransactionConfig[];
+  serializers:
+    | ((data: any, request: IRequest) => void)[]
+    | IHandlerBasedSerializer[];
+  supportedLanguages: string[];
+  defaultLanguage: string;
+  query: IQueryConfig;
 }
 
 export interface IQueryLimitConfig {
@@ -71,6 +126,7 @@ export interface IApplicationConfig extends IConfig {
   logLevel: LogLevels;
   prefix: string;
   database: IDatabaseConfig;
+  framework: Frameworks;
 }
 
 export interface ILanguage {
@@ -112,22 +168,22 @@ export interface IAPI {
 }
 
 export interface IGeneralHooks {
-  onBeforeInit: (app: Express) => void | null;
-  onAfterInit: (app: Express) => void | null;
+  onBeforeInit: (app: IFramework) => void | null;
+  onAfterInit: (app: IFramework) => void | null;
 }
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
-    req: Request,
-    res: Response,
+    req: IRequest,
+    res: IResponse,
     next: NextFunction
   ) => void | Promise<void>;
 }
 
 export interface IHookParameter {
-  req: Request;
-  res: Response;
+  req: IRequest;
+  res: IResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -185,8 +241,8 @@ export interface IRelation {
 export interface IRequestPack {
   api: IAPI;
   version: IVersion;
-  req: Request;
-  res: Response;
+  req: IRequest;
+  res: IResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -253,3 +309,84 @@ export interface IDependency {
   callback: any;
   instance: any;
 }
+
+// FIXME: Check return type
+export type IFrameworkHandler = ( req: IRequest, res: IResponse, next: any ) => Promise<any> | void; 
+
+export interface IFramework {
+  client: Express | any;
+  _name: Frameworks;
+  //get(url: string, handler: IFrameworkHandler): any;
+  get(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  //post(url: string, handler: IFrameworkHandler): any;
+  post(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  //put(url: string, handler: IFrameworkHandler): any;
+  put(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  //delete(url: string, handler: IFrameworkHandler): any;
+  delete(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  //patch(url: string, handler: IFrameworkHandler): any;
+  patch(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  use(middleware: IFrameworkHandler): any
+  listen(port: number, fn: ()=> void): any;
+  kill(): void;
+}
+
+export interface AxeRequest {
+  url: string;
+  method: string;
+  body: ReadableStream<Uint8Array> | any;
+  baseUrl: string;
+  hostname: string;
+  ip: string;
+  ips: string;
+  originalUrl: string;
+  params: any;
+  path: string;
+  protocol: 'http' | 'https';
+  query: any;
+  type: string;
+  currentLanguage: any;
+  getHeader(name: string): string | null;
+  setHeader(name: string, value: any): void;
+  deleteHeader(name: string): void;
+  param(name: string): any;
+}
+
+export interface AxeResponse {
+  appand(name: string, value: any): void;
+  //attachment(path: string): void;
+  setCookie(name: string, value: string, options: any): void;
+  clearCookie(name: string, options: any): void;
+  status(status: number): AxeResponse;
+  getHeader(name: string): string | null;
+  getHeaders(): Record<string, string> | null;
+  setHeader(name: string, value: string): void;
+  deleteHeader(name: string): void;
+  redirect(url: string): void;
+  send(data?: any): void;
+  json(data?: any): void;
+}
+
+// export interface IRequest {
+//   body: any;
+//   get: any;
+//   query: any;
+//   json: any;
+//   currentLanguage: any;
+//   params: any;
+//   method: HttpMethods;
+// }
+
+// export interface IResponse {
+//   status: any;
+//   json: any;
+//   setHeader: any
+// }
+
+// export type IFramework = Express | Fastify;
+
+
+
+export type IRequest = AxeRequest; //|  FastifyRequest;
+
+export type IResponse = AxeResponse; // | FastifyReply;
