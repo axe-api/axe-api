@@ -1,9 +1,5 @@
 import pluralize from "pluralize";
 import path from "path";
-<<<<<<< HEAD
-import { StatusCodes } from "http-status-codes";
-=======
->>>>>>> ed13d3c159aef45bbc27c656fddefd4040ad4527
 import { Knex } from "knex";
 import { NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
@@ -15,10 +11,7 @@ import {
   IRelation,
   IRequest,
   IRequestPack,
-<<<<<<< HEAD
   IResponse,
-=======
->>>>>>> ed13d3c159aef45bbc27c656fddefd4040ad4527
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
