@@ -8,6 +8,7 @@ import {
   IVersion,
 } from "../Interfaces";
 import { LogService, ModelListService } from "../Services";
+import { RESERVED_KEYWORDS } from "../constants";
 
 const COLUMN_BASED_QUERY_LIMITS: QueryFeature[] = [
   QueryFeature.Sorting,
@@ -41,8 +42,8 @@ class SchemaValidatorService {
 
   async validate() {
     const logger = LogService.getInstance();
-
     this.version.modelList.get().forEach((model) => {
+      this.checkModelReservedKeywordsOrFail(model);
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
       this.checkModelColumnsOrFail(
         model,
@@ -57,6 +58,30 @@ class SchemaValidatorService {
     });
 
     logger.info(`[${this.version.name}] Database schema has been validated.`);
+  }
+
+  private checkModelReservedKeywordsOrFail(model: IModelService) {
+    const reservedKeywords: string[] = [];
+    RESERVED_KEYWORDS.forEach((keyword) => {
+      if (
+        model.columnNames.includes(keyword) ||
+        model.name.toLowerCase().includes(keyword)
+      ) {
+        reservedKeywords.push(keyword);
+      }
+
+      for (const relation of model.relations) {
+        if (relation.name === keyword) reservedKeywords.push(relation.name);
+      }
+    });
+
+    if (reservedKeywords.length > 0) {
+      throw new Error(
+        `The following keywords are reserved for the framework; "${reservedKeywords.join(
+          ","
+        )}"`
+      );
+    }
   }
 
   private checkModelColumnsOrFail(
