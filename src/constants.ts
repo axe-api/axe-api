@@ -18,6 +18,17 @@ export const LOG_COLORS = {
   fgWhite: "\x1b[37m",
   fgReset: "\x1b[0m",
 };
+export const RESERVED_KEYWORDS: string[] = [
+  "force",
+  "model",
+  "api",
+  "routes",
+  "docs",
+  "hook",
+  "hooks",
+  "event",
+  "events",
+];
 
 export const DEFAULT_HANDLERS: HandlerTypes[] = [
   HandlerTypes.INSERT,
