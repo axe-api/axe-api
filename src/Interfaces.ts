@@ -34,7 +34,7 @@ export interface IHandlerBasedTransactionConfig {
 
 interface IHandlerBasedSerializer {
   handler: HandlerTypes[];
-  serializer: ((data: any, request: AxeRequest) => void)[];
+  serializer: ((data: any, request: IRequest) => void)[];
 }
 
 export interface IQueryLimitConfig {
@@ -53,7 +53,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: AxeRequest) => void)[]
+    | ((data: any, request: IRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -83,7 +83,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: AxeRequest) => void)[]
+    | ((data: any, request: IRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -113,7 +113,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: AxeRequest) => void)[]
+    | ((data: any, request: IRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -175,14 +175,14 @@ export interface IGeneralHooks {
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
-    req: AxeRequest,
+    req: IRequest,
     res: AxeResponse,
     next: NextFunction
   ) => void | Promise<void>;
 }
 
 export interface IHookParameter {
-  req: AxeRequest;
+  req: IRequest;
   res: AxeResponse;
   handlerType: HandlerTypes;
   model: IModelService;
@@ -241,7 +241,7 @@ export interface IRelation {
 export interface AxeRequestPack {
   api: IAPI;
   version: IVersion;
-  req: AxeRequest;
+  req: IRequest;
   res: AxeResponse;
   handlerType: HandlerTypes;
   model: IModelService;
@@ -312,7 +312,7 @@ export interface IDependency {
 
 // FIXME: Check return type
 export type IFrameworkHandler = (
-  req: AxeRequest,
+  req: any,
   res: AxeResponse,
   next: any
 ) => Promise<any> | void;
@@ -320,31 +320,26 @@ export type IFrameworkHandler = (
 export interface IFramework {
   client: Express | any;
   _name: Frameworks;
-  //get(url: string, handler: IFrameworkHandler): any;
   get(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
     handler?: IFrameworkHandler
   ): any;
-  //post(url: string, handler: IFrameworkHandler): any;
   post(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
     handler?: IFrameworkHandler
   ): any;
-  //put(url: string, handler: IFrameworkHandler): any;
   put(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
     handler?: IFrameworkHandler
   ): any;
-  //delete(url: string, handler: IFrameworkHandler): any;
   delete(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
     handler?: IFrameworkHandler
   ): any;
-  //patch(url: string, handler: IFrameworkHandler): any;
   patch(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
@@ -353,27 +348,6 @@ export interface IFramework {
   use(middleware: IFrameworkHandler): any;
   listen(port: number, fn: () => void): any;
   kill(): void;
-}
-
-export interface AxeRequest {
-  url: string;
-  method: string;
-  body: ReadableStream<Uint8Array> | any;
-  baseUrl: string;
-  hostname: string;
-  ip: string;
-  ips: string;
-  originalUrl: string;
-  params: any;
-  path: string;
-  protocol: "http" | "https";
-  query: any;
-  type: string;
-  currentLanguage: any;
-  getHeader(name: string): string | null;
-  setHeader(name: string, value: any): void;
-  deleteHeader(name: string): void;
-  param(name: string): any;
 }
 
 export interface AxeResponse {
@@ -389,4 +363,23 @@ export interface AxeResponse {
   redirect(url: string): void;
   send(data?: any): void;
   json(data?: any): void;
+}
+
+export interface IRequest {
+  readonly path: string;
+  readonly url: string;
+  readonly method: string;
+  readonly body: ReadableStream<Uint8Array> | any;
+  readonly baseUrl: string;
+  readonly hostname: string;
+  readonly ip: string;
+  readonly ips: string[];
+  readonly originalUrl: string;
+  readonly params: any;
+  readonly protocol: string;
+  readonly query: any;
+  currentLanguage: ILanguage;
+
+  getHeader(name: string): string | null;
+  param(name: string): any;
 }

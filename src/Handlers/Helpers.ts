@@ -7,7 +7,7 @@ import {
   IVersion,
 } from "../Interfaces";
 import { Knex } from "knex";
-import { IWith, AxeRequest } from "../Interfaces";
+import { IWith } from "../Interfaces";
 import {
   HandlerTypes,
   Relationships,
@@ -20,6 +20,7 @@ import { IoCService, ModelListService } from "../Services";
 import { SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
 import { RelationQueryFeatureMap } from "../constants";
+import IRequest from "../Frameworks/Requests/IRequest";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -42,7 +43,7 @@ export const bindTimestampValues = (
 };
 
 export const getMergedFormData = (
-  req: AxeRequest,
+  req: IRequest,
   fillables: string[]
 ): Record<string, any> => {
   const formData: Record<string, any> = {};
@@ -85,7 +86,7 @@ export const getParentColumn = (relation: IRelation | null) => {
 };
 
 export const addForeignKeyQuery = (
-  request: AxeRequest,
+  request: IRequest,
   query: Knex.QueryBuilder,
   relation: IRelation | null,
   parentModel: IModelService | null
@@ -119,7 +120,7 @@ const uniqueByMap = <T>(array: T[]): T[] => {
 const serialize = (
   data: any[] | any,
   callback: SerializationFunction | null,
-  request: AxeRequest
+  request: IRequest
 ): any[] | any => {
   if (!callback) {
     return data;
@@ -136,19 +137,19 @@ const globalSerializer = async (
   version: IVersion,
   itemArray: any[] | any,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: IRequest
 ) => {
   if (!version.config.serializers) {
     return itemArray;
   }
 
-  const callbacks: ((data: any, request: AxeRequest) => void)[] = [];
+  const callbacks: ((data: any, request: IRequest) => void)[] = [];
   // Push all runable serializer into callbacks.
   version.config.serializers.map((configSerializer) => {
     // Serialize data for all requests types.
     if (typeof configSerializer === "function") {
       callbacks.push(
-        configSerializer as unknown as (data: any, request: AxeRequest) => void
+        configSerializer as unknown as (data: any, request: IRequest) => void
       );
       return;
     }
@@ -158,7 +159,7 @@ const globalSerializer = async (
       callbacks.push(
         ...(configSerializer.serializer as unknown as ((
           data: any,
-          request: AxeRequest
+          request: IRequest
         ) => void)[])
       );
       return;
@@ -177,7 +178,7 @@ export const serializeData = async (
   itemArray: any[] | any,
   modelSerializer: SerializationFunction | null,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: IRequest
 ): Promise<any[]> => {
   itemArray = serialize(itemArray, modelSerializer, request);
   itemArray = await globalSerializer(version, itemArray, handler, request);
@@ -228,7 +229,7 @@ export const getRelatedData = async (
   modelList: ModelListService,
   database: Knex | Knex.Transaction,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: IRequest
 ) => {
   if (withArray.length === 0) {
     return;

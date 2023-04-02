@@ -119,8 +119,8 @@ class Server {
     const api = APIService.getInstance();
 
     if (api.config.env === "development") {
-      app.get("/docs", DocsHandler);
-      app.get("/routes", RoutesHandler);
+      app.get("/docs", [], DocsHandler);
+      app.get("/routes", [], RoutesHandler);
     }
 
     app.listen(api.config.port, () => {

@@ -1,7 +1,6 @@
 import pluralize from "pluralize";
 import path from "path";
 import { Knex } from "knex";
-import { NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
 import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
 import {
@@ -9,10 +8,10 @@ import {
   IGeneralHooks,
   IModelService,
   IRelation,
-  AxeRequest,
   AxeRequestPack,
   AxeResponse,
   IVersion,
+  IRequest,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
 import {
@@ -20,7 +19,6 @@ import {
   Relationships,
   HttpMethods,
   StatusCodes,
-  Frameworks,
 } from "../Enums";
 import HandlerFactory from "../Handlers/HandlerFactory";
 import ApiError from "../Exceptions/ApiError";
@@ -31,7 +29,7 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
-import { IRequest, XExpressRequest } from "../Frameworks/ExpressFramework";
+import RequestFactory from "../Frameworks/Requests/RequestFactory";
 
 class RouterBuilder {
   private version: IVersion;
@@ -95,23 +93,12 @@ class RouterBuilder {
         model.instance.primaryKey
       );
 
-      const castRequest = (req: any): IRequest => {
-        const api = APIService.getInstance();
-        const frameworkName = api.config.framework;
-        switch (frameworkName) {
-          case Frameworks.Fastify:
-          default:
-          case Frameworks.Express:
-            return new XExpressRequest(req);
-        }
-      };
-
       // Creating the middleware list for the route. As default, we support some
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
       const middlewares = [
         (req: any, res: any, next: any) =>
-          acceptLanguageMiddleware(castRequest(req), res, next),
+          acceptLanguageMiddleware(RequestFactory.get(req), res, next),
         ...model.instance.getMiddlewares(handlerType),
       ];
 
@@ -188,11 +175,7 @@ class RouterBuilder {
   private async addApiRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: ((
-      req: AxeRequest,
-      res: AxeResponse,
-      next: NextFunction
-    ) => void)[],
+    middlewares: ((req: any, res: any, next: any) => void)[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
@@ -201,7 +184,14 @@ class RouterBuilder {
     const app = await IoCService.useByType<IFramework>("App");
 
     const handler = (req: any, res: any) => {
-      this.requestHandler(handlerType, req, res, model, parentModel, relation);
+      this.requestHandler(
+        handlerType,
+        RequestFactory.get(req),
+        res,
+        model,
+        parentModel,
+        relation
+      );
     };
 
     switch (handlerType) {
@@ -244,7 +234,7 @@ class RouterBuilder {
 
   private async requestHandler(
     handlerType: HandlerTypes,
-    req: any,
+    req: IRequest,
     res: any,
     model: IModelService,
     parentModel: IModelService | null,
@@ -269,7 +259,7 @@ class RouterBuilder {
       const pack: AxeRequestPack = {
         api,
         version: this.version,
-        req: req as AxeRequest,
+        req,
         res: res as AxeResponse,
         handlerType,
         model,

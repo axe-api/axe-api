@@ -1,3 +1,3 @@
-import { AxeRequest } from "./Interfaces";
+import IRequest from "./Frameworks/Requests/IRequest";
 
-export type SerializationFunction = (item: any, request: AxeRequest) => any;
+export type SerializationFunction = (item: any, request: IRequest) => any;

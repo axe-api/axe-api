@@ -1,11 +1,10 @@
 import chalk from "chalk";
 import { paramCase } from "change-case";
 import { APIService } from "./Services";
-import { IVersion, AxeRequest } from "./Interfaces";
+import { IVersion } from "./Interfaces";
+import IRequest from "./Frameworks/Requests/IRequest";
 
-export const getVersionByRequest = async (
-  req: AxeRequest
-): Promise<IVersion> => {
+export const getVersionByRequest = async (req: IRequest): Promise<IVersion> => {
   // Application configuration is need for the default setting.
   const api = APIService.getInstance();
   const matchedVersion = api.versions.find((version) => {

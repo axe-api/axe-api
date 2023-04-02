@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {
-  AxeRequest,
-  AxeResponse,
-  IFramework,
-  IFrameworkHandler,
-} from "../Interfaces";
+import { AxeResponse, IFramework, IFrameworkHandler } from "../Interfaces";
 import { Frameworks } from "../Enums";
 import LogService from "../Services/LogService";
 
-export abstract class FastifyRequest implements AxeRequest {
+export abstract class FastifyRequest {
   type = "fastify";
   abstract url: string;
   abstract body: any;

@@ -1,55 +1,6 @@
-import { Request } from "express";
 import { Frameworks } from "../Enums";
-import { IFramework, AxeRequest, AxeResponse } from "../Interfaces";
+import { IFramework, AxeResponse } from "../Interfaces";
 import LogService from "../Services/LogService";
-
-export interface IRequest {
-  getHeader(name: string): string | null;
-}
-
-export class XExpressRequest {
-  private request: Request;
-
-  constructor(request: Request) {
-    this.request = request;
-  }
-
-  getHeader(name: string): string | null {
-    return this.request.get(name) || null;
-  }
-}
-
-export abstract class ExpressRequest implements AxeRequest {
-  type = "express";
-  abstract url: string;
-  abstract method: string;
-  abstract body: any;
-  abstract baseUrl: string;
-  abstract hostname: string;
-  abstract ip: string;
-  abstract ips: string;
-  abstract originalUrl: string;
-  abstract params: any;
-  abstract path: string;
-  abstract protocol: "http" | "https";
-  abstract query: any;
-  abstract headers: any;
-  abstract currentLanguage: any;
-  abstract param(name: string): string;
-  abstract get(name: string): string;
-
-  getHeader(name: string): string | null {
-    return this.get(name);
-  }
-
-  setHeader(name: string, value: any): void {
-    this.headers[name] = value;
-  }
-
-  deleteHeader(name: string): void {
-    delete this.headers[name];
-  }
-}
 
 export abstract class ExpressResponse implements AxeResponse {
   abstract cookie: any;
@@ -78,8 +29,8 @@ export abstract class ExpressResponse implements AxeResponse {
 }
 
 export type ExpressHandler = (
-  req: ExpressRequest,
-  res: ExpressResponse,
+  req: any,
+  res: any,
   next: any
 ) => Promise<any> | void;
 
@@ -108,75 +59,49 @@ class ExpressFramework implements IFramework {
     middleware: ExpressHandler | ExpressHandler[],
     handler?: ExpressHandler
   ) {
-    if (handler) {
-      this.client.get(url, middleware, handler);
-    } else {
-      this.client.get(url, middleware);
-    }
+    this.client.get(url, middleware, handler);
   }
 
-  // post(url: string, handler: ExpressHandler){
-  //     this.client.post(url, handler);
-  // }
   post(
     url: string,
     middleware: ExpressHandler | ExpressHandler[],
     handler?: ExpressHandler
   ) {
-    if (handler) {
-      this.client.post(url, middleware, handler);
-    } else {
-      this.client.post(url, middleware);
-    }
+    this.client.post(url, middleware, handler);
   }
-  // put(url: string, handler: ExpressHandler){
-  //     this.client.put(url, handler);
-  // }
+
   put(
     url: string,
     middleware: ExpressHandler | ExpressHandler[],
     handler?: ExpressHandler
   ) {
-    if (handler) {
-      this.client.put(url, middleware, handler);
-    } else {
-      this.client.put(url, middleware);
-    }
+    this.client.put(url, middleware, handler);
   }
-  // delete(url: string, handler: ExpressHandler){
-  //     this.client.delete(url, handler);
-  // }
+
   delete(
     url: string,
     middleware: ExpressHandler | ExpressHandler[],
     handler?: ExpressHandler
   ) {
-    if (handler) {
-      this.client.delete(url, middleware, handler);
-    } else {
-      this.client.delete(url, middleware);
-    }
+    this.client.delete(url, middleware, handler);
   }
-  // patch(url: string, handler: ExpressHandler){
-  //     this.client.patch(url, handler);
-  // }
+
   patch(
     url: string,
     middleware: ExpressHandler | ExpressHandler[],
     handler?: ExpressHandler
   ) {
-    if (handler) {
-      this.client.patch(url, middleware, handler);
-    } else {
-      this.client.patch(url, middleware);
-    }
+    this.client.patch(url, middleware, handler);
   }
+
   use(middleware: ExpressHandler): any {
     return this.client.use(middleware);
   }
+
   listen(port: number, fn: () => void): any {
     return this.client.listen(port, fn);
   }
+
   kill(): void {
     throw new Error("Method not implemented.");
   }
