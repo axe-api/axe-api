@@ -25,7 +25,6 @@ export default async (pack: IHttpContext) => {
 
   if (validationRules) {
     // The validation language should be set
-    console.log("req.currentLanguage.language", req.currentLanguage.language);
     Validator.useLang(req.currentLanguage.language);
 
     // Validate the data

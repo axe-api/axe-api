@@ -187,7 +187,6 @@ class RouterBuilder {
     const app = await IoCService.useByType<IFramework>("App");
 
     const handler = (req: any, res: any) => {
-      console.log(req?.name);
       this.requestHandler(
         handlerType,
         RequestFactory.get(req),
