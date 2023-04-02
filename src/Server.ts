@@ -48,17 +48,18 @@ class Server {
     LogService.setInstance(api.config.logLevel);
 
     IoCService.singleton("Framework", async () => {
-      let framework = null, f = null;
+      let framework = null,
+        f = null;
       const frameworkName = api.config.framework;
       switch (frameworkName) {
         case Frameworks.Fastify:
-          f = (await import('fastify')).default;
+          f = (await import("fastify")).default;
           framework = new FastifyFramework(f);
           break;
         default:
         case Frameworks.Express:
           // Express is default fremework
-          f = (await import('express')).default;
+          f = (await import("express")).default;
           framework = new ExpressFramework(f);
       }
       return framework;

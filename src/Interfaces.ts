@@ -34,7 +34,7 @@ export interface IHandlerBasedTransactionConfig {
 
 interface IHandlerBasedSerializer {
   handler: HandlerTypes[];
-  serializer: ((data: any, request: IRequest) => void)[];
+  serializer: ((data: any, request: AxeRequest) => void)[];
 }
 
 export interface IQueryLimitConfig {
@@ -53,7 +53,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: IRequest) => void)[]
+    | ((data: any, request: AxeRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -83,7 +83,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: IRequest) => void)[]
+    | ((data: any, request: AxeRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -113,7 +113,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: Request) => void)[]
+    | ((data: any, request: AxeRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -175,15 +175,15 @@ export interface IGeneralHooks {
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
-    req: IRequest,
-    res: IResponse,
+    req: AxeRequest,
+    res: AxeResponse,
     next: NextFunction
   ) => void | Promise<void>;
 }
 
 export interface IHookParameter {
-  req: IRequest;
-  res: IResponse;
+  req: AxeRequest;
+  res: AxeResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -238,11 +238,11 @@ export interface IRelation {
   foreignKey: string;
 }
 
-export interface IRequestPack {
+export interface AxeRequestPack {
   api: IAPI;
   version: IVersion;
-  req: IRequest;
-  res: IResponse;
+  req: AxeRequest;
+  res: AxeResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -311,23 +311,47 @@ export interface IDependency {
 }
 
 // FIXME: Check return type
-export type IFrameworkHandler = ( req: IRequest, res: IResponse, next: any ) => Promise<any> | void; 
+export type IFrameworkHandler = (
+  req: AxeRequest,
+  res: AxeResponse,
+  next: any
+) => Promise<any> | void;
 
 export interface IFramework {
   client: Express | any;
   _name: Frameworks;
   //get(url: string, handler: IFrameworkHandler): any;
-  get(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  get(
+    url: string,
+    middleware: IFrameworkHandler | IFrameworkHandler[],
+    handler?: IFrameworkHandler
+  ): any;
   //post(url: string, handler: IFrameworkHandler): any;
-  post(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  post(
+    url: string,
+    middleware: IFrameworkHandler | IFrameworkHandler[],
+    handler?: IFrameworkHandler
+  ): any;
   //put(url: string, handler: IFrameworkHandler): any;
-  put(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  put(
+    url: string,
+    middleware: IFrameworkHandler | IFrameworkHandler[],
+    handler?: IFrameworkHandler
+  ): any;
   //delete(url: string, handler: IFrameworkHandler): any;
-  delete(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
+  delete(
+    url: string,
+    middleware: IFrameworkHandler | IFrameworkHandler[],
+    handler?: IFrameworkHandler
+  ): any;
   //patch(url: string, handler: IFrameworkHandler): any;
-  patch(url: string, middleware: IFrameworkHandler | IFrameworkHandler[] , handler?: IFrameworkHandler): any;
-  use(middleware: IFrameworkHandler): any
-  listen(port: number, fn: ()=> void): any;
+  patch(
+    url: string,
+    middleware: IFrameworkHandler | IFrameworkHandler[],
+    handler?: IFrameworkHandler
+  ): any;
+  use(middleware: IFrameworkHandler): any;
+  listen(port: number, fn: () => void): any;
   kill(): void;
 }
 
@@ -342,7 +366,7 @@ export interface AxeRequest {
   originalUrl: string;
   params: any;
   path: string;
-  protocol: 'http' | 'https';
+  protocol: "http" | "https";
   query: any;
   type: string;
   currentLanguage: any;
@@ -366,27 +390,3 @@ export interface AxeResponse {
   send(data?: any): void;
   json(data?: any): void;
 }
-
-// export interface IRequest {
-//   body: any;
-//   get: any;
-//   query: any;
-//   json: any;
-//   currentLanguage: any;
-//   params: any;
-//   method: HttpMethods;
-// }
-
-// export interface IResponse {
-//   status: any;
-//   json: any;
-//   setHeader: any
-// }
-
-// export type IFramework = Express | Fastify;
-
-
-
-export type IRequest = AxeRequest; //|  FastifyRequest;
-
-export type IResponse = AxeResponse; // | FastifyReply;

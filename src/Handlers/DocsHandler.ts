@@ -1,7 +1,7 @@
-import { IRequest, IResponse } from "../Interfaces";
+import { AxeRequest, AxeResponse } from "../Interfaces";
 import { APIService, DocumentationService } from "../Services";
 
-export default async (req: IRequest, res: IResponse) => {
+export default async (req: AxeRequest, res: AxeResponse) => {
   const docs = DocumentationService.getInstance();
   const api = APIService.getInstance();
 

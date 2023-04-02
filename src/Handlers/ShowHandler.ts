@@ -1,4 +1,4 @@
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import { AxeRequestPack, IHookParameter } from "../Interfaces";
 import {
   addForeignKeyQuery,
   getRelatedData,
@@ -12,7 +12,7 @@ import ApiError from "../Exceptions/ApiError";
 import { QueryService } from "../Services";
 import { Knex } from "knex";
 
-export default async (pack: IRequestPack) => {
+export default async (pack: AxeRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
 
   const queryParser = new QueryService(

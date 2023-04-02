@@ -1,3 +1,3 @@
-import { IRequest } from "./Interfaces";
+import { AxeRequest } from "./Interfaces";
 
-export type SerializationFunction = (item: any, request: IRequest) => any;
+export type SerializationFunction = (item: any, request: AxeRequest) => any;

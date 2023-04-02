@@ -1,5 +1,5 @@
 import Validator from "validatorjs";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import { AxeRequestPack, IHookParameter } from "../Interfaces";
 import {
   getMergedFormData,
   getParentColumn,
@@ -15,7 +15,7 @@ import {
   TimestampColumns,
 } from "../Enums";
 
-export default async (pack: IRequestPack) => {
+export default async (pack: AxeRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
 
   const requestMethod: HttpMethods = req.method as unknown as HttpMethods;

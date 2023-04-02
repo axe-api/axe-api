@@ -1,17 +1,17 @@
 import { NextFunction } from "express";
 import { QueryFeature } from "../../../../../../src/Enums";
-import { IRequest, IResponse } from "../../../../../../src/Interfaces";
+import { AxeRequest, AxeResponse } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
 
 class Comment extends Model {
   get middlewares(): ((
-    req: IRequest,
-    res: IResponse,
+    req: AxeRequest,
+    res: AxeResponse,
     next: NextFunction
   ) => void)[] {
     return [
-      (req: IRequest, res: IResponse, next: NextFunction) => {
+      (req: AxeRequest, res: AxeResponse, next: NextFunction) => {
         next();
       },
     ];

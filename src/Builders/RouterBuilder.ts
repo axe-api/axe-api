@@ -9,9 +9,9 @@ import {
   IGeneralHooks,
   IModelService,
   IRelation,
-  IRequest,
-  IRequestPack,
-  IResponse,
+  AxeRequest,
+  AxeRequestPack,
+  AxeResponse,
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
@@ -20,6 +20,7 @@ import {
   Relationships,
   HttpMethods,
   StatusCodes,
+  Frameworks,
 } from "../Enums";
 import HandlerFactory from "../Handlers/HandlerFactory";
 import ApiError from "../Exceptions/ApiError";
@@ -30,6 +31,7 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
+import { IRequest, XExpressRequest } from "../Frameworks/ExpressFramework";
 
 class RouterBuilder {
   private version: IVersion;
@@ -51,7 +53,9 @@ class RouterBuilder {
 
     await this.createRoutesByModelTree();
 
-    logger.info(`[${this.version.name}] ${app._name} routes have been created.`);
+    logger.info(
+      `[${this.version.name}] ${app._name} routes have been created.`
+    );
 
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);
@@ -91,11 +95,23 @@ class RouterBuilder {
         model.instance.primaryKey
       );
 
+      const castRequest = (req: any): IRequest => {
+        const api = APIService.getInstance();
+        const frameworkName = api.config.framework;
+        switch (frameworkName) {
+          case Frameworks.Fastify:
+          default:
+          case Frameworks.Express:
+            return new XExpressRequest(req);
+        }
+      };
+
       // Creating the middleware list for the route. As default, we support some
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
       const middlewares = [
-        acceptLanguageMiddleware,
+        (req: any, res: any, next: any) =>
+          acceptLanguageMiddleware(castRequest(req), res, next),
         ...model.instance.getMiddlewares(handlerType),
       ];
 
@@ -169,29 +185,22 @@ class RouterBuilder {
     }
   }
 
-  private getPrimaryKeyName = (model: IModelService): string => {
-    return (
-      pluralize.singular(model.name).toLowerCase() +
-      this.ucFirst(model.instance.primaryKey)
-    );
-  };
-
-  private ucFirst = (value: string): string => {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  };
-
   private async addApiRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: ((req: IRequest, res: IResponse, next: NextFunction) => void)[],
+    middlewares: ((
+      req: AxeRequest,
+      res: AxeResponse,
+      next: NextFunction
+    ) => void)[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
   ) {
     const docs = DocumentationService.getInstance();
     const app = await IoCService.useByType<IFramework>("App");
-    
-    const handler = (req: IRequest, res: IResponse) => {
+
+    const handler = (req: any, res: any) => {
       this.requestHandler(handlerType, req, res, model, parentModel, relation);
     };
 
@@ -235,8 +244,8 @@ class RouterBuilder {
 
   private async requestHandler(
     handlerType: HandlerTypes,
-    req: IRequest,
-    res: IResponse,
+    req: any,
+    res: any,
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
@@ -257,11 +266,11 @@ class RouterBuilder {
       }
 
       const handler = HandlerFactory.get(handlerType);
-      const pack: IRequestPack = {
+      const pack: AxeRequestPack = {
         api,
         version: this.version,
-        req,
-        res,
+        req: req as AxeRequest,
+        res: res as AxeResponse,
         handlerType,
         model,
         parentModel,
@@ -282,7 +291,7 @@ class RouterBuilder {
     }
   }
 
-  private sendErrorAsResponse(res: IResponse, error: any) {
+  private sendErrorAsResponse(res: AxeResponse, error: any) {
     const type: string | undefined = error.type;
 
     switch (type) {
