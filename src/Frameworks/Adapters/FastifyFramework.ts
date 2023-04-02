@@ -60,6 +60,10 @@ class FastifyFramework implements IFramework {
     }
   }
 
+  getFramework() {
+    return this.client;
+  }
+
   private handleMethod(
     method: string,
     url: string,

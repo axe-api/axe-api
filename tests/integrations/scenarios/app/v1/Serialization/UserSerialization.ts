@@ -1,6 +1,6 @@
-import { AxeRequest } from "axe-api";
+import { IRequest } from "axe-api";
 
-export default (item: any, request: AxeRequest) => {
+export default (item: any, request: IRequest) => {
   return {
     ...item,
     fullname: `${item.name} ${item.surname}`,

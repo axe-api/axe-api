@@ -1,5 +1,5 @@
 import Validator from "validatorjs";
-import { AxeRequestPack, IHookParameter } from "../Interfaces";
+import { IHttpContext, IHookParameter } from "../Interfaces";
 import {
   getMergedFormData,
   addForeignKeyQuery,
@@ -18,7 +18,7 @@ import {
 import ApiError from "../Exceptions/ApiError";
 import { Knex } from "knex";
 
-export default async (pack: AxeRequestPack) => {
+export default async (pack: IHttpContext) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
 
   const query = (database as Knex).from(model.instance.table);

@@ -2,8 +2,8 @@ import { NextFunction } from "express";
 import Model from "../../../../../../src/Model";
 import {
   IHandlerBaseMiddleware,
-  AxeRequest,
-  AxeResponse,
+  IRequest,
+  IResponse,
 } from "../../../../../../src/Interfaces";
 import { HandlerTypes } from "../../../../../../src/Enums";
 
@@ -12,13 +12,13 @@ class Login extends Model {
     return [
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-        middleware: (req: AxeRequest, res: AxeResponse, next: NextFunction) => {
+        middleware: (req: IRequest, res: IResponse, next: NextFunction) => {
           next();
         },
       },
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.PATCH],
-        middleware: (req: AxeRequest, res: AxeResponse, next: NextFunction) => {
+        middleware: (req: IRequest, res: IResponse, next: NextFunction) => {
           next();
         },
       },

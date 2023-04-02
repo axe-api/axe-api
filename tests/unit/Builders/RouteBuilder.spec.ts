@@ -10,10 +10,10 @@ import {
 import {
   IModelService,
   IRelation,
-  AxeRequestPack,
+  IHttpContext,
   IVersion,
-  AxeRequest,
-  AxeResponse,
+  IRequest,
+  IResponse,
 } from "../../../src/Interfaces";
 import { HandlerTypes, LogLevels, Relationships } from "../../../src/Enums";
 import User from "../__Mocks/app/v1/Models/User";
@@ -123,8 +123,8 @@ describe("RouteBuilder", () => {
 
     // Example handler
     const handler = AppMock.post.mock.calls[0][2] as (
-      req: AxeRequest,
-      res: AxeResponse
+      req: IRequest,
+      res: IResponse
     ) => void;
 
     // Response mock
@@ -144,9 +144,9 @@ describe("RouteBuilder", () => {
     // expect(handlerFunctionMock.mock.calls.length).toBe(1);
 
     // // Should be called correctly
-    // const params: AxeRequestPack = (
+    // const params: IHttpContext = (
     //   handlerFunctionMock.mock.calls[0] as any
-    // )[0] as AxeRequestPack;
+    // )[0] as IHttpContext;
     // expect(params.handlerType).toBe(HandlerTypes.INSERT);
     // expect(params.model.name).toBe("User");
   });

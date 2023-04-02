@@ -1,5 +1,5 @@
 import Validator from "validatorjs";
-import { AxeRequestPack, IHookParameter } from "../Interfaces";
+import { IHttpContext, IHookParameter } from "../Interfaces";
 import {
   getMergedFormData,
   getParentColumn,
@@ -15,7 +15,7 @@ import {
   TimestampColumns,
 } from "../Enums";
 
-export default async (pack: AxeRequestPack) => {
+export default async (pack: IHttpContext) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
 
   const requestMethod: HttpMethods = req.method as unknown as HttpMethods;
@@ -25,6 +25,7 @@ export default async (pack: AxeRequestPack) => {
 
   if (validationRules) {
     // The validation language should be set
+    console.log("req.currentLanguage.language", req.currentLanguage.language);
     Validator.useLang(req.currentLanguage.language);
 
     // Validate the data

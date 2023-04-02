@@ -1,10 +1,10 @@
 import { Knex } from "knex";
-import { AxeRequestPack, IHookParameter } from "../Interfaces";
+import { IHttpContext, IHookParameter } from "../Interfaces";
 import { addForeignKeyQuery, callHooks } from "./Helpers";
 import { HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 
-export default async (pack: AxeRequestPack) => {
+export default async (pack: IHttpContext) => {
   const { model, req, res, database, relation, parentModel } = pack;
 
   const query = (database as Knex)

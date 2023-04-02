@@ -1,4 +1,4 @@
-import { AxeRequestPack } from "../Interfaces";
+import { IHttpContext } from "../Interfaces";
 import AllHandler from "./AllHandler";
 import DestroyHandler from "./DestroyHandler";
 import ForceDestroyHandler from "./ForceDestroyHandler";
@@ -10,7 +10,7 @@ import StoreHandler from "./StoreHandler";
 import { HandlerTypes } from "../Enums";
 
 class HandlerFactory {
-  static get(handleType: HandlerTypes): (pack: AxeRequestPack) => void {
+  static get(handleType: HandlerTypes): (pack: IHttpContext) => void {
     switch (handleType) {
       case HandlerTypes.ALL:
         return AllHandler;

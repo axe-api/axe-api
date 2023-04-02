@@ -28,6 +28,10 @@ class ExpressFramework implements IFramework {
     }
   }
 
+  getFramework() {
+    return this.client;
+  }
+
   get(
     url: string,
     middleware: ExpressHandler | ExpressHandler[],

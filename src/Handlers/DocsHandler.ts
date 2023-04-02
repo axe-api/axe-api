@@ -1,6 +1,7 @@
+import { IRequest, IResponse } from "../Interfaces";
 import { APIService, DocumentationService } from "../Services";
 
-export default async (req: any, res: any) => {
+export default async (req: IRequest, res: IResponse) => {
   const docs = DocumentationService.getInstance();
   const api = APIService.getInstance();
 

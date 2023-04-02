@@ -167,8 +167,8 @@ export interface IAPI {
 }
 
 export interface IGeneralHooks {
-  onBeforeInit: (app: IFramework) => void | null;
-  onAfterInit: (app: IFramework) => void | null;
+  onBeforeInit: (app: any) => void | null;
+  onAfterInit: (app: any) => void | null;
 }
 
 export interface IHandlerBaseMiddleware {
@@ -237,7 +237,7 @@ export interface IRelation {
   foreignKey: string;
 }
 
-export interface AxeRequestPack {
+export interface IHttpContext {
   api: IAPI;
   version: IVersion;
   req: IRequest;
@@ -318,6 +318,7 @@ export type IFrameworkHandler = (
 export interface IFramework {
   name: Frameworks;
   init(): Promise<void>;
+  getFramework(): any;
   get(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],

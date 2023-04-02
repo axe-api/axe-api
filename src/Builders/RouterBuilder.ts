@@ -8,7 +8,7 @@ import {
   IGeneralHooks,
   IModelService,
   IRelation,
-  AxeRequestPack,
+  IHttpContext,
   IResponse,
   IVersion,
   IRequest,
@@ -47,7 +47,7 @@ class RouterBuilder {
     ).resolve();
 
     if (generalHooks.onBeforeInit) {
-      generalHooks.onBeforeInit(app);
+      generalHooks.onBeforeInit(app.getFramework());
     }
 
     await this.createRoutesByModelTree();
@@ -55,7 +55,7 @@ class RouterBuilder {
     logger.info(`[${this.version.name}] ${app.name} routes have been created.`);
 
     if (generalHooks.onAfterInit) {
-      generalHooks.onAfterInit(app);
+      generalHooks.onAfterInit(app.getFramework());
     }
   }
 
@@ -97,7 +97,11 @@ class RouterBuilder {
       // the "accept-language" header to use in the application general.
       const middlewares = [
         (req: any, res: any, next: any) =>
-          acceptLanguageMiddleware(RequestFactory.get(req), res, next),
+          acceptLanguageMiddleware(
+            RequestFactory.get(req),
+            ResponseFactory.get(res),
+            next
+          ),
         ...model.instance.getMiddlewares(handlerType),
       ];
 
@@ -183,6 +187,7 @@ class RouterBuilder {
     const app = await IoCService.useByType<IFramework>("App");
 
     const handler = (req: any, res: any) => {
+      console.log(req?.name);
       this.requestHandler(
         handlerType,
         RequestFactory.get(req),
@@ -255,7 +260,7 @@ class RouterBuilder {
       }
 
       const handler = HandlerFactory.get(handlerType);
-      const pack: AxeRequestPack = {
+      const pack: IHttpContext = {
         api,
         version: this.version,
         req,
