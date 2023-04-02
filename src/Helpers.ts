@@ -1,8 +1,7 @@
 import chalk from "chalk";
 import { paramCase } from "change-case";
 import { APIService } from "./Services";
-import { IVersion } from "./Interfaces";
-import IRequest from "./Frameworks/Requests/IRequest";
+import { IVersion, IRequest } from "./Interfaces";
 
 export const getVersionByRequest = async (req: IRequest): Promise<IVersion> => {
   // Application configuration is need for the default setting.

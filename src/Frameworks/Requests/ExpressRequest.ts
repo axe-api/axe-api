@@ -1,5 +1,5 @@
 import { Request } from "express";
-import IRequest from "./IRequest";
+import { IRequest } from "src/Interfaces";
 import BaseRequest from "./BaseRequest";
 
 export class ExpressRequest extends BaseRequest implements IRequest {

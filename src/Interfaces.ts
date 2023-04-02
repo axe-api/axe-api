@@ -1,6 +1,5 @@
 import { Knex } from "knex";
 import { NextFunction, Express } from "express";
-// import { FastifyRequest, FastifyReply } from "fastify";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
@@ -176,14 +175,14 @@ export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
     req: IRequest,
-    res: AxeResponse,
+    res: IResponse,
     next: NextFunction
   ) => void | Promise<void>;
 }
 
 export interface IHookParameter {
   req: IRequest;
-  res: AxeResponse;
+  res: IResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -242,7 +241,7 @@ export interface AxeRequestPack {
   api: IAPI;
   version: IVersion;
   req: IRequest;
-  res: AxeResponse;
+  res: IResponse;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
@@ -310,16 +309,15 @@ export interface IDependency {
   instance: any;
 }
 
-// FIXME: Check return type
 export type IFrameworkHandler = (
-  req: any,
-  res: AxeResponse,
+  req: IRequest,
+  res: IResponse,
   next: any
 ) => Promise<any> | void;
 
 export interface IFramework {
-  client: Express | any;
-  _name: Frameworks;
+  name: Frameworks;
+  init(): Promise<void>;
   get(
     url: string,
     middleware: IFrameworkHandler | IFrameworkHandler[],
@@ -350,19 +348,17 @@ export interface IFramework {
   kill(): void;
 }
 
-export interface AxeResponse {
-  appand(name: string, value: any): void;
-  //attachment(path: string): void;
-  setCookie(name: string, value: string, options: any): void;
-  clearCookie(name: string, options: any): void;
-  status(status: number): AxeResponse;
-  getHeader(name: string): string | null;
-  getHeaders(): Record<string, string> | null;
-  setHeader(name: string, value: string): void;
-  deleteHeader(name: string): void;
-  redirect(url: string): void;
-  send(data?: any): void;
-  json(data?: any): void;
+export interface IResponse {
+  append(name: string, value: any): IResponse;
+  attachment(path: string): IResponse;
+  setCookie(name: string, value: string, options: any): IResponse;
+  clearCookie(name: string, options: any): IResponse;
+  status(status: number): IResponse;
+  setHeader(name: string, value: string): IResponse;
+  deleteHeader(name: string): IResponse;
+  redirect(url: string): IResponse;
+  send(data?: any): IResponse;
+  json(data?: any): IResponse;
 }
 
 export interface IRequest {

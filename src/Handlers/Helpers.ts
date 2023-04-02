@@ -7,7 +7,7 @@ import {
   IVersion,
 } from "../Interfaces";
 import { Knex } from "knex";
-import { IWith } from "../Interfaces";
+import { IWith, IRequest } from "../Interfaces";
 import {
   HandlerTypes,
   Relationships,
@@ -20,7 +20,6 @@ import { IoCService, ModelListService } from "../Services";
 import { SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
 import { RelationQueryFeatureMap } from "../constants";
-import IRequest from "../Frameworks/Requests/IRequest";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,

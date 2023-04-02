@@ -9,7 +9,7 @@ import {
   IModelService,
   IRelation,
   AxeRequestPack,
-  AxeResponse,
+  IResponse,
   IVersion,
   IRequest,
 } from "../Interfaces";
@@ -30,6 +30,7 @@ import {
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
 import RequestFactory from "../Frameworks/Requests/RequestFactory";
+import ResponseFactory from "../Frameworks/Response/ResponseFactory";
 
 class RouterBuilder {
   private version: IVersion;
@@ -51,9 +52,7 @@ class RouterBuilder {
 
     await this.createRoutesByModelTree();
 
-    logger.info(
-      `[${this.version.name}] ${app._name} routes have been created.`
-    );
+    logger.info(`[${this.version.name}] ${app.name} routes have been created.`);
 
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);
@@ -187,7 +186,7 @@ class RouterBuilder {
       this.requestHandler(
         handlerType,
         RequestFactory.get(req),
-        res,
+        ResponseFactory.get(res),
         model,
         parentModel,
         relation
@@ -235,7 +234,7 @@ class RouterBuilder {
   private async requestHandler(
     handlerType: HandlerTypes,
     req: IRequest,
-    res: any,
+    res: IResponse,
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
@@ -260,7 +259,7 @@ class RouterBuilder {
         api,
         version: this.version,
         req,
-        res: res as AxeResponse,
+        res: res as IResponse,
         handlerType,
         model,
         parentModel,
@@ -281,7 +280,7 @@ class RouterBuilder {
     }
   }
 
-  private sendErrorAsResponse(res: AxeResponse, error: any) {
+  private sendErrorAsResponse(res: IResponse, error: any) {
     const type: string | undefined = error.type;
 
     switch (type) {

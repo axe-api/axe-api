@@ -17,11 +17,12 @@ import {
   SchemaValidatorService,
 } from "./Services";
 import { Frameworks } from "./Enums";
-import ExpressFramework from "./Frameworks/ExpressFramework";
-import FastifyFramework from "./Frameworks/FastifyFramework";
+// import ExpressFramework from "./Frameworks/Adapters/ExpressFramework";
+// import FastifyFramework from "./Frameworks/FastifyFramework";
 import DocsHandler from "./Handlers/DocsHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
 import { consoleAxeError } from "./Helpers";
+import AdapterFactory from "./Frameworks/Adapters/AdapterFactory";
 
 class Server {
   async start(rootFolder: string) {
@@ -48,21 +49,7 @@ class Server {
     LogService.setInstance(api.config.logLevel);
 
     IoCService.singleton("Framework", async () => {
-      let framework = null,
-        f = null;
-      const frameworkName = api.config.framework;
-      switch (frameworkName) {
-        case Frameworks.Fastify:
-          f = (await import("fastify")).default;
-          framework = new FastifyFramework(f);
-          break;
-        default:
-        case Frameworks.Express:
-          // Express is default fremework
-          f = (await import("express")).default;
-          framework = new ExpressFramework(f);
-      }
-      return framework;
+      return AdapterFactory.get();
     });
     IoCService.singleton("App", async () => await IoCService.use("Framework"));
     IoCService.singleton("SchemaInspector", () => schemaInspector);
@@ -90,7 +77,7 @@ class Server {
         break;
     }
     const logger = LogService.getInstance();
-    logger.info(`${app._name} has been initialized`);
+    logger.info(`${app.name} has been initialized`);
   }
 
   private async analyzeVersions() {

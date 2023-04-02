@@ -7,10 +7,10 @@ import {
   IMethodBaseValidations,
   IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
-  AxeResponse,
+  IRequest,
+  IResponse,
   IQueryLimitConfig,
 } from "./Interfaces";
-import IRequest from "./Frameworks/Requests/IRequest";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
 
@@ -36,7 +36,7 @@ class Model {
   }
 
   get middlewares():
-    | ((req: IRequest, res: AxeResponse, next: NextFunction) => void)[]
+    | ((req: IRequest, res: IResponse, next: NextFunction) => void)[]
     | IHandlerBaseMiddleware[]
     | IHandlerBaseMiddleware {
     return [];
@@ -116,10 +116,10 @@ class Model {
 
   getMiddlewares(
     handlerType: HandlerTypes
-  ): ((req: IRequest, res: AxeResponse, next: NextFunction) => void)[] {
+  ): ((req: IRequest, res: IResponse, next: NextFunction) => void)[] {
     const results: ((
       req: IRequest,
-      res: AxeResponse,
+      res: IResponse,
       next: NextFunction
     ) => void)[] = [];
     const middlewares = this.middlewares;

@@ -1,9 +1,9 @@
 import { NextFunction } from "express";
 import { AcceptLanguageResolver } from "../Resolvers";
 import { getVersionByRequest } from "../Helpers";
-import IRequest from "src/Frameworks/Requests/IRequest";
+import { IRequest, IResponse } from "src/Interfaces";
 
-export default async (req: IRequest, res: any, next: NextFunction) => {
+export default async (req: IRequest, res: IResponse, next: NextFunction) => {
   // Application configuration is need for the default setting.
   const version = await getVersionByRequest(req);
 

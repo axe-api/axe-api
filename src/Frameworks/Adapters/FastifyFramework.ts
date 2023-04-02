@@ -1,74 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { AxeResponse, IFramework, IFrameworkHandler } from "../Interfaces";
-import { Frameworks } from "../Enums";
-import LogService from "../Services/LogService";
-
-export abstract class FastifyRequest {
-  type = "fastify";
-  abstract url: string;
-  abstract body: any;
-  abstract baseUrl: string;
-  abstract hostname: string;
-  abstract ip: string;
-  abstract ips: string;
-  abstract originalUrl: string;
-  abstract params: any;
-  abstract path: string;
-  abstract protocol: "http" | "https";
-  abstract query: any;
-  abstract headers: any;
-  abstract currentLanguage: any;
-  abstract param(name: string): string;
-  abstract get(name: string): string;
-  abstract reaquestMethod: string;
-
-  get method(): string {
-    return this.reaquestMethod;
-  }
-
-  getHeader(name: string): string | null {
-    return this.headers[name];
-  }
-
-  setHeader(name: string, value: any): void {
-    this.headers[name] = value;
-  }
-
-  deleteHeader(name: string): void {
-    delete this.headers[name];
-  }
-}
-
-export abstract class FastifyResponse implements AxeResponse {
-  abstract cookie: any;
-  abstract set: any;
-  abstract get: any;
-  abstract removeHeader(name: string): any;
-  abstract appand(name: string, value: any): void;
-  abstract clearCookie(name: string, options: any): void;
-  abstract getHeaders(): Record<string, string> | null;
-  abstract status(status: number): AxeResponse;
-  abstract redirect(url: string): void;
-  abstract send(data?: any): void;
-  abstract json(data?: any): void;
-  abstract header(name: string, value: string): any;
-  setCookie(name: string, value: string, options: any): void {
-    this.cookie(name, value, options);
-  }
-  getHeader(name: string): string | null {
-    return this.get(name);
-  }
-  setHeader(name: string, value: string): void {
-    this.header(name, value);
-  }
-  deleteHeader(name: string): void {
-    this.removeHeader(name);
-  }
-}
+import {
+  IFramework,
+  IFrameworkHandler,
+  IRequest,
+  IResponse,
+} from "../../Interfaces";
+import { Frameworks } from "../../Enums";
+import LogService from "../../Services/LogService";
 
 export type ExpressHandler = (
-  req: FastifyRequest,
-  res: FastifyResponse,
+  req: IRequest,
+  res: IResponse,
   next: any
 ) => Promise<any> | void;
 
@@ -100,12 +42,13 @@ function updateReqResToExpressish(middlewares: any, handler: any) {
 
 class FastifyFramework implements IFramework {
   client: any;
-  _name: Frameworks;
   _helpers: Record<string, any> | undefined;
-  constructor(fastify: any) {
+  public name: Frameworks = Frameworks.Fastify;
+
+  async init(): Promise<void> {
     try {
+      const fastify = (await import("fastify")).default;
       this.client = fastify();
-      this._name = Frameworks.Fastify;
     } catch (error: any) {
       if (error.code === "MODULE_NOT_FOUND") {
         const logger = LogService.getInstance();
