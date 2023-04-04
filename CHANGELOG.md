@@ -5,7 +5,6 @@
 ### Breaking Changes
 
 - Added new Serizaliation folder [#125](https://github.com/axe-api/axe-api/issues/125)
-- Added multiple version support [#137](https://github.com/axe-api/axe-api/issues/137)
 - New hook/event folder structure [#146](https://github.com/axe-api/axe-api/issues/146)
 - Limiting query features by configurations [#38](https://github.com/axe-api/axe-api/issues/38)
 - Removing external dependencies from axe-core [#151](https://github.com/axe-api/axe-api/issues/151)
