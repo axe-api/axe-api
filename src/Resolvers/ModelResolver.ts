@@ -115,6 +115,7 @@ class ModelResolver {
     modelList: ModelListService,
     hookType: Extensions
   ) {
+    const logger = LogService.getInstance();
     // What kind of hooks that we can have
     const hookList = Object.keys(HookFunctionTypes);
     const fileResolver = new FileResolver();
@@ -147,15 +148,18 @@ class ModelResolver {
 
       // Loading all hooks files in the subfolder
       const hooks = await fileResolver.resolveContent(subfolderPath);
-      for (const hookName of hookList) {
+      for (const hookName in hooks) {
         // If we have an acceptable hook
-        if (hooks[hookName]) {
+        if (hookList.includes(hookName)) {
           // We bind the hook with the model
           currentModel.setExtensions(
             hookType,
             hookName as HookFunctionTypes,
             hooks[hookName].default
           );
+        }
+        else {
+          logger.warn(`Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`);
         }
       }
     }
