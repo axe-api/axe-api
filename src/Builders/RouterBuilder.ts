@@ -82,7 +82,7 @@ class RouterBuilder {
 
       const urlCreator = API_ROUTE_TEMPLATES[handlerType];
       const url = urlCreator(
-        path.join(await this.getRootPrefix(), this.version.name),
+        `${await this.getRootPrefix()}/${this.version.name}`,
         urlPrefix,
         resource,
         model.instance.primaryKey
