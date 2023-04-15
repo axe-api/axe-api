@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.30.1 (2023-04-05)](https://github.com/axe-api/axe-api/compare/0.30.1...0.30.0)
+
+### Fixed
+
+- Fixed URL slash character difference between windows and *nix [#164](https://github.com/axe-api/axe-api/issues/164)
+
 ## [0.30.0 (2023-04-05)](https://github.com/axe-api/axe-api/compare/0.30.0...0.22.0)
 
 ### Breaking Changes

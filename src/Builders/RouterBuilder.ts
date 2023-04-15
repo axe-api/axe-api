@@ -1,5 +1,4 @@
 import pluralize from "pluralize";
-import path from "path";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
