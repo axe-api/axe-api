@@ -38,7 +38,6 @@ class VersionResolver {
           `${message} ("${version}")`
         );
       }
-
       api.addVersion(version);
     });
   }
@@ -61,5 +60,6 @@ class VersionResolver {
     }
   }
 }
+
 
 export default VersionResolver;

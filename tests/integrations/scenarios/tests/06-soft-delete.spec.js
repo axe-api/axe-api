@@ -18,7 +18,7 @@ const testOnSoftDeleteRecord = async (request, url) => {
     expect(error.response.data.error).toBe(
       "The item is not found on Employee."
     );
-    expect(error.response.status).toBe(400);
+    expect(error.response.status).toBe(404);
   }
 };
 
