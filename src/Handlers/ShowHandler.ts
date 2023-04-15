@@ -11,6 +11,7 @@ import { HandlerTypes, HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { QueryService } from "../Services";
 import { Knex } from "knex";
+import { StatusCodes } from "http-status-codes";
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
@@ -50,9 +51,8 @@ export default async (pack: IRequestPack) => {
 
   let item = await query.first();
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`);
+    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
   }
-
   // We should try to get related data if there is any
   await getRelatedData(
     version,
