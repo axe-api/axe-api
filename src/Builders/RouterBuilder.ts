@@ -336,14 +336,11 @@ class RouterBuilder {
         break;
 
       default:
-        // We should not show the real errors on production
-        if (process.env.NODE_ENV === "production") {
-          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            error: "An error occurredxx.",
-          });
-        }
-
-        throw error;
+        // We should log error and send general error response
+        LogService.getInstance().error(`SERVER ERROR: ${JSON.stringify({...error, message: error.message}, null, '  ')}`);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          error: "An error occurredxx.",
+        });
     }
   }
 
