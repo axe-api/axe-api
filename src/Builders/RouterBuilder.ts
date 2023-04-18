@@ -11,12 +11,7 @@ import {
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES } from "../constants";
-import {
-  HandlerTypes,
-  Relationships,
-  HttpMethods,
-  StatusCodes,
-} from "../Enums";
+import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
 import HandlerFactory from "../Handlers/HandlerFactory";
 import ApiError from "../Exceptions/ApiError";
 import {
@@ -187,17 +182,21 @@ class RouterBuilder {
   ) {
     const docs = DocumentationService.getInstance();
     const app = await IoCService.useByType<Express>("App");
-    const handler = (req: Request, res: Response) => {
-      this.requestHandler(
-        handlerType,
-        req,
-        res,
-        model,
-        parentModel,
-        relation
-      ).catch((error) => {
-        this.sendErrorAsResponse(res, error);
-      });
+
+    const handler = async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await this.requestHandler(
+          handlerType,
+          req,
+          res,
+          model,
+          parentModel,
+          relation
+        );
+      } catch (error: any) {
+        // Catch error then pass it to the express error handler
+        next(error);
+      }
     };
 
     switch (handlerType) {
@@ -336,13 +335,14 @@ class RouterBuilder {
         break;
 
       default:
-        // We should not show the real errors on production
-        if (process.env.NODE_ENV === "production") {
-          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            error: "An error occurredxx.",
-          });
-        }
-
+        // We should log error and send general error response
+        LogService.getInstance().error(
+          `SERVER ERROR: ${JSON.stringify(
+            { ...error, message: error.message },
+            null,
+            "  "
+          )}`
+        );
         throw error;
     }
   }
