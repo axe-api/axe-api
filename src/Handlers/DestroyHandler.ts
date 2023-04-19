@@ -3,6 +3,7 @@ import { IRequestPack, IHookParameter } from "../Interfaces";
 import { addForeignKeyQuery, callHooks, addSoftDeleteQuery } from "./Helpers";
 import { HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
+import { StatusCodes } from "../Enums";
 
 export default async (pack: IRequestPack) => {
   const { model, req, res, database, relation, parentModel } = pack;
@@ -24,7 +25,7 @@ export default async (pack: IRequestPack) => {
 
   const item = await query.first();
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`);
+    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
   }
 
   await callHooks(model, HookFunctionTypes.onAfterDeleteQuery, {
