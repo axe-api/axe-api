@@ -1,5 +1,4 @@
 import pluralize from "pluralize";
-import path from "path";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
@@ -82,7 +81,7 @@ class RouterBuilder {
 
       const urlCreator = API_ROUTE_TEMPLATES[handlerType];
       const url = urlCreator(
-        path.join(await this.getRootPrefix(), this.version.name),
+        `${await this.getRootPrefix()}/${this.version.name}`,
         urlPrefix,
         resource,
         model.instance.primaryKey
