@@ -1,0 +1,19 @@
+name: Lint Check
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+      - rc
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+      - name: Run ESLint
+        run: npm ci && npm run lint
