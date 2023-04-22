@@ -1,5 +1,5 @@
-import { IModelService, IRouteDocumentation } from "../Interfaces";
-import { HttpMethods } from "../Enums";
+import { IModelService, IRouteDocumentation, IVersion } from "../Interfaces";
+import { HandlerTypes, HttpMethods } from "../Enums";
 
 class DocumentationService {
   private static instance: DocumentationService;
@@ -17,15 +17,27 @@ class DocumentationService {
     return DocumentationService.instance;
   }
 
-  push(method: HttpMethods, url: string, model: IModelService) {
+  push(
+    version: IVersion,
+    handler: HandlerTypes,
+    method: HttpMethods,
+    url: string,
+    model: IModelService
+  ) {
     this.routes.push({
+      version: version.name,
+      handler,
       model: model.name,
       table: model.instance.table,
       columns: model.columns,
+      hiddens: model.instance.hiddens,
+      relations: model.relations,
       method,
       url,
       fillables: model.instance.getFillableFields(method),
       validations: model.instance.getValidationRules(method),
+      queryLimits: model.queryLimits,
+      queryDefaults: version.config?.query?.defaults || {},
     });
   }
 
