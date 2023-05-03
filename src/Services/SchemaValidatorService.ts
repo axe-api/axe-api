@@ -98,10 +98,11 @@ class SchemaValidatorService {
           model.name
         } model doesn't have the following columns on the database; "${
           model.instance.table
-        }.${undefinedColumns.join(",")}"`
+        }.${undefinedColumns.map(column => column.trim()).join(",")}"`
       );
     }
   }
+  
 
   private checkRelationNamesOrFail(model: IModelService, names: string[]) {
     const undefinedRelationNames = names.filter((name) => {
