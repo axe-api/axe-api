@@ -52,7 +52,7 @@ export default async (pack: IRequestPack) => {
   let item = await query.first();
   if (!item) {
     throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
-  }//parentı kontrol edip gerçekten varsa 404le item not found döndermemiz gerekiyor
+  }
   
  
   // We should try to get related data if there is any
