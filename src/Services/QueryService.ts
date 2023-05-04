@@ -502,6 +502,13 @@ class QueryService {
     if (this.hasSpecialStructure(where.field, structure)) {
       where.field = where.field.replace(structure, "");
       where.condition = condition;
+      where.model.columns.forEach(column=>{
+        if(column.name==where.field && column.data_type !=='varchar' )
+        {
+          //error
+          throw new ApiError(`Query field need to be varchar. Unacceptable query field: ${where.field}`);
+        }
+        })
     }
   }
 
