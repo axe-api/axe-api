@@ -38,9 +38,9 @@
     "lint": "eslint src/**",
     "lint:watch": "esw --watch --color",
     "prepare:integration": "nodemon --ignore \"./tests/**\" ./scripts/run-integration-test.js",
-    "test:postgres": "sh ./scripts/test-postgres.sh",
-    "test:mysql57": "sh ./scripts/test-mysql57.sh",
-    "test:mysql8": "sh ./scripts/test-mysql8.sh"
+    "test:postgres": "node ./scripts/test-postgres.js",
+    "test:mysql57": "node ./scripts/test-mysql57.js",
+    "test:mysql8": "node ./scripts/test-mysql8.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
