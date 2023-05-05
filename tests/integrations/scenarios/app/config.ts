@@ -14,7 +14,6 @@ const config: IApplicationConfig = {
       database: process.env.DB_DATABASE,
       port: parseInt(process.env.DB_PORT || "3000"),
     },
-    searchPath: [process.env.DB_USER || "user", "public"],
     pool: {
       min: 2,
       max: 10,

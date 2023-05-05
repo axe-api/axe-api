@@ -1,3 +1,5 @@
+set -e
+
 echo "Postgres Tests have been started."
 
 echo "Setting up MySQL container images"
