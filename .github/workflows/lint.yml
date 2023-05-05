@@ -1,6 +1,13 @@
 name: Lint Check
 
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+      - develop
+      - rc   
   pull_request:
     branches:
       - master
@@ -8,12 +15,22 @@ on:
       - rc
 
 jobs:
-  build:
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository code
+      - name: Check out Git repository
         uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-      - name: Run ESLint
-        run: npm ci && npm run lint
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+
+      - name: Install Node.js dependencies
+        run: NODE_ENV=development npm ci
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
