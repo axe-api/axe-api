@@ -1,6 +1,6 @@
-import { Relationships } from "../Enums";
-import { IModelService, IVersion } from "../Interfaces";
-import { LogService } from "../Services";
+import { Relationships } from '../Enums';
+import { IModelService, IVersion } from '../Interfaces';
+import { LogService } from '../Services';
 
 class ModelTreeBuilder {
   private version: IVersion;

@@ -1,6 +1,6 @@
-import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
-import { Column } from "knex-schema-inspector/lib/types/column";
+import { Knex } from 'knex';
+import { Express, Request, Response, NextFunction } from 'express';
+import { Column } from 'knex-schema-inspector/lib/types/column';
 import {
   HandlerTypes,
   LogLevels,
@@ -13,10 +13,10 @@ import {
   DependencyTypes,
   QueryFeature,
   QueryFeatureType,
-} from "./Enums";
-import Model from "./Model";
-import { SerializationFunction } from "./Types";
-import { ModelListService } from "./Services";
+} from './Enums';
+import Model from './Model';
+import { SerializationFunction } from './Types';
+import { ModelListService } from './Services';
 
 export interface IColumn extends Column {
   table_name: string;

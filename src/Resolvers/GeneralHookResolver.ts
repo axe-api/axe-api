@@ -1,5 +1,5 @@
-import { IGeneralHooks, IVersion } from "../Interfaces";
-import { FileResolver } from ".";
+import { IGeneralHooks, IVersion } from '../Interfaces';
+import { FileResolver } from '.';
 
 class GeneralHookResolver {
   private version: IVersion;

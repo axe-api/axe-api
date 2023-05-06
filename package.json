@@ -82,7 +82,7 @@
     "node-color-log": "^10.0.2",
     "nodemon": "^2.0.22",
     "pg": "^8.10.0",
-    "prettier": "^2.8.6",
+    "prettier": "2.8.8",
     "set-value": ">=4.1.0",
     "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",

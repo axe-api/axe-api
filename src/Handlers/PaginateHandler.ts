@@ -1,5 +1,5 @@
-import { Knex } from "knex";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import { Knex } from 'knex';
+import { IRequestPack, IHookParameter } from '../Interfaces';
 import {
   addForeignKeyQuery,
   getRelatedData,
@@ -7,9 +7,9 @@ import {
   filterHiddenFields,
   callHooks,
   addSoftDeleteQuery,
-} from "./Helpers";
-import { HandlerTypes, HookFunctionTypes } from "../Enums";
-import { QueryService } from "../Services";
+} from './Helpers';
+import { HandlerTypes, HookFunctionTypes } from '../Enums';
+import { QueryService } from '../Services';
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, database, relation, parentModel } = pack;

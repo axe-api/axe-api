@@ -1,5 +1,5 @@
-import Validator from "validatorjs";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import Validator from 'validatorjs';
+import { IRequestPack, IHookParameter } from '../Interfaces';
 import {
   getMergedFormData,
   getParentColumn,
@@ -7,13 +7,13 @@ import {
   filterHiddenFields,
   bindTimestampValues,
   callHooks,
-} from "./Helpers";
+} from './Helpers';
 import {
   HandlerTypes,
   HookFunctionTypes,
   HttpMethods,
   TimestampColumns,
-} from "../Enums";
+} from '../Enums';
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
@@ -58,7 +58,7 @@ export default async (pack: IRequestPack) => {
     .returning(model.instance.primaryKey);
 
   let insertedPrimaryKeyValue =
-    typeof returningResult === "number"
+    typeof returningResult === 'number'
       ? returningResult
       : returningResult[model.instance.primaryKey];
 

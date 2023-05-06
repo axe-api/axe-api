@@ -1,4 +1,4 @@
-import { IModelService } from "../Interfaces";
+import { IModelService } from '../Interfaces';
 
 class ModelListService {
   private models: IModelService[];

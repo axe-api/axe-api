@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 class FileResolver {
   async resolve<T>(directory: string): Promise<Record<string, T>> {
@@ -13,13 +13,13 @@ class FileResolver {
       .filter((item) => !item.isDirectory())
       .filter(
         (filename) =>
-          filename.name.includes(".ts") || filename.name.includes(".js")
+          filename.name.includes('.ts') || filename.name.includes('.js')
       )
       .map((item) => item.name);
     for (const file of files) {
       const configFile = path.join(directory, file);
       const { default: content } = await import(configFile);
-      const key = file.replace(".ts", "").replace(".js", "");
+      const key = file.replace('.ts', '').replace('.js', '');
       if (content?.prototype) {
         results[key] = new content();
       } else {
@@ -43,7 +43,7 @@ class FileResolver {
     for (const file of files) {
       const configFile = path.join(directory, file);
       const content = await import(configFile);
-      const key = file.replace(".ts", "").replace(".js", "");
+      const key = file.replace('.ts', '').replace('.js', '');
       results[key] = content;
     }
     return results;

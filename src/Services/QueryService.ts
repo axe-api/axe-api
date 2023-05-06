@@ -3,7 +3,7 @@ import {
   ConditionTypes,
   SortTypes,
   QueryFeature,
-} from "../Enums";
+} from '../Enums';
 import {
   IRawQuery,
   IQuery,
@@ -13,13 +13,13 @@ import {
   IWith,
   IModelService,
   IVersionConfig,
-} from "../Interfaces";
-import { Knex } from "knex";
-import ApiError from "../Exceptions/ApiError";
-import { WithQueryResolver } from "../Resolvers";
-import { ConditionQueryFeatureMap, DEFAULT_VERSION_CONFIG } from "../constants";
-import { valideteQueryFeature } from "./LimitService";
-import { isBoolean } from "../Handlers/Helpers";
+} from '../Interfaces';
+import { Knex } from 'knex';
+import ApiError from '../Exceptions/ApiError';
+import { WithQueryResolver } from '../Resolvers';
+import { ConditionQueryFeatureMap, DEFAULT_VERSION_CONFIG } from '../constants';
+import { valideteQueryFeature } from './LimitService';
+import { isBoolean } from '../Handlers/Helpers';
 
 class QueryService {
   model: IModelService;
@@ -44,12 +44,12 @@ class QueryService {
 
   applyFields(query: Knex.QueryBuilder, fields: string[]) {
     // Users should be able to select some fields to show.
-    if (fields.length === 0 || (fields.length === 1 && fields[0] === "*")) {
+    if (fields.length === 0 || (fields.length === 1 && fields[0] === '*')) {
       valideteQueryFeature(this.model, QueryFeature.FieldsAll);
       query.select(`${this.model.instance.table}.*`);
     } else {
       const fullPathFields = fields.map((field) => {
-        if (field.includes(".") === false) {
+        if (field.includes('.') === false) {
           return `${this.model.instance.table}.${field}`;
         }
         return field;
@@ -93,7 +93,7 @@ class QueryService {
         } else {
           // If the item is an array, we should create the query recursively.
           const firstItem = (item as NestedWhere)[0] as IWhere;
-          if (firstItem.prefix === "or") {
+          if (firstItem.prefix === 'or') {
             sub.orWhere((sub) => {
               this.applyWheresInsideGroup(sub, item);
             });
@@ -124,8 +124,8 @@ class QueryService {
     const undefinedColumns = usedColumns.filter((columnName) => {
       let currentModel: IModelService | undefined = this.model;
       let realColumName = columnName;
-      if (columnName.includes(".")) {
-        const [table, splittedColumnName] = columnName.split(".");
+      if (columnName.includes('.')) {
+        const [table, splittedColumnName] = columnName.split('.');
         currentModel = this.models.find(
           (model) => model.instance.table === table
         );
@@ -137,7 +137,7 @@ class QueryService {
 
     if (undefinedColumns.length > 0) {
       throw new ApiError(
-        `Undefined column names: ${undefinedColumns.join(",")}`
+        `Undefined column names: ${undefinedColumns.join(',')}`
       );
     }
 
@@ -157,8 +157,8 @@ class QueryService {
     ruleSet: IWhere
   ): Knex.QueryBuilder {
     const method = this.getConditionMethodName(ruleSet);
-    const zeroArguments = ["Null", "NotNull"];
-    const oneArguments = ["In", "NotIn", "Between", "NotBetween"];
+    const zeroArguments = ['Null', 'NotNull'];
+    const oneArguments = ['In', 'NotIn', 'Between', 'NotBetween'];
 
     const fullFieldPath = `${ruleSet.table}.${ruleSet.field}`;
 
@@ -226,7 +226,7 @@ class QueryService {
 
   private parseSections(sections: IRawQuery): IQuery {
     if (sections.q) {
-      const queryContent = sections.q.replace(/%20/g, "").replace(/ /g, "");
+      const queryContent = sections.q.replace(/%20/g, '').replace(/ /g, '');
 
       // Users can send an unacceptable query string. We shouldn't allow them to
       // send unacceptable structure because of security reasons.
@@ -245,7 +245,7 @@ class QueryService {
       fields: this.parseFields(sections.fields),
       sort: this.parseSortingOptions(sections.sort),
       q: this.parseCondition(sections.q),
-      with: withQueryResolver.resolve(sections?.with || ""),
+      with: withQueryResolver.resolve(sections?.with || ''),
       trashed: sections?.trashed ? isBoolean(sections.trashed) : false,
     };
 
@@ -313,11 +313,11 @@ class QueryService {
     const strContent = content as string;
 
     // User should be able to select "all" fields.
-    if (strContent.trim() === "*") {
-      return ["*"];
+    if (strContent.trim() === '*') {
+      return ['*'];
     }
 
-    const fields = strContent.split(",");
+    const fields = strContent.split(',');
     fields.forEach((field) => {
       this.shouldBeAcceptableColumn(field);
     });
@@ -333,14 +333,14 @@ class QueryService {
     const result: ISortField[] = [];
     const strContent = content as string;
 
-    for (let field of strContent.split(",")) {
+    for (let field of strContent.split(',')) {
       let type = SortTypes.ASC;
-      if (field.indexOf("-") === 0) {
+      if (field.indexOf('-') === 0) {
         type = SortTypes.DESC;
         field = field.substr(1);
       }
 
-      if (field.indexOf("+") === 0) {
+      if (field.indexOf('+') === 0) {
         field = field.substr(1);
       }
 
@@ -355,7 +355,7 @@ class QueryService {
 
   private parseConditions(conditions: any): NestedWhere {
     if (!Array.isArray(conditions)) {
-      throw new Error("An array should be sent to parseConditions() method.");
+      throw new Error('An array should be sent to parseConditions() method.');
     }
 
     return conditions.map((condition) => {
@@ -386,27 +386,27 @@ class QueryService {
       model: this.model,
       table: this.model.instance.table,
       field: key,
-      condition: ConditionTypes["="],
+      condition: ConditionTypes['='],
       value: content[key],
       relation: null,
     };
 
     // Sometimes we can have basic OR operations for queries
-    if (where.field.indexOf("$or.") === 0) {
-      where.prefix = "or";
-      where.field = where.field.replace("$or.", "");
+    if (where.field.indexOf('$or.') === 0) {
+      where.prefix = 'or';
+      where.field = where.field.replace('$or.', '');
     }
 
-    if (where.field.indexOf("$and.") === 0) {
-      where.prefix = "and";
-      where.field = where.field.replace("$and.", "");
+    if (where.field.indexOf('$and.') === 0) {
+      where.prefix = 'and';
+      where.field = where.field.replace('$and.', '');
     }
 
     // If there is not any value, it means that we should check nullable values
     if (where.value === null) {
       // If the client wants to see not nullable values
-      if (this.hasSpecialStructure(where.field, ".$not")) {
-        where.field = where.field.replace(".$not", "");
+      if (this.hasSpecialStructure(where.field, '.$not')) {
+        where.field = where.field.replace('.$not', '');
         where.condition = ConditionTypes.NotNull;
       } else {
         // So, it means that the clients wants to see null valus
@@ -414,19 +414,19 @@ class QueryService {
       }
     } else {
       // If there is value, we should check it
-      this.applySpecialCondition(where, "$not", ConditionTypes["<>"]);
-      this.applySpecialCondition(where, "$gt", ConditionTypes[">"]);
-      this.applySpecialCondition(where, "$gte", ConditionTypes[">="]);
-      this.applySpecialCondition(where, "$lt", ConditionTypes["<"]);
-      this.applySpecialCondition(where, "$lte", ConditionTypes["<="]);
-      this.applySpecialCondition(where, "$like", ConditionTypes.LIKE);
-      this.applySpecialCondition(where, "$notLike", ConditionTypes["NOT LIKE"]);
-      this.applySpecialCondition(where, "$in", ConditionTypes.In);
-      this.applySpecialCondition(where, "$notIn", ConditionTypes.NotIn);
-      this.applySpecialCondition(where, "$between", ConditionTypes.Between);
+      this.applySpecialCondition(where, '$not', ConditionTypes['<>']);
+      this.applySpecialCondition(where, '$gt', ConditionTypes['>']);
+      this.applySpecialCondition(where, '$gte', ConditionTypes['>=']);
+      this.applySpecialCondition(where, '$lt', ConditionTypes['<']);
+      this.applySpecialCondition(where, '$lte', ConditionTypes['<=']);
+      this.applySpecialCondition(where, '$like', ConditionTypes.LIKE);
+      this.applySpecialCondition(where, '$notLike', ConditionTypes['NOT LIKE']);
+      this.applySpecialCondition(where, '$in', ConditionTypes.In);
+      this.applySpecialCondition(where, '$notIn', ConditionTypes.NotIn);
+      this.applySpecialCondition(where, '$between', ConditionTypes.Between);
       this.applySpecialCondition(
         where,
-        "$notBetween",
+        '$notBetween',
         ConditionTypes.NotBetween
       );
     }
@@ -435,26 +435,26 @@ class QueryService {
       where.condition === ConditionTypes.In ||
       where.condition === ConditionTypes.NotIn
     ) {
-      where.value = where.value.split(",");
+      where.value = where.value.split(',');
     }
 
     if (
       where.condition === ConditionTypes.Between ||
       where.condition === ConditionTypes.NotBetween
     ) {
-      where.value = where.value.split(":");
+      where.value = where.value.split(':');
     }
 
     if (
       where.condition === ConditionTypes.LIKE ||
-      where.condition === ConditionTypes["NOT LIKE"]
+      where.condition === ConditionTypes['NOT LIKE']
     ) {
-      where.value = where.value.replace(/\*/g, "%");
+      where.value = where.value.replace(/\*/g, '%');
     }
 
     // This means that the condition is related with another table
-    if (where.field.includes(".")) {
-      const [relationName, field] = where.field.split(".");
+    if (where.field.includes('.')) {
+      const [relationName, field] = where.field.split('.');
 
       const relation = this.model.relations.find(
         (item) =>
@@ -500,7 +500,7 @@ class QueryService {
   ) {
     structure = `.${structure}`;
     if (this.hasSpecialStructure(where.field, structure)) {
-      where.field = where.field.replace(structure, "");
+      where.field = where.field.replace(structure, '');
       where.condition = condition;
     }
   }
@@ -517,7 +517,7 @@ class QueryService {
       // We should add the field by the relation type. Otherwise it can cause
       // an error something like this; `users.user_id`. Foreign and primary keys
       // are relative.
-      let columnName = "";
+      let columnName = '';
       if (relation.type === Relationships.HAS_MANY) {
         columnName = relation.primaryKey;
       } else {
@@ -529,10 +529,10 @@ class QueryService {
   }
 
   private getConditionMethodName(ruleSet: IWhere) {
-    if (ruleSet.prefix === "or") {
-      return "orWhere";
+    if (ruleSet.prefix === 'or') {
+      return 'orWhere';
     }
-    return "where";
+    return 'where';
   }
 
   private hasSpecialStructure(field: string, structure: string) {
@@ -553,7 +553,7 @@ class QueryService {
       throw new ApiError(`Unacceptable field name: ${field}`);
     }
 
-    if (field.indexOf(".") === 0 || field.indexOf(".") === field.length - 1) {
+    if (field.indexOf('.') === 0 || field.indexOf('.') === field.length - 1) {
       throw new ApiError(
         `You have to define the column specefically: ${field}`
       );

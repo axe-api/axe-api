@@ -2,8 +2,8 @@ import {
   IModelService,
   IHandlerBasedTransactionConfig,
   IVersion,
-} from "../Interfaces";
-import { HandlerTypes } from "../Enums";
+} from '../Interfaces';
+import { HandlerTypes } from '../Enums';
 
 class TransactionResolver {
   private version: IVersion;
@@ -61,7 +61,7 @@ class TransactionResolver {
           defaultValue = configItem.transaction;
         }
       }
-    } else if (typeof option === "boolean") {
+    } else if (typeof option === 'boolean') {
       // Developer should be able to select a boolean value for all kind of routes
       defaultValue = option;
     } else {

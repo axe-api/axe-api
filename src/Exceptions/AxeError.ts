@@ -1,4 +1,4 @@
-import { AxeErrorCode } from "src/Enums";
+import { AxeErrorCode } from 'src/Enums';
 
 class AxeError extends Error {
   type: string;
@@ -7,7 +7,7 @@ class AxeError extends Error {
 
   constructor(code: AxeErrorCode, message: string) {
     super(message);
-    this.type = "AxeError";
+    this.type = 'AxeError';
     this.code = code;
     this.message = message;
   }

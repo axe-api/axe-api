@@ -1,6 +1,6 @@
-import pluralize from "pluralize";
-import { Request, Response, NextFunction } from "express";
-import { snakeCase } from "snake-case";
+import pluralize from 'pluralize';
+import { Request, Response, NextFunction } from 'express';
+import { snakeCase } from 'snake-case';
 import {
   IRelation,
   IMethodBaseConfig,
@@ -8,13 +8,13 @@ import {
   IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
   IQueryLimitConfig,
-} from "./Interfaces";
-import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
-import { DEFAULT_HANDLERS } from "./constants";
+} from './Interfaces';
+import { Relationships, HandlerTypes, HttpMethods } from './Enums';
+import { DEFAULT_HANDLERS } from './constants';
 
 class Model {
   get primaryKey(): string {
-    return "id";
+    return 'id';
   }
 
   get table(): string {
@@ -45,11 +45,11 @@ class Model {
   }
 
   get createdAtColumn(): string | null {
-    return "created_at";
+    return 'created_at';
   }
 
   get updatedAtColumn(): string | null {
-    return "updated_at";
+    return 'updated_at';
   }
 
   get deletedAtColumn(): string | null {
@@ -83,14 +83,14 @@ class Model {
 
     const values: IMethodBaseConfig = this.fillable;
     switch (methodType) {
-      case HttpMethods.PATCH:
-        return values.PATCH || [];
-      case HttpMethods.POST:
-        return values.POST || [];
-      case HttpMethods.PUT:
-        return values.PUT || [];
-      default:
-        return [];
+    case HttpMethods.PATCH:
+      return values.PATCH || [];
+    case HttpMethods.POST:
+      return values.POST || [];
+    case HttpMethods.PUT:
+      return values.PUT || [];
+    default:
+      return [];
     }
   }
 
@@ -102,13 +102,13 @@ class Model {
     const values: IMethodBaseValidations = this.validations;
 
     switch (methodType) {
-      case HttpMethods.POST:
-        return values.POST || null;
-      case HttpMethods.PATCH:
-      case HttpMethods.PUT:
-        return values.PUT || null;
-      default:
-        return null;
+    case HttpMethods.POST:
+      return values.POST || null;
+    case HttpMethods.PATCH:
+    case HttpMethods.PUT:
+      return values.PUT || null;
+    default:
+      return null;
     }
   }
 
@@ -143,7 +143,7 @@ class Model {
     return results;
   }
 
-  hasMany(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
+  hasMany(relatedModel: string, primaryKey = 'id', foreignKey = ''): IRelation {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
         this.constructor.name.toLowerCase()
@@ -159,8 +159,8 @@ class Model {
     };
   }
 
-  hasOne(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
-    if (foreignKey === "") {
+  hasOne(relatedModel: string, primaryKey = 'id', foreignKey = ''): IRelation {
+    if (foreignKey === '') {
       foreignKey = `${pluralize.singular(relatedModel.toLowerCase())}_id`;
     }
 
@@ -182,7 +182,7 @@ class Model {
     let status = false;
 
     for (const key of Object.keys(tester)) {
-      if (typeof tester[key] === "string") {
+      if (typeof tester[key] === 'string') {
         status = true;
       }
     }

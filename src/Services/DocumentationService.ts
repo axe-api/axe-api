@@ -1,5 +1,5 @@
-import { IModelService, IRouteDocumentation } from "../Interfaces";
-import { HttpMethods } from "../Enums";
+import { IModelService, IRouteDocumentation } from '../Interfaces';
+import { HttpMethods } from '../Enums';
 
 class DocumentationService {
   private static instance: DocumentationService;

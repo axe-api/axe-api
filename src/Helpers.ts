@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import { paramCase } from "change-case";
-import { Request } from "express";
-import { APIService } from "./Services";
-import { IVersion } from "./Interfaces";
+import chalk from 'chalk';
+import { paramCase } from 'change-case';
+import { Request } from 'express';
+import { APIService } from './Services';
+import { IVersion } from './Interfaces';
 
 export const getVersionByRequest = async (req: Request): Promise<IVersion> => {
   // Application configuration is need for the default setting.
@@ -61,22 +61,22 @@ export const consoleAxeError = (error: any) => {
   const maxLength = getMaxLength(error.code, error.message);
 
   const messages = [
-    "\n",
-    ...putWithSpace(" ", maxLength),
+    '\n',
+    ...putWithSpace(' ', maxLength),
     ...putWithSpace(`[${error.code}]`, maxLength),
-    ...putWithSpace(" ", maxLength),
+    ...putWithSpace(' ', maxLength),
     ...putWithSpace(error.message, maxLength),
-    ...putWithSpace(" ", maxLength),
+    ...putWithSpace(' ', maxLength),
   ];
-  console.log(chalk.bgRed.white(messages.join("\n")));
+  console.log(chalk.bgRed.white(messages.join('\n')));
 
   console.log(
     chalk.cyan(
       [
-        "\n",
-        "You can find more in the documentation;",
+        '\n',
+        'You can find more in the documentation;',
         `https://axe-api.com/errors.html#${paramCase(error.code)}`,
-      ].join("\n")
+      ].join('\n')
     )
   );
 };

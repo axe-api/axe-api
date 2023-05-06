@@ -1,7 +1,7 @@
-import path from "path";
-import { LogLevels } from "../Enums";
-import { IAPI, IApplicationConfig, IVersion } from "../Interfaces";
-import ModelListService from "./ModelListService";
+import path from 'path';
+import { LogLevels } from '../Enums';
+import { IAPI, IApplicationConfig, IVersion } from '../Interfaces';
+import ModelListService from './ModelListService';
 
 class APIService {
   private folders: IAPI;
@@ -10,13 +10,13 @@ class APIService {
   constructor(rootFolder: string) {
     this.folders = {
       rootFolder: rootFolder,
-      appFolder: path.join(rootFolder, "app"),
+      appFolder: path.join(rootFolder, 'app'),
       versions: [],
       config: {
-        env: "production",
+        env: 'production',
         port: 3000,
         logLevel: LogLevels.INFO,
-        prefix: "/api",
+        prefix: '/api',
         database: {},
       },
     };
@@ -61,20 +61,20 @@ class APIService {
       config: {
         transaction: [],
         serializers: [],
-        supportedLanguages: ["en"],
-        defaultLanguage: "en",
+        supportedLanguages: ['en'],
+        defaultLanguage: 'en',
         query: {
           limits: [],
         },
       },
       folders: {
         root,
-        config: path.join(root, "Config"),
-        events: path.join(root, "Events"),
-        hooks: path.join(root, "Hooks"),
-        middlewares: path.join(root, "Middlewares"),
-        models: path.join(root, "Models"),
-        serialization: path.join(root, "Serialization"),
+        config: path.join(root, 'Config'),
+        events: path.join(root, 'Events'),
+        hooks: path.join(root, 'Hooks'),
+        middlewares: path.join(root, 'Middlewares'),
+        models: path.join(root, 'Models'),
+        serialization: path.join(root, 'Serialization'),
       },
       modelList: new ModelListService([]),
       modelTree: [],

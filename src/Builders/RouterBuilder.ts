@@ -1,31 +1,31 @@
-import pluralize from "pluralize";
-import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
-import { paramCase, camelCase } from "change-case";
-import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
+import pluralize from 'pluralize';
+import { Knex } from 'knex';
+import { Express, Request, Response, NextFunction } from 'express';
+import { paramCase, camelCase } from 'change-case';
+import { GeneralHookResolver, TransactionResolver } from '../Resolvers';
 import {
   IGeneralHooks,
   IModelService,
   IRelation,
   IRequestPack,
   IVersion,
-} from "../Interfaces";
-import { API_ROUTE_TEMPLATES } from "../constants";
+} from '../Interfaces';
+import { API_ROUTE_TEMPLATES } from '../constants';
 import {
   HandlerTypes,
   Relationships,
   HttpMethods,
   StatusCodes,
-} from "../Enums";
-import HandlerFactory from "../Handlers/HandlerFactory";
-import ApiError from "../Exceptions/ApiError";
+} from '../Enums';
+import HandlerFactory from '../Handlers/HandlerFactory';
+import ApiError from '../Exceptions/ApiError';
 import {
   LogService,
   DocumentationService,
   IoCService,
   APIService,
-} from "../Services";
-import { acceptLanguageMiddleware } from "../Middlewares";
+} from '../Services';
+import { acceptLanguageMiddleware } from '../Middlewares';
 
 class RouterBuilder {
   private version: IVersion;
@@ -35,7 +35,7 @@ class RouterBuilder {
   }
 
   async build() {
-    const app = await IoCService.useByType<Express>("App");
+    const app = await IoCService.useByType<Express>('App');
     const logger = LogService.getInstance();
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
@@ -62,7 +62,7 @@ class RouterBuilder {
 
   private async createRouteByModel(
     model: IModelService,
-    urlPrefix = "",
+    urlPrefix = '',
     parentModel: IModelService | null = null,
     relation: IRelation | null = null,
     allowRecursive = true
@@ -185,46 +185,46 @@ class RouterBuilder {
     relation: IRelation | null
   ) {
     const docs = DocumentationService.getInstance();
-    const app = await IoCService.useByType<Express>("App");
+    const app = await IoCService.useByType<Express>('App');
     const handler = (req: Request, res: Response) => {
       this.requestHandler(handlerType, req, res, model, parentModel, relation);
     };
 
     switch (handlerType) {
-      case HandlerTypes.ALL:
-        app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(HttpMethods.DELETE, url, model);
-        break;
-      case HandlerTypes.FORCE_DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(HttpMethods.DELETE, url, model);
-        break;
-      case HandlerTypes.INSERT:
-        app.post(url, middlewares, handler);
-        docs.push(HttpMethods.POST, url, model);
-        break;
-      case HandlerTypes.PAGINATE:
-        app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.PATCH:
-        app.patch(url, middlewares, handler);
-        docs.push(HttpMethods.PATCH, url, model);
-        break;
-      case HandlerTypes.SHOW:
-        app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.UPDATE:
-        app.put(url, middlewares, handler);
-        docs.push(HttpMethods.PUT, url, model);
-        break;
-      default:
-        throw new Error("Undefined handler type");
+    case HandlerTypes.ALL:
+      app.get(url, middlewares, handler);
+      docs.push(HttpMethods.GET, url, model);
+      break;
+    case HandlerTypes.DELETE:
+      app.delete(url, middlewares, handler);
+      docs.push(HttpMethods.DELETE, url, model);
+      break;
+    case HandlerTypes.FORCE_DELETE:
+      app.delete(url, middlewares, handler);
+      docs.push(HttpMethods.DELETE, url, model);
+      break;
+    case HandlerTypes.INSERT:
+      app.post(url, middlewares, handler);
+      docs.push(HttpMethods.POST, url, model);
+      break;
+    case HandlerTypes.PAGINATE:
+      app.get(url, middlewares, handler);
+      docs.push(HttpMethods.GET, url, model);
+      break;
+    case HandlerTypes.PATCH:
+      app.patch(url, middlewares, handler);
+      docs.push(HttpMethods.PATCH, url, model);
+      break;
+    case HandlerTypes.SHOW:
+      app.get(url, middlewares, handler);
+      docs.push(HttpMethods.GET, url, model);
+      break;
+    case HandlerTypes.UPDATE:
+      app.put(url, middlewares, handler);
+      docs.push(HttpMethods.PUT, url, model);
+      break;
+    default:
+      throw new Error('Undefined handler type');
     }
   }
 
@@ -240,7 +240,7 @@ class RouterBuilder {
     let hasTransaction = false;
 
     try {
-      const database = (await IoCService.use("Database")) as Knex;
+      const database = (await IoCService.use('Database')) as Knex;
       const api = APIService.getInstance();
 
       hasTransaction = await new TransactionResolver(this.version).resolve(
@@ -281,23 +281,23 @@ class RouterBuilder {
     const type: string | undefined = error.type;
 
     switch (type) {
-      case "ApiError":
-        // eslint-disable-next-line no-case-declarations
-        const apiError: ApiError = error as ApiError;
-        res.status(apiError.status).json({
-          error: apiError.message,
+    case 'ApiError':
+      // eslint-disable-next-line no-case-declarations
+      const apiError: ApiError = error as ApiError;
+      res.status(apiError.status).json({
+        error: apiError.message,
+      });
+      break;
+
+    default:
+      // We should not show the real errors on production
+      if (process.env.NODE_ENV === 'production') {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          error: 'An error occurredxx.',
         });
-        break;
+      }
 
-      default:
-        // We should not show the real errors on production
-        if (process.env.NODE_ENV === "production") {
-          res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            error: "An error occurredxx.",
-          });
-        }
-
-        throw error;
+      throw error;
     }
   }
 
@@ -309,13 +309,13 @@ class RouterBuilder {
 
   private getRootPrefix = async (): Promise<string> => {
     const api = APIService.getInstance();
-    let prefix = api.config.prefix || "api";
+    let prefix = api.config.prefix || 'api';
 
-    if (prefix.substr(0, 1) === "/") {
+    if (prefix.substr(0, 1) === '/') {
       prefix = prefix.substr(1);
     }
 
-    if (prefix.substr(prefix.length - 1) === "/") {
+    if (prefix.substr(prefix.length - 1) === '/') {
       prefix = prefix.substr(0, prefix.length - 1);
     }
 

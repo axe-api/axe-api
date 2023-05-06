@@ -1,5 +1,5 @@
-import { Request } from "express";
-import { camelCase } from "change-case";
+import { Request } from 'express';
+import { camelCase } from 'change-case';
 import {
   IModelService,
   IRelation,
@@ -7,21 +7,21 @@ import {
   IHookParameter,
   IQuery,
   IVersion,
-} from "../Interfaces";
-import { Knex } from "knex";
-import { IWith } from "../Interfaces";
+} from '../Interfaces';
+import { Knex } from 'knex';
+import { IWith } from '../Interfaces';
 import {
   HandlerTypes,
   Relationships,
   HookFunctionTypes,
   TimestampColumns,
   QueryFeature,
-} from "../Enums";
-import ApiError from "../Exceptions/ApiError";
-import { IoCService, ModelListService } from "../Services";
-import { SerializationFunction } from "../Types";
-import { valideteQueryFeature } from "../Services/LimitService";
-import { RelationQueryFeatureMap } from "../constants";
+} from '../Enums';
+import ApiError from '../Exceptions/ApiError';
+import { IoCService, ModelListService } from '../Services';
+import { SerializationFunction } from '../Types';
+import { valideteQueryFeature } from '../Services/LimitService';
+import { RelationQueryFeatureMap } from '../constants';
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -70,7 +70,7 @@ export const callHooks = async (
     // we don't await for the events. If the developer uses the transaction and
     // try to commit something, it would be lost cause the transaction could be
     // already completed.
-    const database = (await IoCService.use("Database")) as Knex;
+    const database = (await IoCService.use('Database')) as Knex;
     params.database = database;
 
     // Calling the events
@@ -104,7 +104,7 @@ const getPrimaryOrForeignKeyByRelation = (
   relation: IRelation,
   dataField: string
 ) => {
-  if (dataField === "primaryKey") {
+  if (dataField === 'primaryKey') {
     return relation.primaryKey;
   }
   return relation.foreignKey;
@@ -148,7 +148,7 @@ const globalSerializer = async (
   // Push all runable serializer into callbacks.
   version.config.serializers.map((configSerializer) => {
     // Serialize data for all requests types.
-    if (typeof configSerializer === "function") {
+    if (typeof configSerializer === 'function') {
       callbacks.push(
         configSerializer as unknown as (data: any, request: Request) => void
       );
@@ -264,11 +264,11 @@ export const getRelatedData = async (
       `${model.instance.table}.${definedRelation.name}`
     );
 
-    let dataField = "primaryKey";
-    let searchField = "foreignKey";
+    let dataField = 'primaryKey';
+    let searchField = 'foreignKey';
     if (definedRelation.type !== Relationships.HAS_MANY) {
-      dataField = "foreignKey";
-      searchField = "primaryKey";
+      dataField = 'foreignKey';
+      searchField = 'primaryKey';
     }
 
     const dataFieldKey = getPrimaryOrForeignKeyByRelation(
@@ -286,7 +286,7 @@ export const getRelatedData = async (
     );
 
     // Selecting the special field for the relations
-    let selectColumns: string[] = ["*"];
+    let selectColumns: string[] = ['*'];
     if (clientQuery.fields.length > 0) {
       selectColumns = [...clientQuery.fields, searchFieldKey];
 
@@ -310,13 +310,13 @@ export const getRelatedData = async (
         (column) => !foreignModel.columnNames.includes(column)
       );
       if (undefinedColumns.length > 0) {
-        throw new ApiError(`Undefined columns: ${undefinedColumns.join(", ")}`);
+        throw new ApiError(`Undefined columns: ${undefinedColumns.join(', ')}`);
       }
     }
 
     // We should add the HAS_ONE relation's foreignKeys incase the developer
     // wants the related data but didn't set the foreignKey column
-    if (selectColumns.length > 0 && selectColumns[0] !== "*") {
+    if (selectColumns.length > 0 && selectColumns[0] !== '*') {
       const requiredForeignKeys = foreignModel.relations
         .filter((item) => item.type === Relationships.HAS_ONE)
         .map((item) => item.foreignKey);
@@ -384,9 +384,9 @@ export const isBoolean = (value: any): boolean => {
     return false;
   }
 
-  value = ((value || "") as string).trim().toLocaleLowerCase();
+  value = ((value || '') as string).trim().toLocaleLowerCase();
 
-  if (value === "true" || value === "1" || value === "on" || value === "yes") {
+  if (value === 'true' || value === '1' || value === 'on' || value === 'yes') {
     return true;
   }
 

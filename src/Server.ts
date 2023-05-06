@@ -2,24 +2,24 @@ import {
   ModelResolver,
   VersionConfigResolver,
   VersionResolver,
-} from "./Resolvers";
-import { IApplicationConfig } from "./Interfaces";
-import dotenv from "dotenv";
-import path from "path";
-import express from "express";
-import knex from "knex";
-import schemaInspector from "knex-schema-inspector";
-import { attachPaginate } from "knex-paginate";
-import { ModelTreeBuilder, RouterBuilder } from "./Builders";
+} from './Resolvers';
+import { IApplicationConfig } from './Interfaces';
+import dotenv from 'dotenv';
+import path from 'path';
+import express from 'express';
+import knex from 'knex';
+import schemaInspector from 'knex-schema-inspector';
+import { attachPaginate } from 'knex-paginate';
+import { ModelTreeBuilder, RouterBuilder } from './Builders';
 import {
   LogService,
   IoCService,
   APIService,
   SchemaValidatorService,
-} from "./Services";
-import DocsHandler from "./Handlers/DocsHandler";
-import RoutesHandler from "./Handlers/RoutesHandler";
-import { consoleAxeError } from "./Helpers";
+} from './Services';
+import DocsHandler from './Handlers/DocsHandler';
+import RoutesHandler from './Handlers/RoutesHandler';
+import { consoleAxeError } from './Helpers';
 
 class Server {
   async start(rootFolder: string) {
@@ -32,7 +32,7 @@ class Server {
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
-      if (error.type === "AxeError") {
+      if (error.type === 'AxeError') {
         consoleAxeError(error);
       } else {
         throw error;
@@ -43,20 +43,20 @@ class Server {
   private async bindDependencies(rootFolder: string) {
     APIService.setInsance(rootFolder);
     const api = APIService.getInstance();
-    IoCService.singleton("SchemaInspector", () => schemaInspector);
-    IoCService.singleton("Database", async () => {
+    IoCService.singleton('SchemaInspector', () => schemaInspector);
+    IoCService.singleton('Database', async () => {
       const database = knex(api.config.database);
       attachPaginate();
       return database;
     });
-    IoCService.singleton("App", async () => {
+    IoCService.singleton('App', async () => {
       return express();
     });
     LogService.setInstance(api.config.logLevel);
   }
 
   private async loadExpress() {
-    const app = await IoCService.use("App");
+    const app = await IoCService.use('App');
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
   }
@@ -76,19 +76,19 @@ class Server {
 
   private async loadGeneralConfiguration() {
     const api = APIService.getInstance();
-    const generalConfigFile = path.join(api.appFolder, "config");
+    const generalConfigFile = path.join(api.appFolder, 'config');
     const { default: content } = await import(generalConfigFile);
     api.setConfig(content as IApplicationConfig);
   }
 
   private async listen() {
-    const app = await IoCService.use("App");
+    const app = await IoCService.use('App');
     const logger = LogService.getInstance();
     const api = APIService.getInstance();
 
-    if (api.config.env === "development") {
-      app.get("/docs", DocsHandler);
-      app.get("/routes", RoutesHandler);
+    if (api.config.env === 'development') {
+      app.get('/docs', DocsHandler);
+      app.get('/routes', RoutesHandler);
     }
 
     app.listen(api.config.port, () => {

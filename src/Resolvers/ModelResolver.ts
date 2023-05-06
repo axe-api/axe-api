@@ -1,22 +1,22 @@
-import { Knex } from "knex";
-import path from "path";
-import fs from "fs";
-import { readdir } from "fs/promises";
-import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspector";
-import { Column } from "knex-schema-inspector/lib/types/column";
-import { IModelService, IColumn, IRelation, IVersion } from "../Interfaces";
-import FileResolver from "./FileResolver";
-import Model from "../Model";
-import { HookFunctionTypes, Extensions, AxeErrorCode } from "../Enums";
+import { Knex } from 'knex';
+import path from 'path';
+import fs from 'fs';
+import { readdir } from 'fs/promises';
+import { SchemaInspector } from 'knex-schema-inspector/lib/types/schema-inspector';
+import { Column } from 'knex-schema-inspector/lib/types/column';
+import { IModelService, IColumn, IRelation, IVersion } from '../Interfaces';
+import FileResolver from './FileResolver';
+import Model from '../Model';
+import { HookFunctionTypes, Extensions, AxeErrorCode } from '../Enums';
 import {
   ModelService,
   LogService,
   IoCService,
   ModelListService,
-} from "../Services";
-import { DEFAULT_METHODS_OF_MODELS } from "../constants";
-import { SerializationFunction } from "../Types";
-import AxeError from "../Exceptions/AxeError";
+} from '../Services';
+import { DEFAULT_METHODS_OF_MODELS } from '../constants';
+import { SerializationFunction } from '../Types';
+import AxeError from '../Exceptions/AxeError';
 
 class ModelResolver {
   private version: IVersion;
@@ -48,7 +48,7 @@ class ModelResolver {
       for (const relationMethod of relationMethods) {
         const relationFunction = (model.instance as any)[relationMethod];
 
-        if (typeof relationFunction !== "function") {
+        if (typeof relationFunction !== 'function') {
           throw new Error(
             `Model relation definition should be a function: ${model.name}.${relationMethod}`
           );
@@ -77,8 +77,8 @@ class ModelResolver {
   }
 
   private async setDatabaseColumns(modelList: ModelListService) {
-    const database = (await IoCService.use("Database")) as Knex;
-    const schemaInspector = (await IoCService.use("SchemaInspector")) as (
+    const database = (await IoCService.use('Database')) as Knex;
+    const schemaInspector = (await IoCService.use('SchemaInspector')) as (
       knex: Knex
     ) => SchemaInspector;
     const inspector = schemaInspector(database);
@@ -183,11 +183,11 @@ class ModelResolver {
     const files = (await readdir(source, { withFileTypes: true }))
       .filter((dirent) => !dirent.isDirectory())
       .map((dirent) => dirent.name)
-      .filter((filename) => filename !== ".gitignore");
+      .filter((filename) => filename !== '.gitignore');
 
     // If there is any hook or event file in the root level
     const hasHookorEvent = files.some(
-      (file) => file.includes("Hook.ts") || file.includes("Event.ts")
+      (file) => file.includes('Hook.ts') || file.includes('Event.ts')
     );
 
     // Throwing an exception

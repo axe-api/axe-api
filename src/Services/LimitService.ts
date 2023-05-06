@@ -1,6 +1,6 @@
-import { QueryFeature, QueryFeatureType } from "../Enums";
-import { IModelService, IQueryLimitConfig } from "../Interfaces";
-import ApiError from "../Exceptions/ApiError";
+import { QueryFeature, QueryFeatureType } from '../Enums';
+import { IModelService, IQueryLimitConfig } from '../Interfaces';
+import ApiError from '../Exceptions/ApiError';
 
 const QueryFeatureMap: Record<QueryFeature, Array<QueryFeature>> = {
   [QueryFeature.All]: [
@@ -108,7 +108,7 @@ export const valideteQueryFeature = (
   key: string | null = null,
   errorDescription?: string
 ) => {
-  const errorDetail = errorDescription ? ` (${errorDescription})` : "";
+  const errorDetail = errorDescription ? ` (${errorDescription})` : '';
 
   const rules = model.queryLimits.filter(
     (limit) => limit.feature === feature && limit.key === null

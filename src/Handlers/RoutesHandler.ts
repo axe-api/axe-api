@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { DocumentationService } from "../Services";
+import { Request, Response } from 'express';
+import { DocumentationService } from '../Services';
 
 export default async (req: Request, res: Response) => {
   const docs = DocumentationService.getInstance();

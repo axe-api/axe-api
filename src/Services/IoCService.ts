@@ -1,5 +1,5 @@
-import { DependencyTypes } from "../Enums";
-import { IDependency } from "../Interfaces";
+import { DependencyTypes } from '../Enums';
+import { IDependency } from '../Interfaces';
 
 class IoCService {
   private static items: Record<string, IDependency> = {};

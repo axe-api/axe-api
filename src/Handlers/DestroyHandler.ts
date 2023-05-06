@@ -1,8 +1,8 @@
-import { Knex } from "knex";
-import { IRequestPack, IHookParameter } from "../Interfaces";
-import { addForeignKeyQuery, callHooks, addSoftDeleteQuery } from "./Helpers";
-import { HookFunctionTypes } from "../Enums";
-import ApiError from "../Exceptions/ApiError";
+import { Knex } from 'knex';
+import { IRequestPack, IHookParameter } from '../Interfaces';
+import { addForeignKeyQuery, callHooks, addSoftDeleteQuery } from './Helpers';
+import { HookFunctionTypes } from '../Enums';
+import ApiError from '../Exceptions/ApiError';
 
 export default async (pack: IRequestPack) => {
   const { model, req, res, database, relation, parentModel } = pack;

@@ -1,8 +1,8 @@
-import path from "path";
-import fs from "fs";
-import { IVersion, IVersionConfig } from "../Interfaces";
-import AxeError from "../Exceptions/AxeError";
-import { AxeErrorCode } from "../Enums";
+import path from 'path';
+import fs from 'fs';
+import { IVersion, IVersionConfig } from '../Interfaces';
+import AxeError from '../Exceptions/AxeError';
+import { AxeErrorCode } from '../Enums';
 
 class VersionConfigResolver {
   private version: IVersion;
@@ -12,7 +12,7 @@ class VersionConfigResolver {
   }
 
   async resolve() {
-    const versionConfigFile = path.join(this.version.folders.root, "config");
+    const versionConfigFile = path.join(this.version.folders.root, 'config');
     if (
       !fs.existsSync(`${versionConfigFile}.ts`) &&
       !fs.existsSync(`${versionConfigFile}.js`)

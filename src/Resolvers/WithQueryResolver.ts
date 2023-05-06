@@ -1,5 +1,5 @@
-import { IModelService, IWith, IRelation } from "../Interfaces";
-import ApiError from "../Exceptions/ApiError";
+import { IModelService, IWith, IRelation } from '../Interfaces';
+import ApiError from '../Exceptions/ApiError';
 
 interface IExpression {
   key: string;
@@ -18,7 +18,7 @@ class WithQueryResolver {
   resolve(expression: string): IWith[] {
     const result: IWith[] = [];
     const root: IExpression = {
-      key: "root",
+      key: 'root',
       children: [],
     };
     const currentModel = this.model;
@@ -40,7 +40,7 @@ class WithQueryResolver {
       }
 
       const relationFunction = (model.instance as any)[expression.key];
-      if (typeof relationFunction === "function") {
+      if (typeof relationFunction === 'function') {
         const definition: IRelation = relationFunction.call(model.instance);
         const relationModel = this.models.find(
           (item) => item.name === definition.model
@@ -98,7 +98,7 @@ class WithQueryResolver {
         root.children.push(child);
       } else {
         root.children.push(
-          ...group.split("|").map((field) => {
+          ...group.split('|').map((field) => {
             return {
               key: field,
               children: [],
@@ -110,7 +110,7 @@ class WithQueryResolver {
   }
 
   private getKey = (group: string) => {
-    const firstIndex = group.indexOf("{");
+    const firstIndex = group.indexOf('{');
     if (firstIndex > -1) {
       return group.substring(0, firstIndex);
     }
@@ -119,7 +119,7 @@ class WithQueryResolver {
   };
 
   private getGroupValue = (group: string) => {
-    const firstIndex = group.indexOf("{");
+    const firstIndex = group.indexOf('{');
     if (firstIndex > -1) {
       return group.substring(firstIndex + 1, group.length - 1);
     }
@@ -134,13 +134,13 @@ class WithQueryResolver {
 
     for (let index = 0; index < expression.length; index++) {
       const char = expression[index];
-      if (char === "{") {
+      if (char === '{') {
         bracket++;
-      } else if (char === "}") {
+      } else if (char === '}') {
         bracket--;
       }
 
-      if (bracket === 0 && char === ",") {
+      if (bracket === 0 && char === ',') {
         result.push(expression.substring(startedAt, index));
         startedAt = index + 1;
       }

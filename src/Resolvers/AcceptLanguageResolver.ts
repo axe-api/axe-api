@@ -1,4 +1,4 @@
-import { IAcceptedLanguage, ILanguage } from "../Interfaces";
+import { IAcceptedLanguage, ILanguage } from '../Interfaces';
 
 class AcceptLanguageResolver {
   static resolve(
@@ -8,7 +8,7 @@ class AcceptLanguageResolver {
   ): ILanguage {
     value = value.trim();
 
-    if (value === "*") {
+    if (value === '*') {
       return this.toLanguageObject(defaultLanguage);
     }
 
@@ -41,8 +41,8 @@ class AcceptLanguageResolver {
     return this.toLanguageObject(defaultLanguage);
   }
 
-  static toLanguageObject(key = ""): ILanguage {
-    const [language, region] = key.split("-");
+  static toLanguageObject(key = ''): ILanguage {
+    const [language, region] = key.split('-');
     return {
       title: key,
       language,
@@ -52,17 +52,17 @@ class AcceptLanguageResolver {
 
   private static toSortedPreferences(value: string): IAcceptedLanguage[] {
     // Splitting by language definitons
-    const keys = value.split(",").map((key) => key.trim());
+    const keys = value.split(',').map((key) => key.trim());
     const languages: IAcceptedLanguage[] = [];
 
     for (const key of keys) {
       // Splitting by the quality values
-      const [code, quality] = key.split(";");
+      const [code, quality] = key.split(';');
 
       // Parsing the language code and the quality value
       const item: IAcceptedLanguage = {
         language: this.toLanguageObject(code),
-        quality: quality ? parseFloat(quality.replace("q=", "")) : 1,
+        quality: quality ? parseFloat(quality.replace('q=', '')) : 1,
       };
 
       languages.push(item);

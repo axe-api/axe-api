@@ -1,22 +1,22 @@
-import Validator from "validatorjs";
-import { readdir } from "fs/promises";
-import { APIService, LogService } from "../Services";
-import AxeError from "../Exceptions/AxeError";
-import { AxeErrorCode } from "../Enums";
+import Validator from 'validatorjs';
+import { readdir } from 'fs/promises';
+import { APIService, LogService } from '../Services';
+import AxeError from '../Exceptions/AxeError';
+import { AxeErrorCode } from '../Enums';
 
 const RESERVED_VERSION_FOLDERS: string[] = [
-  "Config",
-  "Events",
-  "Hooks",
-  "Models",
-  "Serialization",
+  'Config',
+  'Events',
+  'Hooks',
+  'Models',
+  'Serialization',
 ];
 
 class VersionResolver {
   async resolve() {
     const logger = LogService.getInstance();
     await this.getVersions();
-    logger.info("All API versions have been resolved.");
+    logger.info('All API versions have been resolved.');
   }
 
   private async getVersions() {
@@ -27,7 +27,7 @@ class VersionResolver {
     versionFolders.forEach((version) => {
       const validation = new Validator(
         { version },
-        { version: "required|alpha_num" }
+        { version: 'required|alpha_num' }
       );
 
       if (validation.fails()) {

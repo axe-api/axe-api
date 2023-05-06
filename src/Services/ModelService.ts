@@ -1,13 +1,13 @@
-import { HookFunctionTypes, Extensions } from "../Enums";
+import { HookFunctionTypes, Extensions } from '../Enums';
 import {
   IColumn,
   IHookParameter,
   IModelService,
   IQueryLimitConfig,
   IRelation,
-} from "../Interfaces";
-import Model from "./../Model";
-import { SerializationFunction } from "../Types";
+} from '../Interfaces';
+import Model from './../Model';
+import { SerializationFunction } from '../Types';
 
 class ModelService implements IModelService {
   name: string;
@@ -51,7 +51,7 @@ class ModelService implements IModelService {
     } else if (type == Extensions.Events) {
       this.setEvents(hookFunctionType, data);
     } else {
-      throw new Error("Undefined hook type.");
+      throw new Error('Undefined hook type.');
     }
   }
 

@@ -1,14 +1,14 @@
-import AxeError from "../Exceptions/AxeError";
-import { AxeErrorCode, QueryFeature, Relationships } from "../Enums";
+import AxeError from '../Exceptions/AxeError';
+import { AxeErrorCode, QueryFeature, Relationships } from '../Enums';
 import {
   IRelation,
   IMethodBaseConfig,
   IMethodBaseValidations,
   IModelService,
   IVersion,
-} from "../Interfaces";
-import { LogService, ModelListService } from "../Services";
-import { RESERVED_KEYWORDS } from "../constants";
+} from '../Interfaces';
+import { LogService, ModelListService } from '../Services';
+import { RESERVED_KEYWORDS } from '../constants';
 
 const COLUMN_BASED_QUERY_LIMITS: QueryFeature[] = [
   QueryFeature.Sorting,
@@ -71,14 +71,14 @@ class SchemaValidatorService {
       }
 
       for (const relation of model.relations) {
-        if (relation.name === keyword) reservedKeywords.push(relation.name);
+        if (relation.name === keyword) {reservedKeywords.push(relation.name);}
       }
     });
 
     if (reservedKeywords.length > 0) {
       throw new Error(
         `The following keywords are reserved for the framework; "${reservedKeywords.join(
-          ","
+          ','
         )}"`
       );
     }
@@ -98,7 +98,7 @@ class SchemaValidatorService {
           model.name
         } model doesn't have the following columns on the database; "${
           model.instance.table
-        }.${undefinedColumns.join(",")}"`
+        }.${undefinedColumns.join(',')}"`
       );
     }
   }
@@ -114,7 +114,7 @@ class SchemaValidatorService {
         `${
           model.name
         } model doesn't have a valid relation name that is defined in query limits; "${undefinedRelationNames.join(
-          ","
+          ','
         )}"`
       );
     }
@@ -137,9 +137,9 @@ class SchemaValidatorService {
       .map((limit) => limit.key)
       .map((key) => {
         if (!key) {
-          return "";
+          return '';
         }
-        const [, field] = key.split(".");
+        const [, field] = key.split('.');
         return field;
       });
     return items;

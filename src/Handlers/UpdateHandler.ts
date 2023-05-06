@@ -1,5 +1,5 @@
-import Validator from "validatorjs";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import Validator from 'validatorjs';
+import { IRequestPack, IHookParameter } from '../Interfaces';
 import {
   getMergedFormData,
   addForeignKeyQuery,
@@ -8,15 +8,15 @@ import {
   bindTimestampValues,
   callHooks,
   addSoftDeleteQuery,
-} from "./Helpers";
+} from './Helpers';
 import {
   HandlerTypes,
   HookFunctionTypes,
   HttpMethods,
   TimestampColumns,
-} from "../Enums";
-import ApiError from "../Exceptions/ApiError";
-import { Knex } from "knex";
+} from '../Enums';
+import ApiError from '../Exceptions/ApiError';
+import { Knex } from 'knex';
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;

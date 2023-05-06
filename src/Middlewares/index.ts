@@ -1,3 +1,3 @@
-import acceptLanguageMiddleware from "./acceptLanguageMiddleware";
+import acceptLanguageMiddleware from './acceptLanguageMiddleware';
 
 export { acceptLanguageMiddleware };
