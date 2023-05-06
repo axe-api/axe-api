@@ -263,7 +263,7 @@ class RouterBuilder {
         relation,
         database: hasTransaction && trx ? trx : database,
       };
-      await handler(pack);
+      handler(pack);
 
       if (hasTransaction && trx) {
         trx.commit();
@@ -311,12 +311,12 @@ class RouterBuilder {
     const api = APIService.getInstance();
     let prefix = api.config.prefix || "api";
 
-    if (prefix.substr(0, 1) === "/") {
-      prefix = prefix.substr(1);
+    if (prefix.slice(0, 1) === "/") {
+      prefix = prefix.slice(1);
     }
 
-    if (prefix.substr(prefix.length - 1) === "/") {
-      prefix = prefix.substr(0, prefix.length - 1);
+    if (prefix.slice(-1) === "/") {
+      prefix = prefix.slice(0, -1);
     }
 
     return prefix;

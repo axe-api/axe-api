@@ -84,11 +84,11 @@ class Model {
     const values: IMethodBaseConfig = this.fillable;
     switch (methodType) {
       case HttpMethods.PATCH:
-        return values.PATCH || [];
+        return values.PATCH ?? [];
       case HttpMethods.POST:
-        return values.POST || [];
+        return values.POST ?? [];
       case HttpMethods.PUT:
-        return values.PUT || [];
+        return values.PUT ?? [];
       default:
         return [];
     }
@@ -103,10 +103,10 @@ class Model {
 
     switch (methodType) {
       case HttpMethods.POST:
-        return values.POST || null;
+        return values.POST ?? null;
       case HttpMethods.PATCH:
       case HttpMethods.PUT:
-        return values.PUT || null;
+        return values.PUT ?? null;
       default:
         return null;
     }
@@ -134,7 +134,7 @@ class Model {
         }
       });
     } else {
-      const methodBasedMiddlewares = middlewares as IHandlerBaseMiddleware;
+      const methodBasedMiddlewares = middlewares;
       if (methodBasedMiddlewares.handler.includes(handlerType)) {
         results.push(methodBasedMiddlewares.middleware);
       }

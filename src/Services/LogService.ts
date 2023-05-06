@@ -48,12 +48,6 @@ class LogService {
       console.log(message);
     }
   }
-
-  debug(message: string) {
-    if (this.level === LogLevels.ALL) {
-      console.log(message);
-    }
-  }
 }
 
 export default LogService;

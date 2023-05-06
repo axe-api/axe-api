@@ -67,7 +67,7 @@ export default async (pack: IRequestPack) => {
   }
 
   // We should bind the timestamp values
-  bindTimestampValues(formData, [TimestampColumns.UPDATED_AT], model);
+  bindTimestampValues(formData, model, [TimestampColumns.UPDATED_AT]);
 
   await callHooks(model, HookFunctionTypes.onBeforeUpdate, {
     ...pack,

@@ -14,16 +14,16 @@ if (fs.existsSync("./dev-kit.sh")) {
 }
 
 // Cloning the latest version of 'dev-kit'
-const tempKitPath = process.cwd() + "/temp-kit";
-execSync(
-  `git clone https://github.com/axe-api/dev-kit.git ${tempKitPath}`,
-  (err, stdout, stderr) => {
-    if (err) {
-      console.log(err);
-      process.exit();
-    }
+const cloneCommand =
+  "git clone https://github.com/axe-api/dev-kit.git " +
+  process.cwd() +
+  "/temp-kit";
+execSync(cloneCommand, (err, stdout, stderr) => {
+  if (err) {
+    console.log(err);
+    process.exit();
   }
-);
+});
 
 //Moving files to the correct location
 fs.rename("temp-kit/dev-kit.ts", "./dev-kit.ts", function (err) {
@@ -41,16 +41,16 @@ fs.rmSync("temp-kit", { recursive: true, force: true });
 // Installing the SQLite migration for the first usage.
 console.log("Installing the SQLite migration for the first usage.\n");
 
-const knexPath = process.cwd() + "/dev-kit/knexfile.js";
-execSync(
-  `knex --esm migrate:latest --knexfile ${knexPath}`,
-  (err, stdout, stderr) => {
-    if (err) {
-      console.log(err);
-      process.exit();
-    }
+const knexMigrateCommand =
+  "knex --esm migrate:latest --knexfile " +
+  process.cwd() +
+  "/dev-kit/knexfile.js";
+execSync(knexMigrateCommand, (err, stdout, stderr) => {
+  if (!err) {
+    console.log("hey");
+    process.exit();
   }
-);
+});
 
 // Everything is done
 console.log("dev-kit has been installed.\n");

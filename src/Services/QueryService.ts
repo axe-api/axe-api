@@ -105,7 +105,7 @@ class QueryService {
         }
       }
     } else {
-      const condition: IWhere = ruleSet as IWhere;
+      const condition: IWhere = ruleSet;
       this.applyConditionRule(sub, condition);
     }
   }
@@ -132,7 +132,7 @@ class QueryService {
         realColumName = splittedColumnName;
       }
 
-      return !currentModel || !currentModel.columnNames.includes(realColumName);
+      return !currentModel?.columnNames.includes(realColumName);
     });
 
     if (undefinedColumns.length > 0) {
@@ -245,13 +245,13 @@ class QueryService {
       fields: this.parseFields(sections.fields),
       sort: this.parseSortingOptions(sections.sort),
       q: this.parseCondition(sections.q),
-      with: withQueryResolver.resolve(sections?.with || ""),
+      with: withQueryResolver.resolve(sections?.with ?? ""),
       trashed: sections?.trashed ? isBoolean(sections.trashed) : false,
     };
 
     const configPerPage =
-      this.config?.query.defaults?.perPage ||
-      DEFAULT_VERSION_CONFIG.query?.defaults?.perPage ||
+      this.config?.query.defaults?.perPage ??
+      DEFAULT_VERSION_CONFIG.query?.defaults?.perPage ??
       10;
     if (query.per_page !== configPerPage) {
       valideteQueryFeature(this.model, QueryFeature.Limits);
@@ -285,19 +285,19 @@ class QueryService {
     );
 
     const minPerPage =
-      this.config.query?.defaults?.minPerPage ||
-      DEFAULT_VERSION_CONFIG.query.defaults?.minPerPage ||
+      this.config.query?.defaults?.minPerPage ??
+      DEFAULT_VERSION_CONFIG.query.defaults?.minPerPage ??
       1;
 
     const maxPerPage =
-      this.config.query?.defaults?.maxPerPage ||
-      DEFAULT_VERSION_CONFIG.query.defaults?.maxPerPage ||
+      this.config.query?.defaults?.maxPerPage ??
+      DEFAULT_VERSION_CONFIG.query.defaults?.maxPerPage ??
       100;
 
     if (isNaN(value) || value <= minPerPage || value > maxPerPage) {
       return (
-        this.config.query?.defaults?.perPage ||
-        DEFAULT_VERSION_CONFIG.query.defaults?.perPage ||
+        this.config.query?.defaults?.perPage ??
+        DEFAULT_VERSION_CONFIG.query.defaults?.perPage ??
         10
       );
     }
@@ -335,18 +335,20 @@ class QueryService {
 
     for (let field of strContent.split(",")) {
       let type = SortTypes.ASC;
-      if (field.indexOf("-") === 0) {
+      let tempField = field;
+
+      if (tempField.startsWith("-")) {
         type = SortTypes.DESC;
-        field = field.substr(1);
+        tempField = tempField.slice(1);
       }
 
-      if (field.indexOf("+") === 0) {
-        field = field.substr(1);
+      if (tempField.startsWith("+")) {
+        tempField = tempField.slice(1);
       }
 
-      this.shouldBeAcceptableColumn(field);
+      this.shouldBeAcceptableColumn(tempField);
       result.push({
-        name: field,
+        name: tempField,
         type,
       });
     }
@@ -392,12 +394,12 @@ class QueryService {
     };
 
     // Sometimes we can have basic OR operations for queries
-    if (where.field.indexOf("$or.") === 0) {
+    if (where.field.startsWith("$or.")) {
       where.prefix = "or";
       where.field = where.field.replace("$or.", "");
     }
 
-    if (where.field.indexOf("$and.") === 0) {
+    if (where.field.startsWith("$and.")) {
       where.prefix = "and";
       where.field = where.field.replace("$and.", "");
     }
@@ -548,12 +550,12 @@ class QueryService {
   }
 
   private shouldBeAcceptableColumn(field: string) {
-    const regex = /^[0-9,a-z,A-Z_.]+$/;
-    if (!field.match(regex)) {
+    const regex = /^[a-zA-Z0-9_.]+$/;
+    if (!regex.exec(field)) {
       throw new ApiError(`Unacceptable field name: ${field}`);
     }
 
-    if (field.indexOf(".") === 0 || field.indexOf(".") === field.length - 1) {
+    if (field.startsWith(".") || field.endsWith(".")) {
       throw new ApiError(
         `You have to define the column specefically: ${field}`
       );

@@ -135,9 +135,9 @@ export interface IHookParameter {
   database: Knex | Knex.Transaction;
   conditions: IQuery | null;
   query: Knex.QueryBuilder | null;
-  result: any | null;
-  item: any | null;
-  formData: any | null;
+  result: any;
+  item: any;
+  formData: any;
 }
 
 export interface IMethodBaseConfig {

@@ -156,11 +156,11 @@ class SchemaValidatorService {
       return fillable;
     }
 
-    const config = fillable as IMethodBaseConfig;
+    const config = fillable;
     return [
-      ...(config.POST || []),
-      ...(config.PUT || []),
-      ...(config.PATCH || []),
+      ...(config.POST ?? []),
+      ...(config.PUT ?? []),
+      ...(config.PATCH ?? []),
     ];
   };
 

@@ -3,13 +3,12 @@ import { camelCase } from "change-case";
 import {
   IModelService,
   IRelation,
-  IApplicationConfig,
   IHookParameter,
   IQuery,
   IVersion,
+  IWith,
 } from "../Interfaces";
 import { Knex } from "knex";
-import { IWith } from "../Interfaces";
 import {
   HandlerTypes,
   Relationships,
@@ -25,8 +24,8 @@ import { RelationQueryFeatureMap } from "../constants";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
-  columnTypes: TimestampColumns[] = [],
-  model: IModelService
+  model: IModelService,
+  columnTypes: TimestampColumns[] = []
 ) => {
   if (
     columnTypes.includes(TimestampColumns.CREATED_AT) &&
@@ -62,7 +61,7 @@ export const callHooks = async (
   params: IHookParameter
 ) => {
   if (model.hooks[type]) {
-    await model.hooks[type](params);
+    model.hooks[type](params);
   }
 
   if (model.events[type]) {
@@ -163,7 +162,6 @@ const globalSerializer = async (
           request: Request
         ) => void)[])
       );
-      return;
     }
   });
 
@@ -282,7 +280,7 @@ export const getRelatedData = async (
 
     // We should find the parent Primary Key values.
     const parentPrimaryKeyValues: any[] = data.map(
-      (item) => item[dataFieldKey] as any
+      (item) => item[dataFieldKey]
     );
 
     // Selecting the special field for the relations
