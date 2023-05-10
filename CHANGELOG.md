@@ -4,7 +4,9 @@
 
 ### Fixed
 
-- per_page limit response changed  [#172](https://github.com/axe-api/axe-api/issues/172)
+- The app crashes on database errors [#155](https://github.com/axe-api/axe-api/issues/155)
+- We should return 404 if the record is not found [#169](https://github.com/axe-api/axe-api/issues/169)
+- An error should be thrown if the per_page value is not acceptable [#172](https://github.com/axe-api/axe-api/issues/172)
 
 ## [0.31.0 (2023-05-05)](https://github.com/axe-api/axe-api/compare/0.31.0...0.30.3)
 
