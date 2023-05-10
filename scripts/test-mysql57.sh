@@ -1,3 +1,5 @@
+set -e
+
 echo "MySQL-5.7 Tests have been started."
 
 echo "Setting up MySQL container images"

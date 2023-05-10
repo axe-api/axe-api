@@ -1,6 +1,10 @@
 import { Knex } from "knex";
 import { IRequestPack, IHookParameter } from "../Interfaces";
-import { addForeignKeyQuery, callHooks } from "./Helpers";
+import {
+  addForeignKeyQuery,
+  callHooks,
+  checkPrimaryKeyValueType,
+} from "./Helpers";
 import { HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { StatusCodes } from "../Enums";
@@ -8,9 +12,14 @@ import { StatusCodes } from "../Enums";
 export default async (pack: IRequestPack) => {
   const { model, req, res, database, relation, parentModel } = pack;
 
+  // We should check the parameter type
+  const value = req.params[model.instance.primaryKey];
+  checkPrimaryKeyValueType(model, value);
+
+  // Adding the main query
   const query = (database as Knex)
     .from(model.instance.table)
-    .where(model.instance.primaryKey, req.params[model.instance.primaryKey]);
+    .where(model.instance.primaryKey, value);
 
   // If there is a deletedAtColumn, it means that this table support soft-delete
   if (model.instance.deletedAtColumn === null) {

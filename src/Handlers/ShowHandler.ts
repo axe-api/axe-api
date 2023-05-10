@@ -6,6 +6,7 @@ import {
   filterHiddenFields,
   callHooks,
   addSoftDeleteQuery,
+  checkPrimaryKeyValueType,
 } from "./Helpers";
 import { HandlerTypes, HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
@@ -37,8 +38,12 @@ export default async (pack: IRequestPack) => {
   // If there is a relation, we should bind it
   addForeignKeyQuery(req, query, relation, parentModel);
 
-  // We should add this condition in here because of performance.
-  query.where(model.instance.primaryKey, req.params[model.instance.primaryKey]);
+  // We should check the parameter type
+  const value = req.params[model.instance.primaryKey];
+  checkPrimaryKeyValueType(model, value);
+
+  // Adding the main query
+  query.where(model.instance.primaryKey, value);
 
   await callHooks(model, HookFunctionTypes.onBeforeShow, {
     ...pack,
