@@ -7,6 +7,11 @@ const config: IVersionConfig = {
   defaultLanguage: "en",
   query: {
     limits: [allow(QueryFeature.All)],
+    defaults: {
+      perPage: 10,
+      minPerPage: 1,
+      maxPerPage: 30,
+    },
   },
 };
 

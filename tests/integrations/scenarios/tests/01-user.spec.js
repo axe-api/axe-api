@@ -83,6 +83,13 @@ describe("Axe API", () => {
     await deleteIt({ url: `/api/v1/users/${userId}`, status: 200 });
   });
 
+  test("should be client get 400 when per_page has incorrect value ", async () => {
+    await get({
+      url: "/api/v1/users?per_page=30000000000",
+      status: 400,
+    });
+  });
+
   test("should be able to result users as empty after the delation", async () => {
     const { body } = await get({ url: "/api/v1/users", status: 200 });
     expect(body.data.length).toBe(0);
@@ -106,7 +113,6 @@ describe("Axe API", () => {
         ]),
         fields: "email,surname",
         page: 1,
-        per_page: 300,
       },
     });
     expect(response.pagination.total).toBe(1);
