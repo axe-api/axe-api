@@ -1,5 +1,6 @@
 const fs = require("fs");
-const { exec, execSync } = require("node:child_process");
+const { execSync } = require("node:child_process");
+
 // Users should not be able to re-install the dev-kit in case of they have
 // special configuration or changes. That's why we should not let the developer
 // delete old configurations by re-installing.
@@ -25,15 +26,10 @@ execSync(
 );
 
 //Moving files to the correct location
-fs.rename("temp-kit/dev-kit.ts", "./dev-kit.ts", function (err) {
-  if (err) throw err;
-});
-fs.rename("temp-kit/.env", "./.env", function (err) {
-  if (err) throw err;
-});
-fs.rename("temp-kit/dev-kit", "./dev-kit", function (err) {
-  if (err) throw err;
-});
+fs.renameSync("temp-kit/dev-kit.ts", "./dev-kit.ts");
+fs.renameSync("temp-kit/.env", "./.env");
+fs.renameSync("temp-kit/dev-kit", "./dev-kit");
+
 // Cleaning the temp-kit folder
 fs.rmSync("temp-kit", { recursive: true, force: true });
 

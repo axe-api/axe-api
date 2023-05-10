@@ -26,6 +26,7 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
+import { error } from "console";
 
 class RouterBuilder {
   private version: IVersion;
@@ -187,41 +188,86 @@ class RouterBuilder {
     const docs = DocumentationService.getInstance();
     const app = await IoCService.useByType<Express>("App");
     const handler = (req: Request, res: Response) => {
-      this.requestHandler(handlerType, req, res, model, parentModel, relation);
+      this.requestHandler(
+        handlerType,
+        req,
+        res,
+        model,
+        parentModel,
+        relation
+      ).catch((error) => {
+        this.sendErrorAsResponse(res, error);
+      });
     };
 
     switch (handlerType) {
       case HandlerTypes.ALL:
         app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
+        docs.push(this.version, HandlerTypes.ALL, HttpMethods.GET, url, model);
         break;
       case HandlerTypes.DELETE:
         app.delete(url, middlewares, handler);
-        docs.push(HttpMethods.DELETE, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.DELETE,
+          HttpMethods.DELETE,
+          url,
+          model
+        );
         break;
       case HandlerTypes.FORCE_DELETE:
         app.delete(url, middlewares, handler);
-        docs.push(HttpMethods.DELETE, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.FORCE_DELETE,
+          HttpMethods.DELETE,
+          url,
+          model
+        );
         break;
       case HandlerTypes.INSERT:
         app.post(url, middlewares, handler);
-        docs.push(HttpMethods.POST, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.INSERT,
+          HttpMethods.POST,
+          url,
+          model
+        );
         break;
       case HandlerTypes.PAGINATE:
         app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.PAGINATE,
+          HttpMethods.GET,
+          url,
+          model
+        );
         break;
       case HandlerTypes.PATCH:
         app.patch(url, middlewares, handler);
-        docs.push(HttpMethods.PATCH, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.PATCH,
+          HttpMethods.PATCH,
+          url,
+          model
+        );
         break;
       case HandlerTypes.SHOW:
         app.get(url, middlewares, handler);
-        docs.push(HttpMethods.GET, url, model);
+        docs.push(this.version, HandlerTypes.SHOW, HttpMethods.GET, url, model);
         break;
       case HandlerTypes.UPDATE:
         app.put(url, middlewares, handler);
-        docs.push(HttpMethods.PUT, url, model);
+        docs.push(
+          this.version,
+          HandlerTypes.UPDATE,
+          HttpMethods.PUT,
+          url,
+          model
+        );
         break;
       default:
         throw new Error("Undefined handler type");
