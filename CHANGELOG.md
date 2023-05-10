@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.31.1 (2023-05-08)](https://github.com/axe-api/axe-api/compare/0.31.1...0.31.0)
+
+### Fixed
+
+- per_page limit response changed  [#172](https://github.com/axe-api/axe-api/issues/172)
+
 ## [0.31.0 (2023-05-05)](https://github.com/axe-api/axe-api/compare/0.31.0...0.30.3)
 
 ### Features

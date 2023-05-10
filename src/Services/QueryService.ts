@@ -294,13 +294,9 @@ class QueryService {
       DEFAULT_VERSION_CONFIG.query.defaults?.maxPerPage ||
       100;
 
-    if (isNaN(value) || value <= minPerPage || value > maxPerPage) {
-      return (
-        this.config.query?.defaults?.perPage ||
-        DEFAULT_VERSION_CONFIG.query.defaults?.perPage ||
-        10
-      );
-    }
+      if (isNaN(value) || value < minPerPage || value > maxPerPage) {
+        throw new ApiError(`Unacceptable 'per_page' value! Current value is '${value}'. It should be between ${minPerPage}-${maxPerPage}`);
+      }
 
     return value;
   }
