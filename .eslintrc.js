@@ -28,7 +28,7 @@ module.exports = {
     'no-use-before-define': 'warn',
     '@typescript-eslint/no-var-requires': 'warn',
     '@typescript-eslint/no-empty-function': 'warn',
-    'prettier/prettier': ['off'], // override prettier rules
+    'prettier/prettier': ['off'], // Deactivate prettier rules
   },
   parser: '@typescript-eslint/parser',
 };
