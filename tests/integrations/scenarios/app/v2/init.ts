@@ -1,5 +1,5 @@
-import cors from "cors";
-import { Express } from "express";
+import cors from 'cors';
+import { Express } from 'express';
 
 const onBeforeInit = async (app: Express) => {
   app.use(

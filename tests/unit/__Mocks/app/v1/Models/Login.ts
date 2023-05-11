@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import Model from "../../../../../../src/Model";
-import { IHandlerBaseMiddleware } from "../../../../../../src/Interfaces";
-import { HandlerTypes } from "../../../../../../src/Enums";
+import { Request, Response, NextFunction } from 'express';
+import Model from '../../../../../../src/Model';
+import { IHandlerBaseMiddleware } from '../../../../../../src/Interfaces';
+import { HandlerTypes } from '../../../../../../src/Enums';
 
 class Login extends Model {
   get middlewares(): IHandlerBaseMiddleware[] {

@@ -1,8 +1,8 @@
-import { IApplicationConfig, LogLevels } from "axe-api";
+import { IApplicationConfig, LogLevels } from 'axe-api';
 
 const config: IApplicationConfig = {
-  prefix: "api",
-  env: process.env.NODE_ENV || "production",
+  prefix: 'api',
+  env: process.env.NODE_ENV || 'production',
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000,
   logLevel: LogLevels.INFO,
   database: {
@@ -12,15 +12,14 @@ const config: IApplicationConfig = {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      port: parseInt(process.env.DB_PORT || "3000"),
+      port: parseInt(process.env.DB_PORT || '3000'),
     },
-    searchPath: [process.env.DB_USER || "user", "public"],
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      tableName: 'knex_migrations',
     },
   },
 };

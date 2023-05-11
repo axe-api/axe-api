@@ -1,12 +1,12 @@
-import { Model } from "axe-api";
+import { Model } from 'axe-api';
 
 class Student extends Model {
   get fillable() {
-    return ["name", "phone"];
+    return ['name', 'phone'];
   }
 
   lessons() {
-    return this.hasMany("StudentLesson", "id", "student_id");
+    return this.hasMany('StudentLesson', 'id', 'student_id');
   }
 }
 

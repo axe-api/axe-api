@@ -1,4 +1,4 @@
 export default {
   verbose: true,
-  modulePathIgnorePatterns: ["tests/integrations"],
+  modulePathIgnorePatterns: ['tests/integrations'],
 };

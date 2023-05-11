@@ -1,4 +1,4 @@
-import { ILanguage } from "../Interfaces";
+import { ILanguage } from '../Interfaces';
 
 export {};
 

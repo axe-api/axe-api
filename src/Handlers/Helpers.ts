@@ -86,6 +86,17 @@ export const getParentColumn = (relation: IRelation | null) => {
   return camelCase(relation.foreignKey);
 };
 
+export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
+  // We should check the parameter type
+  const primaryColumn = model.columns.find(
+    (column) => column.name === model.instance.primaryKey
+  );
+
+  if (primaryColumn?.data_type === 'integer' && isNaN(parseInt(value))) {
+    throw new ApiError(`Unacceptable parameter: ${value}`);
+  }
+};
+
 export const addForeignKeyQuery = (
   request: Request,
   query: Knex.QueryBuilder,

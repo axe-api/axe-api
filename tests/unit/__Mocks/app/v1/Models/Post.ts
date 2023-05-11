@@ -1,31 +1,31 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 import {
   HandlerTypes,
   HttpMethods,
   QueryFeature,
-} from "../../../../../../src/Enums";
+} from '../../../../../../src/Enums';
 import {
   IHandlerBasedTransactionConfig,
   IHandlerBaseMiddleware,
   IMethodBaseConfig,
   IMethodBaseValidations,
-} from "../../../../../../src/Interfaces";
-import Model from "../../../../../../src/Model";
-import { allow } from "../../../../../../src/Services";
+} from '../../../../../../src/Interfaces';
+import Model from '../../../../../../src/Model';
+import { allow } from '../../../../../../src/Services';
 
 class Post extends Model {
   get fillable(): IMethodBaseConfig {
     return {
-      [HttpMethods.POST]: ["title", "content"],
-      [HttpMethods.PUT]: ["content"],
+      [HttpMethods.POST]: ['title', 'content'],
+      [HttpMethods.PUT]: ['content'],
     };
   }
 
   get validations(): IMethodBaseValidations {
     return {
       [HttpMethods.POST]: {
-        email: "required|email",
-        name: "required",
+        email: 'required|email',
+        name: 'required',
       },
     };
   }
@@ -51,11 +51,11 @@ class Post extends Model {
   }
 
   comments() {
-    return this.hasMany("Comment", "id", "post_id");
+    return this.hasMany('Comment', 'id', 'post_id');
   }
 
   likes() {
-    return this.hasMany("PostLike", "id", "post_id");
+    return this.hasMany('PostLike', 'id', 'post_id');
   }
 }
 

@@ -1,4 +1,4 @@
-import { Model } from "axe-api";
+import { Model } from 'axe-api';
 
 class ExamLessonDefault extends Model {
   get fillable() {

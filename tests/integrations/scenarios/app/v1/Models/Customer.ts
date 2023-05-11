@@ -1,16 +1,16 @@
-import { Model } from "axe-api";
+import { Model } from 'axe-api';
 
 class Customer extends Model {
   get table() {
-    return "soft_delete_1";
+    return 'soft_delete_1';
   }
 
   get fillable() {
-    return ["name"];
+    return ['name'];
   }
 
   children() {
-    return this.hasMany("Employee", "id", "parent_id");
+    return this.hasMany('Employee', 'id', 'parent_id');
   }
 }
 

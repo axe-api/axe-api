@@ -11,12 +11,7 @@ import {
   IVersion,
 } from '../Interfaces';
 import { API_ROUTE_TEMPLATES } from '../constants';
-import {
-  HandlerTypes,
-  Relationships,
-  HttpMethods,
-  StatusCodes,
-} from '../Enums';
+import { HandlerTypes, Relationships, HttpMethods } from '../Enums';
 import HandlerFactory from '../Handlers/HandlerFactory';
 import ApiError from '../Exceptions/ApiError';
 import {
@@ -26,6 +21,7 @@ import {
   APIService,
 } from '../Services';
 import { acceptLanguageMiddleware } from '../Middlewares';
+import { error } from 'console';
 
 class RouterBuilder {
   private version: IVersion;
@@ -186,42 +182,91 @@ class RouterBuilder {
   ) {
     const docs = DocumentationService.getInstance();
     const app = await IoCService.useByType<Express>('App');
-    const handler = (req: Request, res: Response) => {
-      this.requestHandler(handlerType, req, res, model, parentModel, relation);
+
+    const handler = async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await this.requestHandler(
+          handlerType,
+          req,
+          res,
+          model,
+          parentModel,
+          relation
+        );
+      } catch (error: any) {
+        // Catch error then pass it to the express error handler
+        next(error);
+      }
     };
 
     switch (handlerType) {
     case HandlerTypes.ALL:
       app.get(url, middlewares, handler);
-      docs.push(HttpMethods.GET, url, model);
+      docs.push(this.version, HandlerTypes.ALL, HttpMethods.GET, url, model);
       break;
     case HandlerTypes.DELETE:
       app.delete(url, middlewares, handler);
-      docs.push(HttpMethods.DELETE, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.DELETE,
+        HttpMethods.DELETE,
+        url,
+        model
+      );
       break;
     case HandlerTypes.FORCE_DELETE:
       app.delete(url, middlewares, handler);
-      docs.push(HttpMethods.DELETE, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.FORCE_DELETE,
+        HttpMethods.DELETE,
+        url,
+        model
+      );
       break;
     case HandlerTypes.INSERT:
       app.post(url, middlewares, handler);
-      docs.push(HttpMethods.POST, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.INSERT,
+        HttpMethods.POST,
+        url,
+        model
+      );
       break;
     case HandlerTypes.PAGINATE:
       app.get(url, middlewares, handler);
-      docs.push(HttpMethods.GET, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.PAGINATE,
+        HttpMethods.GET,
+        url,
+        model
+      );
       break;
     case HandlerTypes.PATCH:
       app.patch(url, middlewares, handler);
-      docs.push(HttpMethods.PATCH, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.PATCH,
+        HttpMethods.PATCH,
+        url,
+        model
+      );
       break;
     case HandlerTypes.SHOW:
       app.get(url, middlewares, handler);
-      docs.push(HttpMethods.GET, url, model);
+      docs.push(this.version, HandlerTypes.SHOW, HttpMethods.GET, url, model);
       break;
     case HandlerTypes.UPDATE:
       app.put(url, middlewares, handler);
-      docs.push(HttpMethods.PUT, url, model);
+      docs.push(
+        this.version,
+        HandlerTypes.UPDATE,
+        HttpMethods.PUT,
+        url,
+        model
+      );
       break;
     default:
       throw new Error('Undefined handler type');
@@ -288,15 +333,15 @@ class RouterBuilder {
         error: apiError.message,
       });
       break;
-
     default:
-      // We should not show the real errors on production
-      if (process.env.NODE_ENV === 'production') {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-          error: 'An error occurredxx.',
-        });
-      }
-
+      // We should log error and send general error response
+      LogService.getInstance().error(
+        `SERVER ERROR: ${JSON.stringify(
+          { ...error, message: error.message },
+          null,
+          '  '
+        )}`
+      );
       throw error;
     }
   }

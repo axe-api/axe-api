@@ -1,11 +1,11 @@
-import { HandlerTypes, QueryFeature } from "../../../../../../src/Enums";
-import { IHandlerBasedTransactionConfig } from "../../../../../../src/Interfaces";
-import Model from "../../../../../../src/Model";
-import { allow } from "../../../../../../src/Services";
+import { HandlerTypes, QueryFeature } from '../../../../../../src/Enums';
+import { IHandlerBasedTransactionConfig } from '../../../../../../src/Interfaces';
+import Model from '../../../../../../src/Model';
+import { allow } from '../../../../../../src/Services';
 
 class Author extends Model {
   get table(): string {
-    return "my-authors";
+    return 'my-authors';
   }
 
   get transaction(): IHandlerBasedTransactionConfig[] {
@@ -27,7 +27,7 @@ class Author extends Model {
 
   get validations(): Record<string, string> {
     return {
-      name: "required",
+      name: 'required',
     };
   }
 

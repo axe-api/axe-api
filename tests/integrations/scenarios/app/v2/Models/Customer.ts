@@ -1,12 +1,12 @@
-import { Model, HandlerTypes, deny, QueryFeature } from "axe-api";
+import { Model, HandlerTypes, deny, QueryFeature } from 'axe-api';
 
 class Customer extends Model {
   get table() {
-    return "soft_delete_1";
+    return 'soft_delete_1';
   }
 
   get fillable() {
-    return ["name"];
+    return ['name'];
   }
 
   get handlers() {
@@ -14,11 +14,11 @@ class Customer extends Model {
   }
 
   get limits() {
-    return [deny(QueryFeature.Sorting, ["name"])];
+    return [deny(QueryFeature.Sorting, ['name'])];
   }
 
   children() {
-    return this.hasMany("Employee", "id", "parent_id");
+    return this.hasMany('Employee', 'id', 'parent_id');
   }
 }
 

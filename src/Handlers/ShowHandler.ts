@@ -6,11 +6,13 @@ import {
   filterHiddenFields,
   callHooks,
   addSoftDeleteQuery,
+  checkPrimaryKeyValueType,
 } from './Helpers';
 import { HandlerTypes, HookFunctionTypes } from '../Enums';
 import ApiError from '../Exceptions/ApiError';
 import { QueryService } from '../Services';
 import { Knex } from 'knex';
+import { StatusCodes } from '../Enums';
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
@@ -36,8 +38,12 @@ export default async (pack: IRequestPack) => {
   // If there is a relation, we should bind it
   addForeignKeyQuery(req, query, relation, parentModel);
 
-  // We should add this condition in here because of performance.
-  query.where(model.instance.primaryKey, req.params[model.instance.primaryKey]);
+  // We should check the parameter type
+  const value = req.params[model.instance.primaryKey];
+  checkPrimaryKeyValueType(model, value);
+
+  // Adding the main query
+  query.where(model.instance.primaryKey, value);
 
   await callHooks(model, HookFunctionTypes.onBeforeShow, {
     ...pack,
@@ -50,8 +56,9 @@ export default async (pack: IRequestPack) => {
 
   let item = await query.first();
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`);
+    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
   }
+
 
   // We should try to get related data if there is any
   await getRelatedData(

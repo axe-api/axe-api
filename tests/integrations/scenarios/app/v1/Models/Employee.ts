@@ -1,16 +1,16 @@
-import { Model, DEFAULT_HANDLERS, HandlerTypes } from "axe-api";
+import { Model, DEFAULT_HANDLERS, HandlerTypes } from 'axe-api';
 
 class Employee extends Model {
   get table() {
-    return "soft_delete_2";
+    return 'soft_delete_2';
   }
 
   get fillable() {
-    return ["name"];
+    return ['name'];
   }
 
   get deletedAtColumn() {
-    return "deleted_at";
+    return 'deleted_at';
   }
 
   get handlers() {
@@ -18,11 +18,11 @@ class Employee extends Model {
   }
 
   children() {
-    return this.hasMany("EmployeeAddress", "id", "parent_id");
+    return this.hasMany('EmployeeAddress', 'id', 'parent_id');
   }
 
   parent() {
-    return this.belongsTo("Customer", "parent_id", "id");
+    return this.belongsTo('Customer', 'parent_id', 'id');
   }
 }
 

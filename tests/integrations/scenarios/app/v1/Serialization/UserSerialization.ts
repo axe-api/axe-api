@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request } from 'express';
 
 export default (item: any, request: Request) => {
   return {

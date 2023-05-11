@@ -5,12 +5,11 @@ class ApiError extends Error {
   status: StatusCodes;
   message: string;
 
-  constructor(message: string) {
+  constructor(message: string, status:StatusCodes= StatusCodes.BAD_REQUEST) {
     super(message);
     this.type = 'ApiError';
-    this.status = StatusCodes.BAD_REQUEST;
+    this.status = status;
     this.message = message;
   }
 }
-
 export default ApiError;

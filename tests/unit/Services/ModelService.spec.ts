@@ -1,25 +1,25 @@
-import { describe, expect, jest, test } from "@jest/globals";
-import { Extensions, HookFunctionTypes } from "../../../src/Enums";
-import { ModelService } from "../../../src/Services";
-import { IColumn, IHookParameter } from "../../../src/Interfaces";
-import User from "../__Mocks/app/v1/Models/User";
+import { describe, expect, jest, test } from '@jest/globals';
+import { Extensions, HookFunctionTypes } from '../../../src/Enums';
+import { ModelService } from '../../../src/Services';
+import { IColumn, IHookParameter } from '../../../src/Interfaces';
+import User from '../__Mocks/app/v1/Models/User';
 
 const user = new User();
-const userService = new ModelService("User", user);
+const userService = new ModelService('User', user);
 
-describe("ModelListService", () => {
-  test(".setColumns() should be able to set columns and columnNames", async () => {
+describe('ModelListService', () => {
+  test('.setColumns() should be able to set columns and columnNames', async () => {
     const columns: IColumn[] = [
       {
-        name: "id",
-        table: "users",
-        data_type: "int",
+        name: 'id',
+        table: 'users',
+        data_type: 'int',
         is_nullable: false,
         is_unique: true,
         is_primary_key: true,
         is_generated: false,
         has_auto_increment: true,
-        table_name: "users",
+        table_name: 'users',
         default_value: null,
         max_length: null,
         numeric_precision: null,
@@ -32,10 +32,10 @@ describe("ModelListService", () => {
     ];
     userService.setColumns(columns);
     expect(userService.columnNames.length).toBe(1);
-    expect(userService.columnNames[0]).toBe("id");
+    expect(userService.columnNames[0]).toBe('id');
   });
 
-  test(".setExtensions() should be able to set hooks", async () => {
+  test('.setExtensions() should be able to set hooks', async () => {
     const hookFunction = jest.fn();
     userService.setExtensions(
       Extensions.Hooks,
@@ -55,7 +55,7 @@ describe("ModelListService", () => {
     expect(hookFunction.mock.calls[0][0]).toBe(myParams);
   });
 
-  test(".setExtensions() should be able to set events", async () => {
+  test('.setExtensions() should be able to set events', async () => {
     const hookFunction = jest.fn();
     userService.setExtensions(
       Extensions.Events,

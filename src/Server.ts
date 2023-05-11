@@ -17,7 +17,8 @@ import {
   APIService,
   SchemaValidatorService,
 } from './Services';
-import DocsHandler from './Handlers/DocsHandler';
+import MetadataHandler from './Handlers/MetadataHandler';
+import DocsHTMLHandler from './Handlers/DocsHTMLHandler';
 import RoutesHandler from './Handlers/RoutesHandler';
 import { consoleAxeError } from './Helpers';
 
@@ -87,7 +88,8 @@ class Server {
     const api = APIService.getInstance();
 
     if (api.config.env === 'development') {
-      app.get('/docs', DocsHandler);
+      app.get('/metadata', MetadataHandler);
+      app.get('/docs', DocsHTMLHandler);
       app.get('/routes', RoutesHandler);
     }
 

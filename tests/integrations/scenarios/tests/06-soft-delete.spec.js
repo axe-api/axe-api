@@ -1,44 +1,44 @@
 /* eslint-disable no-undef */
-import axios from "axios";
-import dotenv from "dotenv";
-import { truncate } from "./helper.js";
+import axios from 'axios';
+import dotenv from 'dotenv';
+import { truncate } from './helper.js';
 
 jest.useRealTimers();
 
-axios.defaults.baseURL = "http://localhost:3000/api";
-axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.baseURL = 'http://localhost:3000/api';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const DATA = { name: "Item 1" };
+const DATA = { name: 'Item 1' };
 
 const testOnSoftDeleteRecord = async (request, url) => {
   try {
     await request(url);
-    expect(true).tobe(false, "This should not be happend.");
+    expect(true).tobe(false, 'This should not be happend.');
   } catch (error) {
     expect(error.response.data.error).toBe(
-      "The item is not found on Employee."
+      'The item is not found on Employee.'
     );
-    expect(error.response.status).toBe(400);
+    expect(error.response.status).toBe(404);
   }
 };
 
-describe("Axe API Soft Delete", () => {
+describe('Axe API Soft Delete', () => {
   beforeAll(async () => {
     dotenv.config();
-    await truncate("soft_delete_1");
-    await truncate("soft_delete_2");
-    return await truncate("soft_delete_3");
+    await truncate('soft_delete_1');
+    await truncate('soft_delete_2');
+    return await truncate('soft_delete_3');
   });
 
   afterAll(async () => {
-    await truncate("soft_delete_1");
-    await truncate("soft_delete_2");
-    return await truncate("soft_delete_3");
+    await truncate('soft_delete_1');
+    await truncate('soft_delete_2');
+    return await truncate('soft_delete_3');
   });
 
-  test("testing general stuffs", async () => {
+  test('testing general stuffs', async () => {
     // Main data
-    const response1 = await axios.post("/v1/customers", DATA);
+    const response1 = await axios.post('/v1/customers', DATA);
 
     // Child data
     const response2 = await axios.post(
@@ -46,7 +46,7 @@ describe("Axe API Soft Delete", () => {
       DATA
     );
     await axios.post(`/v1/customers/${response1.data.id}/children`, {
-      name: "Item 2",
+      name: 'Item 2',
     });
 
     // Soft delete
@@ -80,7 +80,7 @@ describe("Axe API Soft Delete", () => {
     await testOnSoftDeleteRecord(axios.patch, deletedItemURL);
 
     // Parent query with `with` parameter.
-    const parentResponse = await axios.get(`/v1/customers?with=children`);
+    const parentResponse = await axios.get('/v1/customers?with=children');
     expect(parentResponse.status).toBe(200);
     expect(parentResponse.data.data.length).toBe(1);
     expect(parentResponse.data.data[0].children.length).toBe(1);
@@ -95,9 +95,9 @@ describe("Axe API Soft Delete", () => {
     expect(response7.status).toBe(200);
   });
 
-  test("testing child-parent queries", async () => {
+  test('testing child-parent queries', async () => {
     // Main data
-    const response1 = await axios.post("/v1/customers", DATA);
+    const response1 = await axios.post('/v1/customers', DATA);
 
     // Child data
     const response2 = await axios.post(
@@ -136,9 +136,9 @@ describe("Axe API Soft Delete", () => {
       await axios.delete(
         `/v1/customers/${response1.data.id}/children/${response2.data.id}/children/${response3.data.id}/force`
       );
-      expect(true).toBe(false, "Force delete hooks are not working.");
+      expect(true).toBe(false, 'Force delete hooks are not working.');
     } catch (error) {
-      expect(error.response.data.error).toBe("This is just a test message.");
+      expect(error.response.data.error).toBe('This is just a test message.');
     }
   });
 });

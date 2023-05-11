@@ -1,8 +1,8 @@
-import { Model, DEFAULT_HANDLERS, HandlerTypes } from "axe-api";
+import { Model, DEFAULT_HANDLERS, HandlerTypes } from 'axe-api';
 
 class Category extends Model {
   get fillable() {
-    return ["title"];
+    return ['title'];
   }
 
   get handlers() {
@@ -10,11 +10,11 @@ class Category extends Model {
   }
 
   categories() {
-    return this.hasMany("Category", "id", "parent_id");
+    return this.hasMany('Category', 'id', 'parent_id');
   }
 
   category() {
-    return this.belongsTo("Category", "parent_id", "id");
+    return this.belongsTo('Category', 'parent_id', 'id');
   }
 }
 

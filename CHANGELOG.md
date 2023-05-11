@@ -1,5 +1,29 @@
 # Release Notes
 
+## [0.31.1 (2023-05-08)](https://github.com/axe-api/axe-api/compare/0.31.1...0.31.0)
+
+### Fixed
+
+- The app crashes on database errors [#155](https://github.com/axe-api/axe-api/issues/155)
+- We should return 404 if the record is not found [#169](https://github.com/axe-api/axe-api/issues/169)
+- An error should be thrown if the per_page value is not acceptable [#172](https://github.com/axe-api/axe-api/issues/172)
+
+## [0.31.0 (2023-05-05)](https://github.com/axe-api/axe-api/compare/0.31.0...0.30.3)
+
+### Features
+
+- Added new auto-created documentation values [#179](https://github.com/axe-api/axe-api/issues/179)
+
+### Fixed
+
+- Fixed PostgreSQL-related issues [#204](https://github.com/axe-api/axe-api/issues/204)
+
+## [0.30.3 (2023-05-05)](https://github.com/axe-api/axe-api/compare/0.30.3...0.30.2)
+
+### Fixed
+
+- Fixed security issues on dependencies.
+
 ## [0.30.2 (2023-04-18)](https://github.com/axe-api/axe-api/compare/0.30.2...0.30.1)
 
 ### Features
@@ -10,7 +34,7 @@
 
 ### Fixed
 
-- Fixed URL slash character difference between windows and *nix [#164](https://github.com/axe-api/axe-api/issues/164)
+- Fixed URL slash character difference between windows and \*nix [#164](https://github.com/axe-api/axe-api/issues/164)
 
 ## [0.30.0 (2023-04-05)](https://github.com/axe-api/axe-api/compare/0.30.0...0.22.0)
 

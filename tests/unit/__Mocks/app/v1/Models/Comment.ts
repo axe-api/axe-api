@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { QueryFeature } from "../../../../../../src/Enums";
-import Model from "../../../../../../src/Model";
-import { allow } from "../../../../../../src/Services";
+import { Request, Response, NextFunction } from 'express';
+import { QueryFeature } from '../../../../../../src/Enums';
+import Model from '../../../../../../src/Model';
+import { allow } from '../../../../../../src/Services';
 
 class Comment extends Model {
   get middlewares(): ((
@@ -25,7 +25,7 @@ class Comment extends Model {
   }
 
   author() {
-    return this.hasOne("Author", "comment_id", "id");
+    return this.hasOne('Author', 'comment_id', 'id');
   }
 }
 

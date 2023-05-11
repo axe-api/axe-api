@@ -195,13 +195,19 @@ export interface IRequestPack {
 }
 
 export interface IRouteDocumentation {
+  version: string;
+  handler: string;
   model: string;
   table: string;
   columns: IColumn[];
+  hiddens: string[];
+  relations: IRelation[];
   method: HttpMethods;
   url: string;
   fillables: string[];
   validations: Record<string, string> | null;
+  queryLimits: IQueryLimitConfig[];
+  queryDefaults: IQueryDefaultConfig;
 }
 
 export interface IRawQuery {

@@ -1,35 +1,35 @@
-import path from "path";
-import { describe, expect, test, beforeEach } from "@jest/globals";
-import { TransactionResolver } from "../../../src/Resolvers";
-import { ModelService, IoCService, APIService } from "../../../src/Services";
-import { HandlerTypes } from "../../../src/Enums";
-import User from "../__Mocks/app/v1/Models/User";
-import Post from "../__Mocks/app/v1/Models/Post";
-import Author from "../__Mocks/app/v1/Models/Author";
-import Comment from "../__Mocks/app/v1/Models/Comment";
-import { IVersion } from "../../../src/Interfaces";
+import path from 'path';
+import { describe, expect, test, beforeEach } from '@jest/globals';
+import { TransactionResolver } from '../../../src/Resolvers';
+import { ModelService, IoCService, APIService } from '../../../src/Services';
+import { HandlerTypes } from '../../../src/Enums';
+import User from '../__Mocks/app/v1/Models/User';
+import Post from '../__Mocks/app/v1/Models/Post';
+import Author from '../__Mocks/app/v1/Models/Author';
+import Comment from '../__Mocks/app/v1/Models/Comment';
+import { IVersion } from '../../../src/Interfaces';
 
 const userInstance = new User();
 const postInstance = new Post();
 const authorInstance = new Author();
 const commentInstance = new Comment();
 
-const userService = new ModelService("User", userInstance);
-const postService = new ModelService("Post", postInstance);
-const authorService = new ModelService("Author", authorInstance);
-const commentService = new ModelService("Comment", commentInstance);
+const userService = new ModelService('User', userInstance);
+const postService = new ModelService('Post', postInstance);
+const authorService = new ModelService('Author', authorInstance);
+const commentService = new ModelService('Comment', commentInstance);
 
 const VersionMock = {
-  name: "v1",
+  name: 'v1',
   config: {
     transaction: [],
     serializers: [],
-    supportedLanguages: ["en"],
-    defaultLanguage: "en",
+    supportedLanguages: ['en'],
+    defaultLanguage: 'en',
   },
   folders: {
-    root: path.join(__dirname, "..", "__Mocks"),
-    models: path.join(__dirname, "..", "__Mocks", "v1", "Models"),
+    root: path.join(__dirname, '..', '__Mocks'),
+    models: path.join(__dirname, '..', '__Mocks', 'v1', 'Models'),
   },
   modelTree: [],
   modelList: [],
@@ -42,12 +42,12 @@ const resolve = async (service: ModelService, handlerType: HandlerTypes) => {
   );
 };
 
-describe("TransactionResolver", () => {
+describe('TransactionResolver', () => {
   beforeEach(() => {
-    APIService.setInsance(path.join(__dirname, "..", "Models"));
+    APIService.setInsance(path.join(__dirname, '..', 'Models'));
   });
 
-  test(".resolve() should be able to get the correct option by the global and local handler configuration", async () => {
+  test('.resolve() should be able to get the correct option by the global and local handler configuration', async () => {
     // The User mock checks
     expect(await resolve(userService, HandlerTypes.INSERT)).toBe(true);
     expect(await resolve(userService, HandlerTypes.PAGINATE)).toBe(true);

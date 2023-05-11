@@ -8,6 +8,7 @@ import {
   bindTimestampValues,
   callHooks,
   addSoftDeleteQuery,
+  checkPrimaryKeyValueType,
 } from './Helpers';
 import {
   HandlerTypes,
@@ -17,6 +18,7 @@ import {
 } from '../Enums';
 import ApiError from '../Exceptions/ApiError';
 import { Knex } from 'knex';
+import { StatusCodes } from '../Enums';
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
@@ -34,12 +36,15 @@ export default async (pack: IRequestPack) => {
     query,
   } as unknown as IHookParameter);
 
-  let item = await query
-    .where(model.instance.primaryKey, req.params[model.instance.primaryKey])
-    .first();
+  // We should check the parameter type
+  const value = req.params[model.instance.primaryKey];
+  checkPrimaryKeyValueType(model, value);
+
+  // Adding the main query
+  let item = await query.where(model.instance.primaryKey, value).first();
 
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`);
+    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
   }
 
   await callHooks(model, HookFunctionTypes.onAfterUpdateQuery, {

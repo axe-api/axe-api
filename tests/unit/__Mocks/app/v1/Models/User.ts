@@ -1,10 +1,10 @@
-import { QueryFeature } from "../../../../../../src/Enums";
-import Model from "../../../../../../src/Model";
-import { allow } from "../../../../../../src/Services";
+import { QueryFeature } from '../../../../../../src/Enums';
+import Model from '../../../../../../src/Model';
+import { allow } from '../../../../../../src/Services';
 
 class User extends Model {
   get fillable(): string[] {
-    return ["name", "surname"];
+    return ['name', 'surname'];
   }
 
   get transaction(): boolean {
@@ -16,11 +16,11 @@ class User extends Model {
   }
 
   posts() {
-    return this.hasMany("Post", "id", "user_id");
+    return this.hasMany('Post', 'id', 'user_id');
   }
 
   logins() {
-    return this.hasMany("Login", "id", "user_id");
+    return this.hasMany('Login', 'id', 'user_id');
   }
 }
 

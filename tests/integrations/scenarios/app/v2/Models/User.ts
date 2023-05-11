@@ -4,21 +4,21 @@ import {
   HandlerTypes,
   IMethodBaseValidations,
   HttpMethods,
-} from "axe-api";
+} from 'axe-api';
 
 class User extends Model {
   get fillable() {
     return {
-      POST: ["email", "name", "surname"],
-      PUT: ["name", "surname"],
+      POST: ['email', 'name', 'surname'],
+      PUT: ['name', 'surname'],
     };
   }
 
   get validations(): IMethodBaseValidations {
     return {
       [HttpMethods.POST]: {
-        email: "required|email",
-        name: "required",
+        email: 'required|email',
+        name: 'required',
       },
     };
   }
@@ -28,19 +28,19 @@ class User extends Model {
   }
 
   get hiddens() {
-    return ["password_salt", "password_hash"];
+    return ['password_salt', 'password_hash'];
   }
 
   posts() {
-    return this.hasMany("Post", "id", "user_id");
+    return this.hasMany('Post', 'id', 'user_id');
   }
 
   ownedPosts() {
-    return this.hasMany("Post", "id", "user_id");
+    return this.hasMany('Post', 'id', 'user_id');
   }
 
   suggestedPosts() {
-    return this.hasMany("Post", "id", "user_id");
+    return this.hasMany('Post', 'id', 'user_id');
   }
 }
 

@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 module.exports = async () => {
@@ -10,15 +10,15 @@ module.exports = async () => {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       port: process.env.DB_PORT,
-      searchPath: [process.env.DB_USER, "public"],
+      searchPath: [process.env.DB_USER, 'public'],
     },
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
-      directory: "./scenarios/migrations",
+      tableName: 'knex_migrations',
+      directory: './scenarios/migrations',
     },
   };
 };
