@@ -89,7 +89,7 @@ class SchemaValidatorService {
     modelColumns: string[]
   ) {
     const undefinedColumns = modelColumns.filter(
-      (modelColumn) => !model.columnNames.includes(modelColumn)
+      (modelColumn) => !model.columnNames.includes(modelColumn.trim())
     );
     if (undefinedColumns.length > 0) {
       throw new AxeError(
