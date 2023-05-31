@@ -28,6 +28,7 @@ export const RESERVED_KEYWORDS: string[] = [
   "hooks",
   "event",
   "events",
+  "all",
 ];
 
 export const DEFAULT_HANDLERS: HandlerTypes[] = [
