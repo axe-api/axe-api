@@ -326,7 +326,7 @@ class RouterBuilder {
     const type: string | undefined = error.type;
 
     switch (type) {
-    case 'ApiError':
+      case 'ApiError':
       // eslint-disable-next-line no-case-declarations
       const apiError: ApiError = error as ApiError;
       res.status(apiError.status).json({

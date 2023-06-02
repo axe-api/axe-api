@@ -12,7 +12,7 @@ echo "Waiting for 15 seconds"
 sleep 15
 
 echo "Starting the application and tests"
-cd ./tests/integrations && npm run build && node index.js mysql57
+cd ./tests/integrations && npm install && npm run build && node index.js mysql57
 
 echo "Downing the database container"
 cd ../../

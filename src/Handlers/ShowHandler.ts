@@ -59,7 +59,6 @@ export default async (pack: IRequestPack) => {
     throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
   }
 
-
   // We should try to get related data if there is any
   await getRelatedData(
     version,
