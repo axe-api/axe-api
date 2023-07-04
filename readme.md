@@ -134,8 +134,7 @@ You will see the following API response if you visit [localhost:3000](http://loc
 ```json
 {
   "name": "AXE API",
-  "description": "The best API creation tool in the world.",
-  "aim": "To kill them all!"
+  "description": "The best API creation tool in the world."
 }
 ```
 
@@ -144,6 +143,17 @@ If you can see that response, it means that your project is running properly.
 ## Documentation
 
 Axe API has great documentation. Please [check it out in here](https://axe-api.com/).
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 
