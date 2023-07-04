@@ -15,10 +15,10 @@ import {
   HookFunctionTypes,
   HttpMethods,
   TimestampColumns,
+  StatusCodes,
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { Knex } from "knex";
-import { StatusCodes } from "../Enums";
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;
@@ -75,7 +75,7 @@ export default async (pack: IRequestPack) => {
   }
 
   // We should bind the timestamp values
-  bindTimestampValues(formData, [TimestampColumns.UPDATED_AT], model);
+  bindTimestampValues(formData, model, [TimestampColumns.UPDATED_AT]);
 
   await callHooks(model, HookFunctionTypes.onBeforeUpdate, {
     ...pack,

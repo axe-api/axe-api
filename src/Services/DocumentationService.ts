@@ -37,7 +37,7 @@ class DocumentationService {
       fillables: model.instance.getFillableFields(method),
       validations: model.instance.getValidationRules(method),
       queryLimits: model.queryLimits,
-      queryDefaults: version.config?.query?.defaults || {},
+      queryDefaults: version.config?.query?.defaults ?? {},
     });
   }
 

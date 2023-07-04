@@ -1,4 +1,3 @@
-import { IRequestPack } from "../Interfaces";
 import AllHandler from "./AllHandler";
 import DestroyHandler from "./DestroyHandler";
 import ForceDestroyHandler from "./ForceDestroyHandler";
@@ -8,9 +7,10 @@ import UpdateHandler from "./UpdateHandler";
 import ShowHandler from "./ShowHandler";
 import StoreHandler from "./StoreHandler";
 import { HandlerTypes } from "../Enums";
+import { HandlerFunction } from "../Types";
 
 class HandlerFactory {
-  static get(handleType: HandlerTypes): (pack: IRequestPack) => void {
+  static get(handleType: HandlerTypes): HandlerFunction {
     switch (handleType) {
       case HandlerTypes.ALL:
         return AllHandler;

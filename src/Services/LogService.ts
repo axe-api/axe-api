@@ -43,13 +43,11 @@ class LogService {
     }
   }
 
-  log(message: string) {
-    if (this.level === LogLevels.ALL) {
-      console.log(message);
-    }
+  debug(message: string) {
+    this.log(message);
   }
 
-  debug(message: string) {
+  log(message: string) {
     if (this.level === LogLevels.ALL) {
       console.log(message);
     }
