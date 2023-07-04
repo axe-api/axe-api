@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.31.2 (2023-07-04)](https://github.com/axe-api/axe-api/compare/0.31.2...0.31.1)
+
+### Fixed
+
+- Fixed many internal issues. [#219](https://github.com/axe-api/axe-api/issues/219), [#174](https://github.com/axe-api/axe-api/issues/174), [#183](https://github.com/axe-api/axe-api/issues/183), [#149](https://github.com/axe-api/axe-api/issues/149), [#186](https://github.com/axe-api/axe-api/issues/186)
+
 ## [0.31.1 (2023-05-08)](https://github.com/axe-api/axe-api/compare/0.31.1...0.31.0)
 
 ### Fixed
