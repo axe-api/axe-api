@@ -6,9 +6,8 @@ import {
   addSoftDeleteQuery,
   checkPrimaryKeyValueType,
 } from "./Helpers";
-import { HookFunctionTypes } from "../Enums";
+import { StatusCodes, HookFunctionTypes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
-import { StatusCodes } from "../Enums";
 
 export default async (pack: IRequestPack) => {
   const { model, req, res, database, relation, parentModel } = pack;

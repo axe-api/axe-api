@@ -42,11 +42,10 @@ export default async (pack: IRequestPack) => {
   }
 
   // We should bind the timestamp values
-  bindTimestampValues(
-    formData,
-    [TimestampColumns.CREATED_AT, TimestampColumns.UPDATED_AT],
-    model
-  );
+  bindTimestampValues(formData, model, [
+    TimestampColumns.CREATED_AT,
+    TimestampColumns.UPDATED_AT,
+  ]);
 
   await callHooks(model, HookFunctionTypes.onBeforeInsert, {
     ...pack,

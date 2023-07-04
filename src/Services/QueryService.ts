@@ -105,7 +105,7 @@ class QueryService {
         }
       }
     } else {
-      const condition: IWhere = ruleSet as IWhere;
+      const condition: IWhere = ruleSet;
       this.applyConditionRule(sub, condition);
     }
   }
@@ -335,11 +335,11 @@ class QueryService {
       let type = SortTypes.ASC;
       if (field.indexOf("-") === 0) {
         type = SortTypes.DESC;
-        field = field.substr(1);
+        field = field.substring(1);
       }
 
       if (field.indexOf("+") === 0) {
-        field = field.substr(1);
+        field = field.substring(1);
       }
 
       this.shouldBeAcceptableColumn(field);

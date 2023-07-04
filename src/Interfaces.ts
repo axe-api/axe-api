@@ -15,7 +15,7 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { SerializationFunction } from "./Types";
+import { HookFunction, SerializationFunction } from "./Types";
 import { ModelListService } from "./Services";
 
 export interface IColumn extends Column {
@@ -135,9 +135,9 @@ export interface IHookParameter {
   database: Knex | Knex.Transaction;
   conditions: IQuery | null;
   query: Knex.QueryBuilder | null;
-  result: any | null;
-  item: any | null;
-  formData: any | null;
+  result: any;
+  item: any;
+  formData: any;
 }
 
 export interface IMethodBaseConfig {
@@ -157,8 +157,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, (params: IHookParameter) => void>;
-  events: Record<HookFunctionTypes, (params: IHookParameter) => void>;
+  hooks: Record<HookFunctionTypes, HookFunction>;
+  events: Record<HookFunctionTypes, HookFunction>;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -168,7 +168,7 @@ export interface IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: (params: IHookParameter) => void
+    data: HookFunction
   ): void;
   setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;

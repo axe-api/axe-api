@@ -210,7 +210,7 @@ class ModelResolver {
       const fileName = `${model.name}Serialization`;
       if (serializations[fileName]) {
         const file = serializations[fileName];
-        model.setSerialization(file.default as any as SerializationFunction);
+        model.setSerialization(file.default as SerializationFunction);
       }
     }
   }

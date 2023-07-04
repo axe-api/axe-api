@@ -8,11 +8,10 @@ import {
   addSoftDeleteQuery,
   checkPrimaryKeyValueType,
 } from "./Helpers";
-import { HandlerTypes, HookFunctionTypes } from "../Enums";
+import { HandlerTypes, HookFunctionTypes, StatusCodes } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { QueryService } from "../Services";
 import { Knex } from "knex";
-import { StatusCodes } from "../Enums";
 
 export default async (pack: IRequestPack) => {
   const { version, model, req, res, database, relation, parentModel } = pack;

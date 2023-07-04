@@ -6,9 +6,9 @@ import {
   IHookParameter,
   IQuery,
   IVersion,
+  IWith,
 } from "../Interfaces";
 import { Knex } from "knex";
-import { IWith } from "../Interfaces";
 import {
   HandlerTypes,
   Relationships,
@@ -18,14 +18,14 @@ import {
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { IoCService, ModelListService } from "../Services";
-import { SerializationFunction } from "../Types";
+import { HookFunction, SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
 import { RelationQueryFeatureMap } from "../constants";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
-  columnTypes: TimestampColumns[] = [],
-  model: IModelService
+  model: IModelService,
+  columnTypes: TimestampColumns[] = []
 ) => {
   if (
     columnTypes.includes(TimestampColumns.CREATED_AT) &&
@@ -61,7 +61,8 @@ export const callHooks = async (
   params: IHookParameter
 ) => {
   if (model.hooks[type]) {
-    await model.hooks[type](params);
+    const hookFunction: HookFunction = model.hooks[type];
+    await hookFunction(params);
   }
 
   if (model.events[type]) {
@@ -129,10 +130,10 @@ const uniqueByMap = <T>(array: T[]): T[] => {
 };
 
 const serialize = (
-  data: any[] | any,
+  data: any,
   callback: SerializationFunction | null,
   request: Request
-): any[] | any => {
+): any => {
   if (!callback) {
     return data;
   }
@@ -146,7 +147,7 @@ const serialize = (
 
 const globalSerializer = async (
   version: IVersion,
-  itemArray: any[] | any,
+  itemArray: any,
   handler: HandlerTypes,
   request: Request
 ) => {
@@ -173,7 +174,6 @@ const globalSerializer = async (
           request: Request
         ) => void)[])
       );
-      return;
     }
   });
 
@@ -186,7 +186,7 @@ const globalSerializer = async (
 
 export const serializeData = async (
   version: IVersion,
-  itemArray: any[] | any,
+  itemArray: any,
   modelSerializer: SerializationFunction | null,
   handler: HandlerTypes,
   request: Request
@@ -292,7 +292,7 @@ export const getRelatedData = async (
 
     // We should find the parent Primary Key values.
     const parentPrimaryKeyValues: any[] = data.map(
-      (item) => item[dataFieldKey] as any
+      (item) => item[dataFieldKey]
     );
 
     // Selecting the special field for the relations

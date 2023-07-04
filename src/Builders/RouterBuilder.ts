@@ -324,26 +324,24 @@ class RouterBuilder {
   private sendErrorAsResponse(res: Response, error: any) {
     const type: string | undefined = error.type;
 
-    switch (type) {
-      case "ApiError":
-        // eslint-disable-next-line no-case-declarations
-        const apiError: ApiError = error as ApiError;
-        res.status(apiError.status).json({
-          error: apiError.message,
-        });
-        break;
-
-      default:
-        // We should log error and send general error response
-        LogService.getInstance().error(
-          `SERVER ERROR: ${JSON.stringify(
-            { ...error, message: error.message },
-            null,
-            "  "
-          )}`
-        );
-        throw error;
+    if (type === "ApiError") {
+      // eslint-disable-next-line no-case-declarations
+      const apiError: ApiError = error as ApiError;
+      res.status(apiError.status).json({
+        error: apiError.message,
+      });
+      return;
     }
+
+    // We should log error and send general error response
+    LogService.getInstance().error(
+      `SERVER ERROR: ${JSON.stringify(
+        { ...error, message: error.message },
+        null,
+        "  "
+      )}`
+    );
+    throw error;
   }
 
   private getResourcePath(model: IModelService, relation: IRelation | null) {
@@ -356,12 +354,12 @@ class RouterBuilder {
     const api = APIService.getInstance();
     let prefix = api.config.prefix || "api";
 
-    if (prefix.substr(0, 1) === "/") {
-      prefix = prefix.substr(1);
+    if (prefix.startsWith("/")) {
+      prefix = prefix.substring(1);
     }
 
-    if (prefix.substr(prefix.length - 1) === "/") {
-      prefix = prefix.substr(0, prefix.length - 1);
+    if (prefix.endsWith("/")) {
+      prefix = prefix.substring(0, prefix.length - 1);
     }
 
     return prefix;
