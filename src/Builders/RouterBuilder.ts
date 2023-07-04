@@ -21,7 +21,6 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
-import { error } from "console";
 
 class RouterBuilder {
   private version: IVersion;

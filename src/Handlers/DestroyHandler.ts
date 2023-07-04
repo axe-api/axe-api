@@ -35,7 +35,10 @@ export default async (pack: IRequestPack) => {
 
   const item = await query.first();
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
+    throw new ApiError(
+      `The item is not found on ${model.name}.`,
+      StatusCodes.NOT_FOUND
+    );
   }
 
   await callHooks(model, HookFunctionTypes.onAfterDeleteQuery, {

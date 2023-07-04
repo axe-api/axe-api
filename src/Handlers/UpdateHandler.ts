@@ -44,7 +44,10 @@ export default async (pack: IRequestPack) => {
   let item = await query.where(model.instance.primaryKey, value).first();
 
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
+    throw new ApiError(
+      `The item is not found on ${model.name}.`,
+      StatusCodes.NOT_FOUND
+    );
   }
 
   await callHooks(model, HookFunctionTypes.onAfterUpdateQuery, {

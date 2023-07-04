@@ -61,5 +61,4 @@ class VersionResolver {
   }
 }
 
-
 export default VersionResolver;

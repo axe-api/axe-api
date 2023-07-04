@@ -157,9 +157,10 @@ class ModelResolver {
             hookName as HookFunctionTypes,
             hooks[hookName].default
           );
-        }
-        else {
-          logger.warn(`Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`);
+        } else {
+          logger.warn(
+            `Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`
+          );
         }
       }
     }
