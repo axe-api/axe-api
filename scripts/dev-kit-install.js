@@ -16,7 +16,7 @@ if (fs.existsSync("./dev-kit.sh")) {
 
 // Cloning the latest version of 'dev-kit'
 execSync(
-  "git clone https://github.com/axe-api/dev-kit.git temp-kit",
+  "git clone https://github.com/axe-api/dev-kit.git temp-kit", // NOSONAR
   (err, stdout, stderr) => {
     if (err) {
       console.log(err);
@@ -37,7 +37,7 @@ fs.rmSync("temp-kit", { recursive: true, force: true });
 console.log("Installing the SQLite migration for the first usage.\n");
 
 execSync(
-  "knex --esm migrate:latest --knexfile ./dev-kit/knexfile.js",
+  "knex --esm migrate:latest --knexfile ./dev-kit/knexfile.js", // NOSONAR
   (err, stdout, stderr) => {
     if (err) {
       console.log(err);
