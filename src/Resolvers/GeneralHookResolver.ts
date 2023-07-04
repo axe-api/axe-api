@@ -14,7 +14,7 @@ class GeneralHookResolver {
       this.version.folders.root
     );
 
-    if (content && content.init) {
+    if (content?.init) {
       const { onBeforeInit = null, onAfterInit = null } = content.init;
       return { onBeforeInit, onAfterInit } as IGeneralHooks;
     }

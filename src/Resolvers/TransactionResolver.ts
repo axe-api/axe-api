@@ -49,7 +49,7 @@ class TransactionResolver {
   ): boolean => {
     if (Array.isArray(option)) {
       // If this is an array, we should treat it like an array.
-      const configs = option as IHandlerBasedTransactionConfig[];
+      const configs = option;
 
       // We should check every item of the array
       for (const configItem of configs) {
@@ -65,7 +65,7 @@ class TransactionResolver {
       // Developer should be able to select a boolean value for all kind of routes
       defaultValue = option;
     } else {
-      const configItem = option as IHandlerBasedTransactionConfig;
+      const configItem = option;
       const value = TransactionResolver.getTransactionConfiguration(
         configItem,
         handlerType
@@ -87,15 +87,13 @@ class TransactionResolver {
     // handler: [HandlerTypes.ALL, HandlerTypes.INSERT]
     if (Array.isArray(configItem.handler)) {
       // If this is an array, we should find the matched handler type
-      const found = (configItem.handler as HandlerTypes[]).find(
-        (item) => item === handlerType
-      );
+      const found = configItem.handler.find((item) => item === handlerType);
 
       // If there is, this is the our transaction choice
       if (found) {
         return configItem.transaction;
       }
-    } else if ((configItem.handler as HandlerTypes) === handlerType) {
+    } else if (configItem.handler === handlerType) {
       // If the "configItem.handler" is not an array, should be matched
       // with the handlerType. If it matches, it means that this is our
       // transaction configuration

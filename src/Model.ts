@@ -1,5 +1,4 @@
 import pluralize from "pluralize";
-import { Request, Response, NextFunction } from "express";
 import { snakeCase } from "snake-case";
 import {
   IRelation,
@@ -11,6 +10,7 @@ import {
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
+import { FieldList, MiddlewareFunction, ModelValidation } from "./Types";
 
 class Model {
   get primaryKey(): string {
@@ -21,11 +21,11 @@ class Model {
     return pluralize(snakeCase(this.constructor.name));
   }
 
-  get fillable(): string[] | IMethodBaseConfig {
+  get fillable(): FieldList | IMethodBaseConfig {
     return [];
   }
 
-  get validations(): IMethodBaseValidations | Record<string, string> {
+  get validations(): IMethodBaseValidations | ModelValidation {
     return {};
   }
 
@@ -34,13 +34,13 @@ class Model {
   }
 
   get middlewares():
-    | ((req: Request, res: Response, next: NextFunction) => void)[]
+    | MiddlewareFunction[]
     | IHandlerBaseMiddleware[]
     | IHandlerBaseMiddleware {
     return [];
   }
 
-  get hiddens(): string[] {
+  get hiddens(): FieldList {
     return [];
   }
 
@@ -84,42 +84,36 @@ class Model {
     const values: IMethodBaseConfig = this.fillable;
     switch (methodType) {
       case HttpMethods.PATCH:
-        return values.PATCH || [];
+        return values.PATCH ?? [];
       case HttpMethods.POST:
-        return values.POST || [];
+        return values.POST ?? [];
       case HttpMethods.PUT:
-        return values.PUT || [];
+        return values.PUT ?? [];
       default:
         return [];
     }
   }
 
-  getValidationRules(methodType: HttpMethods): Record<string, string> | null {
+  getValidationRules(methodType: HttpMethods): ModelValidation | null {
     if (this.hasStringValue()) {
-      return this.validations as Record<string, string>;
+      return this.validations as ModelValidation;
     }
 
     const values: IMethodBaseValidations = this.validations;
 
     switch (methodType) {
       case HttpMethods.POST:
-        return values.POST || null;
+        return values.POST ?? null;
       case HttpMethods.PATCH:
       case HttpMethods.PUT:
-        return values.PUT || null;
+        return values.PUT ?? null;
       default:
         return null;
     }
   }
 
-  getMiddlewares(
-    handlerType: HandlerTypes
-  ): ((req: Request, res: Response, next: NextFunction) => void)[] {
-    const results: ((
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ) => void)[] = [];
+  getMiddlewares(handlerType: HandlerTypes): MiddlewareFunction[] {
+    const results: MiddlewareFunction[] = [];
     const middlewares = this.middlewares;
 
     if (Array.isArray(middlewares)) {

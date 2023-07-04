@@ -1,13 +1,12 @@
 import { HookFunctionTypes, Extensions } from "../Enums";
 import {
   IColumn,
-  IHookParameter,
   IModelService,
   IQueryLimitConfig,
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
-import { SerializationFunction } from "../Types";
+import { HookFunction, SerializationFunction } from "../Types";
 
 class ModelService implements IModelService {
   name: string;
@@ -15,10 +14,14 @@ class ModelService implements IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, (params: IHookParameter) => void> =
-    {} as Record<HookFunctionTypes, (params: IHookParameter) => void>;
-  events: Record<HookFunctionTypes, (params: IHookParameter) => void> =
-    {} as Record<HookFunctionTypes, (params: IHookParameter) => void>;
+  hooks: Record<HookFunctionTypes, HookFunction> = {} as Record<
+    HookFunctionTypes,
+    HookFunction
+  >;
+  events: Record<HookFunctionTypes, HookFunction> = {} as Record<
+    HookFunctionTypes,
+    HookFunction
+  >;
   children: IModelService[];
   isRecursive: boolean;
   queryLimits: IQueryLimitConfig[];
@@ -44,7 +47,7 @@ class ModelService implements IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: (params: IHookParameter) => void
+    data: HookFunction
   ) {
     if (type == Extensions.Hooks) {
       this.setHooks(hookFunctionType, data);
@@ -63,17 +66,11 @@ class ModelService implements IModelService {
     this.serialize = callback;
   }
 
-  private setHooks(
-    hookFunctionType: HookFunctionTypes,
-    data: (params: IHookParameter) => void
-  ) {
+  private setHooks(hookFunctionType: HookFunctionTypes, data: HookFunction) {
     this.hooks[hookFunctionType] = data;
   }
 
-  private setEvents(
-    hookFunctionType: HookFunctionTypes,
-    data: (params: IHookParameter) => void
-  ) {
+  private setEvents(hookFunctionType: HookFunctionTypes, data: HookFunction) {
     this.events[hookFunctionType] = data;
   }
 }
