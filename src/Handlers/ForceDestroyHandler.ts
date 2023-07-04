@@ -24,7 +24,8 @@ export default async (pack: IRequestPack) => {
   // If there is a deletedAtColumn, it means that this table support soft-delete
   if (model.instance.deletedAtColumn === null) {
     throw new ApiError(
-      "You can use force delete only soft-delete supported models.",StatusCodes.NOT_FOUND
+      "You can use force delete only soft-delete supported models.",
+      StatusCodes.NOT_FOUND
     );
   }
 

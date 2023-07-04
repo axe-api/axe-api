@@ -56,10 +56,12 @@ export default async (pack: IRequestPack) => {
 
   let item = await query.first();
   if (!item) {
-    throw new ApiError(`The item is not found on ${model.name}.`,StatusCodes.NOT_FOUND);
+    throw new ApiError(
+      `The item is not found on ${model.name}.`,
+      StatusCodes.NOT_FOUND
+    );
   }
-  
- 
+
   // We should try to get related data if there is any
   await getRelatedData(
     version,

@@ -3,7 +3,6 @@ import { camelCase } from "change-case";
 import {
   IModelService,
   IRelation,
-  IApplicationConfig,
   IHookParameter,
   IQuery,
   IVersion,

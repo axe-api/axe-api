@@ -5,7 +5,7 @@ class ApiError extends Error {
   status: StatusCodes;
   message: string;
 
-  constructor(message: string, status:StatusCodes= StatusCodes.BAD_REQUEST) {
+  constructor(message: string, status: StatusCodes = StatusCodes.BAD_REQUEST) {
     super(message);
     this.type = "ApiError";
     this.status = status;
