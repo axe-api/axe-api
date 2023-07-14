@@ -1,7 +1,7 @@
 import pluralize from "pluralize";
 import { Knex } from "knex";
 import { Express, Request, Response, NextFunction } from "express";
-import { paramCase, camelCase } from "change-case";
+import { paramCase, camelCase, pascalCase } from "change-case";
 import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
 import {
   IGeneralHooks,
@@ -126,7 +126,7 @@ class RouterBuilder {
     if (relation) {
       await this.createRouteByModel(
         model,
-        `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
+        `${urlPrefix}${resource}/:${camelCase(relation.name)}${pascalCase(relation.foreignKey)}/`,
         model,
         relation,
         false

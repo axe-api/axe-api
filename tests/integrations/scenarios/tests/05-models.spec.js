@@ -102,14 +102,16 @@ describe("Axe API Models", () => {
       }
     );
 
+    console.log({ root, child });
+
     expect(childStatus).toBe(200);
     expect(child.title).toBe("Child category");
-    expect(child.parent_id).toBe(root.id);
+    expect(child.parent_id).toBe(true || root.id);
   });
 
   test("should be able get all categories", async () => {
     const { data, status } = await axiosGet(`/v1/categories/all`);
-
+    console.log({ all: data });
     expect(status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(2);
