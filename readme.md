@@ -29,15 +29,15 @@ Next Generation Rest API Framework
 
 ## What Is Axe API?
 
-Axe API is a [Node.js](https://nodejs.org/) framework that helps you create a **Rest API** in a declarative way quickly. :axe:
+Axe API is a [Node.js](https://nodejs.org/) framework that helps you create a **Rest API** in a declarative way, quickly. :axe:
 
 It has been written with [TypeScript](https://www.typescriptlang.org/) and built on [Express](https://expressjs.com/) and [Knex.js](https://knexjs.org/).
 
 ## Motivation
 
-You would understand easily what you are going to code when you look at a bunch of database tables and their relations with each other, more or less. Because, as a developer, you already know that _Rest API_ best practices.
+You would understand easily what you are going to code when you look at a bunch of database tables and their relations with each other, more or less. Because, as a developer, you already know the _Rest API_ best practices.
 
-Therefore I asked a simple question more than two years ago;
+Therefore I asked a simple question more than two years ago:
 
 **_"Can we create a Rest API in a declarative way, and handle all endpoints automatically?"_**
 
@@ -51,7 +51,7 @@ Let's look at an example!
 
 You have two database tables; `users` and `posts`. These tables are related to each other and we aim that create a **Rest API** for basic **CRUD** endpoints.
 
-The only thing to do is creating models like the following example;
+The only thing to do is creating models like the following example:
 
 ```ts
 class User extends Model {
@@ -92,13 +92,13 @@ Your API is ready to process all of the following endpoints after those model de
 - [PUT] `api/users/:userId/posts/:id`
 - [DELETE] `api/users/:userId/posts/:id`
 
-This is the main power of Axe API. Nevertheless, it is not limited only to this power. There are many more features are waiting to discover. :bulb:
+This is the main power of Axe API. Nevertheless, it is not limited only to this power. There are many more features waiting to be discovered. :bulb:
 
 ## Installation
 
 Using **Axe API** in an application is very easy. We've created a CLI tool for you; [axe-magic](https://github.com/axe-api/axe-magic).
 
-You can create a new Axe API project by using [axe-magic](https://github.com/axe-api/axe-magic). But first, you can install it in your development environment. When you installed it, you can be able to access **axe-magic** command via CLI. You can use the following command to install **axe-magic** to your machine;
+You can create a new Axe API project by using [axe-magic](https://github.com/axe-api/axe-magic). But first, you can install it in your development environment. When you have installed it, you will be able to access **axe-magic** command via CLI. You can use the following command to install **axe-magic** to your machine:
 
 ```bash
 $ npm i -g axe-magic
@@ -106,30 +106,30 @@ $ axe-magic --version
 1.0.0
 ```
 
-After that, creating a new project is very easy. Just you can execute the following command;
+After that, creating a new project is very easy. Just you can execute the following command:
 
 ```bash
 $ axe-magic new my-api
 ```
 
-This command will pull [axe-api-template](https://github.com/axe-api/axe-api-template) project to your current directory with a new name, **my-api**.
+This command will pull the [axe-api-template](https://github.com/axe-api/axe-api-template) project to your current directory with a new name, **my-api**.
 
-To install your project's depencies, you can execute the following commands in the root directory;
+To install your project's dependencies, you can execute the following commands in the root directory:
 
 ```bash
 $ cd my-api
 $ npm install
 ```
 
-To serve this application, you can execute the following command;
+To serve the application, you can execute the following command:
 
 ```bash
 $ npm run start:dev
 ```
 
-After that, your first **Axe API** application will be running in `localhost:3000`.
+After that, your first **Axe API** application will be running on `localhost:3000`.
 
-You will see the following API response if you visit [localhost:3000](http://localhost:3000).
+You will see the following API response if you visit [localhost:3000](http://localhost:3000):
 
 ```json
 {
