@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  database:
+    image: cockroachdb/cockroach
+    environment:
+      COCKROACH_DATABASE: axeapi
+      COCKROACH_USER: axeapi
+      COCKROACH_ROOT_PASSWORD: 123456
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"
+      - "8080:8080"

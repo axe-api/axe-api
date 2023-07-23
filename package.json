@@ -39,6 +39,7 @@
     "lint:watch": "esw --watch --color",
     "prepare:integration": "nodemon --ignore \"./tests/**\" ./scripts/run-integration-test.js",
     "test:postgres": "sh ./scripts/test-postgres.sh",
+    "test:cockroach": "sh ./scripts/test-cockroach.sh",
     "test:mysql57": "sh ./scripts/test-mysql57.sh",
     "test:mysql8": "sh ./scripts/test-mysql8.sh",
     "prettier:check": "prettier --check .",

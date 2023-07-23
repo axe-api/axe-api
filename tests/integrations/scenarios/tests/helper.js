@@ -89,6 +89,7 @@ export const truncate = async (table) => {
     case "mysql":
       return await truncateMySQL(table);
     case "postgres":
+    case "cockroachdb":
       return await truncatePostgres(table);
     default:
       throw new Error(`Unknown DB client: ${process.env.DB_CLIENT}`);

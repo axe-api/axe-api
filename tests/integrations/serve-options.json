@@ -31,5 +31,16 @@
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
     "DB_DATABASE": "axeapi"
+  },
+  "cockroach": {
+    "_title": "Cockroach DB",
+    "NODE_ENV": "development",
+    "APP_PORT": "3000",
+    "DB_CLIENT": "cockroachdb",
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "axeapi",
+    "DB_PORT": "26257",
+    "DB_PASSWORD": "123456",
+    "DB_DATABASE": "axeapi"
   }
 }

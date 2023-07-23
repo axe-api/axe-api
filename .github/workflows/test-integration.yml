@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [ 16.x, 18.x, 20.x ]
-        database: [mysql8, mysql57, "postgres"]
+        database: [mysql8, mysql57, "postgres", "cockroach"]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}

@@ -159,3 +159,5 @@ export const DEFAULT_VERSION_CONFIG: IVersionConfig = {
     },
   },
 };
+
+export const NUMERIC_PRIMARY_KEY_TYPES = ["integer", "bigint"];
