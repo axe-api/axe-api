@@ -430,20 +430,6 @@ class QueryService {
     }
 
     if (
-      where.condition === ConditionTypes.In ||
-      where.condition === ConditionTypes.NotIn
-    ) {
-      where.value = where.value.split(",");
-    }
-
-    if (
-      where.condition === ConditionTypes.Between ||
-      where.condition === ConditionTypes.NotBetween
-    ) {
-      where.value = where.value.split(":");
-    }
-
-    if (
       where.condition === ConditionTypes.LIKE ||
       where.condition === ConditionTypes["NOT LIKE"]
     ) {
