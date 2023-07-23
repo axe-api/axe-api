@@ -1,3 +1,4 @@
 node_modules
 .env
 axe-api
+axedb.sql
