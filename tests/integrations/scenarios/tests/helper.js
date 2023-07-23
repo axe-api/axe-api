@@ -40,10 +40,7 @@ export const patch = async ({ url, data, status }) => {
 };
 
 export const deleteIt = async ({ url, status }) => {
-  return await request("localhost:3000")
-    .delete(url)
-    .expect("Content-Type", /json/)
-    .expect(status);
+  return await request("localhost:3000").delete(url).expect(status);
 };
 
 const truncateMySQL = async (table) => {

@@ -80,7 +80,7 @@ describe("Axe API", () => {
   });
 
   test("should be able to delete the user by id", async () => {
-    await deleteIt({ url: `/api/v1/users/${userId}`, status: 200 });
+    await deleteIt({ url: `/api/v1/users/${userId}`, status: 204 });
   });
 
   test("should be client get 400 when per_page has incorrect value ", async () => {

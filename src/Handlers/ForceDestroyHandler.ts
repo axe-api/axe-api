@@ -60,5 +60,5 @@ export default async (pack: IRequestPack) => {
     item,
   } as unknown as IHookParameter);
 
-  return res.json();
+  return res.status(204).json();
 };
