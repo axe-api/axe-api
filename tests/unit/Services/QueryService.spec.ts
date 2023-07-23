@@ -145,7 +145,7 @@ describe("QueryService", () => {
 
   test(".get() should be parse values to an arry in-based queries", async () => {
     const query: IQuery = service.get({
-      q: `{"name.$in":"Özgür,Adem,Işıklı"}`,
+      q: `{"name.$in":["Özgür","Adem","Işıklı"]}`,
     });
 
     expect(query.q.length).toBe(1);
