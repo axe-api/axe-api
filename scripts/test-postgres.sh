@@ -2,7 +2,7 @@ set -e
 
 echo "Postgres Tests have been started."
 
-echo "Setting up MySQL container images"
+echo "Setting up Postgres container images"
 docker-compose -f "./tests/integrations/docker-compose.postgres.yml" down
 docker-compose -f "./tests/integrations/docker-compose.postgres.yml" up -d --build
 

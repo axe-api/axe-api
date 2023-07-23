@@ -20,7 +20,10 @@ import ApiError from "../Exceptions/ApiError";
 import { IoCService, ModelListService } from "../Services";
 import { HookFunction, SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
-import { RelationQueryFeatureMap } from "../constants";
+import {
+  NUMERIC_PRIMARY_KEY_TYPES,
+  RelationQueryFeatureMap,
+} from "../constants";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -92,7 +95,10 @@ export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
     (column) => column.name === model.instance.primaryKey
   );
 
-  if (primaryColumn?.data_type === "integer" && isNaN(parseInt(value))) {
+  if (
+    NUMERIC_PRIMARY_KEY_TYPES.includes(primaryColumn?.data_type || "") &&
+    isNaN(parseInt(value))
+  ) {
     throw new ApiError(`Unacceptable parameter: ${value}`);
   }
 };

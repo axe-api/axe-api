@@ -11,6 +11,7 @@ module.exports = async () => {
       database: process.env.DB_DATABASE,
       port: process.env.DB_PORT,
       searchPath: [process.env.DB_USER, "public"],
+      filename: "./axedb.sql",
     },
     pool: {
       min: 2,
