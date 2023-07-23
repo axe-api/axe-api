@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import request from "supertest";
 import mysql from "mysql";
+import sqlite3 from "sqlite3";
 import axios from "axios";
 import { Pool } from "pg";
 
@@ -70,6 +71,19 @@ const truncateMySQL = async (table) => {
   });
 };
 
+const truncateSQLite = async (table) => {
+  const instance = sqlite3.verbose();
+  const connection = new instance.Database("./axedb.sql");
+
+  return new Promise((resolve) => {
+    const sql = `DELETE FROM ${table}`; //NOSONAR
+    connection.run(sql, function (err) {
+      if (err) throw err;
+      resolve();
+    });
+  });
+};
+
 const truncatePostgres = async (table) => {
   const pool = new Pool({
     host: process.env.DB_HOST,
@@ -88,7 +102,10 @@ export const truncate = async (table) => {
   switch (process.env.DB_CLIENT) {
     case "mysql":
       return await truncateMySQL(table);
+    case "sqlite3":
+      return await truncateSQLite(table);
     case "postgres":
+    case "cockroachdb":
       return await truncatePostgres(table);
     default:
       throw new Error(`Unknown DB client: ${process.env.DB_CLIENT}`);

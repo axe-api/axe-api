@@ -13,6 +13,7 @@ const config: IApplicationConfig = {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       port: parseInt(process.env.DB_PORT || "3000"),
+      filename: "./axedb.sql",
     },
     pool: {
       min: 2,

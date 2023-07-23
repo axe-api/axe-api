@@ -24,6 +24,7 @@ const executeScenario = async (serveOptions) => {
       password: serveOptions.DB_PASSWORD,
       database: serveOptions.DB_DATABASE,
       port: serveOptions.DB_PORT,
+      filename: "./axedb.sql",
     },
     searchPath: [process.env.DB_USER, "public"],
     migrations: {
