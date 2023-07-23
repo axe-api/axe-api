@@ -104,7 +104,7 @@ describe("Axe API", () => {
 
     await deleteIt({
       url: `/api/v1/users/${userId}/posts/${postId}`,
-      status: 200,
+      status: 204,
     });
   });
 });

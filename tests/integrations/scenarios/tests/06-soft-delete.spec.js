@@ -53,7 +53,7 @@ describe("Axe API Soft Delete", () => {
     const response3 = await axios.delete(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}`
     );
-    expect(response3.status).toBe(200);
+    expect(response3.status).toBe(204);
 
     // pagination
     const response4 = await axios.get(
@@ -92,7 +92,7 @@ describe("Axe API Soft Delete", () => {
     const response7 = await axios.delete(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}/force`
     );
-    expect(response7.status).toBe(200);
+    expect(response7.status).toBe(204);
   });
 
   test("testing child-parent queries", async () => {
