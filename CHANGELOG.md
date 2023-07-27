@@ -1,5 +1,16 @@
 # Release Notes
 
+## [0.31.4 (2023-07-27)](https://github.com/axe-api/axe-api/compare/0.31.4...0.31.3)
+
+### Fixed
+
+- Fixed `$in` and `$between` queries [#252](https://github.com/axe-api/axe-api/issues/252)
+- Fixed wrong HTTP status codes
+
+### Internal
+
+- Added integrations tests for MariaDB, CockroachDB, and SQLite
+
 ## [0.31.3 (2023-07-19)](https://github.com/axe-api/axe-api/compare/0.31.3...0.31.2)
 
 ### Fixed
