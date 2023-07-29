@@ -14,5 +14,6 @@ export default async (context: IRequestPack) => {
   );
 
   // Adding the `Content-Language` header to the response object
-  context.res.setHeader("Content-Language", context.req.currentLanguage.title);
+  // TODO: Fix it
+  // context.res.setHeader("Content-Language", context.req.currentLanguage.title);
 };
