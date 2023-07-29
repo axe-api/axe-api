@@ -94,6 +94,12 @@ class Server {
 
   private async listen() {
     const server = http.createServer(RequestHandler);
+
+    server.on("error", function (e) {
+      // Handle your error here
+      console.log("GENERAL");
+    });
+
     server.listen(8080);
 
     const app = await IoCService.use("App");

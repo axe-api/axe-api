@@ -18,6 +18,13 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const axeResponse = new AxeResponse(response);
   const match = urlService.match(axeRequest);
 
+  request.on("error", (err) => {
+    console.error("ERRR");
+    response.statusCode = 400;
+    response.end();
+    return;
+  });
+
   if (!match) {
     return return404(response);
   }
@@ -54,7 +61,13 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     }
 
     // Middleware and hook calls
-    await phase.callback(pack);
+    try {
+      await phase.callback(pack);
+    } catch (error: any) {
+      // TODO: We need an error handler.
+      axeResponse.json(error, 500);
+      return;
+    }
 
     // If the response is not created, we should go to the next phase
     if (!pack.res.isResponded()) {
