@@ -37,12 +37,9 @@ interface Pair {
 }
 
 class URLService {
-  private urls: Pair[];
-  constructor() {
-    this.urls = [];
-  }
+  private static urls: Pair[] = [];
 
-  async add(
+  static async add(
     method: string,
     pattern: string,
     data: IRouteData,
@@ -81,12 +78,12 @@ class URLService {
     });
   }
 
-  match(request: AxeRequest) {
+  static match(request: AxeRequest) {
     if (!request) {
       return undefined;
     }
 
-    for (const item of this.urls) {
+    for (const item of URLService.urls) {
       const found =
         item.method === request.method &&
         check(request.url.pathname, item.pattern);

@@ -202,8 +202,6 @@ class RouterBuilder {
     //   }
     // };
 
-    const urlService = await IoCService.useByType<URLService>("URLService");
-
     const data: IRouteData = {
       version: this.version,
       handlerType,
@@ -211,7 +209,7 @@ class RouterBuilder {
       parentModel,
       relation,
     };
-    await urlService.add(
+    await URLService.add(
       HANDLER_METHOD_MAP[handlerType],
       url,
       data,

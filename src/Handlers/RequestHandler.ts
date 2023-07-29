@@ -6,6 +6,8 @@ import { Knex } from "knex";
 import AxeRequest from "../Services/AxeRequest";
 import AxeResponse from "../Services/AxeResponse";
 
+const api = APIService.getInstance();
+
 const return404 = (response: ServerResponse) => {
   response.statusCode = 404;
   response.write(JSON.stringify({ error: "Resource not found" }));
@@ -13,22 +15,21 @@ const return404 = (response: ServerResponse) => {
 };
 
 export default async (request: IncomingMessage, response: ServerResponse) => {
-  const urlService = await IoCService.useByType<URLService>("URLService");
   const axeRequest = new AxeRequest(request);
-  const axeResponse = new AxeResponse(response);
-  const match = urlService.match(axeRequest);
+  const match = URLService.match(axeRequest);
 
   if (!match) {
     return return404(response);
   }
 
+  const axeResponse = new AxeResponse(response);
+
   // We should resolve the body
   await axeRequest.prepare(match.params);
 
-  const api = APIService.getInstance();
+  const database = (await IoCService.use("Database")) as Knex;
 
   // Prepare the database by the transaction option
-  const database = (await IoCService.use("Database")) as Knex;
   let trx: Knex.Transaction | null = null;
   if (match.hasTransaction) {
     trx = await database.transaction();

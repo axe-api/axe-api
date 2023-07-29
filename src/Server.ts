@@ -56,9 +56,6 @@ class Server {
     // IoCService.singleton("App", async () => {
     //   return express();
     // });
-    IoCService.singleton("URLService", async () => {
-      return new URLService();
-    });
     LogService.setInstance(api.config.logLevel);
 
     // IoCService.singleton("Server", async () => {
