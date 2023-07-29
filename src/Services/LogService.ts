@@ -1,56 +1,30 @@
-import { LogLevels } from "../Enums";
-import { LOG_COLORS } from "../constants";
-
-const { fgRed, fgGreen, fgYellow, fgCyan, fgReset } = LOG_COLORS;
+import logger from "pino";
 
 class LogService {
-  private static instance: LogService;
-  private level: LogLevels;
+  private static logger: logger.Logger;
 
-  constructor(level: LogLevels) {
-    this.level = level;
+  static setInstance(options?: logger.LoggerOptions | undefined) {
+    LogService.logger = logger(options);
   }
 
-  static setInstance(level: LogLevels) {
-    LogService.instance = new LogService(level);
+  static instance() {
+    return LogService.logger;
   }
 
-  static getInstance(): LogService {
-    return LogService.instance;
+  static error(message: string) {
+    LogService.logger.error(message);
   }
 
-  error(message: string) {
-    if (this.level >= LogLevels.ERROR) {
-      console.error(fgRed, "[axe]", message, fgReset);
-    }
+  static warn(message: string) {
+    LogService.logger.warn(message);
   }
 
-  warn(message: string) {
-    if (this.level >= LogLevels.WARNING) {
-      console.warn(fgYellow, "[axe]", message, fgReset);
-    }
+  static info(message: string) {
+    LogService.logger.info(message);
   }
 
-  info(message: string) {
-    if (this.level >= LogLevels.INFO) {
-      console.info(fgCyan, "[axe]", message, fgReset);
-    }
-  }
-
-  success(message: string) {
-    if (this.level >= LogLevels.INFO) {
-      console.info(fgGreen, "[axe]", message, fgReset);
-    }
-  }
-
-  debug(message: string) {
-    this.log(message);
-  }
-
-  log(message: string) {
-    if (this.level === LogLevels.ALL) {
-      console.log(message);
-    }
+  static debug(message: string) {
+    LogService.logger.debug(message);
   }
 }
 

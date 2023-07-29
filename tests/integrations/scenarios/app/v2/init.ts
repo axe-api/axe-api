@@ -1,7 +1,7 @@
 import cors from "cors";
-import { Express } from "express";
+import { App } from "axe-api";
 
-const onBeforeInit = async (app: Express) => {
+const onBeforeInit = async (app: App) => {
   app.use(
     cors({
       origin: true,
