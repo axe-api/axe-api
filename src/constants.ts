@@ -1,6 +1,7 @@
 import {
   ConditionTypes,
   HandlerTypes,
+  HttpMethods,
   QueryFeature,
   Relationships,
 } from "./Enums";
@@ -161,3 +162,14 @@ export const DEFAULT_VERSION_CONFIG: IVersionConfig = {
 };
 
 export const NUMERIC_PRIMARY_KEY_TYPES = ["integer", "bigint"];
+
+export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
+  [HandlerTypes.INSERT]: HttpMethods.POST,
+  [HandlerTypes.PAGINATE]: HttpMethods.GET,
+  [HandlerTypes.SHOW]: HttpMethods.GET,
+  [HandlerTypes.UPDATE]: HttpMethods.PUT,
+  [HandlerTypes.DELETE]: HttpMethods.DELETE,
+  [HandlerTypes.FORCE_DELETE]: HttpMethods.DELETE,
+  [HandlerTypes.PATCH]: HttpMethods.PATCH,
+  [HandlerTypes.ALL]: HttpMethods.GET,
+};

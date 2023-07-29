@@ -8,9 +8,10 @@ import {
   IModelService,
   IRelation,
   IRequestPack,
+  IRouteData,
   IVersion,
 } from "../Interfaces";
-import { API_ROUTE_TEMPLATES } from "../constants";
+import { API_ROUTE_TEMPLATES, HANDLER_METHOD_MAP } from "../constants";
 import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
 import HandlerFactory from "../Handlers/HandlerFactory";
 import ApiError from "../Exceptions/ApiError";
@@ -21,6 +22,7 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
+import URLService from "../Services/URLService";
 
 class RouterBuilder {
   private version: IVersion;
@@ -198,78 +200,92 @@ class RouterBuilder {
       }
     };
 
-    switch (handlerType) {
-      case HandlerTypes.ALL:
-        app.get(url, middlewares, handler);
-        docs.push(this.version, HandlerTypes.ALL, HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.DELETE,
-          HttpMethods.DELETE,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.FORCE_DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.FORCE_DELETE,
-          HttpMethods.DELETE,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.INSERT:
-        app.post(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.INSERT,
-          HttpMethods.POST,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.PAGINATE:
-        app.get(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.PAGINATE,
-          HttpMethods.GET,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.PATCH:
-        app.patch(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.PATCH,
-          HttpMethods.PATCH,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.SHOW:
-        app.get(url, middlewares, handler);
-        docs.push(this.version, HandlerTypes.SHOW, HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.UPDATE:
-        app.put(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.UPDATE,
-          HttpMethods.PUT,
-          url,
-          model
-        );
-        break;
-      default:
-        throw new Error("Undefined handler type");
-    }
+    const urlService = await IoCService.useByType<URLService>("URLService");
+
+    const data: IRouteData = {
+      version: this.version,
+      handlerType,
+      model,
+      parentModel,
+      relation,
+    };
+    urlService.add(HANDLER_METHOD_MAP[handlerType], url, data);
+    // console.log(urlService);
+
+    // console.log(urlService.match("DELETE", "/api/v1/users/asdads"));
+
+    // switch (handlerType) {
+    //   case HandlerTypes.ALL:
+    //     app.get(url, middlewares, handler);
+    //     docs.push(this.version, HandlerTypes.ALL, HttpMethods.GET, url, model);
+    //     break;
+    //   case HandlerTypes.DELETE:
+    //     app.delete(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.DELETE,
+    //       HttpMethods.DELETE,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   case HandlerTypes.FORCE_DELETE:
+    //     app.delete(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.FORCE_DELETE,
+    //       HttpMethods.DELETE,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   case HandlerTypes.INSERT:
+    //     app.post(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.INSERT,
+    //       HttpMethods.POST,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   case HandlerTypes.PAGINATE:
+    //     app.get(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.PAGINATE,
+    //       HttpMethods.GET,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   case HandlerTypes.PATCH:
+    //     app.patch(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.PATCH,
+    //       HttpMethods.PATCH,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   case HandlerTypes.SHOW:
+    //     app.get(url, middlewares, handler);
+    //     docs.push(this.version, HandlerTypes.SHOW, HttpMethods.GET, url, model);
+    //     break;
+    //   case HandlerTypes.UPDATE:
+    //     app.put(url, middlewares, handler);
+    //     docs.push(
+    //       this.version,
+    //       HandlerTypes.UPDATE,
+    //       HttpMethods.PUT,
+    //       url,
+    //       model
+    //     );
+    //     break;
+    //   default:
+    //     throw new Error("Undefined handler type");
+    // }
   }
 
   private async requestHandler(

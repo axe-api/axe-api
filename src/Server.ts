@@ -21,6 +21,9 @@ import MetadataHandler from "./Handlers/MetadataHandler";
 import DocsHTMLHandler from "./Handlers/DocsHTMLHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
 import { consoleAxeError } from "./Helpers";
+import http from "http";
+import RequestHandler from "./Handlers/RequestHandler";
+import URLService from "./Services/URLService";
 
 class Server {
   async start(rootFolder: string) {
@@ -53,7 +56,14 @@ class Server {
     IoCService.singleton("App", async () => {
       return express();
     });
+    IoCService.singleton("URLService", async () => {
+      return new URLService();
+    });
     LogService.setInstance(api.config.logLevel);
+
+    IoCService.singleton("Server", async () => {
+      return express();
+    });
   }
 
   private async loadExpress() {
@@ -83,21 +93,22 @@ class Server {
   }
 
   private async listen() {
-    const app = await IoCService.use("App");
-    const logger = LogService.getInstance();
-    const api = APIService.getInstance();
+    const server = http.createServer(RequestHandler);
+    server.listen(8080);
 
-    if (api.config.env === "development") {
-      app.get("/metadata", MetadataHandler);
-      app.get("/docs", DocsHTMLHandler);
-      app.get("/routes", RoutesHandler);
-    }
-
-    app.listen(api.config.port, () => {
-      logger.info(
-        `API listens requests on http://localhost:${api.config.port}`
-      );
-    });
+    // const app = await IoCService.use("App");
+    // const logger = LogService.getInstance();
+    // const api = APIService.getInstance();
+    // if (api.config.env === "development") {
+    //   app.get("/metadata", MetadataHandler);
+    //   app.get("/docs", DocsHTMLHandler);
+    //   app.get("/routes", RoutesHandler);
+    // }
+    // app.listen(api.config.port, () => {
+    //   logger.info(
+    //     `API listens requests on http://localhost:${api.config.port}`
+    //   );
+    // });
   }
 }
 

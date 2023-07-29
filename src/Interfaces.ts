@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { IncomingMessage } from "http";
 import { Express, Request, Response, NextFunction } from "express";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
@@ -119,7 +120,7 @@ export interface IGeneralHooks {
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
-    req: Request,
+    req: IRequest,
     res: Response,
     next: NextFunction
   ) => void | Promise<void>;
@@ -182,15 +183,26 @@ export interface IRelation {
   foreignKey: string;
 }
 
-export interface IRequestPack {
-  api: IAPI;
+export interface IRouteData {
   version: IVersion;
-  req: Request;
-  res: Response;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
   relation: IRelation | null;
+}
+
+export interface IRequest {
+  query: any;
+  params: Record<string, any>;
+  method: string;
+  body: any;
+  currentLanguage: ILanguage;
+}
+
+export interface IRequestPack extends IRouteData {
+  api: IAPI;
+  req: IRequest;
+  res?: Response | any;
   database: Knex | Knex.Transaction;
 }
 
