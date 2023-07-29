@@ -12,6 +12,7 @@ import PaginatePhase from "./Phases/PaginatePhase";
 import QueryPhase from "./Phases/QueryPhase";
 import RelationalDataPhase from "./Phases/RelationalDataPhase";
 import ResultPhase from "./Phases/ResultPhase";
+import SerializePhase from "./Phases/SerializePhase";
 import { allow, deny } from "./Services/LimitService";
 import { PhaseFunction } from "./Types";
 
@@ -217,6 +218,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
     new Phase(PaginatePhase),
     new Phase(RelationalDataPhase),
     new Hook(HookFunctionTypes.onAfterPaginate),
+    new Phase(SerializePhase),
     new Phase(ResultPhase),
   ],
   [HandlerTypes.SHOW]: [],

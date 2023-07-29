@@ -1,4 +1,4 @@
-import { filterHiddenFields, serializeData } from "src/Handlers/Helpers";
+import { filterHiddenFields, serializeData } from "../Handlers/Helpers";
 import { IRequestPack } from "../Interfaces";
 
 export default async (context: IRequestPack) => {
