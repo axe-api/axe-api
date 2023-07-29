@@ -2,6 +2,7 @@ import { PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
 import { IPhaseDefinition, IRouteData } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
+import { TransactionResolver } from "../Resolvers";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -31,6 +32,7 @@ interface Pair {
   pattern: string;
   data: IRouteData;
   phases: IPhaseDefinition[];
+  hasTransaction: boolean;
 }
 
 class URLService {
@@ -39,7 +41,7 @@ class URLService {
     this.urls = [];
   }
 
-  add(
+  async add(
     method: string,
     pattern: string,
     data: IRouteData,
@@ -64,11 +66,17 @@ class URLService {
       }
     }
 
+    const hasTransaction = await new TransactionResolver(data.version).resolve(
+      data.model,
+      data.handlerType
+    );
+
     this.urls.push({
       method,
       pattern,
       data,
       phases,
+      hasTransaction,
     });
   }
 

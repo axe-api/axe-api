@@ -30,12 +30,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const database = (await IoCService.use("Database")) as Knex;
 
   let trx: Knex.Transaction | null = null;
-  let hasTransaction = false;
-  hasTransaction = await new TransactionResolver(match.data.version).resolve(
-    match.data.model,
-    match.data.handlerType
-  );
-  if (hasTransaction) {
+  if (match.hasTransaction) {
     trx = await database.transaction();
   }
 
@@ -43,7 +38,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     ...match.data,
     api,
     req: axeRequest,
-    database: hasTransaction && trx ? trx : database,
+    database: match.hasTransaction && trx ? trx : database,
   };
 
   response.setHeader("Content-Type", "application/json");

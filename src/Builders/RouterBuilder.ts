@@ -211,7 +211,12 @@ class RouterBuilder {
       parentModel,
       relation,
     };
-    urlService.add(HANDLER_METHOD_MAP[handlerType], url, data, middlewares);
+    await urlService.add(
+      HANDLER_METHOD_MAP[handlerType],
+      url,
+      data,
+      middlewares
+    );
 
     // switch (handlerType) {
     //   case HandlerTypes.ALL:
