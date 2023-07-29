@@ -96,19 +96,19 @@ class Server {
     const server = http.createServer(RequestHandler);
     server.listen(8080);
 
-    // const app = await IoCService.use("App");
-    // const logger = LogService.getInstance();
-    // const api = APIService.getInstance();
-    // if (api.config.env === "development") {
-    //   app.get("/metadata", MetadataHandler);
-    //   app.get("/docs", DocsHTMLHandler);
-    //   app.get("/routes", RoutesHandler);
-    // }
-    // app.listen(api.config.port, () => {
-    //   logger.info(
-    //     `API listens requests on http://localhost:${api.config.port}`
-    //   );
-    // });
+    const app = await IoCService.use("App");
+    const logger = LogService.getInstance();
+    const api = APIService.getInstance();
+    if (api.config.env === "development") {
+      app.get("/metadata", MetadataHandler);
+      app.get("/docs", DocsHTMLHandler);
+      app.get("/routes", RoutesHandler);
+    }
+    app.listen(api.config.port, () => {
+      logger.info(
+        `API listens requests on http://localhost:${api.config.port}`
+      );
+    });
   }
 }
 

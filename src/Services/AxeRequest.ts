@@ -1,14 +1,26 @@
 import { IncomingMessage } from "http";
+import { ILanguage } from "src/Interfaces";
 
 class AxeRequest {
   private request: IncomingMessage;
+  private language: ILanguage;
 
   constructor(request: IncomingMessage) {
     this.request = request;
+    this.language = {
+      title: "en",
+      language: "en",
+      region: null,
+    };
   }
 
   get query() {
     return "";
+  }
+
+  get path() {
+    // TODO: Path
+    return this.request.url || "";
   }
 
   get params(): Record<string, any> {
@@ -19,16 +31,20 @@ class AxeRequest {
     return this.request.method || "GET";
   }
 
-  get body() {
+  get body(): any {
     return {};
   }
 
   get currentLanguage() {
-    return {
-      title: "en",
-      language: "en",
-      region: null,
-    };
+    return this.language;
+  }
+
+  set currentLanguage(language: ILanguage) {
+    this.language = language;
+  }
+
+  header(key: string) {
+    return this.request.headers[key];
   }
 }
 

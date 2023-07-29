@@ -30,7 +30,7 @@ export default async (pack: IRequestPack) => {
   await callHooks(model, HookFunctionTypes.onBeforeDeleteQuery, {
     ...pack,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   const item = await query.first();
   if (!item) {
@@ -44,13 +44,13 @@ export default async (pack: IRequestPack) => {
     ...pack,
     query,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   await callHooks(model, HookFunctionTypes.onBeforeDelete, {
     ...pack,
     query,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // If there is a deletedAtColumn, it means that this table support soft-delete
   if (model.instance.deletedAtColumn) {
@@ -64,7 +64,7 @@ export default async (pack: IRequestPack) => {
   await callHooks(model, HookFunctionTypes.onAfterDelete, {
     ...pack,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   return res.status(204).json();
 };

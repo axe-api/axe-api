@@ -34,7 +34,7 @@ export default async (pack: IRequestPack) => {
   await callHooks(model, HookFunctionTypes.onBeforeUpdateQuery, {
     ...pack,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // We should check the parameter type
   const value = req.params[model.instance.primaryKey];
@@ -54,7 +54,7 @@ export default async (pack: IRequestPack) => {
     ...pack,
     item,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   const requestMethod: HttpMethods = req.method as unknown as HttpMethods;
   const fillables = model.instance.getFillableFields(requestMethod);
@@ -82,7 +82,7 @@ export default async (pack: IRequestPack) => {
     item,
     formData,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   await query
     .where(model.instance.primaryKey, item[model.instance.primaryKey])
@@ -97,7 +97,7 @@ export default async (pack: IRequestPack) => {
     item,
     formData,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Serializing the data by the model's serialize method
   item = await serializeData(

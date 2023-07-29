@@ -177,29 +177,33 @@ class RouterBuilder {
   private async addExpressRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: ((req: Request, res: Response, next: NextFunction) => void)[],
+    middlewares: ((
+      req: AxeRequest,
+      res: Response,
+      next: NextFunction
+    ) => void)[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
   ) {
-    const docs = DocumentationService.getInstance();
-    const app = await IoCService.useByType<Express>("App");
+    // const docs = DocumentationService.getInstance();
+    // const app = await IoCService.useByType<Express>("App");
 
-    const handler = async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await this.requestHandler(
-          handlerType,
-          req,
-          res,
-          model,
-          parentModel,
-          relation
-        );
-      } catch (error: any) {
-        // Catch error then pass it to the express error handler
-        next(error);
-      }
-    };
+    // const handler = async (req: Request, res: Response, next: NextFunction) => {
+    //   try {
+    //     await this.requestHandler(
+    //       handlerType,
+    //       req,
+    //       res,
+    //       model,
+    //       parentModel,
+    //       relation
+    //     );
+    //   } catch (error: any) {
+    //     // Catch error then pass it to the express error handler
+    //     next(error);
+    //   }
+    // };
 
     const urlService = await IoCService.useByType<URLService>("URLService");
 

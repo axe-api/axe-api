@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import { IRequestPack } from "../Interfaces";
 import {
   addForeignKeyQuery,
   getRelatedData,
@@ -38,7 +38,7 @@ export default async (pack: IRequestPack) => {
     ...pack,
     conditions,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Users should be able to filter records
   queryParser.applyWheres(query, conditions.q);
@@ -69,7 +69,7 @@ export default async (pack: IRequestPack) => {
     conditions,
     result,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Serializing the data by the model's serialize method
   result.data = await serializeData(

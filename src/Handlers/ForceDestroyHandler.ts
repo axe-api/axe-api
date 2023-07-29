@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { IRequestPack, IHookParameter } from "../Interfaces";
+import { IRequestPack } from "../Interfaces";
 import {
   addForeignKeyQuery,
   callHooks,
@@ -34,7 +34,7 @@ export default async (pack: IRequestPack) => {
   await callHooks(model, HookFunctionTypes.onBeforeForceDeleteQuery, {
     ...pack,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   const item = await query.first();
   if (!item) {
@@ -45,20 +45,20 @@ export default async (pack: IRequestPack) => {
     ...pack,
     query,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   await callHooks(model, HookFunctionTypes.onBeforeForceDelete, {
     ...pack,
     query,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   await query.delete();
 
   await callHooks(model, HookFunctionTypes.onAfterForceDelete, {
     ...pack,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   return res.status(204).json();
 };

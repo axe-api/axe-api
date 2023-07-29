@@ -50,7 +50,7 @@ export default async (pack: IRequestPack) => {
   await callHooks(model, HookFunctionTypes.onBeforeInsert, {
     ...pack,
     formData,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   const [returningResult] = await database(model.instance.table)
     .insert(formData)
@@ -74,7 +74,7 @@ export default async (pack: IRequestPack) => {
     ...pack,
     formData,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Serializing the data by the model's serialize method
   item = await serializeData(

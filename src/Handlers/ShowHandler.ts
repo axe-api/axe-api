@@ -48,7 +48,7 @@ export default async (pack: IRequestPack) => {
     ...pack,
     query,
     conditions,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Users should be able to filter records
   queryParser.applyWheres(query, conditions.q);
@@ -78,7 +78,7 @@ export default async (pack: IRequestPack) => {
     query,
     conditions,
     item,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Serializing the data by the model's serialize method
   item = await serializeData(

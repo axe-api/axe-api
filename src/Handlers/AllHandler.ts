@@ -41,7 +41,7 @@ export default async (pack: IRequestPack) => {
     ...pack,
     conditions,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // User should be able to select sorting fields and types
   queryParser.applySorting(query, conditions.sort);
@@ -65,7 +65,7 @@ export default async (pack: IRequestPack) => {
     result,
     conditions,
     query,
-  } as unknown as IHookParameter);
+  } as unknown as IRequestPack);
 
   // Serializing the data by the model's serialize method
   result = await serializeData(
