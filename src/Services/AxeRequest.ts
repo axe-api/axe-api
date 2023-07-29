@@ -4,14 +4,20 @@ import { ILanguage } from "src/Interfaces";
 class AxeRequest {
   private request: IncomingMessage;
   private language: ILanguage;
+  private urlObject: URL;
 
   constructor(request: IncomingMessage) {
     this.request = request;
+    this.urlObject = new URL(request.url || "", "http://127.0.0.1");
     this.language = {
       title: "en",
       language: "en",
       region: null,
     };
+  }
+
+  get url() {
+    return this.urlObject;
   }
 
   get query() {

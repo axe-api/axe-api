@@ -1,6 +1,7 @@
 import { PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
 import { IRouteData } from "../Interfaces";
+import AxeRequest from "./AxeRequest";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -56,13 +57,15 @@ class URLService {
     });
   }
 
-  match(method: string | undefined, url: string | undefined) {
-    if (!method || !url) {
+  match(request: AxeRequest) {
+    if (!request) {
       return undefined;
     }
 
     for (const item of this.urls) {
-      const found = item.method === method && check(url, item.pattern);
+      const found =
+        item.method === request.method &&
+        check(request.url.pathname, item.pattern);
 
       if (found) {
         return {

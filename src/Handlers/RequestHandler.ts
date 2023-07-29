@@ -19,8 +19,8 @@ const jsonResponse = (response: ServerResponse, data: any) => {
 
 export default async (request: IncomingMessage, response: ServerResponse) => {
   const urlService = await IoCService.useByType<URLService>("URLService");
-  const { method, url } = request;
-  const match = urlService.match(method, url);
+  const axeRequest = new AxeRequest(request);
+  const match = urlService.match(axeRequest);
 
   if (!match) {
     return return404(response);
@@ -42,7 +42,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const pack: IRequestPack = {
     ...match.data,
     api,
-    req: new AxeRequest(request),
+    req: axeRequest,
     database: hasTransaction && trx ? trx : database,
   };
 
