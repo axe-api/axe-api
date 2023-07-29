@@ -24,6 +24,7 @@ import {
 import { acceptLanguageMiddleware } from "../Middlewares";
 import URLService from "../Services/URLService";
 import AxeRequest from "../Services/AxeRequest";
+import { MiddlewareFunction } from "src/Types";
 
 class RouterBuilder {
   private version: IVersion;
@@ -88,7 +89,7 @@ class RouterBuilder {
       // Creating the middleware list for the route. As default, we support some
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
-      const middlewares = [
+      const middlewares: MiddlewareFunction[] = [
         acceptLanguageMiddleware,
         ...model.instance.getMiddlewares(handlerType),
       ];
@@ -177,11 +178,7 @@ class RouterBuilder {
   private async addExpressRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: ((
-      req: AxeRequest,
-      res: Response,
-      next: NextFunction
-    ) => void)[],
+    middlewares: MiddlewareFunction[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null

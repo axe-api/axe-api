@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from "express";
 import { IRequestPack, IHookParameter } from "./Interfaces";
 import AxeRequest from "./Services/AxeRequest";
 
@@ -7,10 +6,8 @@ export type SerializationFunction = (item: any, request: AxeRequest) => any;
 export type HandlerFunction = (pack: IRequestPack) => void;
 
 export type MiddlewareFunction = (
-  req: AxeRequest,
-  res: Response,
-  next: NextFunction
-) => void;
+  context: IRequestPack
+) => void | Promise<void>;
 
 export type ModelValidation = Record<string, string>;
 

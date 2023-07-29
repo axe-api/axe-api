@@ -121,11 +121,7 @@ export interface IGeneralHooks {
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: (
-    req: AxeRequest,
-    res: Response,
-    next: NextFunction
-  ) => void | Promise<void>;
+  middleware: (context: IRequestPack) => Promise<void>;
 }
 
 export interface IHookParameter {
