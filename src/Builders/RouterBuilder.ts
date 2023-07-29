@@ -292,54 +292,54 @@ class RouterBuilder {
     // }
   }
 
-  private async requestHandler(
-    handlerType: HandlerTypes,
-    req: Request,
-    res: Response,
-    model: IModelService,
-    parentModel: IModelService | null,
-    relation: IRelation | null
-  ) {
-    let trx: Knex.Transaction | null = null;
-    let hasTransaction = false;
+  // private async requestHandler(
+  //   handlerType: HandlerTypes,
+  //   req: Request,
+  //   res: Response,
+  //   model: IModelService,
+  //   parentModel: IModelService | null,
+  //   relation: IRelation | null
+  // ) {
+  //   let trx: Knex.Transaction | null = null;
+  //   let hasTransaction = false;
 
-    try {
-      const database = (await IoCService.use("Database")) as Knex;
-      const api = APIService.getInstance();
+  //   try {
+  //     const database = (await IoCService.use("Database")) as Knex;
+  //     const api = APIService.getInstance();
 
-      hasTransaction = await new TransactionResolver(this.version).resolve(
-        model,
-        handlerType
-      );
-      if (hasTransaction) {
-        trx = await database.transaction();
-      }
+  //     hasTransaction = await new TransactionResolver(this.version).resolve(
+  //       model,
+  //       handlerType
+  //     );
+  //     if (hasTransaction) {
+  //       trx = await database.transaction();
+  //     }
 
-      const handler = HandlerFactory.get(handlerType);
-      const pack: IRequestPack = {
-        api,
-        version: this.version,
-        req: new AxeRequest(req),
-        res,
-        handlerType,
-        model,
-        parentModel,
-        relation,
-        database: hasTransaction && trx ? trx : database,
-      };
-      await handler(pack);
+  //     const handler = HandlerFactory.get(handlerType);
+  //     const pack: IRequestPack = {
+  //       api,
+  //       version: this.version,
+  //       req: new AxeRequest(req),
+  //       res,
+  //       handlerType,
+  //       model,
+  //       parentModel,
+  //       relation,
+  //       database: hasTransaction && trx ? trx : database,
+  //     };
+  //     await handler(pack);
 
-      if (hasTransaction && trx) {
-        trx.commit();
-      }
-    } catch (error: any) {
-      if (hasTransaction && trx) {
-        trx.rollback();
-      }
+  //     if (hasTransaction && trx) {
+  //       trx.commit();
+  //     }
+  //   } catch (error: any) {
+  //     if (hasTransaction && trx) {
+  //       trx.rollback();
+  //     }
 
-      this.sendErrorAsResponse(res, error);
-    }
-  }
+  //     this.sendErrorAsResponse(res, error);
+  //   }
+  // }
 
   private sendErrorAsResponse(res: Response, error: any) {
     const type: string | undefined = error.type;

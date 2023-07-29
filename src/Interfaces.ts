@@ -209,6 +209,7 @@ export interface IRequestPack extends IRouteData {
   params?: any;
   result?: any;
   item?: any;
+  formData?: any;
 }
 
 export interface IRouteDocumentation {

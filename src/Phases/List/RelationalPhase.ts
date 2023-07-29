@@ -1,5 +1,5 @@
-import { getRelatedData } from "../Handlers/Helpers";
-import { IRequestPack } from "../Interfaces";
+import { getRelatedData } from "../../Handlers/Helpers";
+import { IRequestPack } from "../../Interfaces";
 
 export default async (context: IRequestPack) => {
   // We should try to get related data if there is any

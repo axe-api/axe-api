@@ -22,9 +22,13 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     return return404(response);
   }
 
-  const api = APIService.getInstance();
-  const database = (await IoCService.use("Database")) as Knex;
+  // We should resolve the body
+  await axeRequest.prepare(match.params);
 
+  const api = APIService.getInstance();
+
+  // Prepare the database by the transaction option
+  const database = (await IoCService.use("Database")) as Knex;
   let trx: Knex.Transaction | null = null;
   if (match.hasTransaction) {
     trx = await database.transaction();
@@ -63,12 +67,13 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
       if (match.hasTransaction && trx) {
         trx.rollback();
       }
-      continue;
+      break;
     }
 
     // If there is a valid transaction, we should commit it
     if (match.hasTransaction && trx) {
       trx.commit();
+      break;
     }
   }
 };
