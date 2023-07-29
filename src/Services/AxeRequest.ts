@@ -46,7 +46,11 @@ class AxeRequest {
   async prepare(params: any) {
     this.privateParams = params;
 
-    if (this.request.method !== "POST" && this.request.method !== "PUT") {
+    if (
+      this.request.method !== "POST" &&
+      this.request.method !== "PUT" &&
+      this.request.method !== "PATCH"
+    ) {
       return;
     }
 

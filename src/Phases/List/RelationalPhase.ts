@@ -5,7 +5,7 @@ export default async (context: IRequestPack) => {
   // We should try to get related data if there is any
   await getRelatedData(
     context.version,
-    context.result.data,
+    context.result?.data || context.result || [],
     context.conditions?.with || [],
     context.model,
     context.version.modelList,

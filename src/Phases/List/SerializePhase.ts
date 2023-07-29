@@ -5,7 +5,7 @@ export default async (context: IRequestPack) => {
   // Serializing the data by the model's serialize method
   context.result.data = await serializeData(
     context.version,
-    context.result.data,
+    context.result?.data || context.result || [],
     context.model.serialize,
     context.handlerType,
     context.req

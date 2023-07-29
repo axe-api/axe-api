@@ -12,9 +12,11 @@ import { PhaseFunction } from "./Types";
 import Single from "./Phases/Single";
 import List from "./Phases/List";
 import Paginate from "./Phases/Paginate";
+import All from "./Phases/All";
 import Show from "./Phases/Show";
 import Store from "./Phases/Store";
 import Update from "./Phases/Update";
+import Patch from "./Phases/Patch";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -286,6 +288,31 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
   ],
   [HandlerTypes.DELETE]: [],
   [HandlerTypes.FORCE_DELETE]: [],
-  [HandlerTypes.PATCH]: [],
-  [HandlerTypes.ALL]: [],
+  [HandlerTypes.PATCH]: [
+    new Phase(Single.PrepareGetPhase),
+    new Hook(HookFunctionTypes.onBeforeUpdateQuery),
+    new Event(HookFunctionTypes.onBeforeUpdateQuery),
+    new Phase(Single.GetPhase),
+    new Hook(HookFunctionTypes.onAfterUpdateQuery),
+    new Event(HookFunctionTypes.onAfterUpdateQuery),
+    new Phase(Patch.PrepareActionPhase),
+    new Hook(HookFunctionTypes.onBeforeUpdate),
+    new Event(HookFunctionTypes.onBeforeUpdate),
+    new Phase(Update.ActionPhase),
+    new Hook(HookFunctionTypes.onAfterUpdate),
+    new Event(HookFunctionTypes.onAfterUpdate),
+    new Phase(Single.SerializePhase),
+    new Phase(Single.ResultPhase),
+  ],
+  [HandlerTypes.ALL]: [
+    new Phase(Paginate.PreparePhase),
+    new Hook(HookFunctionTypes.onBeforePaginate),
+    new Event(HookFunctionTypes.onBeforePaginate),
+    new Phase(All.FetchPhase),
+    new Phase(List.RelationalPhase),
+    new Hook(HookFunctionTypes.onAfterPaginate),
+    new Event(HookFunctionTypes.onAfterPaginate),
+    new Phase(List.SerializePhase),
+    new Phase(List.ResultPhase),
+  ],
 };

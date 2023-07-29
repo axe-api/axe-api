@@ -18,13 +18,6 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const axeResponse = new AxeResponse(response);
   const match = urlService.match(axeRequest);
 
-  request.on("error", (err) => {
-    console.error("ERRR");
-    response.statusCode = 400;
-    response.end();
-    return;
-  });
-
   if (!match) {
     return return404(response);
   }
@@ -65,8 +58,8 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
       await phase.callback(pack);
     } catch (error: any) {
       // TODO: We need an error handler.
-      axeResponse.json(error, 500);
-      return;
+      axeResponse.json({ error: error.toString() }, 500);
+      break;
     }
 
     // If the response is not created, we should go to the next phase
@@ -76,7 +69,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
 
     // If the response is an error, and we have an active transaction,
     // we should rollback it before the HTTP request end.
-    if (pack.res.statusCode() >= 400 || pack.res.statusCode() < 599) {
+    if (pack.res.statusCode() >= 400 && pack.res.statusCode() < 599) {
       if (match.hasTransaction && trx) {
         trx.rollback();
       }
