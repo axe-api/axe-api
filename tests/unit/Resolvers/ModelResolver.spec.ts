@@ -4,7 +4,6 @@ import { describe, expect, test, beforeEach, jest } from "@jest/globals";
 import { ModelResolver } from "../../../src/Resolvers";
 import { IoCService, LogService } from "../../../src/Services";
 import { IVersion } from "../../../src/Interfaces";
-import { LogLevels } from "../../../src/Enums";
 
 const DBMock = {};
 
@@ -56,7 +55,7 @@ const SchemaInspectorMock = () => {
 
 describe("ModelResolver", () => {
   beforeEach(() => {
-    LogService.setInstance(LogLevels.ERROR);
+    LogService.setInstance();
     IoCService.singleton("Database", () => DBMock);
     IoCService.singleton("SchemaInspector", () => SchemaInspectorMock);
   });

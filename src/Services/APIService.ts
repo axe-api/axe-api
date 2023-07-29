@@ -1,5 +1,4 @@
 import path from "path";
-import { LogLevels } from "../Enums";
 import { IAPI, IApplicationConfig, IVersion } from "../Interfaces";
 import ModelListService from "./ModelListService";
 
@@ -15,9 +14,9 @@ class APIService {
       config: {
         env: "production",
         port: 3000,
-        logLevel: LogLevels.INFO,
         prefix: "/api",
         database: {},
+        pino: {},
       },
     };
   }

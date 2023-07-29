@@ -41,7 +41,6 @@ class SchemaValidatorService {
   }
 
   async validate() {
-    const logger = LogService.getInstance();
     this.version.modelList.get().forEach((model) => {
       this.checkModelReservedKeywordsOrFail(model);
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
@@ -57,7 +56,9 @@ class SchemaValidatorService {
       this.checkRelationColumnsOrFail(this.version.modelList, model);
     });
 
-    logger.info(`[${this.version.name}] Database schema has been validated.`);
+    LogService.debug(
+      `[${this.version.name}] Database schema has been validated.`
+    );
   }
 
   private checkModelReservedKeywordsOrFail(model: IModelService) {
