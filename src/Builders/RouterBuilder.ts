@@ -211,10 +211,7 @@ class RouterBuilder {
       parentModel,
       relation,
     };
-    urlService.add(HANDLER_METHOD_MAP[handlerType], url, data);
-    // console.log(urlService);
-
-    // console.log(urlService.match("DELETE", "/api/v1/users/asdads"));
+    urlService.add(HANDLER_METHOD_MAP[handlerType], url, data, middlewares);
 
     // switch (handlerType) {
     //   case HandlerTypes.ALL:

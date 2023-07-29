@@ -21,7 +21,7 @@ class AxeRequest {
   }
 
   get query() {
-    return "";
+    return this.urlObject.searchParams;
   }
 
   get path() {

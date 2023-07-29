@@ -1,4 +1,4 @@
-import { PhaseFunction } from "src/Types";
+import { MiddlewareFunction, PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
 import { IRouteData } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
@@ -39,7 +39,12 @@ class URLService {
     this.urls = [];
   }
 
-  add(method: string, pattern: string, data: IRouteData) {
+  add(
+    method: string,
+    pattern: string,
+    data: IRouteData,
+    middleware: MiddlewareFunction[]
+  ) {
     const phases: PhaseFunction[] = [];
 
     for (const cycle of HANDLER_CYLES[data.handlerType]) {
