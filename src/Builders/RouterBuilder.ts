@@ -23,6 +23,7 @@ import {
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
 import URLService from "../Services/URLService";
+import AxeRequest from "../Services/AxeRequest";
 
 class RouterBuilder {
   private version: IVersion;
@@ -315,7 +316,7 @@ class RouterBuilder {
       const pack: IRequestPack = {
         api,
         version: this.version,
-        req,
+        req: new AxeRequest(req),
         res,
         handlerType,
         model,

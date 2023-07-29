@@ -1,12 +1,19 @@
 import {
   ConditionTypes,
   HandlerTypes,
+  HookFunctionTypes,
   HttpMethods,
   QueryFeature,
   Relationships,
 } from "./Enums";
-import { IVersionConfig } from "./Interfaces";
+import { IModelService, IVersionConfig } from "./Interfaces";
+import Model from "./Model";
+import PaginatePhase from "./Phases/PaginatePhase";
+import QueryPhase from "./Phases/QueryPhase";
+import RelationalDataPhase from "./Phases/RelationalDataPhase";
+import ResultPhase from "./Phases/ResultPhase";
 import { allow, deny } from "./Services/LimitService";
+import { PhaseFunction } from "./Types";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -172,4 +179,50 @@ export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
   [HandlerTypes.FORCE_DELETE]: HttpMethods.DELETE,
   [HandlerTypes.PATCH]: HttpMethods.PATCH,
   [HandlerTypes.ALL]: HttpMethods.GET,
+};
+
+export interface ICycleDefinition {
+  get(model: IModelService): PhaseFunction;
+}
+
+class Phase implements ICycleDefinition {
+  private callback: PhaseFunction;
+
+  constructor(callback: PhaseFunction) {
+    this.callback = callback;
+  }
+
+  get(): PhaseFunction {
+    return this.callback;
+  }
+}
+
+class Hook implements ICycleDefinition {
+  private hookFunctionType: HookFunctionTypes;
+
+  constructor(hookFunctionType: HookFunctionTypes) {
+    this.hookFunctionType = hookFunctionType;
+  }
+
+  get(model: IModelService): PhaseFunction {
+    return model.hooks[this.hookFunctionType];
+  }
+}
+
+export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
+  [HandlerTypes.INSERT]: [],
+  [HandlerTypes.PAGINATE]: [
+    new Phase(QueryPhase),
+    new Hook(HookFunctionTypes.onBeforePaginate),
+    new Phase(PaginatePhase),
+    new Phase(RelationalDataPhase),
+    new Hook(HookFunctionTypes.onAfterPaginate),
+    new Phase(ResultPhase),
+  ],
+  [HandlerTypes.SHOW]: [],
+  [HandlerTypes.UPDATE]: [],
+  [HandlerTypes.DELETE]: [],
+  [HandlerTypes.FORCE_DELETE]: [],
+  [HandlerTypes.PATCH]: [],
+  [HandlerTypes.ALL]: [],
 };

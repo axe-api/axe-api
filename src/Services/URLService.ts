@@ -1,3 +1,5 @@
+import { PhaseFunction } from "src/Types";
+import { HANDLER_CYLES } from "../constants";
 import { IRouteData } from "../Interfaces";
 
 const check = (url: string, pattern: string) => {
@@ -27,6 +29,7 @@ interface Pair {
   method: string;
   pattern: string;
   data: IRouteData;
+  phases: PhaseFunction[];
 }
 
 class URLService {
@@ -36,10 +39,20 @@ class URLService {
   }
 
   add(method: string, pattern: string, data: IRouteData) {
+    const phases: PhaseFunction[] = [];
+
+    for (const cycle of HANDLER_CYLES[data.handlerType]) {
+      const item = cycle.get(data.model);
+      if (item) {
+        phases.push(item);
+      }
+    }
+
     this.urls.push({
       method,
       pattern,
       data,
+      phases,
     });
   }
 
@@ -48,16 +61,15 @@ class URLService {
       return undefined;
     }
 
-    const item = this.urls.find(
-      (item) => item.method === method && check(url, item.pattern)
-    );
+    for (const item of this.urls) {
+      const found = item.method === method && check(url, item.pattern);
 
-    if (item) {
-      const params = check(url, item.pattern);
-      return {
-        ...item,
-        params,
-      };
+      if (found) {
+        return {
+          ...item,
+          found,
+        };
+      }
     }
   }
 }

@@ -16,8 +16,10 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { HookFunction, SerializationFunction } from "./Types";
-import { ModelListService } from "./Services";
+import { HookFunction, PhaseFunction, SerializationFunction } from "./Types";
+import { ModelListService, QueryService } from "./Services";
+import AxeRequest from "./Services/AxeRequest";
+import { Table } from "knex-schema-inspector/lib/types/table";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -120,7 +122,7 @@ export interface IGeneralHooks {
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (
-    req: IRequest,
+    req: AxeRequest,
     res: Response,
     next: NextFunction
   ) => void | Promise<void>;
@@ -158,8 +160,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, HookFunction>;
-  events: Record<HookFunctionTypes, HookFunction>;
+  hooks: Record<HookFunctionTypes, PhaseFunction>;
+  events: Record<HookFunctionTypes, PhaseFunction>;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -191,19 +193,23 @@ export interface IRouteData {
   relation: IRelation | null;
 }
 
-export interface IRequest {
-  query: any;
-  params: Record<string, any>;
-  method: string;
-  body: any;
-  currentLanguage: ILanguage;
-}
+// export interface IRequest {
+//   query: any;
+//   params: Record<string, any>;
+//   method: string;
+//   body: any;
+//   currentLanguage: ILanguage;
+// }
 
 export interface IRequestPack extends IRouteData {
   api: IAPI;
-  req: IRequest;
+  req: AxeRequest;
   res?: Response | any;
   database: Knex | Knex.Transaction;
+  queryParser?: QueryService;
+  conditions?: IQuery;
+  query?: Knex.QueryBuilder;
+  result?: any;
 }
 
 export interface IRouteDocumentation {
