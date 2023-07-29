@@ -20,6 +20,7 @@ import { HookFunction, PhaseFunction, SerializationFunction } from "./Types";
 import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
 import { Table } from "knex-schema-inspector/lib/types/table";
+import AxeResponse from "./Services/AxeResponse";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -200,7 +201,7 @@ export interface IRouteData {
 export interface IRequestPack extends IRouteData {
   api: IAPI;
   req: AxeRequest;
-  res?: Response | any;
+  res: AxeResponse;
   database: Knex | Knex.Transaction;
   queryParser?: QueryService;
   conditions?: IQuery;
