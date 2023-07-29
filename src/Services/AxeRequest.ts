@@ -29,10 +29,6 @@ class AxeRequest {
     return this.request.url || "";
   }
 
-  get params(): Record<string, any> {
-    return {};
-  }
-
   get method() {
     return this.request.method || "GET";
   }

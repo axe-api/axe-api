@@ -206,7 +206,9 @@ export interface IRequestPack extends IRouteData {
   queryParser?: QueryService;
   conditions?: IQuery;
   query?: Knex.QueryBuilder;
+  params?: any;
   result?: any;
+  item?: any;
 }
 
 export interface IRouteDocumentation {

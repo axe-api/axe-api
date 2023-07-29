@@ -33,6 +33,7 @@ interface Pair {
   data: IRouteData;
   phases: IPhaseDefinition[];
   hasTransaction: boolean;
+  params?: any;
 }
 
 class URLService {
@@ -93,7 +94,7 @@ class URLService {
       if (found) {
         return {
           ...item,
-          found,
+          params: found,
         };
       }
     }

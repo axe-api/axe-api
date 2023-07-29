@@ -7,14 +7,14 @@ import {
   Relationships,
 } from "./Enums";
 import { IModelService, IVersionConfig } from "./Interfaces";
-import Model from "./Model";
-import PaginatePhase from "./Phases/PaginatePhase";
-import QueryPhase from "./Phases/QueryPhase";
-import RelationalDataPhase from "./Phases/RelationalDataPhase";
+import RelationalListPhase from "./Phases/RelationalListPhase";
 import ResultPhase from "./Phases/ResultPhase";
 import SerializePhase from "./Phases/SerializePhase";
 import { allow, deny } from "./Services/LimitService";
 import { PhaseFunction } from "./Types";
+import Paginate from "./Phases/Paginate";
+import Show from "./Phases/Show";
+import Single from "./Phases/Single";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -238,17 +238,27 @@ class Event implements ICycleDefinition {
 export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
   [HandlerTypes.INSERT]: [],
   [HandlerTypes.PAGINATE]: [
-    new Phase(QueryPhase),
+    new Phase(Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
-    new Phase(PaginatePhase),
-    new Phase(RelationalDataPhase),
+    new Phase(Paginate.FetchPhase),
+    new Phase(RelationalListPhase),
     new Hook(HookFunctionTypes.onAfterPaginate),
     new Event(HookFunctionTypes.onAfterPaginate),
     new Phase(SerializePhase),
     new Phase(ResultPhase),
   ],
-  [HandlerTypes.SHOW]: [],
+  [HandlerTypes.SHOW]: [
+    new Phase(Show.PreparePhase),
+    new Hook(HookFunctionTypes.onBeforeShow),
+    new Event(HookFunctionTypes.onBeforeShow),
+    new Phase(Show.FetchPhase),
+    new Phase(Single.RelationalPhase),
+    new Hook(HookFunctionTypes.onAfterShow),
+    new Event(HookFunctionTypes.onAfterShow),
+    new Phase(Single.SerializePhase),
+    new Phase(Single.ResultPhase),
+  ],
   [HandlerTypes.UPDATE]: [],
   [HandlerTypes.DELETE]: [],
   [HandlerTypes.FORCE_DELETE]: [],

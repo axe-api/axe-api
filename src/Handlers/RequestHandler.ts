@@ -32,6 +32,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
 
   const pack: IRequestPack = {
     ...match.data,
+    params: match.params,
     api,
     req: axeRequest,
     res: axeResponse,
@@ -60,7 +61,6 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     // we should rollback it before the HTTP request end.
     if (pack.res.statusCode() >= 400 || pack.res.statusCode() < 599) {
       if (match.hasTransaction && trx) {
-        console.log("rollback");
         trx.rollback();
       }
       continue;
