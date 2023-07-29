@@ -273,3 +273,8 @@ export interface IDependency {
   callback: any;
   instance: any;
 }
+
+export interface IPhaseDefinition {
+  isAsync: boolean;
+  callback: PhaseFunction;
+}

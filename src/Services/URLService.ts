@@ -1,6 +1,6 @@
 import { PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
-import { IRouteData } from "../Interfaces";
+import { IPhaseDefinition, IRouteData } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
 
 const check = (url: string, pattern: string) => {
@@ -30,7 +30,7 @@ interface Pair {
   method: string;
   pattern: string;
   data: IRouteData;
-  phases: PhaseFunction[];
+  phases: IPhaseDefinition[];
 }
 
 class URLService {
@@ -45,12 +45,22 @@ class URLService {
     data: IRouteData,
     middlewares: PhaseFunction[]
   ) {
-    const phases: PhaseFunction[] = [...middlewares];
+    const phases: IPhaseDefinition[] = [
+      ...middlewares.map((middleware) => {
+        return {
+          isAsync: true,
+          callback: middleware,
+        };
+      }),
+    ];
 
     for (const cycle of HANDLER_CYLES[data.handlerType]) {
       const item = cycle.get(data.model);
       if (item) {
-        phases.push(item);
+        phases.push({
+          isAsync: cycle.isAsync(),
+          callback: item,
+        });
       }
     }
 

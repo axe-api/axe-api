@@ -184,6 +184,7 @@ export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
 
 export interface ICycleDefinition {
   get(model: IModelService): PhaseFunction;
+  isAsync(): boolean;
 }
 
 class Phase implements ICycleDefinition {
@@ -195,6 +196,10 @@ class Phase implements ICycleDefinition {
 
   get(): PhaseFunction {
     return this.callback;
+  }
+
+  isAsync() {
+    return true;
   }
 }
 
@@ -208,6 +213,26 @@ class Hook implements ICycleDefinition {
   get(model: IModelService): PhaseFunction {
     return model.hooks[this.hookFunctionType];
   }
+
+  isAsync() {
+    return true;
+  }
+}
+
+class Event implements ICycleDefinition {
+  private hookFunctionType: HookFunctionTypes;
+
+  constructor(hookFunctionType: HookFunctionTypes) {
+    this.hookFunctionType = hookFunctionType;
+  }
+
+  get(model: IModelService): PhaseFunction {
+    return model.events[this.hookFunctionType];
+  }
+
+  isAsync() {
+    return false;
+  }
 }
 
 export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
@@ -215,9 +240,11 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
   [HandlerTypes.PAGINATE]: [
     new Phase(QueryPhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
+    new Event(HookFunctionTypes.onBeforePaginate),
     new Phase(PaginatePhase),
     new Phase(RelationalDataPhase),
     new Hook(HookFunctionTypes.onAfterPaginate),
+    new Event(HookFunctionTypes.onAfterPaginate),
     new Phase(SerializePhase),
     new Phase(ResultPhase),
   ],

@@ -50,11 +50,17 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   response.setHeader("X-Powered-By", "Axe API");
 
   for (const phase of match.phases) {
-    const result: any = await phase(pack);
+    // Middleware and hook calls
+    if (phase.isAsync) {
+      const result: any = await phase.callback(pack);
 
-    if (result) {
-      jsonResponse(response, result);
-      return;
+      if (result) {
+        jsonResponse(response, result);
+        return;
+      }
+    } else {
+      // Event calls
+      await phase.callback(pack);
     }
   }
 
