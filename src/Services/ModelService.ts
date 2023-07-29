@@ -6,7 +6,7 @@ import {
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
-import { HookFunction, SerializationFunction } from "../Types";
+import { PhaseFunction, SerializationFunction } from "../Types";
 
 class ModelService implements IModelService {
   name: string;
@@ -14,13 +14,13 @@ class ModelService implements IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, HookFunction> = {} as Record<
+  hooks: Record<HookFunctionTypes, PhaseFunction> = {} as Record<
     HookFunctionTypes,
-    HookFunction
+    PhaseFunction
   >;
-  events: Record<HookFunctionTypes, HookFunction> = {} as Record<
+  events: Record<HookFunctionTypes, PhaseFunction> = {} as Record<
     HookFunctionTypes,
-    HookFunction
+    PhaseFunction
   >;
   children: IModelService[];
   isRecursive: boolean;
@@ -47,7 +47,7 @@ class ModelService implements IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: HookFunction
+    data: PhaseFunction
   ) {
     if (type == Extensions.Hooks) {
       this.setHooks(hookFunctionType, data);
@@ -66,11 +66,11 @@ class ModelService implements IModelService {
     this.serialize = callback;
   }
 
-  private setHooks(hookFunctionType: HookFunctionTypes, data: HookFunction) {
+  private setHooks(hookFunctionType: HookFunctionTypes, data: PhaseFunction) {
     this.hooks[hookFunctionType] = data;
   }
 
-  private setEvents(hookFunctionType: HookFunctionTypes, data: HookFunction) {
+  private setEvents(hookFunctionType: HookFunctionTypes, data: PhaseFunction) {
     this.events[hookFunctionType] = data;
   }
 }

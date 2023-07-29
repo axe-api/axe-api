@@ -3,7 +3,7 @@ import { describe, expect, jest, test, beforeAll } from "@jest/globals";
 import { ModelTreeBuilder } from "../../../src/Builders";
 import { IoCService, LogService, ModelService } from "../../../src/Services";
 import { IModelService, IRelation, IVersion } from "../../../src/Interfaces";
-import { LogLevels, Relationships } from "../../../src/Enums";
+import { Relationships } from "../../../src/Enums";
 import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
@@ -71,7 +71,7 @@ const VersionMock = {
 
 describe("ModelTreeBuilder", () => {
   beforeAll(() => {
-    LogService.setInstance(LogLevels.ERROR);
+    LogService.setInstance();
   });
 
   test("should be able to create model tree", async () => {

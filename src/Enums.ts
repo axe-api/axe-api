@@ -67,14 +67,6 @@ export enum HttpMethods {
   DELETE = "DELETE",
 }
 
-export enum LogLevels {
-  NONE,
-  ERROR,
-  WARNING,
-  INFO,
-  ALL,
-}
-
 export enum Relationships {
   HAS_ONE = "HAS_ONE",
   HAS_MANY = "HAS_MANY",

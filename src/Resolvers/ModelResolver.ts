@@ -26,19 +26,32 @@ class ModelResolver {
   }
 
   async resolve() {
-    const logger = LogService.getInstance();
-
     const modelList = new ModelListService(await this.getModelList());
+    LogService.debug(`[${this.version.name}] Model list has been resolved`);
     await this.setModelRelations(modelList);
+    LogService.debug(
+      `[${this.version.name}] Model relations have been resolved`
+    );
     await this.setDatabaseColumns(modelList);
+    LogService.debug(
+      `[${this.version.name}] Database columns have been bonded with models`
+    );
     await this.setModelHooks(modelList, Extensions.Hooks);
+    LogService.debug(`[${this.version.name}] Model hooks have been loaded`);
     await this.setModelHooks(modelList, Extensions.Events);
+    LogService.debug(`[${this.version.name}] Model events have been loaded`);
     await this.setModelSerializations(modelList);
+    LogService.debug(
+      `[${this.version.name}] Model serializers have been loaded`
+    );
     await this.setModelQueryLimits(modelList);
+    LogService.debug(
+      `[${this.version.name}] Model query limits have been loaded`
+    );
 
     this.version.modelList = modelList;
 
-    logger.info(`[${this.version.name}] All models have been resolved.`);
+    LogService.debug(`[${this.version.name}] All models have been resolved.`);
   }
 
   private async setModelRelations(modelList: ModelListService) {
@@ -115,7 +128,6 @@ class ModelResolver {
     modelList: ModelListService,
     hookType: Extensions
   ) {
-    const logger = LogService.getInstance();
     // What kind of hooks that we can have
     const hookList = Object.keys(HookFunctionTypes);
     const fileResolver = new FileResolver();
@@ -158,7 +170,7 @@ class ModelResolver {
             hooks[hookName].default
           );
         } else {
-          logger.warn(
+          LogService.warn(
             `Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`
           );
         }

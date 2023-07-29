@@ -1,9 +1,7 @@
 import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
-  LogLevels,
   HttpMethods,
   HookFunctionTypes,
   Extensions,
@@ -15,8 +13,12 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { HookFunction, SerializationFunction } from "./Types";
-import { ModelListService } from "./Services";
+import { PhaseFunction, SerializationFunction } from "./Types";
+import { ModelListService, QueryService } from "./Services";
+import AxeRequest from "./Services/AxeRequest";
+import AxeResponse from "./Services/AxeResponse";
+import App from "./Services/App";
+import { LoggerOptions } from "pino";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -32,7 +34,7 @@ export interface IHandlerBasedTransactionConfig {
 
 interface IHandlerBasedSerializer {
   handler: HandlerTypes[];
-  serializer: ((data: any, request: Request) => void)[];
+  serializer: ((data: any, request: AxeRequest) => void)[];
 }
 
 export interface IQueryLimitConfig {
@@ -58,7 +60,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: Request) => void)[]
+    | ((data: any, request: AxeRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -68,9 +70,9 @@ export interface IVersionConfig {
 export interface IApplicationConfig extends IConfig {
   env: string;
   port: number;
-  logLevel: LogLevels;
   prefix: string;
   database: IDatabaseConfig;
+  pino: LoggerOptions;
 }
 
 export interface ILanguage {
@@ -112,32 +114,13 @@ export interface IAPI {
 }
 
 export interface IGeneralHooks {
-  onBeforeInit: (app: Express) => void | null;
-  onAfterInit: (app: Express) => void | null;
+  onBeforeInit: (app: App) => void | null;
+  onAfterInit: (app: App) => void | null;
 }
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => void | Promise<void>;
-}
-
-export interface IHookParameter {
-  req: Request;
-  res: Response;
-  handlerType: HandlerTypes;
-  model: IModelService;
-  parentModel: IModelService | null;
-  relation: IRelation | null;
-  database: Knex | Knex.Transaction;
-  conditions: IQuery | null;
-  query: Knex.QueryBuilder | null;
-  result: any;
-  item: any;
-  formData: any;
+  middleware: (context: IRequestPack) => Promise<void> | void;
 }
 
 export interface IMethodBaseConfig {
@@ -157,8 +140,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, HookFunction>;
-  events: Record<HookFunctionTypes, HookFunction>;
+  hooks: Record<HookFunctionTypes, PhaseFunction>;
+  events: Record<HookFunctionTypes, PhaseFunction>;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -168,7 +151,7 @@ export interface IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: HookFunction
+    data: PhaseFunction
   ): void;
   setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;
@@ -182,16 +165,26 @@ export interface IRelation {
   foreignKey: string;
 }
 
-export interface IRequestPack {
-  api: IAPI;
+export interface IRouteData {
   version: IVersion;
-  req: Request;
-  res: Response;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
   relation: IRelation | null;
+}
+
+export interface IRequestPack extends IRouteData {
+  api: IAPI;
+  req: AxeRequest;
+  res: AxeResponse;
   database: Knex | Knex.Transaction;
+  queryParser?: QueryService;
+  conditions?: IQuery;
+  query?: Knex.QueryBuilder;
+  params?: any;
+  result?: any;
+  item?: any;
+  formData?: any;
 }
 
 export interface IRouteDocumentation {
@@ -258,4 +251,9 @@ export interface IDependency {
   type: DependencyTypes;
   callback: any;
   instance: any;
+}
+
+export interface IPhaseDefinition {
+  isAsync: boolean;
+  callback: PhaseFunction;
 }
