@@ -14,6 +14,7 @@ import List from "./Phases/List";
 import Paginate from "./Phases/Paginate";
 import Show from "./Phases/Show";
 import Store from "./Phases/Store";
+import Update from "./Phases/Update";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -267,7 +268,22 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
     new Phase(Single.SerializePhase),
     new Phase(Single.ResultPhase),
   ],
-  [HandlerTypes.UPDATE]: [],
+  [HandlerTypes.UPDATE]: [
+    new Phase(Single.PrepareGetPhase),
+    new Hook(HookFunctionTypes.onBeforeUpdateQuery),
+    new Event(HookFunctionTypes.onBeforeUpdateQuery),
+    new Phase(Single.GetPhase),
+    new Hook(HookFunctionTypes.onAfterUpdateQuery),
+    new Event(HookFunctionTypes.onAfterUpdateQuery),
+    new Phase(Update.PrepareActionPhase),
+    new Hook(HookFunctionTypes.onBeforeUpdate),
+    new Event(HookFunctionTypes.onBeforeUpdate),
+    new Phase(Update.ActionPhase),
+    new Hook(HookFunctionTypes.onAfterUpdate),
+    new Event(HookFunctionTypes.onAfterUpdate),
+    new Phase(Single.SerializePhase),
+    new Phase(Single.ResultPhase),
+  ],
   [HandlerTypes.DELETE]: [],
   [HandlerTypes.FORCE_DELETE]: [],
   [HandlerTypes.PATCH]: [],
