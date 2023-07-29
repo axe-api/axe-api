@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
 import { APIService, DocumentationService } from "../Services";
+import AxeRequest from "../Services/AxeRequest";
+import AxeResponse from "../Services/AxeResponse";
 
-export default async (req: Request, res: Response) => {
+export default async (req: AxeRequest, res: AxeResponse) => {
   const docs = DocumentationService.getInstance();
   const api = APIService.getInstance();
 

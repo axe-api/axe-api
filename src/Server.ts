@@ -6,7 +6,6 @@ import {
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
-import express from "express";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
 import { attachPaginate } from "knex-paginate";
@@ -21,6 +20,9 @@ import MetadataHandler from "./Handlers/MetadataHandler";
 import DocsHTMLHandler from "./Handlers/DocsHTMLHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
 import { consoleAxeError } from "./Helpers";
+import http from "http";
+import RequestHandler from "./Handlers/RequestHandler";
+import App from "./Services/App";
 
 class Server {
   async start(rootFolder: string) {
@@ -29,7 +31,6 @@ class Server {
     try {
       await this.bindDependencies(rootFolder);
       await this.loadGeneralConfiguration();
-      await this.loadExpress();
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
@@ -45,21 +46,13 @@ class Server {
     APIService.setInsance(rootFolder);
     const api = APIService.getInstance();
     IoCService.singleton("SchemaInspector", () => schemaInspector);
+    IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
       attachPaginate();
       return database;
     });
-    IoCService.singleton("App", async () => {
-      return express();
-    });
     LogService.setInstance(api.config.logLevel);
-  }
-
-  private async loadExpress() {
-    const app = await IoCService.use("App");
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
   }
 
   private async analyzeVersions() {
@@ -83,21 +76,27 @@ class Server {
   }
 
   private async listen() {
-    const app = await IoCService.use("App");
+    const app = await IoCService.useByType<App>("App");
+
+    app.use(RequestHandler);
+
+    const server = http.createServer(app.instance);
     const logger = LogService.getInstance();
     const api = APIService.getInstance();
+
+    server.on("error", function (e) {
+      // Handle your error here
+      console.log("GENERAL", e);
+    });
+
+    server.listen(api.config.port);
+    logger.info(`API listens requests on http://localhost:${api.config.port}`);
 
     if (api.config.env === "development") {
       app.get("/metadata", MetadataHandler);
       app.get("/docs", DocsHTMLHandler);
       app.get("/routes", RoutesHandler);
     }
-
-    app.listen(api.config.port, () => {
-      logger.info(
-        `API listens requests on http://localhost:${api.config.port}`
-      );
-    });
   }
 }
 

@@ -1,8 +1,6 @@
 import { LogLevels } from "../Enums";
 import { LOG_COLORS } from "../constants";
 
-const { fgRed, fgGreen, fgYellow, fgCyan, fgReset } = LOG_COLORS;
-
 class LogService {
   private static instance: LogService;
   private level: LogLevels;
@@ -21,25 +19,25 @@ class LogService {
 
   error(message: string) {
     if (this.level >= LogLevels.ERROR) {
-      console.error(fgRed, "[axe]", message, fgReset);
+      console.error(LOG_COLORS.fgRed, "[axe]", message, LOG_COLORS.fgReset);
     }
   }
 
   warn(message: string) {
     if (this.level >= LogLevels.WARNING) {
-      console.warn(fgYellow, "[axe]", message, fgReset);
+      console.warn(LOG_COLORS.fgYellow, "[axe]", message, LOG_COLORS.fgReset);
     }
   }
 
   info(message: string) {
     if (this.level >= LogLevels.INFO) {
-      console.info(fgCyan, "[axe]", message, fgReset);
+      console.info(LOG_COLORS.fgCyan, "[axe]", message, LOG_COLORS.fgReset);
     }
   }
 
   success(message: string) {
     if (this.level >= LogLevels.INFO) {
-      console.info(fgGreen, "[axe]", message, fgReset);
+      console.info(LOG_COLORS.fgGreen, "[axe]", message, LOG_COLORS.fgReset);
     }
   }
 

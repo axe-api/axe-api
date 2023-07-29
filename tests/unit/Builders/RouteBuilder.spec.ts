@@ -20,6 +20,7 @@ import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
 import Comment from "../__Mocks/app/v1/Models/Comment";
 import HandlerFactory from "../../../src/Handlers/HandlerFactory";
+import URLService from "../../../src/Services/URLService";
 
 const waitForIt = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
@@ -105,7 +106,9 @@ describe("RouteBuilder", () => {
     await builder.build();
 
     // Checking GETs
-    const getURLs = AppMock.get.mock.calls.map((item) => item[0]);
+    const getURLs = URLService.getAllURLs()
+      .filter((item) => item.method == "GET")
+      .map((item) => item.pattern);
     expect(getURLs.length).toBe(8);
     expect(getURLs.includes("/api/v1/users")).toBeTruthy();
     expect(getURLs.includes("/api/v1/users/:id")).toBeTruthy();
@@ -114,39 +117,12 @@ describe("RouteBuilder", () => {
     expect(getURLs.includes("/api/v1/posts/:postId/likes/:id")).toBeTruthy();
 
     // Checking POSTSs
-    const postURLs = AppMock.post.mock.calls.map((item) => item[0]);
+    const postURLs = URLService.getAllURLs()
+      .filter((item) => item.method == "POST")
+      .map((item) => item.pattern);
     expect(postURLs.length).toBe(4);
     expect(postURLs.includes("/api/v1/users")).toBeTruthy();
     expect(postURLs.includes("/api/v1/posts")).toBeTruthy();
     expect(postURLs.includes("/api/v1/posts/:postId/likes")).toBeTruthy();
-
-    // Example handler
-    const handler = AppMock.post.mock.calls[0][2] as (
-      req: Request,
-      res: Response
-    ) => void;
-
-    // Response mock
-    // const response = {
-    //   status: jest.fn(() => {
-    //     return response;
-    //   }),
-    //   json: jest.fn(),
-    // };
-    // // Call the handler
-    // handler({} as Request, response as unknown as Response);
-
-    // // Wait for the async call
-    // await waitForIt(10);
-
-    // // Test the mock function has been called
-    // expect(handlerFunctionMock.mock.calls.length).toBe(1);
-
-    // // Should be called correctly
-    // const params: IRequestPack = (
-    //   handlerFunctionMock.mock.calls[0] as any
-    // )[0] as IRequestPack;
-    // expect(params.handlerType).toBe(HandlerTypes.INSERT);
-    // expect(params.model.name).toBe("User");
   });
 });

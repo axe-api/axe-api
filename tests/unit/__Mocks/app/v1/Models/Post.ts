@@ -9,6 +9,7 @@ import {
   IHandlerBaseMiddleware,
   IMethodBaseConfig,
   IMethodBaseValidations,
+  IRequestPack,
 } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
@@ -33,9 +34,7 @@ class Post extends Model {
   get middlewares(): IHandlerBaseMiddleware {
     return {
       handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-      middleware: (req: Request, res: Response, next: NextFunction) => {
-        next();
-      },
+      middleware: async (context: IRequestPack) => {},
     };
   }
 

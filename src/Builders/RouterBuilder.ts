@@ -1,19 +1,15 @@
 import pluralize from "pluralize";
-import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
-import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
+import { GeneralHookResolver } from "../Resolvers";
 import {
   IGeneralHooks,
   IModelService,
   IRelation,
-  IRequestPack,
+  IRouteData,
   IVersion,
 } from "../Interfaces";
-import { API_ROUTE_TEMPLATES } from "../constants";
-import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
-import HandlerFactory from "../Handlers/HandlerFactory";
-import ApiError from "../Exceptions/ApiError";
+import { API_ROUTE_TEMPLATES, HANDLER_METHOD_MAP } from "../constants";
+import { HandlerTypes, Relationships } from "../Enums";
 import {
   LogService,
   DocumentationService,
@@ -21,6 +17,9 @@ import {
   APIService,
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
+import URLService from "../Services/URLService";
+import { PhaseFunction } from "src/Types";
+import App from "../Services/App";
 
 class RouterBuilder {
   private version: IVersion;
@@ -30,7 +29,7 @@ class RouterBuilder {
   }
 
   async build() {
-    const app = await IoCService.useByType<Express>("App");
+    const app = await IoCService.useByType<App>("App");
     const logger = LogService.getInstance();
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
@@ -85,7 +84,7 @@ class RouterBuilder {
       // Creating the middleware list for the route. As default, we support some
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
-      const middlewares = [
+      const middlewares: PhaseFunction[] = [
         acceptLanguageMiddleware,
         ...model.instance.getMiddlewares(handlerType),
       ];
@@ -160,188 +159,40 @@ class RouterBuilder {
     }
   }
 
-  private getPrimaryKeyName = (model: IModelService): string => {
-    return (
-      pluralize.singular(model.name).toLowerCase() +
-      this.ucFirst(model.instance.primaryKey)
-    );
-  };
-
-  private ucFirst = (value: string): string => {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  };
-
   private async addExpressRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: ((req: Request, res: Response, next: NextFunction) => void)[],
+    middlewares: PhaseFunction[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
   ) {
     const docs = DocumentationService.getInstance();
-    const app = await IoCService.useByType<Express>("App");
 
-    const handler = async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        await this.requestHandler(
-          handlerType,
-          req,
-          res,
-          model,
-          parentModel,
-          relation
-        );
-      } catch (error: any) {
-        // Catch error then pass it to the express error handler
-        next(error);
-      }
+    const data: IRouteData = {
+      version: this.version,
+      handlerType,
+      model,
+      parentModel,
+      relation,
     };
 
-    switch (handlerType) {
-      case HandlerTypes.ALL:
-        app.get(url, middlewares, handler);
-        docs.push(this.version, HandlerTypes.ALL, HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.DELETE,
-          HttpMethods.DELETE,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.FORCE_DELETE:
-        app.delete(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.FORCE_DELETE,
-          HttpMethods.DELETE,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.INSERT:
-        app.post(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.INSERT,
-          HttpMethods.POST,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.PAGINATE:
-        app.get(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.PAGINATE,
-          HttpMethods.GET,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.PATCH:
-        app.patch(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.PATCH,
-          HttpMethods.PATCH,
-          url,
-          model
-        );
-        break;
-      case HandlerTypes.SHOW:
-        app.get(url, middlewares, handler);
-        docs.push(this.version, HandlerTypes.SHOW, HttpMethods.GET, url, model);
-        break;
-      case HandlerTypes.UPDATE:
-        app.put(url, middlewares, handler);
-        docs.push(
-          this.version,
-          HandlerTypes.UPDATE,
-          HttpMethods.PUT,
-          url,
-          model
-        );
-        break;
-      default:
-        throw new Error("Undefined handler type");
-    }
-  }
-
-  private async requestHandler(
-    handlerType: HandlerTypes,
-    req: Request,
-    res: Response,
-    model: IModelService,
-    parentModel: IModelService | null,
-    relation: IRelation | null
-  ) {
-    let trx: Knex.Transaction | null = null;
-    let hasTransaction = false;
-
-    try {
-      const database = (await IoCService.use("Database")) as Knex;
-      const api = APIService.getInstance();
-
-      hasTransaction = await new TransactionResolver(this.version).resolve(
-        model,
-        handlerType
-      );
-      if (hasTransaction) {
-        trx = await database.transaction();
-      }
-
-      const handler = HandlerFactory.get(handlerType);
-      const pack: IRequestPack = {
-        api,
-        version: this.version,
-        req,
-        res,
-        handlerType,
-        model,
-        parentModel,
-        relation,
-        database: hasTransaction && trx ? trx : database,
-      };
-      await handler(pack);
-
-      if (hasTransaction && trx) {
-        trx.commit();
-      }
-    } catch (error: any) {
-      if (hasTransaction && trx) {
-        trx.rollback();
-      }
-
-      this.sendErrorAsResponse(res, error);
-    }
-  }
-
-  private sendErrorAsResponse(res: Response, error: any) {
-    const type: string | undefined = error.type;
-
-    if (type === "ApiError") {
-      // eslint-disable-next-line no-case-declarations
-      const apiError: ApiError = error as ApiError;
-      res.status(apiError.status).json({
-        error: apiError.message,
-      });
-      return;
-    }
-
-    // We should log error and send general error response
-    LogService.getInstance().error(
-      `SERVER ERROR: ${JSON.stringify(
-        { ...error, message: error.message },
-        null,
-        "  "
-      )}`
+    // Adding the route
+    await URLService.add(
+      HANDLER_METHOD_MAP[handlerType],
+      url,
+      data,
+      middlewares
     );
-    throw error;
+
+    // Documentation
+    docs.push(
+      this.version,
+      handlerType,
+      HANDLER_METHOD_MAP[handlerType],
+      url,
+      model
+    );
   }
 
   private getResourcePath(model: IModelService, relation: IRelation | null) {

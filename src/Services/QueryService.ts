@@ -3,6 +3,7 @@ import {
   ConditionTypes,
   SortTypes,
   QueryFeature,
+  StatusCodes,
 } from "../Enums";
 import {
   IRawQuery,
@@ -118,7 +119,7 @@ class QueryService {
     this.applyRelatedQueryJoins(query, ruleSet);
   }
 
-  get(query: any): IQuery {
+  get(query: URLSearchParams): IQuery {
     const conditions: IQuery = this.parseSections(query);
     const usedColumns: string[] = this.getUsedColumns(conditions);
     const undefinedColumns = usedColumns.filter((columnName) => {
@@ -224,14 +225,16 @@ class QueryService {
     this.createdJoins.push(relation.name);
   }
 
-  private parseSections(sections: IRawQuery): IQuery {
-    if (sections.q) {
-      const queryContent = sections.q.replace(/%20/g, "").replace(/ /g, "");
+  private parseSections(sections: URLSearchParams): IQuery {
+    let q = sections.get("q");
+
+    if (q) {
+      const queryContent = q.replace(/%20/g, "").replace(/ /g, "");
 
       // Users can send an unacceptable query string. We shouldn't allow them to
       // send unacceptable structure because of security reasons.
       try {
-        sections.q = JSON.parse(queryContent);
+        q = JSON.parse(queryContent);
       } catch (err) {
         throw new ApiError(`Unacceptable query string: ${queryContent}`);
       }
@@ -240,13 +243,15 @@ class QueryService {
     const withQueryResolver = new WithQueryResolver(this.model, this.models);
 
     const query: IQuery = {
-      page: this.parsePage(sections.page),
-      per_page: this.parsePerPage(sections.per_page),
-      fields: this.parseFields(sections.fields),
-      sort: this.parseSortingOptions(sections.sort),
-      q: this.parseCondition(sections.q),
-      with: withQueryResolver.resolve(sections?.with || ""),
-      trashed: sections?.trashed ? isBoolean(sections.trashed) : false,
+      page: this.parsePage(sections.get("page")),
+      per_page: this.parsePerPage(sections.get("per_page")),
+      fields: this.parseFields(sections.get("fields")),
+      sort: this.parseSortingOptions(sections.get("sort")),
+      q: this.parseCondition(q),
+      with: withQueryResolver.resolve(sections.get("with") || ""),
+      trashed: sections.get("trashed")
+        ? isBoolean(sections.get("trashed"))
+        : false,
     };
 
     const configPerPage =
@@ -296,7 +301,8 @@ class QueryService {
 
     if (isNaN(value) || value < minPerPage || value > maxPerPage) {
       throw new ApiError(
-        `Unacceptable 'per_page' value! Current value is '${value}'. It should be between ${minPerPage}-${maxPerPage}`
+        `Unacceptable 'per_page' value! Current value is '${value}'. It should be between ${minPerPage}-${maxPerPage}`,
+        StatusCodes.BAD_REQUEST
       );
     }
 

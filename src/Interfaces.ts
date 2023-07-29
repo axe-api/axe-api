@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { IncomingMessage } from "http";
 import { Express, Request, Response, NextFunction } from "express";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
@@ -15,8 +16,12 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { HookFunction, SerializationFunction } from "./Types";
-import { ModelListService } from "./Services";
+import { HookFunction, PhaseFunction, SerializationFunction } from "./Types";
+import { ModelListService, QueryService } from "./Services";
+import AxeRequest from "./Services/AxeRequest";
+import { Table } from "knex-schema-inspector/lib/types/table";
+import AxeResponse from "./Services/AxeResponse";
+import App from "./Services/App";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -112,17 +117,13 @@ export interface IAPI {
 }
 
 export interface IGeneralHooks {
-  onBeforeInit: (app: Express) => void | null;
-  onAfterInit: (app: Express) => void | null;
+  onBeforeInit: (app: App) => void | null;
+  onAfterInit: (app: App) => void | null;
 }
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => void | Promise<void>;
+  middleware: (context: IRequestPack) => Promise<void>;
 }
 
 export interface IHookParameter {
@@ -157,8 +158,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, HookFunction>;
-  events: Record<HookFunctionTypes, HookFunction>;
+  hooks: Record<HookFunctionTypes, PhaseFunction>;
+  events: Record<HookFunctionTypes, PhaseFunction>;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -168,7 +169,7 @@ export interface IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: HookFunction
+    data: PhaseFunction
   ): void;
   setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;
@@ -182,16 +183,34 @@ export interface IRelation {
   foreignKey: string;
 }
 
-export interface IRequestPack {
-  api: IAPI;
+export interface IRouteData {
   version: IVersion;
-  req: Request;
-  res: Response;
   handlerType: HandlerTypes;
   model: IModelService;
   parentModel: IModelService | null;
   relation: IRelation | null;
+}
+
+// export interface IRequest {
+//   query: any;
+//   params: Record<string, any>;
+//   method: string;
+//   body: any;
+//   currentLanguage: ILanguage;
+// }
+
+export interface IRequestPack extends IRouteData {
+  api: IAPI;
+  req: AxeRequest;
+  res: AxeResponse;
   database: Knex | Knex.Transaction;
+  queryParser?: QueryService;
+  conditions?: IQuery;
+  query?: Knex.QueryBuilder;
+  params?: any;
+  result?: any;
+  item?: any;
+  formData?: any;
 }
 
 export interface IRouteDocumentation {
@@ -258,4 +277,9 @@ export interface IDependency {
   type: DependencyTypes;
   callback: any;
   instance: any;
+}
+
+export interface IPhaseDefinition {
+  isAsync: boolean;
+  callback: PhaseFunction;
 }
