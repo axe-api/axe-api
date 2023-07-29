@@ -1,5 +1,4 @@
 import path from "path";
-import { Request, Response } from "express";
 import { describe, expect, jest, test, beforeAll } from "@jest/globals";
 import { RouterBuilder } from "../../../src/Builders";
 import {
@@ -8,20 +7,13 @@ import {
   LogService,
   ModelService,
 } from "../../../src/Services";
-import {
-  IModelService,
-  IRelation,
-  IRequestPack,
-  IVersion,
-} from "../../../src/Interfaces";
-import { HandlerTypes, LogLevels, Relationships } from "../../../src/Enums";
+import { IModelService, IRelation, IVersion } from "../../../src/Interfaces";
+import { Relationships } from "../../../src/Enums";
 import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
 import Comment from "../__Mocks/app/v1/Models/Comment";
-import HandlerFactory from "../../../src/Handlers/HandlerFactory";
-
-const waitForIt = (time) => new Promise((resolve) => setTimeout(resolve, time));
+import URLService from "../../../src/Services/URLService";
 
 const userService = new ModelService("User", new User());
 const postService = new ModelService("Post", new Post());
@@ -90,7 +82,7 @@ const VersionMock = {
 describe("RouteBuilder", () => {
   beforeAll(() => {
     APIService.setInsance(path.join(__dirname, "..", "__Mocks"));
-    LogService.setInstance(LogLevels.ERROR);
+    LogService.setInstance();
     IoCService.singleton("App", () => AppMock);
     IoCService.singleton(
       "DocumentationService",
@@ -100,12 +92,14 @@ describe("RouteBuilder", () => {
     IoCService.singleton("Database", () => DatabaseMock);
   });
 
-  test("should be able to build express routes", async () => {
+  test("should be able to build routes", async () => {
     const builder = new RouterBuilder(VersionMock);
     await builder.build();
 
     // Checking GETs
-    const getURLs = AppMock.get.mock.calls.map((item) => item[0]);
+    const getURLs = URLService.getAllURLs()
+      .filter((item) => item.method == "GET")
+      .map((item) => item.pattern);
     expect(getURLs.length).toBe(8);
     expect(getURLs.includes("/api/v1/users")).toBeTruthy();
     expect(getURLs.includes("/api/v1/users/:id")).toBeTruthy();
@@ -114,39 +108,12 @@ describe("RouteBuilder", () => {
     expect(getURLs.includes("/api/v1/posts/:postId/likes/:id")).toBeTruthy();
 
     // Checking POSTSs
-    const postURLs = AppMock.post.mock.calls.map((item) => item[0]);
+    const postURLs = URLService.getAllURLs()
+      .filter((item) => item.method == "POST")
+      .map((item) => item.pattern);
     expect(postURLs.length).toBe(4);
     expect(postURLs.includes("/api/v1/users")).toBeTruthy();
     expect(postURLs.includes("/api/v1/posts")).toBeTruthy();
     expect(postURLs.includes("/api/v1/posts/:postId/likes")).toBeTruthy();
-
-    // Example handler
-    const handler = AppMock.post.mock.calls[0][2] as (
-      req: Request,
-      res: Response
-    ) => void;
-
-    // Response mock
-    // const response = {
-    //   status: jest.fn(() => {
-    //     return response;
-    //   }),
-    //   json: jest.fn(),
-    // };
-    // // Call the handler
-    // handler({} as Request, response as unknown as Response);
-
-    // // Wait for the async call
-    // await waitForIt(10);
-
-    // // Test the mock function has been called
-    // expect(handlerFunctionMock.mock.calls.length).toBe(1);
-
-    // // Should be called correctly
-    // const params: IRequestPack = (
-    //   handlerFunctionMock.mock.calls[0] as any
-    // )[0] as IRequestPack;
-    // expect(params.handlerType).toBe(HandlerTypes.INSERT);
-    // expect(params.model.name).toBe("User");
   });
 });

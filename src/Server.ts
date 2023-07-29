@@ -6,7 +6,6 @@ import {
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
-import express from "express";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
 import { attachPaginate } from "knex-paginate";
@@ -20,46 +19,40 @@ import {
 import MetadataHandler from "./Handlers/MetadataHandler";
 import DocsHTMLHandler from "./Handlers/DocsHTMLHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
-import { consoleAxeError } from "./Helpers";
+import http from "http";
+import RequestHandler from "./Handlers/RequestHandler";
+import App from "./Services/App";
 
 class Server {
   async start(rootFolder: string) {
     dotenv.config();
 
     try {
-      await this.bindDependencies(rootFolder);
+      APIService.setInsance(rootFolder);
       await this.loadGeneralConfiguration();
-      await this.loadExpress();
+      await this.bindDependencies();
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
       if (error.type === "AxeError") {
-        consoleAxeError(error);
+        LogService.error(error);
       } else {
         throw error;
       }
     }
   }
 
-  private async bindDependencies(rootFolder: string) {
-    APIService.setInsance(rootFolder);
+  private async bindDependencies() {
     const api = APIService.getInstance();
     IoCService.singleton("SchemaInspector", () => schemaInspector);
+    IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
+      LogService.debug("Created a knex connection instance");
       attachPaginate();
+      LogService.debug("Added pagination support to the knex");
       return database;
     });
-    IoCService.singleton("App", async () => {
-      return express();
-    });
-    LogService.setInstance(api.config.logLevel);
-  }
-
-  private async loadExpress() {
-    const app = await IoCService.use("App");
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
   }
 
   private async analyzeVersions() {
@@ -80,12 +73,22 @@ class Server {
     const generalConfigFile = path.join(api.appFolder, "config");
     const { default: content } = await import(generalConfigFile);
     api.setConfig(content as IApplicationConfig);
+    LogService.setInstance(api.config.pino);
+    LogService.debug("Configurations are loaded");
   }
 
   private async listen() {
-    const app = await IoCService.use("App");
-    const logger = LogService.getInstance();
+    const app = await IoCService.useByType<App>("App");
+
+    app.use(RequestHandler);
+
+    const server = http.createServer(app.instance);
     const api = APIService.getInstance();
+
+    server.on("error", function (e) {
+      // Handle your error here
+      console.log("GENERAL", e);
+    });
 
     if (api.config.env === "development") {
       app.get("/metadata", MetadataHandler);
@@ -93,11 +96,11 @@ class Server {
       app.get("/routes", RoutesHandler);
     }
 
-    app.listen(api.config.port, () => {
-      logger.info(
-        `API listens requests on http://localhost:${api.config.port}`
-      );
-    });
+    server.listen(api.config.port);
+
+    LogService.warn(
+      `API listens requests on http://localhost:${api.config.port}`
+    );
   }
 }
 

@@ -1,10 +1,12 @@
-import { IApplicationConfig, LogLevels } from "axe-api";
+import { IApplicationConfig } from "axe-api";
 
 const config: IApplicationConfig = {
   prefix: "api",
   env: process.env.NODE_ENV || "production",
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000,
-  logLevel: LogLevels.INFO,
+  pino: {
+    level: "debug",
+  },
   database: {
     client: process.env.DB_CLIENT,
     connection: {
