@@ -34,23 +34,23 @@ class RouterBuilder {
   }
 
   async build() {
-    const app = await IoCService.useByType<Express>("App");
+    // const app = await IoCService.useByType<Express>("App");
     const logger = LogService.getInstance();
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
     ).resolve();
 
-    if (generalHooks.onBeforeInit) {
-      generalHooks.onBeforeInit(app);
-    }
+    // if (generalHooks.onBeforeInit) {
+    //   generalHooks.onBeforeInit(app);
+    // }
 
     await this.createRoutesByModelTree();
 
     logger.info(`[${this.version.name}] Express routes have been created.`);
 
-    if (generalHooks.onAfterInit) {
-      generalHooks.onAfterInit(app);
-    }
+    // if (generalHooks.onAfterInit) {
+    //   generalHooks.onAfterInit(app);
+    // }
   }
 
   private async createRoutesByModelTree() {

@@ -53,23 +53,23 @@ class Server {
       attachPaginate();
       return database;
     });
-    IoCService.singleton("App", async () => {
-      return express();
-    });
+    // IoCService.singleton("App", async () => {
+    //   return express();
+    // });
     IoCService.singleton("URLService", async () => {
       return new URLService();
     });
     LogService.setInstance(api.config.logLevel);
 
-    IoCService.singleton("Server", async () => {
-      return express();
-    });
+    // IoCService.singleton("Server", async () => {
+    //   return express();
+    // });
   }
 
   private async loadExpress() {
-    const app = await IoCService.use("App");
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.json());
+    // const app = await IoCService.use("App");
+    // app.use(express.urlencoded({ extended: true }));
+    // app.use(express.json());
   }
 
   private async analyzeVersions() {
@@ -102,19 +102,19 @@ class Server {
 
     server.listen(8080);
 
-    const app = await IoCService.use("App");
-    const logger = LogService.getInstance();
-    const api = APIService.getInstance();
-    if (api.config.env === "development") {
-      app.get("/metadata", MetadataHandler);
-      app.get("/docs", DocsHTMLHandler);
-      app.get("/routes", RoutesHandler);
-    }
-    app.listen(api.config.port, () => {
-      logger.info(
-        `API listens requests on http://localhost:${api.config.port}`
-      );
-    });
+    // const app = await IoCService.use("App");
+    // const logger = LogService.getInstance();
+    // const api = APIService.getInstance();
+    // if (api.config.env === "development") {
+    //   app.get("/metadata", MetadataHandler);
+    //   app.get("/docs", DocsHTMLHandler);
+    //   app.get("/routes", RoutesHandler);
+    // }
+    // app.listen(api.config.port, () => {
+    //   logger.info(
+    //     `API listens requests on http://localhost:${api.config.port}`
+    //   );
+    // });
   }
 }
 
