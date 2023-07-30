@@ -18,6 +18,7 @@ import Store from "./Phases/Store";
 import Update from "./Phases/Update";
 import Patch from "./Phases/Patch";
 import Delete from "./Phases/Delete";
+import ForceDelete from "./Phases/ForceDelete";
 
 export const LOG_COLORS = {
   fgBlack: "\x1b[30m",
@@ -301,7 +302,20 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
     new Event(HookFunctionTypes.onAfterDelete),
     new Phase(Delete.ResponsePhase),
   ],
-  [HandlerTypes.FORCE_DELETE]: [],
+  [HandlerTypes.FORCE_DELETE]: [
+    new Phase(ForceDelete.PreparePhase),
+    new Hook(HookFunctionTypes.onBeforeForceDeleteQuery),
+    new Event(HookFunctionTypes.onBeforeForceDeleteQuery),
+    new Phase(ForceDelete.QueryPhase),
+    new Hook(HookFunctionTypes.onAfterForceDeleteQuery),
+    new Event(HookFunctionTypes.onAfterForceDeleteQuery),
+    new Hook(HookFunctionTypes.onBeforeForceDelete),
+    new Event(HookFunctionTypes.onBeforeForceDelete),
+    new Phase(ForceDelete.ActionPhase),
+    new Hook(HookFunctionTypes.onAfterForceDelete),
+    new Event(HookFunctionTypes.onAfterForceDelete),
+    new Phase(Delete.ResponsePhase),
+  ],
   [HandlerTypes.PATCH]: [
     new Phase(Single.PrepareGetPhase),
     new Hook(HookFunctionTypes.onBeforeUpdateQuery),
