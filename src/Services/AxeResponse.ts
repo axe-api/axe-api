@@ -15,6 +15,12 @@ class AxeResponse {
     this.responseStatus = true;
   }
 
+  noContent() {
+    this.response.statusCode = 204;
+    this.response.end();
+    this.responseStatus = true;
+  }
+
   isResponded() {
     return this.responseStatus;
   }
