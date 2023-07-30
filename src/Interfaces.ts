@@ -21,6 +21,7 @@ import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
 import { Table } from "knex-schema-inspector/lib/types/table";
 import AxeResponse from "./Services/AxeResponse";
+import App from "./Services/AppService";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -116,8 +117,8 @@ export interface IAPI {
 }
 
 export interface IGeneralHooks {
-  onBeforeInit: (app: Express) => void | null;
-  onAfterInit: (app: Express) => void | null;
+  onBeforeInit: (app: App) => void | null;
+  onAfterInit: (app: App) => void | null;
 }
 
 export interface IHandlerBaseMiddleware {

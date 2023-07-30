@@ -94,7 +94,7 @@ class Server {
 
     server.on("error", function (e) {
       // Handle your error here
-      console.log("GENERAL");
+      console.log("GENERAL", e);
     });
 
     server.listen(8080);
