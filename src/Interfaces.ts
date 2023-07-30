@@ -21,7 +21,7 @@ import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
 import { Table } from "knex-schema-inspector/lib/types/table";
 import AxeResponse from "./Services/AxeResponse";
-import App from "./Services/AppService";
+import App from "./Services/App";
 
 export interface IColumn extends Column {
   table_name: string;

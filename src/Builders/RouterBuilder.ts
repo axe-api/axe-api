@@ -25,7 +25,7 @@ import { acceptLanguageMiddleware } from "../Middlewares";
 import URLService from "../Services/URLService";
 import AxeRequest from "../Services/AxeRequest";
 import { PhaseFunction } from "src/Types";
-import App from "../Services/AppService";
+import App from "../Services/App";
 
 class RouterBuilder {
   private version: IVersion;
@@ -41,8 +41,10 @@ class RouterBuilder {
       this.version
     ).resolve();
 
+    const app = new App();
+
     if (generalHooks.onBeforeInit) {
-      generalHooks.onBeforeInit(App);
+      generalHooks.onBeforeInit(app);
     }
 
     await this.createRoutesByModelTree();
@@ -50,7 +52,7 @@ class RouterBuilder {
     logger.info(`[${this.version.name}] Express routes have been created.`);
 
     if (generalHooks.onAfterInit) {
-      generalHooks.onAfterInit(App);
+      generalHooks.onAfterInit(app);
     }
   }
 

@@ -5,6 +5,7 @@ import { IRequestPack } from "../Interfaces";
 import { Knex } from "knex";
 import AxeRequest from "../Services/AxeRequest";
 import AxeResponse from "../Services/AxeResponse";
+import cors from "cors";
 
 const api = APIService.getInstance();
 
@@ -17,12 +18,31 @@ const return404 = (response: ServerResponse) => {
 export default async (request: IncomingMessage, response: ServerResponse) => {
   const axeRequest = new AxeRequest(request);
   const match = URLService.match(axeRequest);
+  const axeResponse = new AxeResponse(response);
+
+  const xxx = cors({
+    origin: function (origin, callback) {
+      // callback(new Error("Not allowed by CORS"));
+      callback(null);
+    },
+  });
+
+  const testCors = () => {
+    return new Promise((resolve) => {
+      xxx(request, response, (err) => {
+        resolve(err);
+      });
+    });
+  };
+
+  const result = await testCors();
+  if (result) {
+    return axeResponse.json({ errors: "CORS", result }, 500);
+  }
 
   if (!match) {
     return return404(response);
   }
-
-  const axeResponse = new AxeResponse(response);
 
   // We should resolve the body
   await axeRequest.prepare(match.params);

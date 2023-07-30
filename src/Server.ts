@@ -1,3 +1,4 @@
+import middy from "@middy/core";
 import {
   ModelResolver,
   VersionConfigResolver,
@@ -97,7 +98,7 @@ class Server {
       console.log("GENERAL", e);
     });
 
-    server.listen(8080);
+    server.listen(3000);
 
     // const app = await IoCService.use("App");
     // const logger = LogService.getInstance();
