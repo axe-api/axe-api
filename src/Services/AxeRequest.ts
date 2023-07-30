@@ -82,6 +82,10 @@ class AxeRequest {
   header(key: string) {
     return this.request.headers[key];
   }
+
+  get original() {
+    return this.request;
+  }
 }
 
 export default AxeRequest;
