@@ -6,6 +6,7 @@ import { Knex } from "knex";
 import AxeRequest from "../Services/AxeRequest";
 import AxeResponse from "../Services/AxeResponse";
 import cors from "cors";
+import helmet from "helmet";
 
 const api = APIService.getInstance();
 
@@ -27,6 +28,18 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     },
   });
 
+  const helmetX = helmet({
+    xPoweredBy: false,
+  });
+
+  const testHelmet = () => {
+    return new Promise((resolve) => {
+      helmetX(request, response, (err) => {
+        resolve(err);
+      });
+    });
+  };
+
   const testCors = () => {
     return new Promise((resolve) => {
       xxx(request, response, (err) => {
@@ -35,9 +48,10 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     });
   };
 
-  const result = await testCors();
+  const result = await testHelmet();
+
   if (result) {
-    return axeResponse.json({ errors: "CORS", result }, 500);
+    return axeResponse.json({ errors: "Helper", result }, 500);
   }
 
   if (!match) {
@@ -65,7 +79,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   };
 
   response.setHeader("Content-Type", "application/json");
-  response.setHeader("X-Powered-By", "Axe API");
+  response.setHeader("x-powered-by", "Axe API");
 
   for (const phase of match.phases) {
     // If there is an non-async phase, it should be an Event function
