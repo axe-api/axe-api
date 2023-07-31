@@ -1,19 +1,15 @@
 import pluralize from "pluralize";
-import { Knex } from "knex";
-import { Express, Request, Response, NextFunction } from "express";
 import { paramCase, camelCase } from "change-case";
-import { GeneralHookResolver, TransactionResolver } from "../Resolvers";
+import { GeneralHookResolver } from "../Resolvers";
 import {
   IGeneralHooks,
   IModelService,
   IRelation,
-  IRequestPack,
   IRouteData,
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES, HANDLER_METHOD_MAP } from "../constants";
-import { HandlerTypes, Relationships, HttpMethods } from "../Enums";
-import HandlerFactory from "../Handlers/HandlerFactory";
+import { HandlerTypes, Relationships } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import {
   LogService,
@@ -23,7 +19,6 @@ import {
 } from "../Services";
 import { acceptLanguageMiddleware } from "../Middlewares";
 import URLService from "../Services/URLService";
-import AxeRequest from "../Services/AxeRequest";
 import { PhaseFunction } from "src/Types";
 import App from "../Services/App";
 
@@ -35,13 +30,11 @@ class RouterBuilder {
   }
 
   async build() {
-    // const app = await IoCService.useByType<Express>("App");
+    const app = await IoCService.useByType<App>("App");
     const logger = LogService.getInstance();
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
     ).resolve();
-
-    const app = new App();
 
     if (generalHooks.onBeforeInit) {
       generalHooks.onBeforeInit(app);
@@ -342,28 +335,28 @@ class RouterBuilder {
   //   }
   // }
 
-  private sendErrorAsResponse(res: Response, error: any) {
-    const type: string | undefined = error.type;
+  // private sendErrorAsResponse(res: Response, error: any) {
+  //   const type: string | undefined = error.type;
 
-    if (type === "ApiError") {
-      // eslint-disable-next-line no-case-declarations
-      const apiError: ApiError = error as ApiError;
-      res.status(apiError.status).json({
-        error: apiError.message,
-      });
-      return;
-    }
+  //   if (type === "ApiError") {
+  //     // eslint-disable-next-line no-case-declarations
+  //     const apiError: ApiError = error as ApiError;
+  //     res.status(apiError.status).json({
+  //       error: apiError.message,
+  //     });
+  //     return;
+  //   }
 
-    // We should log error and send general error response
-    LogService.getInstance().error(
-      `SERVER ERROR: ${JSON.stringify(
-        { ...error, message: error.message },
-        null,
-        "  "
-      )}`
-    );
-    throw error;
-  }
+  //   // We should log error and send general error response
+  //   LogService.getInstance().error(
+  //     `SERVER ERROR: ${JSON.stringify(
+  //       { ...error, message: error.message },
+  //       null,
+  //       "  "
+  //     )}`
+  //   );
+  //   throw error;
+  // }
 
   private getResourcePath(model: IModelService, relation: IRelation | null) {
     return relation

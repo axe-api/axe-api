@@ -1,6 +1,6 @@
 import { PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
-import { IPhaseDefinition, IRouteData } from "../Interfaces";
+import { IPhaseDefinition, IRequestPack, IRouteData } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
 
@@ -38,6 +38,7 @@ interface Pair {
 
 class URLService {
   private static urls: Pair[] = [];
+  private static externalMiddlewares: any[] = [];
 
   static async add(
     method: string,
@@ -45,7 +46,27 @@ class URLService {
     data: IRouteData,
     middlewares: PhaseFunction[]
   ) {
+    // Creating external middleware wrappers
+    const externalMiddlewareWrappers = this.externalMiddlewares.map(
+      (middleware) => {
+        const wrapper: PhaseFunction = async (pack: IRequestPack) =>
+          new Promise((resolve) => {
+            middleware(pack.req.original, pack.res.original, resolve);
+          });
+        return wrapper;
+      }
+    );
+
+    // Creating the phase array
     const phases: IPhaseDefinition[] = [
+      // External middlewares like "cors", "helmet", etc.
+      ...externalMiddlewareWrappers.map((wrapper) => {
+        return {
+          isAsync: true,
+          callback: wrapper,
+        };
+      }),
+      // Internal middlewares
       ...middlewares.map((middleware) => {
         return {
           isAsync: true,
@@ -95,6 +116,10 @@ class URLService {
         };
       }
     }
+  }
+
+  static addMiddleware(middleware: any) {
+    this.externalMiddlewares.push(middleware);
   }
 }
 

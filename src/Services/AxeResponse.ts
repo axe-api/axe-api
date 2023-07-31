@@ -8,6 +8,10 @@ class AxeResponse {
     this.response = response;
   }
 
+  get original() {
+    return this.response;
+  }
+
   json(data: object, statusCode = 200) {
     this.response.statusCode = statusCode;
     this.response.write(JSON.stringify(data));

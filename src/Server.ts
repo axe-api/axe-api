@@ -25,6 +25,7 @@ import { consoleAxeError } from "./Helpers";
 import http from "http";
 import RequestHandler from "./Handlers/RequestHandler";
 import URLService from "./Services/URLService";
+import App from "./Services/App";
 
 class Server {
   async start(rootFolder: string) {
@@ -49,6 +50,7 @@ class Server {
     APIService.setInsance(rootFolder);
     const api = APIService.getInstance();
     IoCService.singleton("SchemaInspector", () => schemaInspector);
+    IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
       attachPaginate();

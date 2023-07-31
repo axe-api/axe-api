@@ -1,10 +1,12 @@
+import URLService from "./URLService";
+
 class App {
   public get(url: string, callback: any) {
     console.log("url");
   }
 
-  public use(callback: any) {
-    console.log("callback", callback);
+  public use(middleware: any) {
+    URLService.addMiddleware(middleware);
   }
 }
 
