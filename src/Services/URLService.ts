@@ -1,4 +1,4 @@
-import { PhaseFunction } from "src/Types";
+import { HandlerFunction, PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
 import { IPhaseDefinition, IRequestPack, IRouteData } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
@@ -30,10 +30,11 @@ const check = (url: string, pattern: string) => {
 interface Pair {
   method: string;
   pattern: string;
-  data: IRouteData;
+  data?: IRouteData;
   phases: IPhaseDefinition[];
   hasTransaction: boolean;
   params?: any;
+  customHandler?: HandlerFunction;
 }
 
 class URLService {
@@ -46,6 +47,73 @@ class URLService {
     data: IRouteData,
     middlewares: PhaseFunction[]
   ) {
+    const phases = this.getDefaultPhases(middlewares);
+
+    for (const cycle of HANDLER_CYLES[data.handlerType]) {
+      const item = cycle.get(data.model);
+      if (item) {
+        phases.push({
+          isAsync: cycle.isAsync(),
+          callback: item,
+        });
+      }
+    }
+
+    const hasTransaction = await new TransactionResolver(data.version).resolve(
+      data.model,
+      data.handlerType
+    );
+
+    this.urls.push({
+      method,
+      pattern,
+      data,
+      phases,
+      hasTransaction,
+    });
+  }
+
+  static async addHandler(
+    method: string,
+    pattern: string,
+    customHandler: HandlerFunction
+  ) {
+    const phases = this.getDefaultPhases([]);
+    const hasTransaction = false;
+
+    this.urls.push({
+      method,
+      pattern,
+      phases,
+      hasTransaction,
+      customHandler,
+    });
+  }
+
+  static match(request: AxeRequest) {
+    if (!request) {
+      return undefined;
+    }
+
+    for (const item of URLService.urls) {
+      const found =
+        item.method === request.method &&
+        check(request.url.pathname, item.pattern);
+
+      if (found) {
+        return {
+          ...item,
+          params: found,
+        };
+      }
+    }
+  }
+
+  static addMiddleware(middleware: any) {
+    this.externalMiddlewares.push(middleware);
+  }
+
+  private static getDefaultPhases(middlewares: PhaseFunction[]) {
     // Creating external middleware wrappers
     const externalMiddlewareWrappers = this.externalMiddlewares.map(
       (middleware) => {
@@ -75,51 +143,7 @@ class URLService {
       }),
     ];
 
-    for (const cycle of HANDLER_CYLES[data.handlerType]) {
-      const item = cycle.get(data.model);
-      if (item) {
-        phases.push({
-          isAsync: cycle.isAsync(),
-          callback: item,
-        });
-      }
-    }
-
-    const hasTransaction = await new TransactionResolver(data.version).resolve(
-      data.model,
-      data.handlerType
-    );
-
-    this.urls.push({
-      method,
-      pattern,
-      data,
-      phases,
-      hasTransaction,
-    });
-  }
-
-  static match(request: AxeRequest) {
-    if (!request) {
-      return undefined;
-    }
-
-    for (const item of URLService.urls) {
-      const found =
-        item.method === request.method &&
-        check(request.url.pathname, item.pattern);
-
-      if (found) {
-        return {
-          ...item,
-          params: found,
-        };
-      }
-    }
-  }
-
-  static addMiddleware(middleware: any) {
-    this.externalMiddlewares.push(middleware);
+    return phases;
   }
 }
 
