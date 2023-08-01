@@ -184,11 +184,11 @@ export interface IRelation {
 }
 
 export interface IRouteData {
-  version: IVersion;
-  handlerType: HandlerTypes;
-  model: IModelService;
-  parentModel: IModelService | null;
-  relation: IRelation | null;
+  version?: IVersion;
+  handlerType?: HandlerTypes;
+  model?: IModelService;
+  parentModel?: IModelService | null;
+  relation?: IRelation | null;
 }
 
 // export interface IRequest {

@@ -49,20 +49,26 @@ class URLService {
   ) {
     const phases = this.getDefaultPhases(middlewares);
 
-    for (const cycle of HANDLER_CYLES[data.handlerType]) {
-      const item = cycle.get(data.model);
-      if (item) {
-        phases.push({
-          isAsync: cycle.isAsync(),
-          callback: item,
-        });
+    if (data.handlerType && data.model) {
+      for (const cycle of HANDLER_CYLES[data.handlerType]) {
+        const item = cycle.get(data.model);
+        if (item) {
+          phases.push({
+            isAsync: cycle.isAsync(),
+            callback: item,
+          });
+        }
       }
     }
 
-    const hasTransaction = await new TransactionResolver(data.version).resolve(
-      data.model,
-      data.handlerType
-    );
+    let hasTransaction = false;
+
+    if (data.version && data.model && data.handlerType) {
+      hasTransaction = await new TransactionResolver(data.version).resolve(
+        data.model,
+        data.handlerType
+      );
+    }
 
     this.urls.push({
       method,
@@ -80,6 +86,13 @@ class URLService {
   ) {
     const phases = this.getDefaultPhases([]);
     const hasTransaction = false;
+
+    phases.push({
+      isAsync: false,
+      callback: (pack: IRequestPack) => {
+        customHandler(pack.req, pack.res);
+      },
+    });
 
     this.urls.push({
       method,
