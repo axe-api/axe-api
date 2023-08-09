@@ -23,10 +23,10 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     return return404(response);
   }
 
-  // if (match.customHandler) {
-  //   match.customHandler(axeRequest, axeResponse);
-  //   return;
-  // }
+  if (match.customHandler) {
+    match.customHandler(axeRequest, axeResponse);
+    return;
+  }
 
   // We should resolve the body
   await axeRequest.prepare(match.params);

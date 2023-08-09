@@ -1,8 +1,15 @@
 import { HandlerFunction, PhaseFunction } from "src/Types";
 import { HANDLER_CYLES } from "../constants";
-import { IPhaseDefinition, IRequestPack, IRouteData } from "../Interfaces";
+import {
+  IModelService,
+  IPhaseDefinition,
+  IRequestPack,
+  IRouteData,
+  IVersion,
+} from "../Interfaces";
 import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
+import { HandlerTypes } from "../Enums";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -30,7 +37,7 @@ const check = (url: string, pattern: string) => {
 interface Pair {
   method: string;
   pattern: string;
-  data?: IRouteData;
+  data: IRouteData;
   phases: IPhaseDefinition[];
   hasTransaction: boolean;
   params?: any;
@@ -100,6 +107,13 @@ class URLService {
       phases,
       hasTransaction,
       customHandler,
+      data: {
+        version: {} as IVersion,
+        handlerType: HandlerTypes.INSERT,
+        model: {} as IModelService,
+        parentModel: null,
+        relation: null,
+      },
     });
   }
 
