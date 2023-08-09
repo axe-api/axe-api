@@ -1,4 +1,3 @@
-import middy from "@middy/core";
 import {
   ModelResolver,
   VersionConfigResolver,
@@ -7,7 +6,6 @@ import {
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
-import express from "express";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
 import { attachPaginate } from "knex-paginate";
@@ -94,27 +92,23 @@ class Server {
 
   private async listen() {
     const server = http.createServer(RequestHandler);
+    const logger = LogService.getInstance();
+    const api = APIService.getInstance();
 
     server.on("error", function (e) {
       // Handle your error here
       console.log("GENERAL", e);
     });
 
-    server.listen(3000);
+    server.listen(api.config.port);
+    logger.info(`API listens requests on http://localhost:${api.config.port}`);
 
-    // const app = await IoCService.use("App");
-    // const logger = LogService.getInstance();
-    // const api = APIService.getInstance();
-    // if (api.config.env === "development") {
-    //   app.get("/metadata", MetadataHandler);
-    //   app.get("/docs", DocsHTMLHandler);
-    //   app.get("/routes", RoutesHandler);
-    // }
-    // app.listen(api.config.port, () => {
-    //   logger.info(
-    //     `API listens requests on http://localhost:${api.config.port}`
-    //   );
-    // });
+    const app = await IoCService.use("App");
+    if (api.config.env === "development") {
+      app.get("/metadata", MetadataHandler);
+      app.get("/docs", DocsHTMLHandler);
+      app.get("/routes", RoutesHandler);
+    }
   }
 }
 

@@ -9,7 +9,7 @@ import {
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES, HANDLER_METHOD_MAP } from "../constants";
-import { HandlerTypes, Relationships } from "../Enums";
+import { HandlerTypes, HttpMethods, Relationships } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import {
   LogService,
@@ -179,7 +179,7 @@ class RouterBuilder {
     parentModel: IModelService | null,
     relation: IRelation | null
   ) {
-    // const docs = DocumentationService.getInstance();
+    const docs = DocumentationService.getInstance();
     // const app = await IoCService.useByType<Express>("App");
 
     // const handler = async (req: Request, res: Response, next: NextFunction) => {
@@ -205,11 +205,20 @@ class RouterBuilder {
       parentModel,
       relation,
     };
+    // Adding the route
     await URLService.add(
       HANDLER_METHOD_MAP[handlerType],
       url,
       data,
       middlewares
+    );
+    // Documentation
+    docs.push(
+      this.version,
+      handlerType,
+      HANDLER_METHOD_MAP[handlerType],
+      url,
+      model
     );
 
     // switch (handlerType) {

@@ -19,6 +19,13 @@ class AxeResponse {
     this.responseStatus = true;
   }
 
+  send(content: string, statusCode = 200) {
+    this.response.statusCode = statusCode;
+    this.response.write(content);
+    this.response.end();
+    this.responseStatus = true;
+  }
+
   noContent() {
     this.response.statusCode = 204;
     this.response.end();
