@@ -1,5 +1,4 @@
 import { Knex } from "knex";
-import { Request, Response } from "express";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
@@ -35,7 +34,7 @@ export interface IHandlerBasedTransactionConfig {
 
 interface IHandlerBasedSerializer {
   handler: HandlerTypes[];
-  serializer: ((data: any, request: Request) => void)[];
+  serializer: ((data: any, request: AxeRequest) => void)[];
 }
 
 export interface IQueryLimitConfig {
@@ -61,7 +60,7 @@ export interface IVersionConfig {
     | IHandlerBasedTransactionConfig
     | IHandlerBasedTransactionConfig[];
   serializers:
-    | ((data: any, request: Request) => void)[]
+    | ((data: any, request: AxeRequest) => void)[]
     | IHandlerBasedSerializer[];
   supportedLanguages: string[];
   defaultLanguage: string;
@@ -122,21 +121,6 @@ export interface IGeneralHooks {
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
   middleware: (context: IRequestPack) => Promise<void>;
-}
-
-export interface IHookParameter {
-  req: Request;
-  res: Response;
-  handlerType: HandlerTypes;
-  model: IModelService;
-  parentModel: IModelService | null;
-  relation: IRelation | null;
-  database: Knex | Knex.Transaction;
-  conditions: IQuery | null;
-  query: Knex.QueryBuilder | null;
-  result: any;
-  item: any;
-  formData: any;
 }
 
 export interface IMethodBaseConfig {
