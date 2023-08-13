@@ -1,6 +1,5 @@
 import { Knex } from "knex";
-import { IncomingMessage } from "http";
-import { Express, Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
@@ -16,10 +15,9 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { HookFunction, PhaseFunction, SerializationFunction } from "./Types";
+import { PhaseFunction, SerializationFunction } from "./Types";
 import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
-import { Table } from "knex-schema-inspector/lib/types/table";
 import AxeResponse from "./Services/AxeResponse";
 import App from "./Services/App";
 

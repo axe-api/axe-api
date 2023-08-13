@@ -16,7 +16,6 @@ import {
   IoCService,
   APIService,
 } from "../Services";
-import { acceptLanguageMiddleware } from "../Middlewares";
 import URLService from "../Services/URLService";
 import { PhaseFunction } from "src/Types";
 import App from "../Services/App";
@@ -85,7 +84,6 @@ class RouterBuilder {
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
       const middlewares: PhaseFunction[] = [
-        acceptLanguageMiddleware,
         ...model.instance.getMiddlewares(handlerType),
       ];
 

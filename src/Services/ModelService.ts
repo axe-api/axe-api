@@ -6,7 +6,7 @@ import {
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
-import { HookFunction, PhaseFunction, SerializationFunction } from "../Types";
+import { PhaseFunction, SerializationFunction } from "../Types";
 
 class ModelService implements IModelService {
   name: string;

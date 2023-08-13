@@ -6,7 +6,6 @@ import {
   StatusCodes,
 } from "../Enums";
 import {
-  IRawQuery,
   IQuery,
   ISortField,
   NestedWhere,

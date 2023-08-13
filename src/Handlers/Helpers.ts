@@ -1,9 +1,7 @@
-import { Request } from "express";
 import { camelCase } from "change-case";
 import {
   IModelService,
   IRelation,
-  IHookParameter,
   IQuery,
   IVersion,
   IWith,
@@ -19,7 +17,7 @@ import {
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
 import { IoCService, ModelListService } from "../Services";
-import { HookFunction, PhaseFunction, SerializationFunction } from "../Types";
+import { PhaseFunction, SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
 import {
   NUMERIC_PRIMARY_KEY_TYPES,
