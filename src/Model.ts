@@ -121,7 +121,6 @@ class Model {
         if (item?.handler) {
           const methodBasedMiddlewares = item as IHandlerBaseMiddleware;
           if (methodBasedMiddlewares.handler.includes(handlerType)) {
-            methodBasedMiddlewares.middleware;
             results.push(methodBasedMiddlewares.middleware);
           }
         } else {
