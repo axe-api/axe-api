@@ -17,4 +17,4 @@ export type NextFunction = () => void;
 export type HandlerFunction = (
   request: AxeRequest,
   response: AxeResponse
-) => void;
+) => Promise<void> | void;
