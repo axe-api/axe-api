@@ -189,14 +189,6 @@ export interface IRouteData {
   relation: IRelation | null;
 }
 
-// export interface IRequest {
-//   query: any;
-//   params: Record<string, any>;
-//   method: string;
-//   body: any;
-//   currentLanguage: ILanguage;
-// }
-
 export interface IRequestPack extends IRouteData {
   api: IAPI;
   req: AxeRequest;

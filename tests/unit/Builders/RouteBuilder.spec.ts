@@ -1,5 +1,4 @@
 import path from "path";
-import { Request, Response } from "express";
 import { describe, expect, jest, test, beforeAll } from "@jest/globals";
 import { RouterBuilder } from "../../../src/Builders";
 import {
@@ -19,7 +18,6 @@ import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
 import Comment from "../__Mocks/app/v1/Models/Comment";
-import HandlerFactory from "../../../src/Handlers/HandlerFactory";
 import URLService from "../../../src/Services/URLService";
 
 const waitForIt = (time) => new Promise((resolve) => setTimeout(resolve, time));

@@ -201,7 +201,7 @@ class RouterBuilder {
 
   private getRootPrefix = async (): Promise<string> => {
     const api = APIService.getInstance();
-    let prefix = api.config.prefix || "api";
+    let prefix = api.config.prefix;
 
     if (prefix.startsWith("/")) {
       prefix = prefix.substring(1);

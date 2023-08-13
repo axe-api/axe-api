@@ -8,7 +8,7 @@ export const getVersionByRequest = (urlObject: URL): IVersion | undefined => {
   const api = APIService.getInstance();
   const matchedVersion = api.versions.find((version) => {
     const path = `/${api.config.prefix}/${version.name}`;
-    return urlObject.pathname.indexOf(path) === 0;
+    return urlObject.pathname.startsWith(path);
   });
 
   return matchedVersion;

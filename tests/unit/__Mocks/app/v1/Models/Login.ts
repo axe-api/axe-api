@@ -1,9 +1,5 @@
-import { Request, Response, NextFunction } from "express";
 import Model from "../../../../../../src/Model";
-import {
-  IHandlerBaseMiddleware,
-  IRequestPack,
-} from "../../../../../../src/Interfaces";
+import { IRequestPack } from "../../../../../../src/Interfaces";
 import { HandlerTypes } from "../../../../../../src/Enums";
 
 class Login extends Model {
