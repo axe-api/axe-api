@@ -22,7 +22,7 @@ export default async (context: IRequestPack) => {
     // Validate the data
     const validation = new Validator(context.formData, validationRules);
     if (validation.fails()) {
-      context.res.json(validation.errors, 400);
+      context.res.status(400).json(validation.errors);
       return;
     }
   }

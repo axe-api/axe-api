@@ -14,10 +14,9 @@ export default async (context: IRequestPack) => {
       .first();
 
     if (!context.item) {
-      context.res.json(
-        { error: `The item is not found on ${context.model.name}.` },
-        StatusCodes.NOT_FOUND
-      );
+      context.res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: `The item is not found on ${context.model.name}.` });
     }
   }
 };

@@ -8,6 +8,7 @@ class AxeResponse {
 
   constructor(response: ServerResponse, language: ILanguage) {
     this.response = response;
+    this.response.statusCode = 200;
     this.language = language;
   }
 
@@ -15,17 +16,20 @@ class AxeResponse {
     return this.response;
   }
 
-  json(data: object, statusCode = 200) {
+  status(statusCode: number) {
+    this.response.statusCode = statusCode;
+    return this;
+  }
+
+  json(data: object) {
     this.response.setHeader("Content-Type", "application/json");
     this.response.setHeader("Content-Language", this.language.language);
-    this.response.statusCode = statusCode;
     this.response.write(JSON.stringify(data));
     this.response.end();
     this.responseStatus = true;
   }
 
-  send(content: string, statusCode = 200) {
-    this.response.statusCode = statusCode;
+  send(content: string) {
     this.response.write(content);
     this.response.end();
     this.responseStatus = true;
