@@ -29,7 +29,6 @@ class RouterBuilder {
 
   async build() {
     const app = await IoCService.useByType<App>("App");
-    const logger = LogService.getInstance();
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
     ).resolve();
@@ -40,7 +39,7 @@ class RouterBuilder {
 
     await this.createRoutesByModelTree();
 
-    logger.info(`[${this.version.name}] Express routes have been created.`);
+    LogService.info(`[${this.version.name}] Express routes have been created.`);
 
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);

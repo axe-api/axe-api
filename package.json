@@ -57,7 +57,8 @@
     "knex-paginate": "^3.1.1",
     "knex-schema-inspector": "^3.0.1",
     "pluralize": "^8.0.0",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",

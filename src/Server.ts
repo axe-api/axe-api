@@ -5,6 +5,7 @@ import {
 } from "./Resolvers";
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
+import winston from "winston";
 import path from "path";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
@@ -52,7 +53,15 @@ class Server {
       attachPaginate();
       return database;
     });
-    LogService.setInstance(api.config.logLevel);
+
+    // TODO: Set configurations
+    LogService.setInstance({
+      level: "info",
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.Console({ format: winston.format.simple() }),
+      ],
+    });
   }
 
   private async analyzeVersions() {
@@ -81,7 +90,6 @@ class Server {
     app.use(RequestHandler);
 
     const server = http.createServer(app.instance);
-    const logger = LogService.getInstance();
     const api = APIService.getInstance();
 
     server.on("error", function (e) {
@@ -90,7 +98,9 @@ class Server {
     });
 
     server.listen(api.config.port);
-    logger.info(`API listens requests on http://localhost:${api.config.port}`);
+    LogService.info(
+      `API listens requests on http://localhost:${api.config.port}`
+    );
 
     if (api.config.env === "development") {
       app.get("/metadata", MetadataHandler);
