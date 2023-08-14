@@ -70,11 +70,13 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
 
       if (error.type === "ApiError") {
         const apiError: ApiError = error as ApiError;
-        return axeResponse.json({ error: apiError.message }, apiError.status);
+        return axeResponse
+          .status(apiError.status)
+          .json({ error: apiError.message });
       }
 
       // TODO: We need an error handler.
-      axeResponse.json({ error: error.toString() }, 500);
+      axeResponse.status(500).json({ error: error.toString() });
       break;
     }
 

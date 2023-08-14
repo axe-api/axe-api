@@ -120,7 +120,7 @@ export interface IGeneralHooks {
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: (context: IRequestPack) => Promise<void>;
+  middleware: (context: IRequestPack) => Promise<void> | void;
 }
 
 export interface IMethodBaseConfig {
