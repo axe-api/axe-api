@@ -1,54 +1,44 @@
+import winston from "winston";
 import { LogLevels } from "../Enums";
 import { LOG_COLORS } from "../constants";
 
 class LogService {
-  private static instance: LogService;
-  private level: LogLevels;
+  private static instance: winston.Logger;
 
-  constructor(level: LogLevels) {
-    this.level = level;
+  static setInstance(options?: winston.LoggerOptions | undefined) {
+    LogService.instance = winston.createLogger(options);
   }
 
-  static setInstance(level: LogLevels) {
-    LogService.instance = new LogService(level);
+  static emerg(message: string) {
+    LogService.instance.emerg(message);
   }
 
-  static getInstance(): LogService {
-    return LogService.instance;
+  static alert(message: string) {
+    LogService.instance.alert(message);
   }
 
-  error(message: string) {
-    if (this.level >= LogLevels.ERROR) {
-      console.error(LOG_COLORS.fgRed, "[axe]", message, LOG_COLORS.fgReset);
-    }
+  static crit(message: string) {
+    LogService.instance.crit(message);
   }
 
-  warn(message: string) {
-    if (this.level >= LogLevels.WARNING) {
-      console.warn(LOG_COLORS.fgYellow, "[axe]", message, LOG_COLORS.fgReset);
-    }
+  static error(message: string) {
+    LogService.instance.error(message);
   }
 
-  info(message: string) {
-    if (this.level >= LogLevels.INFO) {
-      console.info(LOG_COLORS.fgCyan, "[axe]", message, LOG_COLORS.fgReset);
-    }
+  static warning(message: string) {
+    LogService.instance.warning(message);
   }
 
-  success(message: string) {
-    if (this.level >= LogLevels.INFO) {
-      console.info(LOG_COLORS.fgGreen, "[axe]", message, LOG_COLORS.fgReset);
-    }
+  static notice(message: string) {
+    LogService.instance.notice(message);
   }
 
-  debug(message: string) {
-    this.log(message);
+  static info(message: string) {
+    LogService.instance.info(message);
   }
 
-  log(message: string) {
-    if (this.level === LogLevels.ALL) {
-      console.log(message);
-    }
+  static debug(message: string) {
+    LogService.instance.debug(message);
   }
 }
 

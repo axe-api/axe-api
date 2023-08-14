@@ -10,12 +10,11 @@ class ModelTreeBuilder {
   }
 
   async build() {
-    const logger = LogService.getInstance();
     const tree = this.getRootLevelOfTree();
     this.createRecursiveTree(tree);
     this.addNestedRoutes(tree);
     this.version.modelTree = tree;
-    logger.info(`[${this.version.name}] Model tree has been created.`);
+    LogService.info(`[${this.version.name}] Model tree has been created.`);
   }
 
   private getRootLevelOfTree(): IModelService[] {
