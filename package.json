@@ -49,16 +49,16 @@
   },
   "dependencies": {
     "body-parser": "^1.20.2",
-    "chalk": "^4.1.2",
     "change-case": "^4.1.2",
     "connect": "^3.7.0",
     "dotenv": "^16.3.1",
     "knex": "^2.4.2",
     "knex-paginate": "^3.1.1",
     "knex-schema-inspector": "^3.0.1",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0",
     "pluralize": "^8.0.0",
-    "validatorjs": "^3.22.1",
-    "winston": "^3.10.0"
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",

@@ -2,7 +2,6 @@ import { Knex } from "knex";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
-  LogLevels,
   HttpMethods,
   HookFunctionTypes,
   Extensions,
@@ -19,6 +18,7 @@ import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
 import AxeResponse from "./Services/AxeResponse";
 import App from "./Services/App";
+import { LoggerOptions } from "pino";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -70,9 +70,9 @@ export interface IVersionConfig {
 export interface IApplicationConfig extends IConfig {
   env: string;
   port: number;
-  logLevel: LogLevels;
   prefix: string;
   database: IDatabaseConfig;
+  pino: LoggerOptions;
 }
 
 export interface ILanguage {
