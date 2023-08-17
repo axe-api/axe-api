@@ -61,6 +61,7 @@ class URLService {
         const item = cycle.get(data.model);
         if (item) {
           phases.push({
+            name: cycle.name,
             isAsync: cycle.isAsync(),
             callback: item,
           });
@@ -77,7 +78,7 @@ class URLService {
       );
     }
 
-    LogService.warn(`${method} ${pattern}`);
+    LogService.info(`${method} ${pattern}`);
 
     this.urls.push({
       method,
@@ -93,13 +94,14 @@ class URLService {
     pattern: string,
     customHandler: HandlerFunction
   ) {
-    LogService.warn(`${method} ${pattern}`);
+    LogService.info(`${method} ${pattern}`);
 
     const phases = this.getDefaultPhases([]);
     const hasTransaction = false;
 
     phases.push({
       isAsync: false,
+      name: "customHandler",
       callback: (pack: IRequestPack) => {
         customHandler(pack.req, pack.res);
       },
@@ -151,6 +153,7 @@ class URLService {
       ...middlewares.map((middleware) => {
         return {
           isAsync: true,
+          name: `middleware:${middleware.name || "anonymous"}`,
           callback: middleware,
         };
       }),
