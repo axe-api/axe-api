@@ -187,19 +187,26 @@ export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
 };
 
 export interface ICycleDefinition {
+  name: string;
   get(model: IModelService): PhaseFunction;
   isAsync(): boolean;
 }
 
 class Phase implements ICycleDefinition {
   private callback: PhaseFunction;
+  private phaseName: string;
 
-  constructor(callback: PhaseFunction) {
+  constructor(name: string, callback: PhaseFunction) {
+    this.phaseName = name;
     this.callback = callback;
   }
 
   get(): PhaseFunction {
     return this.callback;
+  }
+
+  get name() {
+    return this.phaseName;
   }
 
   isAsync() {
@@ -218,6 +225,10 @@ class Hook implements ICycleDefinition {
     return model.hooks[this.hookFunctionType];
   }
 
+  get name() {
+    return `hook:${this.hookFunctionType}`;
+  }
+
   isAsync() {
     return true;
   }
@@ -234,6 +245,10 @@ class Event implements ICycleDefinition {
     return model.events[this.hookFunctionType];
   }
 
+  get name() {
+    return `event:${this.hookFunctionType}`;
+  }
+
   isAsync() {
     return false;
   }
@@ -241,106 +256,106 @@ class Event implements ICycleDefinition {
 
 export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
   [HandlerTypes.INSERT]: [
-    new Phase(Store.PreparePhase),
+    new Phase("insert.prepare", Store.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeInsert),
     new Event(HookFunctionTypes.onBeforeInsert),
-    new Phase(Store.ActionPhase),
+    new Phase("insert.action", Store.ActionPhase),
     new Hook(HookFunctionTypes.onAfterInsert),
     new Event(HookFunctionTypes.onAfterInsert),
-    new Phase(Single.SerializePhase),
-    new Phase(Single.ResultPhase),
+    new Phase("insert.serialize", Single.SerializePhase),
+    new Phase("insert.response", Single.ResultPhase),
   ],
   [HandlerTypes.PAGINATE]: [
-    new Phase(Paginate.PreparePhase),
+    new Phase("paginate.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
-    new Phase(Paginate.FetchPhase),
-    new Phase(List.RelationalPhase),
+    new Phase("paginate.query", Paginate.FetchPhase),
+    new Phase("paginate.relational", List.RelationalPhase),
     new Hook(HookFunctionTypes.onAfterPaginate),
     new Event(HookFunctionTypes.onAfterPaginate),
-    new Phase(List.SerializePhase),
-    new Phase(List.ResultPhase),
+    new Phase("paginate.serialize", List.SerializePhase),
+    new Phase("paginate.response", List.ResultPhase),
   ],
   [HandlerTypes.SHOW]: [
-    new Phase(Show.PreparePhase),
+    new Phase("show.prepareQuery", Show.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeShow),
     new Event(HookFunctionTypes.onBeforeShow),
-    new Phase(Show.FetchPhase),
-    new Phase(Single.RelationalPhase),
+    new Phase("show.query", Show.FetchPhase),
+    new Phase("show.relational", Single.RelationalPhase),
     new Hook(HookFunctionTypes.onAfterShow),
     new Event(HookFunctionTypes.onAfterShow),
-    new Phase(Single.SerializePhase),
-    new Phase(Single.ResultPhase),
+    new Phase("show.serialize", Single.SerializePhase),
+    new Phase("show.response", Single.ResultPhase),
   ],
   [HandlerTypes.UPDATE]: [
-    new Phase(Single.PrepareGetPhase),
+    new Phase("update.prepareQuery", Single.PrepareGetPhase),
     new Hook(HookFunctionTypes.onBeforeUpdateQuery),
     new Event(HookFunctionTypes.onBeforeUpdateQuery),
-    new Phase(Single.GetPhase),
+    new Phase("update.query", Single.GetPhase),
     new Hook(HookFunctionTypes.onAfterUpdateQuery),
     new Event(HookFunctionTypes.onAfterUpdateQuery),
-    new Phase(Update.PrepareActionPhase),
+    new Phase("update.prepareAction", Update.PrepareActionPhase),
     new Hook(HookFunctionTypes.onBeforeUpdate),
     new Event(HookFunctionTypes.onBeforeUpdate),
-    new Phase(Update.ActionPhase),
+    new Phase("update.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
-    new Phase(Single.SerializePhase),
-    new Phase(Single.ResultPhase),
+    new Phase("update.serialize", Single.SerializePhase),
+    new Phase("update.response", Single.ResultPhase),
   ],
   [HandlerTypes.DELETE]: [
-    new Phase(Delete.PreparePhase),
+    new Phase("delete.prepareQuery", Delete.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeDeleteQuery),
     new Event(HookFunctionTypes.onBeforeDeleteQuery),
-    new Phase(Delete.QueryPhase),
+    new Phase("delete.query", Delete.QueryPhase),
     new Hook(HookFunctionTypes.onAfterDeleteQuery),
     new Event(HookFunctionTypes.onAfterDeleteQuery),
     new Hook(HookFunctionTypes.onBeforeDelete),
     new Event(HookFunctionTypes.onBeforeDelete),
-    new Phase(Delete.ActionPhase),
+    new Phase("delete.action", Delete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterDelete),
     new Event(HookFunctionTypes.onAfterDelete),
-    new Phase(Delete.ResponsePhase),
+    new Phase("delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.FORCE_DELETE]: [
-    new Phase(ForceDelete.PreparePhase),
+    new Phase("force-delete.prepareQuery", ForceDelete.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeForceDeleteQuery),
     new Event(HookFunctionTypes.onBeforeForceDeleteQuery),
-    new Phase(ForceDelete.QueryPhase),
+    new Phase("force-delete.query", ForceDelete.QueryPhase),
     new Hook(HookFunctionTypes.onAfterForceDeleteQuery),
     new Event(HookFunctionTypes.onAfterForceDeleteQuery),
     new Hook(HookFunctionTypes.onBeforeForceDelete),
     new Event(HookFunctionTypes.onBeforeForceDelete),
-    new Phase(ForceDelete.ActionPhase),
+    new Phase("force-delete.action", ForceDelete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterForceDelete),
     new Event(HookFunctionTypes.onAfterForceDelete),
-    new Phase(Delete.ResponsePhase),
+    new Phase("force-delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.PATCH]: [
-    new Phase(Single.PrepareGetPhase),
+    new Phase("patch.prepareQuery", Single.PrepareGetPhase),
     new Hook(HookFunctionTypes.onBeforeUpdateQuery),
     new Event(HookFunctionTypes.onBeforeUpdateQuery),
-    new Phase(Single.GetPhase),
+    new Phase("patch.query", Single.GetPhase),
     new Hook(HookFunctionTypes.onAfterUpdateQuery),
     new Event(HookFunctionTypes.onAfterUpdateQuery),
-    new Phase(Patch.PrepareActionPhase),
+    new Phase("patch.prepareAction", Patch.PrepareActionPhase),
     new Hook(HookFunctionTypes.onBeforeUpdate),
     new Event(HookFunctionTypes.onBeforeUpdate),
-    new Phase(Update.ActionPhase),
+    new Phase("patch.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
-    new Phase(Single.SerializePhase),
-    new Phase(Single.ResultPhase),
+    new Phase("patch.serialize", Single.SerializePhase),
+    new Phase("patch.response", Single.ResultPhase),
   ],
   [HandlerTypes.ALL]: [
-    new Phase(Paginate.PreparePhase),
+    new Phase("all.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
-    new Phase(All.FetchPhase),
-    new Phase(List.RelationalPhase),
+    new Phase("all.query", All.FetchPhase),
+    new Phase("all.relational", List.RelationalPhase),
     new Hook(HookFunctionTypes.onAfterPaginate),
     new Event(HookFunctionTypes.onAfterPaginate),
-    new Phase(List.SerializePhase),
-    new Phase(List.ResultPhase),
+    new Phase("all.serialize", List.SerializePhase),
+    new Phase("all.response", List.ResultPhase),
   ],
 };

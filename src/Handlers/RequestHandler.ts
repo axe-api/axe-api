@@ -40,7 +40,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   // Prepare the database by the transaction option
   let trx: Knex.Transaction | null = null;
   if (match.hasTransaction) {
-    LogService.warn("DB transaction created");
+    LogService.warn("\tDB transaction created");
     trx = await database.transaction();
   }
 
@@ -59,20 +59,21 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   for (const phase of match.phases) {
     // If there is an non-async phase, it should be an Event function
     if (phase.isAsync === false) {
-      LogService.debug(`Event is called: ${phase.callback}`);
+      LogService.debug(`\t${phase.name}()`);
       await phase.callback(pack);
       continue;
     }
 
     // Middleware and hook calls
     try {
+      LogService.debug(`\t${phase.name}()`);
       await phase.callback(pack);
     } catch (error: any) {
-      LogService.error(`${error.message} ${phase.callback}`);
+      LogService.error(`\t${error.message} ${phase.callback}`);
 
       // Rollback transaction
       if (match.hasTransaction && trx) {
-        LogService.warn("DB transaction rollback");
+        LogService.warn("\tDB transaction rollback");
         trx.rollback();
       }
 
@@ -97,18 +98,20 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     // we should rollback it before the HTTP request end.
     if (pack.res.statusCode() >= 400 && pack.res.statusCode() < 599) {
       if (match.hasTransaction && trx) {
-        LogService.warn("DB transaction rollback");
+        LogService.warn("\tDB transaction rollback");
         trx.rollback();
       }
+      LogService.debug(`\tResponse ${pack.res.statusCode()}`);
       break;
     }
 
     // If there is a valid transaction, we should commit it
     if (match.hasTransaction && trx) {
-      LogService.warn("DB transaction commit");
+      LogService.warn("\tDB transaction commit");
       trx.commit();
     }
 
+    LogService.debug(`\tResponse ${pack.res.statusCode()}`);
     // We should brake the for-loop
     break;
   }

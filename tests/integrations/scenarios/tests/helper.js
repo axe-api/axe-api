@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from "supertest";
 import mysql from "mysql";
 import sqlite3 from "sqlite3";
