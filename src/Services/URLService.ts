@@ -10,6 +10,7 @@ import {
 import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
 import { HandlerTypes } from "../Enums";
+import LogService from "./LogService";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -76,6 +77,8 @@ class URLService {
       );
     }
 
+    LogService.warn(`${method} ${pattern}`);
+
     this.urls.push({
       method,
       pattern,
@@ -90,6 +93,8 @@ class URLService {
     pattern: string,
     customHandler: HandlerFunction
   ) {
+    LogService.warn(`${method} ${pattern}`);
+
     const phases = this.getDefaultPhases([]);
     const hasTransaction = false;
 
