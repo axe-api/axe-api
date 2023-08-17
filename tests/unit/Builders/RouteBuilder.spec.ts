@@ -7,20 +7,13 @@ import {
   LogService,
   ModelService,
 } from "../../../src/Services";
-import {
-  IModelService,
-  IRelation,
-  IRequestPack,
-  IVersion,
-} from "../../../src/Interfaces";
-import { HandlerTypes, LogLevels, Relationships } from "../../../src/Enums";
+import { IModelService, IRelation, IVersion } from "../../../src/Interfaces";
+import { Relationships } from "../../../src/Enums";
 import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
 import Comment from "../__Mocks/app/v1/Models/Comment";
 import URLService from "../../../src/Services/URLService";
-
-const waitForIt = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 const userService = new ModelService("User", new User());
 const postService = new ModelService("Post", new Post());
@@ -89,7 +82,7 @@ const VersionMock = {
 describe("RouteBuilder", () => {
   beforeAll(() => {
     APIService.setInsance(path.join(__dirname, "..", "__Mocks"));
-    LogService.setInstance(LogLevels.ERROR);
+    LogService.setInstance();
     IoCService.singleton("App", () => AppMock);
     IoCService.singleton(
       "DocumentationService",
