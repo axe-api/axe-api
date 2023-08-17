@@ -1,44 +1,30 @@
-import winston from "winston";
-import { LogLevels } from "../Enums";
-import { LOG_COLORS } from "../constants";
+import logger from "pino";
 
 class LogService {
-  private static instance: winston.Logger;
+  private static logger: logger.Logger;
 
-  static setInstance(options?: winston.LoggerOptions | undefined) {
-    LogService.instance = winston.createLogger(options);
+  static setInstance(options?: logger.LoggerOptions | undefined) {
+    LogService.logger = logger(options);
   }
 
-  static emerg(message: string) {
-    LogService.instance.emerg(message);
-  }
-
-  static alert(message: string) {
-    LogService.instance.alert(message);
-  }
-
-  static crit(message: string) {
-    LogService.instance.crit(message);
+  static instance() {
+    return LogService.logger;
   }
 
   static error(message: string) {
-    LogService.instance.error(message);
+    LogService.logger.error(message);
   }
 
-  static warning(message: string) {
-    LogService.instance.warning(message);
-  }
-
-  static notice(message: string) {
-    LogService.instance.notice(message);
+  static warn(message: string) {
+    LogService.logger.warn(message);
   }
 
   static info(message: string) {
-    LogService.instance.info(message);
+    LogService.logger.info(message);
   }
 
   static debug(message: string) {
-    LogService.instance.debug(message);
+    LogService.logger.debug(message);
   }
 }
 

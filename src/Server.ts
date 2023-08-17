@@ -5,7 +5,6 @@ import {
 } from "./Resolvers";
 import { IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
-import winston from "winston";
 import path from "path";
 import knex from "knex";
 import schemaInspector from "knex-schema-inspector";
@@ -20,7 +19,6 @@ import {
 import MetadataHandler from "./Handlers/MetadataHandler";
 import DocsHTMLHandler from "./Handlers/DocsHTMLHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
-import { consoleAxeError } from "./Helpers";
 import http from "http";
 import RequestHandler from "./Handlers/RequestHandler";
 import App from "./Services/App";
@@ -30,13 +28,14 @@ class Server {
     dotenv.config();
 
     try {
-      await this.bindDependencies(rootFolder);
+      APIService.setInsance(rootFolder);
       await this.loadGeneralConfiguration();
+      await this.bindDependencies(rootFolder);
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
       if (error.type === "AxeError") {
-        consoleAxeError(error);
+        LogService.error(error);
       } else {
         throw error;
       }
@@ -44,7 +43,6 @@ class Server {
   }
 
   private async bindDependencies(rootFolder: string) {
-    APIService.setInsance(rootFolder);
     const api = APIService.getInstance();
     IoCService.singleton("SchemaInspector", () => schemaInspector);
     IoCService.singleton("App", () => new App());
@@ -54,14 +52,7 @@ class Server {
       return database;
     });
 
-    // TODO: Set configurations
-    LogService.setInstance({
-      level: "info",
-      format: winston.format.json(),
-      transports: [
-        new winston.transports.Console({ format: winston.format.simple() }),
-      ],
-    });
+    LogService.setInstance(api.config.pino);
   }
 
   private async analyzeVersions() {
@@ -98,6 +89,7 @@ class Server {
     });
 
     server.listen(api.config.port);
+
     LogService.info(
       `API listens requests on http://localhost:${api.config.port}`
     );

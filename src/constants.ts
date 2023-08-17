@@ -20,18 +20,6 @@ import Patch from "./Phases/Patch";
 import Delete from "./Phases/Delete";
 import ForceDelete from "./Phases/ForceDelete";
 
-export const LOG_COLORS = {
-  fgBlack: "\x1b[30m",
-  fgRed: "\x1b[31m",
-  fgGreen: "\x1b[32m",
-  fgYellow: "\x1b[33m",
-  fgBlue: "\x1b[34m",
-  fgMagenta: "\x1b[35m",
-  fgCyan: "\x1b[36m",
-  fgWhite: "\x1b[37m",
-  fgReset: "\x1b[0m",
-};
-
 export const RESERVED_KEYWORDS: string[] = [
   "force",
   "model",

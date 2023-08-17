@@ -155,7 +155,7 @@ class ModelResolver {
             hooks[hookName].default
           );
         } else {
-          LogService.warning(
+          LogService.warn(
             `Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`
           );
         }
