@@ -56,7 +56,7 @@ class SchemaValidatorService {
       this.checkRelationColumnsOrFail(this.version.modelList, model);
     });
 
-    LogService.info(
+    LogService.debug(
       `[${this.version.name}] Database schema has been validated.`
     );
   }

@@ -14,7 +14,7 @@ class ModelTreeBuilder {
     this.createRecursiveTree(tree);
     this.addNestedRoutes(tree);
     this.version.modelTree = tree;
-    LogService.info(`[${this.version.name}] Model tree has been created.`);
+    LogService.debug(`[${this.version.name}] Model tree has been created.`);
   }
 
   private getRootLevelOfTree(): IModelService[] {

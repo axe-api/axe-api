@@ -39,7 +39,9 @@ class RouterBuilder {
 
     await this.createRoutesByModelTree();
 
-    LogService.info(`[${this.version.name}] Express routes have been created.`);
+    LogService.debug(
+      `[${this.version.name}] Express routes have been created.`
+    );
 
     if (generalHooks.onAfterInit) {
       generalHooks.onAfterInit(app);

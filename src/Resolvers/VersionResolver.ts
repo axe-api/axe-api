@@ -15,7 +15,7 @@ const RESERVED_VERSION_FOLDERS: string[] = [
 class VersionResolver {
   async resolve() {
     await this.getVersions();
-    LogService.info("All API versions have been resolved.");
+    LogService.debug("All API versions have been resolved.");
   }
 
   private async getVersions() {

@@ -30,7 +30,7 @@ class Server {
     try {
       APIService.setInsance(rootFolder);
       await this.loadGeneralConfiguration();
-      await this.bindDependencies(rootFolder);
+      await this.bindDependencies();
       await this.analyzeVersions();
       await this.listen();
     } catch (error: any) {
@@ -42,17 +42,17 @@ class Server {
     }
   }
 
-  private async bindDependencies(rootFolder: string) {
+  private async bindDependencies() {
     const api = APIService.getInstance();
     IoCService.singleton("SchemaInspector", () => schemaInspector);
     IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
+      LogService.debug("Created a knex connection instance");
       attachPaginate();
+      LogService.debug("Added pagination support to the knex");
       return database;
     });
-
-    LogService.setInstance(api.config.pino);
   }
 
   private async analyzeVersions() {
@@ -73,6 +73,8 @@ class Server {
     const generalConfigFile = path.join(api.appFolder, "config");
     const { default: content } = await import(generalConfigFile);
     api.setConfig(content as IApplicationConfig);
+    LogService.setInstance(api.config.pino);
+    LogService.debug("Configurations are loaded");
   }
 
   private async listen() {
@@ -88,17 +90,17 @@ class Server {
       console.log("GENERAL", e);
     });
 
-    server.listen(api.config.port);
-
-    LogService.info(
-      `API listens requests on http://localhost:${api.config.port}`
-    );
-
     if (api.config.env === "development") {
       app.get("/metadata", MetadataHandler);
       app.get("/docs", DocsHTMLHandler);
       app.get("/routes", RoutesHandler);
     }
+
+    server.listen(api.config.port);
+
+    LogService.warn(
+      `API listens requests on http://localhost:${api.config.port}`
+    );
   }
 }
 
