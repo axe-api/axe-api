@@ -254,6 +254,7 @@ export interface IDependency {
 }
 
 export interface IPhaseDefinition {
+  name: string;
   isAsync: boolean;
   callback: PhaseFunction;
 }

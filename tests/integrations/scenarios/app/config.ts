@@ -6,6 +6,9 @@ const config: IApplicationConfig = {
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000,
   pino: {
     level: "debug",
+    transport: {
+      target: "pino-pretty",
+    },
   },
   database: {
     client: process.env.DB_CLIENT,
