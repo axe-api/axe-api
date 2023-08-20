@@ -1,5 +1,5 @@
 import cors from "cors";
-import { App } from "axe-api";
+import { App, AxeRequest, AxeResponse } from "axe-api";
 
 const onBeforeInit = async (app: App) => {
   app.use(
@@ -7,13 +7,15 @@ const onBeforeInit = async (app: App) => {
       origin: true,
     })
   );
-  app.get("/health/before", async (req, res) => {
+  app.get("/health/before", async (req: AxeRequest, res: AxeResponse) => {
     res.json({ health: true });
   });
 };
 
 const onAfterInit = async (app: App) => {
-  app.get("/health/after", async (req, res) => res.json({ health: true }));
+  app.get("/health/after", async (req: AxeRequest, res: AxeResponse) =>
+    res.json({ health: true })
+  );
 };
 
 export { onBeforeInit, onAfterInit };
