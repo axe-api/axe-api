@@ -17,6 +17,15 @@ class APIService {
         prefix: "/api",
         database: {},
         pino: {},
+        rateLimit: {
+          enabled: false,
+          maxRequests: 200,
+          windowInSeconds: 5,
+          trustProxyIP: false,
+          adaptor: {
+            type: "memory",
+          },
+        },
       },
     };
   }
@@ -65,6 +74,7 @@ class APIService {
         query: {
           limits: [],
         },
+        formidable: {},
       },
       folders: {
         root,

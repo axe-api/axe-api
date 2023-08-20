@@ -8,6 +8,7 @@ const config: IVersionConfig = {
   query: {
     limits: [allow(QueryFeature.All)],
   },
+  formidable: {},
 };
 
 export default config;

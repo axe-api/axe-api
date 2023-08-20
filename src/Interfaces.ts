@@ -1,4 +1,5 @@
 import { Knex } from "knex";
+import { Options as FormOptions } from "formidable";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import {
   HandlerTypes,
@@ -13,12 +14,21 @@ import {
   QueryFeatureType,
 } from "./Enums";
 import Model from "./Model";
-import { PhaseFunction, SerializationFunction } from "./Types";
+import {
+  AdaptorTypes,
+  HandlerFunction,
+  HookFunctions,
+  MiddlewareFunction,
+  StepTypes,
+  PhaseFunction,
+  SerializationFunction,
+} from "./Types";
 import { ModelListService, QueryService } from "./Services";
 import AxeRequest from "./Services/AxeRequest";
 import AxeResponse from "./Services/AxeResponse";
 import App from "./Services/App";
 import { LoggerOptions } from "pino";
+import { IncomingMessage } from "http";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -54,6 +64,30 @@ export interface IQueryConfig {
   defaults?: IQueryDefaultConfig;
 }
 
+export interface IRedisOptions {
+  host?: string;
+  port?: number;
+  password?: string;
+  db?: number;
+}
+
+export interface IRateLimitAdaptorConfig {
+  type: AdaptorTypes;
+  redis?: IRedisOptions;
+}
+
+export interface IRateLimitOptions {
+  maxRequests: number;
+  windowInSeconds: number;
+}
+
+export interface IRateLimitConfig extends IRateLimitOptions {
+  enabled: boolean;
+  adaptor: IRateLimitAdaptorConfig;
+  trustProxyIP: boolean;
+  keyGenerator?: (req: IncomingMessage) => string;
+}
+
 export interface IVersionConfig {
   transaction:
     | boolean
@@ -65,6 +99,7 @@ export interface IVersionConfig {
   supportedLanguages: string[];
   defaultLanguage: string;
   query: IQueryConfig;
+  formidable: FormOptions;
 }
 
 export interface IApplicationConfig extends IConfig {
@@ -73,6 +108,7 @@ export interface IApplicationConfig extends IConfig {
   prefix: string;
   database: IDatabaseConfig;
   pino: LoggerOptions;
+  rateLimit: IRateLimitConfig;
 }
 
 export interface ILanguage {
@@ -120,7 +156,7 @@ export interface IGeneralHooks {
 
 export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: (context: IRequestPack) => Promise<void> | void;
+  middleware: StepTypes;
 }
 
 export interface IMethodBaseConfig {
@@ -140,8 +176,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, PhaseFunction>;
-  events: Record<HookFunctionTypes, PhaseFunction>;
+  hooks: HookFunctions;
+  events: HookFunctions;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -257,4 +293,14 @@ export interface IPhaseDefinition {
   name: string;
   isAsync: boolean;
   callback: PhaseFunction;
+}
+
+export interface AxeRequestResponsePair {
+  axeRequest: AxeRequest;
+  axeResponse: AxeResponse;
+}
+
+export interface MiddlewareResolution {
+  middlewares: MiddlewareFunction[];
+  handler: HandlerFunction;
 }
