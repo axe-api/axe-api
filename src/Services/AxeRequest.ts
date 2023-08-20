@@ -1,7 +1,9 @@
+import formidable, { Options as FormOptions } from "formidable";
 import { IncomingMessage } from "http";
 import { getVersionByRequest } from "../Helpers";
 import { ILanguage, IVersion } from "../Interfaces";
 import { AcceptLanguageResolver } from "../Resolvers";
+import LogService from "./LogService";
 
 class AxeRequest {
   private request: IncomingMessage;
@@ -72,6 +74,17 @@ class AxeRequest {
 
   header(key: string) {
     return this.request.headers[key];
+  }
+
+  async files(options?: FormOptions) {
+    if (!this.header("content-type")?.includes("multipart/form-data")) {
+      LogService.warn(`Content-type must be 'multipart/form-data'.`);
+      throw new Error(`Content-type must be 'multipart/form-data'.`);
+    }
+
+    LogService.debug(`Form data is parsing`);
+    const form = formidable(options || this.version?.config.formidable || {});
+    return await form.parse(this.request);
   }
 
   get original() {

@@ -5,7 +5,6 @@ class LogService {
 
   static setInstance(options?: logger.LoggerOptions | undefined) {
     LogService.logger = logger(options);
-    LogService.logger.info("ADAS");
   }
 
   static instance() {

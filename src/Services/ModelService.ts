@@ -6,7 +6,7 @@ import {
   IRelation,
 } from "../Interfaces";
 import Model from "./../Model";
-import { PhaseFunction, SerializationFunction } from "../Types";
+import { HookFunctions, PhaseFunction, SerializationFunction } from "../Types";
 
 class ModelService implements IModelService {
   name: string;
@@ -14,14 +14,8 @@ class ModelService implements IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: Record<HookFunctionTypes, PhaseFunction> = {} as Record<
-    HookFunctionTypes,
-    PhaseFunction
-  >;
-  events: Record<HookFunctionTypes, PhaseFunction> = {} as Record<
-    HookFunctionTypes,
-    PhaseFunction
-  >;
+  hooks: HookFunctions = {} as HookFunctions;
+  events: HookFunctions = {} as HookFunctions;
   children: IModelService[];
   isRecursive: boolean;
   queryLimits: IQueryLimitConfig[];
