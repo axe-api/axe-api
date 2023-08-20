@@ -10,7 +10,12 @@ import {
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
-import { FieldList, ModelValidation, PhaseFunction } from "./Types";
+import {
+  FieldList,
+  ModelMiddlewareDefinition,
+  StepTypes,
+  ModelValidation,
+} from "./Types";
 
 class Model {
   get primaryKey(): string {
@@ -33,10 +38,7 @@ class Model {
     return [...DEFAULT_HANDLERS];
   }
 
-  get middlewares():
-    | PhaseFunction[]
-    | IHandlerBaseMiddleware[]
-    | IHandlerBaseMiddleware {
+  get middlewares(): ModelMiddlewareDefinition {
     return [];
   }
 
@@ -112,8 +114,8 @@ class Model {
     }
   }
 
-  getMiddlewares(handlerType: HandlerTypes): PhaseFunction[] {
-    const results: PhaseFunction[] = [];
+  getMiddlewares(handlerType: HandlerTypes): StepTypes[] {
+    const results: StepTypes[] = [];
     const middlewares = this.middlewares;
 
     if (Array.isArray(middlewares)) {
@@ -124,7 +126,7 @@ class Model {
             results.push(methodBasedMiddlewares.middleware);
           }
         } else {
-          results.push(item as () => Promise<void>);
+          results.push(item);
         }
       });
     } else {

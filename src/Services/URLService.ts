@@ -1,4 +1,11 @@
-import { HandlerFunction, PhaseFunction } from "src/Types";
+import { promisify } from "util";
+import {
+  HandlerFunction,
+  MiddlewareFunction,
+  StepTypes,
+  NextFunction,
+  PhaseFunction,
+} from "../Types";
 import { HANDLER_CYLES } from "../constants";
 import {
   IModelService,
@@ -11,6 +18,12 @@ import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
 import { HandlerTypes } from "../Enums";
 import LogService from "./LogService";
+import {
+  isHandlerFunction,
+  isMiddlewareFunction,
+  isPhaseFunction,
+  toPhaseFunction,
+} from "./ConverterService";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -52,7 +65,7 @@ class URLService {
     method: string,
     pattern: string,
     data: IRouteData,
-    middlewares: PhaseFunction[]
+    middlewares: StepTypes[]
   ) {
     const phases = this.getDefaultPhases(middlewares);
 
@@ -92,17 +105,30 @@ class URLService {
   static async addHandler(
     method: string,
     pattern: string,
-    customHandler: HandlerFunction
+    customHandler: HandlerFunction,
+    middlewares: MiddlewareFunction[]
   ) {
     LogService.info(`${method} ${pattern}`);
 
-    const phases = this.getDefaultPhases([]);
+    const phases = middlewares.map((middleware) => {
+      return {
+        isAsync: false,
+        name: `middleware:test`,
+        callback: async (pack: IRequestPack) => {
+          const caller = promisify((pack: IRequestPack, next: NextFunction) =>
+            middleware(pack.req.original, pack.res.original, next)
+          );
+          await caller(pack);
+        },
+      };
+    });
+
     const hasTransaction = false;
 
     phases.push({
       isAsync: false,
       name: "customHandler",
-      callback: (pack: IRequestPack) => {
+      callback: async (pack: IRequestPack) => {
         customHandler(pack.req, pack.res);
       },
     });
@@ -146,15 +172,19 @@ class URLService {
     return this.urls;
   }
 
-  private static getDefaultPhases(middlewares: PhaseFunction[]) {
-    // Creating the phase array
+  private static getDefaultPhases(
+    middlewares: StepTypes[]
+  ): IPhaseDefinition[] {
+    // We should convert to all StepTypes functions to PhaseFunctions
+    const callbacks: PhaseFunction[] = middlewares.map(toPhaseFunction);
+
     const phases: IPhaseDefinition[] = [
       // Internal middlewares
-      ...middlewares.map((middleware) => {
+      ...callbacks.map((callback: PhaseFunction) => {
         return {
           isAsync: true,
-          name: `middleware:${middleware.name || "anonymous"}`,
-          callback: middleware,
+          name: `middleware:${callback.name || "anonymous"}`,
+          callback,
         };
       }),
     ];

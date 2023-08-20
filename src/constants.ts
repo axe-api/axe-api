@@ -160,6 +160,7 @@ export const DEFAULT_VERSION_CONFIG: IVersionConfig = {
       maxPerPage: 100,
     },
   },
+  formidable: {},
 };
 
 export const NUMERIC_PRIMARY_KEY_TYPES = ["integer", "bigint"];

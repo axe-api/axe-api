@@ -1,10 +1,9 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { APIService, IoCService, LogService } from "../Services";
+import { APIService, AxeResponse, IoCService, LogService } from "../Services";
 import URLService from "../Services/URLService";
-import { IRequestPack } from "../Interfaces";
+import { IPhaseDefinition, IRequestPack } from "../Interfaces";
 import { Knex } from "knex";
-import AxeRequest from "../Services/AxeRequest";
-import AxeResponse from "../Services/AxeResponse";
+import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "src/Exceptions/ApiError";
 
 const api = APIService.getInstance();
@@ -15,48 +14,14 @@ const return404 = (response: ServerResponse) => {
   response.end();
 };
 
-export default async (request: IncomingMessage, response: ServerResponse) => {
-  LogService.debug(`${request.method} ${request.url}`);
-
-  const axeRequest = new AxeRequest(request);
-  const match = URLService.match(axeRequest);
-  const axeResponse = new AxeResponse(response, axeRequest.currentLanguage);
-
-  if (!match) {
-    LogService.warn(`The URL is not matched! ${request.method} ${request.url}`);
-    return return404(response);
-  }
-
-  if (match.customHandler) {
-    match.customHandler(axeRequest, axeResponse);
-    return;
-  }
-
-  // We should set the params
-  axeRequest.params = match.params;
-
-  const database = (await IoCService.use("Database")) as Knex;
-
-  // Prepare the database by the transaction option
-  let trx: Knex.Transaction | null = null;
-  if (match.hasTransaction) {
-    LogService.warn("\tDB transaction created");
-    trx = await database.transaction();
-  }
-
-  const pack: IRequestPack = {
-    ...match.data,
-    params: match.params,
-    api,
-    req: axeRequest,
-    res: axeResponse,
-    database: match.hasTransaction && trx ? trx : database,
-  };
-
-  response.setHeader("Content-Type", "application/json");
-  response.setHeader("x-powered-by", "Axe API");
-
-  for (const phase of match.phases) {
+const callPhases = async (
+  phases: IPhaseDefinition[],
+  pack: IRequestPack,
+  match: any,
+  trx: Knex.Transaction | null,
+  axeResponse: AxeResponse
+) => {
+  for (const phase of phases) {
     // If there is an non-async phase, it should be an Event function
     if (phase.isAsync === false) {
       LogService.debug(`\t${phase.name}()`);
@@ -115,4 +80,45 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     // We should brake the for-loop
     break;
   }
+};
+
+export default async (request: IncomingMessage, response: ServerResponse) => {
+  LogService.debug(`${request.method} ${request.url}`);
+
+  const { axeRequest, axeResponse } = toAxeRequestResponsePair(
+    request,
+    response
+  );
+  const match = URLService.match(axeRequest);
+
+  if (!match) {
+    LogService.warn(`The URL is not matched! ${request.method} ${request.url}`);
+    return return404(response);
+  }
+
+  // We should set the params
+  axeRequest.params = match.params;
+
+  const database = (await IoCService.use("Database")) as Knex;
+
+  // Prepare the database by the transaction option
+  let trx: Knex.Transaction | null = null;
+  if (match.hasTransaction) {
+    LogService.warn("\tDB transaction created");
+    trx = await database.transaction();
+  }
+
+  const pack: IRequestPack = {
+    ...match.data,
+    params: match.params,
+    api,
+    req: axeRequest,
+    res: axeResponse,
+    database: match.hasTransaction && trx ? trx : database,
+  };
+
+  response.setHeader("Content-Type", "application/json");
+  response.setHeader("x-powered-by", "Axe API");
+
+  await callPhases(match.phases, pack, match, trx, axeResponse);
 };

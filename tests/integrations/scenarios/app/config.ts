@@ -10,6 +10,15 @@ const config: IApplicationConfig = {
       target: "pino-pretty",
     },
   },
+  rateLimit: {
+    enabled: false,
+    maxRequests: 200,
+    windowInSeconds: 5,
+    trustProxyIP: false,
+    adaptor: {
+      type: "memory",
+    },
+  },
   database: {
     client: process.env.DB_CLIENT,
     connection: {
