@@ -21,6 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install and remove the dev-kit
         run: |
+          set -e
           npm install
           npm i -g ts-node-dev typescript knex
           npm run dev-kit:install

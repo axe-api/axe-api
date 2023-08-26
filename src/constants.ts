@@ -6,7 +6,7 @@ import {
   QueryFeature,
   Relationships,
 } from "./Enums";
-import { IModelService, IVersionConfig } from "./Interfaces";
+import { AxeConfig, AxeVersionConfig, IModelService } from "./Interfaces";
 import { allow, deny } from "./Services/LimitService";
 import { PhaseFunction } from "./Types";
 import Single from "./Phases/Single";
@@ -139,28 +139,6 @@ export const ConditionQueryFeatureMap: Record<ConditionTypes, QueryFeature> = {
 export const RelationQueryFeatureMap: Record<Relationships, QueryFeature> = {
   [Relationships.HAS_ONE]: QueryFeature.WithHasOne,
   [Relationships.HAS_MANY]: QueryFeature.WithHasMany,
-};
-
-export const DEFAULT_VERSION_CONFIG: IVersionConfig = {
-  transaction: false,
-  serializers: [],
-  supportedLanguages: ["en"],
-  defaultLanguage: "en",
-  query: {
-    limits: [
-      allow(QueryFeature.All),
-      deny(QueryFeature.WithHasMany),
-      deny(QueryFeature.WhereLike),
-      deny(QueryFeature.WhereNotLike),
-      deny(QueryFeature.Trashed),
-    ],
-    defaults: {
-      perPage: 10,
-      minPerPage: 1,
-      maxPerPage: 100,
-    },
-  },
-  formidable: {},
 };
 
 export const NUMERIC_PRIMARY_KEY_TYPES = ["integer", "bigint"];
@@ -359,4 +337,53 @@ export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
     new Phase("all.serialize", List.SerializePhase),
     new Phase("all.response", List.ResultPhase),
   ],
+};
+
+export const DEFAULT_APP_CONFIG: AxeConfig = {
+  prefix: "api",
+  env: "production",
+  port: 3000,
+  pino: {
+    level: "error",
+    transport: {
+      target: "pino-pretty",
+    },
+  },
+  rateLimit: {
+    enabled: false,
+    adaptor: {
+      type: "memory",
+    },
+    maxRequests: 200,
+    windowInSeconds: 5,
+    trustProxyIP: false,
+  },
+  database: {
+    client: "sqlite",
+    connection: {
+      filename: "./axedb.sql",
+    },
+  },
+};
+
+export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {
+  transaction: false,
+  serializers: [],
+  supportedLanguages: ["en"],
+  defaultLanguage: "en",
+  query: {
+    limits: [
+      allow(QueryFeature.All),
+      deny(QueryFeature.WithHasMany),
+      deny(QueryFeature.WhereLike),
+      deny(QueryFeature.WhereNotLike),
+      deny(QueryFeature.Trashed),
+    ],
+    defaults: {
+      perPage: 10,
+      minPerPage: 1,
+      maxPerPage: 100,
+    },
+  },
+  formidable: {},
 };

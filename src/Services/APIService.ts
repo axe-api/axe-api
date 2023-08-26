@@ -1,6 +1,7 @@
 import path from "path";
-import { IAPI, IApplicationConfig, IVersion } from "../Interfaces";
+import { AxeConfig, IAPI, IVersion } from "../Interfaces";
 import ModelListService from "./ModelListService";
+import { DEFAULT_APP_CONFIG } from "../constants";
 
 class APIService {
   private folders: IAPI;
@@ -11,22 +12,7 @@ class APIService {
       rootFolder: rootFolder,
       appFolder: path.join(rootFolder, "app"),
       versions: [],
-      config: {
-        env: "production",
-        port: 3000,
-        prefix: "/api",
-        database: {},
-        pino: {},
-        rateLimit: {
-          enabled: false,
-          maxRequests: 200,
-          windowInSeconds: 5,
-          trustProxyIP: false,
-          adaptor: {
-            type: "memory",
-          },
-        },
-      },
+      config: DEFAULT_APP_CONFIG,
     };
   }
 
@@ -54,11 +40,11 @@ class APIService {
     return this.folders.versions;
   }
 
-  get config(): IApplicationConfig {
+  get config(): AxeConfig {
     return this.folders.config;
   }
 
-  setConfig(config: IApplicationConfig) {
+  setConfig(config: AxeConfig) {
     this.folders.config = config;
   }
 
