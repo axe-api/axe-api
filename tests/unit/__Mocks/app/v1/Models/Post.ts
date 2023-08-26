@@ -12,6 +12,7 @@ import {
 } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
+import { ModelMiddlewareDefinition } from "../../../../../../src/Types";
 
 class Post extends Model {
   get fillable(): IMethodBaseConfig {
@@ -30,11 +31,13 @@ class Post extends Model {
     };
   }
 
-  get middlewares(): IHandlerBaseMiddleware {
-    return {
-      handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-      middleware: async (context: IRequestPack) => {},
-    };
+  get middlewares(): ModelMiddlewareDefinition {
+    return [
+      {
+        handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
+        middleware: async (context: IRequestPack) => {},
+      },
+    ];
   }
 
   get transaction(): IHandlerBasedTransactionConfig {

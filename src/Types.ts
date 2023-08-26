@@ -23,7 +23,7 @@ export type HandlerFunction = (
   response: AxeResponse
 ) => DefaultResponse;
 
-export type PhaseFunction = (pack: IRequestPack) => DefaultResponse;
+export type PhaseFunction = (context: IRequestPack) => DefaultResponse;
 
 export type SerializationFunction = (item: any, request: AxeRequest) => any;
 
