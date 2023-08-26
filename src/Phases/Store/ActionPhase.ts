@@ -21,4 +21,7 @@ export default async (context: IRequestPack) => {
     .database(context.model.instance.table)
     .where(context.model.instance.primaryKey, insertedPrimaryKeyValue)
     .first();
+
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+  context.res.status(201);
 };

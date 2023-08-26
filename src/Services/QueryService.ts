@@ -12,7 +12,7 @@ import {
   IWhere,
   IWith,
   IModelService,
-  IVersionConfig,
+  AxeVersionConfig,
 } from "../Interfaces";
 import { Knex } from "knex";
 import ApiError from "../Exceptions/ApiError";
@@ -31,12 +31,12 @@ class QueryService {
   usedConditionColumns: string[];
   relationColumns: string[];
   createdJoins: string[];
-  config: IVersionConfig;
+  config: AxeVersionConfig;
 
   constructor(
     model: IModelService,
     models: IModelService[],
-    config: IVersionConfig
+    config: AxeVersionConfig
   ) {
     this.model = model;
     this.models = models;

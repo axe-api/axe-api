@@ -3,7 +3,7 @@ import {
   VersionConfigResolver,
   VersionResolver,
 } from "./Resolvers";
-import { IApplicationConfig } from "./Interfaces";
+import { AxeConfig, IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
 import knex from "knex";
@@ -22,6 +22,7 @@ import RoutesHandler from "./Handlers/RoutesHandler";
 import http from "http";
 import RequestHandler from "./Handlers/RequestHandler";
 import App from "./Services/App";
+import { DEFAULT_APP_CONFIG } from "./constants";
 
 class Server {
   async start(rootFolder: string) {
@@ -70,9 +71,22 @@ class Server {
 
   private async loadGeneralConfiguration() {
     const api = APIService.getInstance();
+    // Getting configuration file path
     const generalConfigFile = path.join(api.appFolder, "config");
+
+    // Loading the configurations
     const { default: content } = await import(generalConfigFile);
-    api.setConfig(content as IApplicationConfig);
+
+    // Merge the configuration with the default configurations
+    const apiConfiguration: AxeConfig = {
+      ...DEFAULT_APP_CONFIG,
+      ...(content as IApplicationConfig),
+    };
+
+    // Setting the configurations
+    api.setConfig(apiConfiguration);
+
+    // Setting the logger instance
     LogService.setInstance(api.config.pino);
     LogService.debug("Configurations are loaded");
   }

@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import AdaptorFactory from "./AdaptorFactory";
 import {
-  IApplicationConfig,
+  AxeConfig,
   IRateLimitConfig,
   IRateLimitOptions,
   IRequestPack,
@@ -79,7 +79,7 @@ const getClientKeyByConfigurations = (
   return `axe-api-rate-limit:${req.socket.remoteAddress || ""}`;
 };
 
-export const setupRateLimitAdaptors = (config: IApplicationConfig) => {
+export const setupRateLimitAdaptors = (config: AxeConfig) => {
   // Creating the correct adaptor by the configuration
   adaptor = AdaptorFactory(
     config.rateLimit?.adaptor.type || "memory",

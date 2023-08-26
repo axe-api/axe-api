@@ -12,6 +12,7 @@ import {
   IModelService,
   IQuery,
   IVersionConfig,
+  AxeVersionConfig,
 } from "../../../src/Interfaces";
 import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
@@ -40,7 +41,7 @@ userService.queryLimits = [
 const postService = new ModelService("Post", new Post());
 const commentService = new ModelService("Comment", new Comment());
 const models: IModelService[] = [userService, postService, commentService];
-const config: IVersionConfig = {
+const config: AxeVersionConfig = {
   ...DEFAULT_VERSION_CONFIG,
 };
 let service = new QueryService(userService, models, config);

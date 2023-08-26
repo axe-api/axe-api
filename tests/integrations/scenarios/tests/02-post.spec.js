@@ -32,7 +32,7 @@ describe("Axe API", () => {
     const { body: user } = await post({
       url: "/api/v1/users",
       data,
-      status: 200,
+      status: 201,
     });
     const userId = user.id;
     expect(user.email).toBe("foo@bar.com");
@@ -52,7 +52,7 @@ describe("Axe API", () => {
         title: "My Post",
         content: "This is the best post ever",
       },
-      status: 200,
+      status: 201,
     });
     const postId = createdPost.id;
     expect(createdPost.title).toBe("My Post");

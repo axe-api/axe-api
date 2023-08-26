@@ -88,7 +88,7 @@ export interface IRateLimitConfig extends IRateLimitOptions {
   keyGenerator?: (req: IncomingMessage) => string;
 }
 
-export interface IVersionConfig {
+export interface AxeVersionConfig {
   transaction:
     | boolean
     | IHandlerBasedTransactionConfig
@@ -102,7 +102,9 @@ export interface IVersionConfig {
   formidable: FormOptions;
 }
 
-export interface IApplicationConfig extends IConfig {
+export type IVersionConfig = Partial<AxeVersionConfig>;
+
+export interface AxeConfig extends IConfig {
   env: string;
   port: number;
   prefix: string;
@@ -110,6 +112,8 @@ export interface IApplicationConfig extends IConfig {
   pino: LoggerOptions;
   rateLimit: IRateLimitConfig;
 }
+
+export type IApplicationConfig = Partial<AxeConfig>;
 
 export interface ILanguage {
   title: string;
@@ -136,7 +140,7 @@ export interface IVersionFolder {
 
 export interface IVersion {
   name: string;
-  config: IVersionConfig;
+  config: AxeVersionConfig;
   folders: IVersionFolder;
   modelList: ModelListService;
   modelTree: IModelService[];
@@ -146,7 +150,7 @@ export interface IAPI {
   rootFolder: string;
   appFolder: string;
   versions: IVersion[];
-  config: IApplicationConfig;
+  config: AxeConfig;
 }
 
 export interface IGeneralHooks {
@@ -214,6 +218,7 @@ export interface IRequestPack extends IRouteData {
   req: AxeRequest;
   res: AxeResponse;
   database: Knex | Knex.Transaction;
+  isTransactionOpen: boolean;
   queryParser?: QueryService;
   conditions?: IQuery;
   query?: Knex.QueryBuilder;
@@ -301,6 +306,6 @@ export interface AxeRequestResponsePair {
 }
 
 export interface MiddlewareResolution {
-  middlewares: MiddlewareFunction[];
+  middlewares: (MiddlewareFunction | HandlerFunction)[];
   handler: HandlerFunction;
 }
