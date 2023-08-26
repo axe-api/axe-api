@@ -1,8 +1,9 @@
 import path from "path";
 import fs from "fs";
-import { IVersion, IVersionConfig } from "../Interfaces";
+import { AxeVersionConfig, IVersion, IVersionConfig } from "../Interfaces";
 import AxeError from "../Exceptions/AxeError";
 import { AxeErrorCode } from "../Enums";
+import { DEFAULT_VERSION_CONFIG } from "../constants";
 
 class VersionConfigResolver {
   private version: IVersion;
@@ -22,8 +23,15 @@ class VersionConfigResolver {
         `The version file not found: ${versionConfigFile}.ts`
       );
     }
+    // Loading the configuration file
     const { default: content } = await import(versionConfigFile);
-    this.version.config = content as IVersionConfig;
+    // Merging the configurations with the default version configurations
+    const apiConfiguration: AxeVersionConfig = {
+      ...DEFAULT_VERSION_CONFIG,
+      ...(content as IVersionConfig),
+    };
+    // Setting the config values
+    this.version.config = apiConfiguration;
   }
 }
 

@@ -1,7 +1,7 @@
 import { QueryService } from "../../Services";
 import { IRequestPack } from "../../Interfaces";
 import { Knex } from "knex";
-import { addForeignKeyQuery, addSoftDeleteQuery } from "../../Handlers/Helpers";
+import { addSoftDeleteQuery } from "../../Handlers/Helpers";
 
 export default async (context: IRequestPack) => {
   context.queryParser = new QueryService(
@@ -18,21 +18,4 @@ export default async (context: IRequestPack) => {
 
   // If there is a deletedAtColumn, it means that this table support soft-delete
   addSoftDeleteQuery(context.model, context.conditions, context.query);
-
-  // Users should be able to select some fields to show.
-  context.queryParser.applyFields(context.query, context.conditions.fields);
-
-  // Binding parent id if there is.
-  addForeignKeyQuery(
-    context.req,
-    context.query,
-    context.relation,
-    context.parentModel
-  );
-
-  // Users should be able to filter records
-  context.queryParser.applyWheres(context.query, context.conditions.q);
-
-  // User should be able to select sorting fields and types
-  context.queryParser.applySorting(context.query, context.conditions.sort);
 };

@@ -29,7 +29,7 @@ describe("Axe API", () => {
       name: "John",
       surname: "Doe",
     };
-    const { body } = await post({ url: "/api/v1/users", data, status: 200 });
+    const { body } = await post({ url: "/api/v1/users", data, status: 201 });
     userId = body.id;
     expect(body.email).toBe("foo@bar.com");
     expect(body.created_at).not.toBeNull();
@@ -102,7 +102,7 @@ describe("Axe API", () => {
       name: "John",
       surname: "Doe",
     };
-    await post({ url: "/api/v1/users", data, status: 200 });
+    await post({ url: "/api/v1/users", data, status: 201 });
 
     const { data: response } = await axios.get(`/v1/users`, {
       params: {

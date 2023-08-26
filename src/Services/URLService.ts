@@ -18,12 +18,7 @@ import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
 import { HandlerTypes } from "../Enums";
 import LogService from "./LogService";
-import {
-  isHandlerFunction,
-  isMiddlewareFunction,
-  isPhaseFunction,
-  toPhaseFunction,
-} from "./ConverterService";
+import { isMiddlewareFunction, toPhaseFunction } from "./ConverterService";
 
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
@@ -106,7 +101,7 @@ class URLService {
     method: string,
     pattern: string,
     customHandler: HandlerFunction,
-    middlewares: MiddlewareFunction[]
+    middlewares: (MiddlewareFunction | HandlerFunction)[]
   ) {
     LogService.info(`${method} ${pattern}`);
 
@@ -114,11 +109,22 @@ class URLService {
       return {
         isAsync: false,
         name: `middleware:test`,
-        callback: async (pack: IRequestPack) => {
-          const caller = promisify((pack: IRequestPack, next: NextFunction) =>
-            middleware(pack.req.original, pack.res.original, next)
-          );
-          await caller(pack);
+        callback: async (context: IRequestPack) => {
+          if (isMiddlewareFunction(middleware)) {
+            // It should be wrapped
+            const caller = promisify(
+              (context: IRequestPack, next: NextFunction) =>
+                (middleware as MiddlewareFunction)(
+                  context.req.original,
+                  context.res.original,
+                  next
+                )
+            );
+            await caller(context);
+          } else {
+            // We call it directly.
+            await (middleware as HandlerFunction)(context.req, context.res);
+          }
         },
       };
     });
@@ -128,8 +134,8 @@ class URLService {
     phases.push({
       isAsync: false,
       name: "customHandler",
-      callback: async (pack: IRequestPack) => {
-        customHandler(pack.req, pack.res);
+      callback: async (context: IRequestPack) => {
+        customHandler(context.req, context.res);
       },
     });
 

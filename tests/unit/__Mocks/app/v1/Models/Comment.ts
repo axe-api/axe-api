@@ -5,7 +5,7 @@ import { IRequestPack } from "../../../../../../src/Interfaces";
 
 class Comment extends Model {
   get middlewares() {
-    return [(pack: IRequestPack) => {}];
+    return [(context: IRequestPack) => {}];
   }
 
   get transaction(): null {

@@ -7,11 +7,11 @@ class Login extends Model {
     return [
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-        middleware: async (pack: IRequestPack) => {},
+        middleware: async (context: IRequestPack) => {},
       },
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.PATCH],
-        middleware: async (pack: IRequestPack) => {},
+        middleware: async (context: IRequestPack) => {},
       },
     ];
   }

@@ -26,7 +26,7 @@ describe("Axe API Models", () => {
       uuid,
       title: "KG",
     });
-    expect(status).toBe(200);
+    expect(status).toBe(201);
     expect(data.uuid).toBe(uuid);
     expect(data.title).toBe("KG");
     expect(data.created_at).toBe(undefined);
@@ -91,7 +91,7 @@ describe("Axe API Models", () => {
       }
     );
 
-    expect(rootStatus).toBe(200);
+    expect(rootStatus).toBe(201);
     expect(root.title).toBe("Main category");
     expect(root.parent_id).toBe(null);
 
@@ -102,7 +102,7 @@ describe("Axe API Models", () => {
       }
     );
 
-    expect(childStatus).toBe(200);
+    expect(childStatus).toBe(201);
     expect(child.title).toBe("Child category");
     expect(child.parent_id).toBe(root.id);
   });
