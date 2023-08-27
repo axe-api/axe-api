@@ -1,9 +1,4 @@
-import {
-  Model,
-  HandlerTypes,
-  IMethodBaseValidations,
-  HttpMethods,
-} from "axe-api";
+import { Model, HandlerTypes, HttpMethods } from "axe-api";
 
 const { INSERT, SHOW, UPDATE } = HandlerTypes;
 
@@ -19,7 +14,7 @@ class Unit extends Model {
     };
   }
 
-  get validations(): IMethodBaseValidations {
+  get validations() {
     return {
       [HttpMethods.POST]: {
         title: "required|min:1",

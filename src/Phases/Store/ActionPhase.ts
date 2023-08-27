@@ -1,3 +1,4 @@
+import { StatusCodes } from "../../Enums";
 import { IRequestPack } from "../../Interfaces";
 
 export default async (context: IRequestPack) => {
@@ -23,5 +24,5 @@ export default async (context: IRequestPack) => {
     .first();
 
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
-  context.res.status(201);
+  context.res.status(StatusCodes.CREATED);
 };

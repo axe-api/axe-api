@@ -8,18 +8,18 @@ class Author extends Model {
     return "my-authors";
   }
 
-  get transaction(): IHandlerBasedTransactionConfig[] {
+  get transaction() {
     return [
       {
-        handler: HandlerTypes.INSERT,
+        handlers: [HandlerTypes.INSERT],
         transaction: true,
       },
       {
-        handler: [HandlerTypes.PAGINATE],
+        handlers: [HandlerTypes.PAGINATE],
         transaction: true,
       },
       {
-        handler: [HandlerTypes.DELETE],
+        handlers: [HandlerTypes.DELETE],
         transaction: false,
       },
     ];
