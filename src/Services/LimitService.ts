@@ -88,6 +88,15 @@ const generatePermission = (
     .flat();
 };
 
+/**
+ * Allow a query feature.
+ *
+ * @param feature
+ * @param keys
+ * @returns
+ * @example
+ *  allow(QueryFeature.WhereLike)
+ */
 export const allow = (
   feature: QueryFeature,
   keys: string[] = []
@@ -95,6 +104,15 @@ export const allow = (
   return generatePermission(QueryFeatureType.Allow, feature, keys);
 };
 
+/**
+ * Deny a query feature.
+ *
+ * @param feature
+ * @param keys
+ * @returns
+ * @example
+ *  deny(QueryFeature.WhereLike)
+ */
 export const deny = (
   feature: QueryFeature,
   keys: string[] = []

@@ -3,12 +3,12 @@ import { AxeErrorCode, QueryFeature, Relationships } from "../Enums";
 import {
   IRelation,
   IMethodBaseConfig,
-  IMethodBaseValidations,
   IModelService,
   IVersion,
 } from "../Interfaces";
 import { LogService, ModelListService } from "../Services";
 import { RESERVED_KEYWORDS } from "../constants";
+import { FieldList, ModelValidation } from "../Types";
 
 const COLUMN_BASED_QUERY_LIMITS: QueryFeature[] = [
   QueryFeature.Sorting,
@@ -157,7 +157,7 @@ class SchemaValidatorService {
       return fillable;
     }
 
-    const config = fillable as IMethodBaseConfig;
+    const config = fillable as IMethodBaseConfig<FieldList>;
     return [
       ...(config.POST || []),
       ...(config.PUT || []),
@@ -176,7 +176,7 @@ class SchemaValidatorService {
       return Object.keys(objValidations);
     }
 
-    const config = validations as IMethodBaseValidations;
+    const config = validations as IMethodBaseConfig<ModelValidation>;
 
     return [
       ...Object.keys(config.POST ? config.POST : {}),

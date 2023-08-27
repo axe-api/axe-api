@@ -19,7 +19,6 @@ import {
   HandlerFunction,
   HookFunctions,
   MiddlewareFunction,
-  StepTypes,
   PhaseFunction,
   SerializationFunction,
 } from "./Types";
@@ -38,7 +37,7 @@ export interface IColumn extends Column {
 export interface IConfig {}
 
 export interface IHandlerBasedTransactionConfig {
-  handler: HandlerTypes | HandlerTypes[];
+  handlers: HandlerTypes[];
   transaction: boolean;
 }
 
@@ -108,7 +107,7 @@ export interface AxeConfig extends IConfig {
   env: string;
   port: number;
   prefix: string;
-  database: IDatabaseConfig;
+  database: Knex.Config;
   pino: LoggerOptions;
   rateLimit: IRateLimitConfig;
 }
@@ -125,8 +124,6 @@ export interface IAcceptedLanguage {
   language: ILanguage;
   quality: number;
 }
-
-export type IDatabaseConfig = Knex.Config;
 
 export interface IVersionFolder {
   root: string;
@@ -158,20 +155,15 @@ export interface IGeneralHooks {
   onAfterInit: (app: App) => void | null;
 }
 
-export interface IHandlerBaseMiddleware {
+export interface IHandlerBaseConfig<T> {
   handler: HandlerTypes[];
-  middleware: StepTypes;
+  middleware: T;
 }
 
-export interface IMethodBaseConfig {
-  [HttpMethods.POST]?: string[];
-  [HttpMethods.PUT]?: string[];
-  [HttpMethods.PATCH]?: string[];
-}
-
-export interface IMethodBaseValidations {
-  [HttpMethods.POST]?: Record<string, string>;
-  [HttpMethods.PUT]?: Record<string, string>;
+export interface IMethodBaseConfig<T> {
+  [HttpMethods.POST]?: T;
+  [HttpMethods.PUT]?: T;
+  [HttpMethods.PATCH]?: T;
 }
 
 export interface IModelService {

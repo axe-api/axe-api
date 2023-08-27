@@ -4,7 +4,8 @@ import URLService from "../Services/URLService";
 import { IRequestPack } from "../Interfaces";
 import { Knex } from "knex";
 import { toAxeRequestResponsePair } from "../Services/ConverterService";
-import ApiError from "src/Exceptions/ApiError";
+import ApiError from "../Exceptions/ApiError";
+import { StatusCodes } from "../Enums";
 
 const api = APIService.getInstance();
 
@@ -31,7 +32,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   // We should set the params
   axeRequest.params = match.params;
 
-  const database = (await IoCService.use("Database")) as Knex;
+  const database = await IoCService.use<Knex>("Database");
 
   // Prepare the database by the transaction option
   let trx: Knex.Transaction | null = null;
@@ -82,7 +83,9 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
       }
 
       // TODO: We need an error handler.
-      axeResponse.status(500).json({ error: error.toString() });
+      axeResponse
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: error.toString() });
       break;
     }
 

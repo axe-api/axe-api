@@ -28,7 +28,7 @@ class RouterBuilder {
   }
 
   async build() {
-    const app = await IoCService.useByType<App>("App");
+    const app = await IoCService.use<App>("App");
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
       this.version
     ).resolve();
