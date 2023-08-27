@@ -1,5 +1,5 @@
 import Validator from "validatorjs";
-import { HttpMethods, TimestampColumns } from "../../Enums";
+import { HttpMethods, StatusCodes, TimestampColumns } from "../../Enums";
 import { IRequestPack } from "../../Interfaces";
 import { bindTimestampValues, getMergedFormData } from "../../Handlers/Helpers";
 
@@ -20,7 +20,9 @@ export default async (context: IRequestPack) => {
     // Validate the data
     const validation = new Validator(context.formData, validationRules);
     if (validation.fails()) {
-      return context.res.status(400).json(validation.errors);
+      return context.res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(validation.errors);
     }
   }
 

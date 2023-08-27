@@ -9,6 +9,7 @@ import {
 import { APIService, LogService } from "../../Services";
 import IAdaptor from "./IAdaptor";
 import { nanoid } from "nanoid";
+import { StatusCodes } from "../../Enums";
 
 let adaptor: IAdaptor;
 
@@ -88,6 +89,23 @@ export const setupRateLimitAdaptors = (config: AxeConfig) => {
   );
 };
 
+/**
+ * Add a rate limit with the `IRateLimitOptions`
+ *
+ * @param options
+ * @returns
+ * @example
+ *  class User extends Model {
+ *    get middlewares() {
+ *      return [
+ *        {
+ *          handler: [HandlerTypes.INSERT],
+ *          middleware: rateLimit({ maxRequests: 200, windowInSeconds: 5 }),
+ *        },
+ *      ];
+ *    }
+ *  }
+ */
 export const rateLimit = (options?: IRateLimitOptions) => {
   // For each model middleware, we should use a different ID for the cache key
   const id = nanoid();
@@ -125,7 +143,9 @@ export const rateLimit = (options?: IRateLimitOptions) => {
     // Sending an error message if there is an error
     if (isAllowed.success === false) {
       LogService.warn(`Rate limit exceeded: ${context.req.url}`);
-      context.res.status(429).json({ error: "Rate limit exceeded." });
+      context.res
+        .status(StatusCodes.TOO_MANY_REQUESTS)
+        .json({ error: "Rate limit exceeded." });
     }
   };
 };

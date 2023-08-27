@@ -74,7 +74,7 @@ export const callHooks = async (
     // we don't await for the events. If the developer uses the transaction and
     // try to commit something, it would be lost cause the transaction could be
     // already completed.
-    const database = (await IoCService.use("Database")) as Knex;
+    const database = await IoCService.use<Knex>("Database");
     params.database = database;
 
     // Calling the events

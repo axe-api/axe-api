@@ -2,7 +2,6 @@ import { Knex } from "knex";
 import path from "path";
 import fs from "fs";
 import { readdir } from "fs/promises";
-import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspector";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import { IModelService, IColumn, IRelation, IVersion } from "../Interfaces";
 import FileResolver from "./FileResolver";
@@ -15,7 +14,7 @@ import {
   ModelListService,
 } from "../Services";
 import { DEFAULT_METHODS_OF_MODELS } from "../constants";
-import { SerializationFunction } from "../Types";
+import { SchemaInspectorTypes, SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
 
 class ModelResolver {
@@ -90,10 +89,12 @@ class ModelResolver {
   }
 
   private async setDatabaseColumns(modelList: ModelListService) {
-    const database = (await IoCService.use("Database")) as Knex;
-    const schemaInspector = (await IoCService.use("SchemaInspector")) as (
-      knex: Knex
-    ) => SchemaInspector;
+    const database = await IoCService.use<Knex>("Database");
+
+    const schemaInspector = await IoCService.use<SchemaInspectorTypes>(
+      "SchemaInspector"
+    );
+
     const inspector = schemaInspector(database);
     const columns: IColumn[] = [];
     for (const table of await inspector.tables()) {

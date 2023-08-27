@@ -1,8 +1,10 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { IHandlerBaseMiddleware, IRequestPack } from "./Interfaces";
+import { IHandlerBaseConfig, IRequestPack } from "./Interfaces";
 import AxeRequest from "./Services/AxeRequest";
 import AxeResponse from "./Services/AxeResponse";
 import { HookFunctionTypes } from "./Enums";
+import { Knex } from "knex";
+import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspector";
 
 export type ModelValidation = Record<string, string>;
 
@@ -36,5 +38,7 @@ export type DynamicFunctionType = (MiddlewareFunction | HandlerFunction)[];
 export type StepTypes = MiddlewareFunction | HandlerFunction | PhaseFunction;
 
 export type ModelMiddlewareDefinition = Array<
-  StepTypes | IHandlerBaseMiddleware
+  StepTypes | IHandlerBaseConfig<StepTypes>
 >;
+
+export type SchemaInspectorTypes = (database: Knex) => SchemaInspector;

@@ -5,7 +5,7 @@ import {
   getMergedFormData,
   getParentColumn,
 } from "../../Handlers/Helpers";
-import { HttpMethods, TimestampColumns } from "../../Enums";
+import { HttpMethods, StatusCodes, TimestampColumns } from "../../Enums";
 
 export default async (context: IRequestPack) => {
   const requestMethod: HttpMethods = context.req
@@ -22,7 +22,7 @@ export default async (context: IRequestPack) => {
     // Validate the data
     const validation = new Validator(context.formData, validationRules);
     if (validation.fails()) {
-      context.res.status(400).json(validation.errors);
+      context.res.status(StatusCodes.BAD_REQUEST).json(validation.errors);
       return;
     }
   }
