@@ -25,6 +25,11 @@ import App from "./Services/App";
 import { DEFAULT_APP_CONFIG } from "./constants";
 
 class Server {
+  /**
+   * Start the application with the rootFolder.
+   *
+   * @param rootFolder
+   */
   async start(rootFolder: string) {
     dotenv.config();
 
@@ -92,7 +97,7 @@ class Server {
   }
 
   private async listen() {
-    const app = await IoCService.useByType<App>("App");
+    const app = await IoCService.use<App>("App");
 
     app.use(RequestHandler);
 

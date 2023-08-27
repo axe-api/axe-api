@@ -35,10 +35,23 @@ class AxeRequest {
     }
   }
 
+  /**
+   * Get the URL Object
+   *
+   * @memberof AxeRequest
+   */
   get url() {
     return this.urlObject;
   }
 
+  /**
+   * Get the URL params
+   *
+   * @memberof AxeRequest
+   * @example
+   *  GET api/v1/users/123
+   *  { "id": 123 }
+   */
   get params() {
     return this.privateParams;
   }
@@ -47,23 +60,38 @@ class AxeRequest {
     this.privateParams = value;
   }
 
+  /**
+   * Get the URLSearchParams
+   *
+   * @memberof AxeRequest
+   */
   get query() {
     return this.urlObject.searchParams;
   }
 
-  get path() {
-    // TODO: Path
-    return this.request.url || "";
-  }
-
+  /**
+   * Get the HTTP Method
+   *
+   * @memberof AxeRequest
+   */
   get method() {
     return this.request.method || "GET";
   }
 
+  /**
+   * Get the request form body
+   *
+   * @memberof AxeRequest
+   */
   get body() {
     return this.request.body;
   }
 
+  /**
+   * Get the current langugage
+   *
+   * @memberof AxeRequest
+   */
   get currentLanguage() {
     return this.language;
   }
@@ -72,10 +100,22 @@ class AxeRequest {
     this.language = language;
   }
 
+  /**
+   * Get a HTTP Request Header value
+   *
+   * @param key
+   * @returns
+   */
   header(key: string) {
     return this.request.headers[key];
   }
 
+  /**
+   * Parse and get uploaded files. It uses `formidable` internally.
+   *
+   * @param options
+   * @returns
+   */
   async files(options?: FormOptions) {
     if (!this.header("content-type")?.includes("multipart/form-data")) {
       LogService.warn(`Content-type must be 'multipart/form-data'.`);
@@ -87,6 +127,11 @@ class AxeRequest {
     return await form.parse(this.request);
   }
 
+  /**
+   * Get the original `IncomingMessage` request.
+   *
+   * @memberof AxeRequest
+   */
   get original() {
     return this.request;
   }

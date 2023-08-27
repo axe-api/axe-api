@@ -8,8 +8,8 @@ class Comment extends Model {
     return [(context: IRequestPack) => {}];
   }
 
-  get transaction(): null {
-    return null;
+  get transaction() {
+    return false;
   }
 
   get limits() {

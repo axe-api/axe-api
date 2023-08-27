@@ -3,26 +3,20 @@ import {
   HttpMethods,
   QueryFeature,
 } from "../../../../../../src/Enums";
-import {
-  IHandlerBasedTransactionConfig,
-  IHandlerBaseMiddleware,
-  IMethodBaseConfig,
-  IMethodBaseValidations,
-  IRequestPack,
-} from "../../../../../../src/Interfaces";
+import { IRequestPack } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
 import { ModelMiddlewareDefinition } from "../../../../../../src/Types";
 
 class Post extends Model {
-  get fillable(): IMethodBaseConfig {
+  get fillable() {
     return {
       [HttpMethods.POST]: ["title", "content"],
       [HttpMethods.PUT]: ["content"],
     };
   }
 
-  get validations(): IMethodBaseValidations {
+  get validations() {
     return {
       [HttpMethods.POST]: {
         email: "required|email",
@@ -40,11 +34,13 @@ class Post extends Model {
     ];
   }
 
-  get transaction(): IHandlerBasedTransactionConfig {
-    return {
-      handler: HandlerTypes.INSERT,
-      transaction: true,
-    };
+  get transaction() {
+    return [
+      {
+        handlers: [HandlerTypes.INSERT],
+        transaction: true,
+      },
+    ];
   }
 
   get limits() {

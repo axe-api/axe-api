@@ -11,7 +11,7 @@ describe("IoCService", () => {
     IoCService.bind("my-class", () => Date.now());
     const first = await IoCService.use("my-class");
     await waitForIt(5);
-    const second = await IoCService.use("my-class");
+    const second = await IoCService.use<number>("my-class");
     expect(first).toBeLessThan(second);
   });
 
@@ -23,9 +23,9 @@ describe("IoCService", () => {
     expect(first).toBe(second);
   });
 
-  test(".useByType() should be able return the dependency with a type", async () => {
+  test(".use() should be able return the dependency with a type", async () => {
     IoCService.singleton("UserModel", () => new User());
-    const instance = await IoCService.useByType<User>("UserModel");
+    const instance = await IoCService.use<User>("UserModel");
     expect(instance.constructor.name).toBe("User");
     expect(instance.table).toBe("users");
   });

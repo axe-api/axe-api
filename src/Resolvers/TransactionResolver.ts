@@ -82,21 +82,10 @@ class TransactionResolver {
     configItem: IHandlerBasedTransactionConfig,
     handlerType: HandlerTypes
   ): boolean | null {
-    // An item definitions might have handler array such as;
-    //
-    // handler: [HandlerTypes.ALL, HandlerTypes.INSERT]
-    if (Array.isArray(configItem.handler)) {
-      // If this is an array, we should find the matched handler type
-      const found = configItem.handler.find((item) => item === handlerType);
+    const found = configItem.handlers.find((item) => item === handlerType);
 
-      // If there is, this is the our transaction choice
-      if (found) {
-        return configItem.transaction;
-      }
-    } else if (configItem.handler === handlerType) {
-      // If the "configItem.handler" is not an array, should be matched
-      // with the handlerType. If it matches, it means that this is our
-      // transaction configuration
+    // If there is, this is the our transaction choice
+    if (found) {
       return configItem.transaction;
     }
 
