@@ -21,8 +21,52 @@
     "DB_PASSWORD": "123456",
     "DB_DATABASE": "axeapi"
   },
-  "postgres": {
-    "_title": "PostgreSQL",
+  "postgres11": {
+    "_title": "PostgreSQL 11",
+    "NODE_ENV": "development",
+    "APP_PORT": "3000",
+    "DB_CLIENT": "postgres",
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "axeapi",
+    "DB_PORT": "5433",
+    "DB_PASSWORD": "123456",
+    "DB_DATABASE": "axeapi"
+  },
+  "postgres12": {
+    "_title": "PostgreSQL 12",
+    "NODE_ENV": "development",
+    "APP_PORT": "3000",
+    "DB_CLIENT": "postgres",
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "axeapi",
+    "DB_PORT": "5433",
+    "DB_PASSWORD": "123456",
+    "DB_DATABASE": "axeapi"
+  },
+  "postgres13": {
+    "_title": "PostgreSQL 13",
+    "NODE_ENV": "development",
+    "APP_PORT": "3000",
+    "DB_CLIENT": "postgres",
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "axeapi",
+    "DB_PORT": "5433",
+    "DB_PASSWORD": "123456",
+    "DB_DATABASE": "axeapi"
+  },
+  "postgres14": {
+    "_title": "PostgreSQL 14",
+    "NODE_ENV": "development",
+    "APP_PORT": "3000",
+    "DB_CLIENT": "postgres",
+    "DB_HOST": "127.0.0.1",
+    "DB_USER": "axeapi",
+    "DB_PORT": "5433",
+    "DB_PASSWORD": "123456",
+    "DB_DATABASE": "axeapi"
+  },
+  "postgres15": {
+    "_title": "PostgreSQL 15",
     "NODE_ENV": "development",
     "APP_PORT": "3000",
     "DB_CLIENT": "postgres",
