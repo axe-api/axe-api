@@ -3,10 +3,10 @@ import {
   HttpMethods,
   QueryFeature,
 } from "../../../../../../src/Enums";
-import { IRequestPack } from "../../../../../../src/Interfaces";
+import { IContext } from "../../../../../../src/Interfaces";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
-import { ModelMiddlewareDefinition } from "../../../../../../src/Types";
+import { ModelMiddleware } from "../../../../../../src/Types";
 
 class Post extends Model {
   get fillable() {
@@ -25,11 +25,11 @@ class Post extends Model {
     };
   }
 
-  get middlewares(): ModelMiddlewareDefinition {
+  get middlewares(): ModelMiddleware {
     return [
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-        middleware: async (context: IRequestPack) => {},
+        middleware: async (context: IContext) => {},
       },
     ];
   }

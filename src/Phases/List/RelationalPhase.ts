@@ -1,7 +1,7 @@
 import { getRelatedData } from "../../Handlers/Helpers";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   // We should try to get related data if there is any
   await getRelatedData(
     context.version,

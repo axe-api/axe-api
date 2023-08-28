@@ -1,7 +1,7 @@
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { StatusCodes } from "../../Enums";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   if (context.query) {
     context.item = await context.query.first();
     if (!context.item) {

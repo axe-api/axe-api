@@ -1,10 +1,10 @@
-import { AdaptorTypes } from "../../Types";
+import { AdaptorType } from "../../Types";
 import RedisAdaptor from "./RedisAdaptor";
 import MemoryAdaptor from "./MemoryAdaptor";
 import { IRedisOptions } from "src/Interfaces";
 
 export default (
-  adaptor: AdaptorTypes,
+  adaptor: AdaptorType,
   redisOptions: IRedisOptions | undefined,
   prefix: string
 ) => {

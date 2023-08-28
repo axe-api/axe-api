@@ -4,15 +4,15 @@ import AxeRequest from "./AxeRequest";
 import AxeResponse from "./AxeResponse";
 import {
   AxeRequestResponsePair,
-  IRequestPack,
+  IContext,
   MiddlewareResolution,
 } from "../Interfaces";
 import {
-  DynamicFunctionType,
+  GeneralFunction,
   HandlerFunction,
   MiddlewareFunction,
   PhaseFunction,
-  StepTypes,
+  AxeFunction,
 } from "src/Types";
 
 export const toAxeRequestResponsePair = (
@@ -28,7 +28,7 @@ export const toAxeRequestResponsePair = (
 };
 
 export const resolveMiddlewares = (
-  args: DynamicFunctionType
+  args: GeneralFunction[]
 ): MiddlewareResolution => {
   const middlewares: MiddlewareFunction[] = args.slice(
     0,
@@ -55,9 +55,9 @@ export const isPhaseFunction = (callback: any): boolean => {
   return callback.length === 1;
 };
 
-export const toPhaseFunction = (callback: StepTypes): PhaseFunction => {
+export const toPhaseFunction = (callback: AxeFunction): PhaseFunction => {
   if (isMiddlewareFunction(callback)) {
-    return promisify((context: IRequestPack, next: any) =>
+    return promisify((context: IContext, next: any) =>
       (callback as MiddlewareFunction)(
         context.req.original,
         context.res.original,
@@ -67,7 +67,7 @@ export const toPhaseFunction = (callback: StepTypes): PhaseFunction => {
   }
 
   if (isHandlerFunction(callback)) {
-    return (context: IRequestPack) =>
+    return (context: IContext) =>
       (callback as HandlerFunction)(context.req, context.res);
   }
 

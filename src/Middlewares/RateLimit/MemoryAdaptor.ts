@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
-import IAdaptor from "./IAdaptor";
+import { ICacheAdaptor } from "src/Interfaces";
 
-class MemoryAdaptor implements IAdaptor {
+class MemoryAdaptor implements ICacheAdaptor {
   private client: NodeCache;
   private prefix: string;
 
