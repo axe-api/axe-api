@@ -1,8 +1,8 @@
 import { Knex } from "knex";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { addForeignKeyQuery, addSoftDeleteQuery } from "../../Handlers/Helpers";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   context.query = (context.database as Knex).from(context.model.instance.table);
 
   // If there is a relation, we should bind it

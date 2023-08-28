@@ -1,6 +1,6 @@
 import connect from "connect";
 import bodyParser from "body-parser";
-import { DynamicFunctionType } from "../Types";
+import { GeneralFunction } from "../Types";
 import URLService from "./URLService";
 import LogService from "./LogService";
 import RateLimitMiddleware, {
@@ -67,7 +67,7 @@ class App {
    *    }
    * );
    */
-  public get(url: string, ...args: DynamicFunctionType) {
+  public get(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("GET", url, handler, middlewares);
   }
@@ -86,7 +86,7 @@ class App {
    *    }
    * );
    */
-  public post(url: string, ...args: DynamicFunctionType) {
+  public post(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("POST", url, handler, middlewares);
   }
@@ -105,7 +105,7 @@ class App {
    *    }
    * );
    */
-  public put(url: string, ...args: DynamicFunctionType) {
+  public put(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("PUT", url, handler, middlewares);
   }
@@ -124,7 +124,7 @@ class App {
    *    }
    * );
    */
-  public patch(url: string, ...args: DynamicFunctionType) {
+  public patch(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("PATCH", url, handler, middlewares);
   }
@@ -143,7 +143,7 @@ class App {
    *    }
    * );
    */
-  public delete(url: string, ...args: DynamicFunctionType) {
+  public delete(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("DELETE", url, handler, middlewares);
   }

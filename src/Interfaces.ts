@@ -15,10 +15,11 @@ import {
 } from "./Enums";
 import Model from "./Model";
 import {
-  AdaptorTypes,
+  AdaptorType,
+  AxeFunction,
+  GeneralFunction,
   HandlerFunction,
-  HookFunctions,
-  MiddlewareFunction,
+  ModelHooks,
   PhaseFunction,
   SerializationFunction,
 } from "./Types";
@@ -71,7 +72,7 @@ export interface IRedisOptions {
 }
 
 export interface IRateLimitAdaptorConfig {
-  type: AdaptorTypes;
+  type: AdaptorType;
   redis?: IRedisOptions;
 }
 
@@ -155,9 +156,9 @@ export interface IGeneralHooks {
   onAfterInit: (app: App) => void | null;
 }
 
-export interface IHandlerBaseConfig<T> {
+export interface IHandlerBaseMiddleware {
   handler: HandlerTypes[];
-  middleware: T;
+  middleware: AxeFunction;
 }
 
 export interface IMethodBaseConfig<T> {
@@ -172,8 +173,8 @@ export interface IModelService {
   relations: IRelation[];
   columns: IColumn[];
   columnNames: string[];
-  hooks: HookFunctions;
-  events: HookFunctions;
+  hooks: ModelHooks;
+  events: ModelHooks;
   isRecursive: boolean;
   children: IModelService[];
   queryLimits: IQueryLimitConfig[];
@@ -205,7 +206,7 @@ export interface IRouteData {
   relation: IRelation | null;
 }
 
-export interface IRequestPack extends IRouteData {
+export interface IContext extends IRouteData {
   api: IAPI;
   req: AxeRequest;
   res: AxeResponse;
@@ -298,6 +299,36 @@ export interface AxeRequestResponsePair {
 }
 
 export interface MiddlewareResolution {
-  middlewares: (MiddlewareFunction | HandlerFunction)[];
+  middlewares: GeneralFunction[];
   handler: HandlerFunction;
+}
+
+export interface IStepDefinition {
+  name: string;
+  get(model: IModelService): PhaseFunction;
+  isAsync(): boolean;
+}
+
+export interface ICacheAdaptor {
+  get(key: string): Promise<string | null>;
+
+  set(key: string, value: string, ttl: number): Promise<void>;
+
+  decr(key: string, ttl: number): Promise<void>;
+}
+
+export interface IRateLimitResponse {
+  success: boolean;
+  limit: number;
+  remaining: number;
+}
+
+export interface IURLPair {
+  method: string;
+  pattern: string;
+  data: IRouteData;
+  phases: IPhaseDefinition[];
+  hasTransaction: boolean;
+  params?: any;
+  customHandler?: HandlerFunction;
 }

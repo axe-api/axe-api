@@ -1,7 +1,7 @@
 import { filterHiddenFields, serializeData } from "../../Handlers/Helpers";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   // Serializing the data by the model's serialize method
   context.item = await serializeData(
     context.version,

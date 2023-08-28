@@ -1,8 +1,7 @@
 import { createClient, RedisClientType } from "redis";
-import IAdaptor from "./IAdaptor";
-import { IRedisOptions } from "../../Interfaces";
+import { ICacheAdaptor, IRedisOptions } from "../../Interfaces";
 
-class RedisAdaptor implements IAdaptor {
+class RedisAdaptor implements ICacheAdaptor {
   private client: RedisClientType;
   private prefix: string;
 

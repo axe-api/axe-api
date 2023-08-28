@@ -1,11 +1,11 @@
 import { QueryFeature } from "../../../../../../src/Enums";
 import Model from "../../../../../../src/Model";
 import { allow } from "../../../../../../src/Services";
-import { IRequestPack } from "../../../../../../src/Interfaces";
+import { IContext } from "../../../../../../src/Interfaces";
 
 class Comment extends Model {
   get middlewares() {
-    return [(context: IRequestPack) => {}];
+    return [(context: IContext) => {}];
   }
 
   get transaction() {

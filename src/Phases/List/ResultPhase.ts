@@ -1,8 +1,8 @@
 import { Knex } from "knex";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { LogService } from "../../Services";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   const { database, isTransactionOpen, result, res } = context;
 
   // If there is a valid transaction, we should commit it

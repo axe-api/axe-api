@@ -1,11 +1,11 @@
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { StatusCodes } from "../../Enums";
 import {
   addForeignKeyQuery,
   checkPrimaryKeyValueType,
 } from "../../Handlers/Helpers";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   if (context.queryParser && context.query && context.conditions) {
     // Users should be able to filter records
     context.queryParser.applyWheres(context.query, context.conditions?.q || []);
