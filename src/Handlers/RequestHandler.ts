@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { APIService, IoCService, LogService } from "../Services";
 import URLService from "../Services/URLService";
-import { IRequestPack } from "../Interfaces";
+import { IContext } from "../Interfaces";
 import { Knex } from "knex";
 import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "../Exceptions/ApiError";
@@ -41,7 +41,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     trx = await database.transaction();
   }
 
-  const context: IRequestPack = {
+  const context: IContext = {
     ...match.data,
     params: match.params,
     api,

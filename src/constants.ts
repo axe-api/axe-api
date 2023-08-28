@@ -6,9 +6,8 @@ import {
   QueryFeature,
   Relationships,
 } from "./Enums";
-import { AxeConfig, AxeVersionConfig, IModelService } from "./Interfaces";
+import { AxeConfig, AxeVersionConfig, IStepDefinition } from "./Interfaces";
 import { allow, deny } from "./Services/LimitService";
-import { PhaseFunction } from "./Types";
 import Single from "./Phases/Single";
 import List from "./Phases/List";
 import Paginate from "./Phases/Paginate";
@@ -19,6 +18,9 @@ import Update from "./Phases/Update";
 import Patch from "./Phases/Patch";
 import Delete from "./Phases/Delete";
 import ForceDelete from "./Phases/ForceDelete";
+import Phase from "./Steps/Phase";
+import Hook from "./Steps/Hook";
+import Event from "./Steps/Event";
 
 export const RESERVED_KEYWORDS: string[] = [
   "force",
@@ -165,75 +167,7 @@ export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
   [HandlerTypes.ALL]: HttpMethods.GET,
 };
 
-export interface ICycleDefinition {
-  name: string;
-  get(model: IModelService): PhaseFunction;
-  isAsync(): boolean;
-}
-
-class Phase implements ICycleDefinition {
-  private callback: PhaseFunction;
-  private phaseName: string;
-
-  constructor(name: string, callback: PhaseFunction) {
-    this.phaseName = name;
-    this.callback = callback;
-  }
-
-  get(): PhaseFunction {
-    return this.callback;
-  }
-
-  get name() {
-    return this.phaseName;
-  }
-
-  isAsync() {
-    return true;
-  }
-}
-
-class Hook implements ICycleDefinition {
-  private hookFunctionType: HookFunctionTypes;
-
-  constructor(hookFunctionType: HookFunctionTypes) {
-    this.hookFunctionType = hookFunctionType;
-  }
-
-  get(model: IModelService): PhaseFunction {
-    return model.hooks[this.hookFunctionType];
-  }
-
-  get name() {
-    return `hook:${this.hookFunctionType}`;
-  }
-
-  isAsync() {
-    return true;
-  }
-}
-
-class Event implements ICycleDefinition {
-  private hookFunctionType: HookFunctionTypes;
-
-  constructor(hookFunctionType: HookFunctionTypes) {
-    this.hookFunctionType = hookFunctionType;
-  }
-
-  get(model: IModelService): PhaseFunction {
-    return model.events[this.hookFunctionType];
-  }
-
-  get name() {
-    return `event:${this.hookFunctionType}`;
-  }
-
-  isAsync() {
-    return false;
-  }
-}
-
-export const HANDLER_CYLES: Record<HandlerTypes, ICycleDefinition[]> = {
+export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
   [HandlerTypes.INSERT]: [
     new Phase("insert.prepare", Store.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeInsert),

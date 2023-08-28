@@ -1,9 +1,9 @@
 import Validator from "validatorjs";
 import { HttpMethods, StatusCodes, TimestampColumns } from "../../Enums";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { bindTimestampValues, getMergedFormData } from "../../Handlers/Helpers";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   const requestMethod: HttpMethods = context.req
     .method as unknown as HttpMethods;
   const fillables = context.model.instance.getFillableFields(requestMethod);

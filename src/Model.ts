@@ -4,17 +4,12 @@ import {
   IRelation,
   IMethodBaseConfig,
   IQueryLimitConfig,
-  IHandlerBaseConfig,
+  IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
-import {
-  FieldList,
-  ModelMiddlewareDefinition,
-  StepTypes,
-  ModelValidation,
-} from "./Types";
+import { ModelMiddleware, AxeFunction, ModelValidation } from "./Types";
 
 class Model {
   /**
@@ -56,10 +51,10 @@ class Model {
    *  get fillable() {
    *    return ["name", "email", "password"]
    *  }
-   * @type {(FieldList | IMethodBaseConfig)}
+   * @type {(string[] | IMethodBaseConfig)}
    * @tutorial https://axe-api.com/reference/model-fillable.html
    */
-  get fillable(): FieldList | IMethodBaseConfig<FieldList> {
+  get fillable(): string[] | IMethodBaseConfig<string[]> {
     return [];
   }
 
@@ -112,10 +107,10 @@ class Model {
    *      }
    *    ]
    *  }
-   * @type {ModelMiddlewareDefinition}
+   * @type {ModelMiddleware}
    * @tutorial https://axe-api.com/reference/model-middlewares.html
    */
-  get middlewares(): ModelMiddlewareDefinition {
+  get middlewares(): ModelMiddleware {
     return [];
   }
 
@@ -129,10 +124,10 @@ class Model {
    *  get hiddens() {
    *    return ["password_salt", "password_hash", "github_token"]
    *  }
-   * @type {FieldList}
+   * @type {string[]}
    * @tutorial https://axe-api.com/reference/model-hiddens.html
    */
-  get hiddens(): FieldList {
+  get hiddens(): string[] {
     return [];
   }
 
@@ -314,7 +309,7 @@ class Model {
       return this.fillable;
     }
 
-    const values: IMethodBaseConfig<FieldList> = this.fillable;
+    const values: IMethodBaseConfig<string[]> = this.fillable;
     switch (methodType) {
       case HttpMethods.PATCH:
         return values.PATCH ?? [];
@@ -345,14 +340,14 @@ class Model {
     }
   }
 
-  getMiddlewares(handlerType: HandlerTypes): StepTypes[] {
-    const results: StepTypes[] = [];
+  getMiddlewares(handlerType: HandlerTypes): AxeFunction[] {
+    const results: AxeFunction[] = [];
     const middlewares = this.middlewares;
 
     if (Array.isArray(middlewares)) {
       (middlewares as Array<any>).forEach((item) => {
         if (item?.handler) {
-          const handlerBasedMiddlewares = item as IHandlerBaseConfig<StepTypes>;
+          const handlerBasedMiddlewares = item as IHandlerBaseMiddleware;
           if (handlerBasedMiddlewares.handler.includes(handlerType)) {
             results.push(handlerBasedMiddlewares.middleware);
           }
@@ -361,8 +356,7 @@ class Model {
         }
       });
     } else {
-      const handlerBasedMiddlewares =
-        middlewares as IHandlerBaseConfig<StepTypes>;
+      const handlerBasedMiddlewares = middlewares as IHandlerBaseMiddleware;
       if (handlerBasedMiddlewares.handler.includes(handlerType)) {
         results.push(handlerBasedMiddlewares.middleware);
       }

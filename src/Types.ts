@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { IHandlerBaseConfig, IRequestPack } from "./Interfaces";
+import { IHandlerBaseMiddleware, IContext } from "./Interfaces";
 import AxeRequest from "./Services/AxeRequest";
 import AxeResponse from "./Services/AxeResponse";
 import { HookFunctionTypes } from "./Enums";
@@ -8,11 +8,19 @@ import { SchemaInspector } from "knex-schema-inspector/lib/types/schema-inspecto
 
 export type ModelValidation = Record<string, string>;
 
-export type FieldList = string[];
+export type ModelHooks = Record<HookFunctionTypes, PhaseFunction>;
+
+export type ModelMiddleware = Array<AxeFunction | IHandlerBaseMiddleware>;
+
+export type AdaptorType = "redis" | "memory";
 
 export type DefaultResponse = Promise<void> | void | undefined;
 
-export type AdaptorTypes = "redis" | "memory";
+export type NextFunction = (error: any) => void;
+
+export type SchemaInspectorFuction = (database: Knex) => SchemaInspector;
+
+export type SerializationFunction = (item: any, request: AxeRequest) => any;
 
 export type MiddlewareFunction = (
   req: IncomingMessage,
@@ -25,20 +33,8 @@ export type HandlerFunction = (
   response: AxeResponse
 ) => DefaultResponse;
 
-export type PhaseFunction = (context: IRequestPack) => DefaultResponse;
+export type PhaseFunction = (context: IContext) => DefaultResponse;
 
-export type SerializationFunction = (item: any, request: AxeRequest) => any;
+export type GeneralFunction = MiddlewareFunction | HandlerFunction;
 
-export type HookFunctions = Record<HookFunctionTypes, PhaseFunction>;
-
-export type NextFunction = (error: any) => void;
-
-export type DynamicFunctionType = (MiddlewareFunction | HandlerFunction)[];
-
-export type StepTypes = MiddlewareFunction | HandlerFunction | PhaseFunction;
-
-export type ModelMiddlewareDefinition = Array<
-  StepTypes | IHandlerBaseConfig<StepTypes>
->;
-
-export type SchemaInspectorTypes = (database: Knex) => SchemaInspector;
+export type AxeFunction = GeneralFunction | PhaseFunction;

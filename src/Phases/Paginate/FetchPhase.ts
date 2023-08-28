@@ -1,7 +1,7 @@
 import { addForeignKeyQuery } from "../../Handlers/Helpers";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   if (context.query && context.queryParser && context.conditions) {
     // Users should be able to select some fields to show.
     context.queryParser.applyFields(context.query, context.conditions.fields);

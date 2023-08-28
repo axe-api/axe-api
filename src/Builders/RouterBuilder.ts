@@ -17,7 +17,7 @@ import {
   APIService,
 } from "../Services";
 import URLService from "../Services/URLService";
-import { StepTypes } from "src/Types";
+import { AxeFunction } from "src/Types";
 import App from "../Services/App";
 
 class RouterBuilder {
@@ -82,7 +82,7 @@ class RouterBuilder {
       // Creating the middleware list for the route. As default, we support some
       // internal middlewares such as `Accept Language Middleware` which parse
       // the "accept-language" header to use in the application general.
-      const middlewares: StepTypes[] = [
+      const middlewares: AxeFunction[] = [
         ...model.instance.getMiddlewares(handlerType),
       ];
 
@@ -161,7 +161,7 @@ class RouterBuilder {
   private async addRoute(
     handlerType: HandlerTypes,
     url: string,
-    middlewares: StepTypes[],
+    middlewares: AxeFunction[],
     model: IModelService,
     parentModel: IModelService | null,
     relation: IRelation | null
