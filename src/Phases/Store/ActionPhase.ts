@@ -1,7 +1,7 @@
 import { StatusCodes } from "../../Enums";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   const [returningResult] = await context
     .database(context.model.instance.table)
     .insert(context.formData)

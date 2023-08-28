@@ -8,7 +8,7 @@ import {
 } from "../Interfaces";
 import { LogService, ModelListService } from "../Services";
 import { RESERVED_KEYWORDS } from "../constants";
-import { FieldList, ModelValidation } from "../Types";
+import { ModelValidation } from "../Types";
 
 const COLUMN_BASED_QUERY_LIMITS: QueryFeature[] = [
   QueryFeature.Sorting,
@@ -157,7 +157,7 @@ class SchemaValidatorService {
       return fillable;
     }
 
-    const config = fillable as IMethodBaseConfig<FieldList>;
+    const config = fillable as IMethodBaseConfig<string[]>;
     return [
       ...(config.POST || []),
       ...(config.PUT || []),

@@ -1,6 +1,6 @@
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   if (context.query) {
     await context.query
       .where(

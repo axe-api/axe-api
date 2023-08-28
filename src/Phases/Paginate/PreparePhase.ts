@@ -1,9 +1,9 @@
 import { QueryService } from "../../Services";
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { Knex } from "knex";
 import { addSoftDeleteQuery } from "../../Handlers/Helpers";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   context.queryParser = new QueryService(
     context.model,
     context.version.modelList.get(),

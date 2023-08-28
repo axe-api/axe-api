@@ -2,17 +2,19 @@ import { promisify } from "util";
 import {
   HandlerFunction,
   MiddlewareFunction,
-  StepTypes,
+  AxeFunction,
   NextFunction,
   PhaseFunction,
+  GeneralFunction,
 } from "../Types";
 import { HANDLER_CYLES } from "../constants";
 import {
   IModelService,
   IPhaseDefinition,
-  IRequestPack,
+  IContext,
   IRouteData,
   IVersion,
+  IURLPair,
 } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
@@ -43,24 +45,14 @@ const check = (url: string, pattern: string) => {
   return null; // URL does not match the pattern
 };
 
-interface Pair {
-  method: string;
-  pattern: string;
-  data: IRouteData;
-  phases: IPhaseDefinition[];
-  hasTransaction: boolean;
-  params?: any;
-  customHandler?: HandlerFunction;
-}
-
 class URLService {
-  private static urls: Pair[] = [];
+  private static urls: IURLPair[] = [];
 
   static async add(
     method: string,
     pattern: string,
     data: IRouteData,
-    middlewares: StepTypes[]
+    middlewares: AxeFunction[]
   ) {
     const phases = this.getDefaultPhases(middlewares);
 
@@ -101,7 +93,7 @@ class URLService {
     method: string,
     pattern: string,
     customHandler: HandlerFunction,
-    middlewares: (MiddlewareFunction | HandlerFunction)[]
+    middlewares: GeneralFunction[]
   ) {
     LogService.info(`${method} ${pattern}`);
 
@@ -109,16 +101,15 @@ class URLService {
       return {
         isAsync: false,
         name: `middleware:test`,
-        callback: async (context: IRequestPack) => {
+        callback: async (context: IContext) => {
           if (isMiddlewareFunction(middleware)) {
             // It should be wrapped
-            const caller = promisify(
-              (context: IRequestPack, next: NextFunction) =>
-                (middleware as MiddlewareFunction)(
-                  context.req.original,
-                  context.res.original,
-                  next
-                )
+            const caller = promisify((context: IContext, next: NextFunction) =>
+              (middleware as MiddlewareFunction)(
+                context.req.original,
+                context.res.original,
+                next
+              )
             );
             await caller(context);
           } else {
@@ -134,7 +125,7 @@ class URLService {
     phases.push({
       isAsync: false,
       name: "customHandler",
-      callback: async (context: IRequestPack) => {
+      callback: async (context: IContext) => {
         customHandler(context.req, context.res);
       },
     });
@@ -179,9 +170,9 @@ class URLService {
   }
 
   private static getDefaultPhases(
-    middlewares: StepTypes[]
+    middlewares: AxeFunction[]
   ): IPhaseDefinition[] {
-    // We should convert to all StepTypes functions to PhaseFunctions
+    // We should convert to all AxeFunction functions to PhaseFunctions
     const callbacks: PhaseFunction[] = middlewares.map(toPhaseFunction);
 
     const phases: IPhaseDefinition[] = [

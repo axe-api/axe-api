@@ -5,7 +5,7 @@ import {
   IQuery,
   IVersion,
   IWith,
-  IRequestPack,
+  IContext,
 } from "../Interfaces";
 import { Knex } from "knex";
 import {
@@ -62,7 +62,7 @@ export const getMergedFormData = (
 export const callHooks = async (
   model: IModelService,
   type: HookFunctionTypes,
-  params: IRequestPack
+  params: IContext
 ) => {
   if (model.hooks[type]) {
     const hookFunction: PhaseFunction = model.hooks[type];

@@ -14,7 +14,7 @@ import {
   ModelListService,
 } from "../Services";
 import { DEFAULT_METHODS_OF_MODELS } from "../constants";
-import { SchemaInspectorTypes, SerializationFunction } from "../Types";
+import { SchemaInspectorFuction, SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
 
 class ModelResolver {
@@ -91,7 +91,7 @@ class ModelResolver {
   private async setDatabaseColumns(modelList: ModelListService) {
     const database = await IoCService.use<Knex>("Database");
 
-    const schemaInspector = await IoCService.use<SchemaInspectorTypes>(
+    const schemaInspector = await IoCService.use<SchemaInspectorFuction>(
       "SchemaInspector"
     );
 

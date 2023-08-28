@@ -1,5 +1,5 @@
 import Model from "../../../../../../src/Model";
-import { IRequestPack } from "../../../../../../src/Interfaces";
+import { IContext } from "../../../../../../src/Interfaces";
 import { HandlerTypes } from "../../../../../../src/Enums";
 
 class Login extends Model {
@@ -7,11 +7,11 @@ class Login extends Model {
     return [
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.INSERT],
-        middleware: async (context: IRequestPack) => {},
+        middleware: async (context: IContext) => {},
       },
       {
         handler: [HandlerTypes.PAGINATE, HandlerTypes.PATCH],
-        middleware: async (context: IRequestPack) => {},
+        middleware: async (context: IContext) => {},
       },
     ];
   }

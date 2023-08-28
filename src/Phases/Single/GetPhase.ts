@@ -1,8 +1,8 @@
-import { IRequestPack } from "../../Interfaces";
+import { IContext } from "../../Interfaces";
 import { checkPrimaryKeyValueType } from "../../Handlers/Helpers";
 import { StatusCodes } from "../../Enums";
 
-export default async (context: IRequestPack) => {
+export default async (context: IContext) => {
   // We should check the parameter type
   const value = context.req.params[context.model.instance.primaryKey];
   checkPrimaryKeyValueType(context.model, value);

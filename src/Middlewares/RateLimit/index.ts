@@ -4,20 +4,15 @@ import {
   AxeConfig,
   IRateLimitConfig,
   IRateLimitOptions,
-  IRequestPack,
+  IContext,
+  ICacheAdaptor,
+  IRateLimitResponse,
 } from "../../Interfaces";
 import { APIService, LogService } from "../../Services";
-import IAdaptor from "./IAdaptor";
 import { nanoid } from "nanoid";
 import { StatusCodes } from "../../Enums";
 
-let adaptor: IAdaptor;
-
-interface IRateLimitResponse {
-  success: boolean;
-  limit: number;
-  remaining: number;
-}
+let adaptor: ICacheAdaptor;
 
 const checkRateLimit = async function (
   clientKey: string,
@@ -110,7 +105,7 @@ export const rateLimit = (options?: IRateLimitOptions) => {
   // For each model middleware, we should use a different ID for the cache key
   const id = nanoid();
 
-  return async (context: IRequestPack) => {
+  return async (context: IContext) => {
     // API configuration fetching
     const api = APIService.getInstance();
 
