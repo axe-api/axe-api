@@ -32,7 +32,7 @@ export default async (pack: IRequestPack) => {
   queryParser.applyFields(query, conditions.fields);
 
   // Binding parent id if there is.
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   await callHooks(model, HookFunctionTypes.onBeforePaginate, {
     ...pack,
