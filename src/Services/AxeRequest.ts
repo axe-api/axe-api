@@ -24,7 +24,7 @@ class AxeRequest {
       this.language = AcceptLanguageResolver.resolve(
         (this.request.headers["accept-language"] as string) || "",
         this.version.config.supportedLanguages || ["en"],
-        this.version.config.defaultLanguage || "en"
+        this.version.config.defaultLanguage || "en",
       );
     } else {
       this.language = {

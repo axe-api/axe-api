@@ -5,7 +5,7 @@ const onBeforeInit = async (app: App) => {
   app.use(
     cors({
       origin: true,
-    })
+    }),
   );
   app.get("/health/before", async (req: AxeRequest, res: AxeResponse) => {
     res.json({ health: true });
@@ -14,7 +14,7 @@ const onBeforeInit = async (app: App) => {
 
 const onAfterInit = async (app: App) => {
   app.get("/health/after", async (req: AxeRequest, res: AxeResponse) =>
-    res.json({ health: true })
+    res.json({ health: true }),
   );
 };
 

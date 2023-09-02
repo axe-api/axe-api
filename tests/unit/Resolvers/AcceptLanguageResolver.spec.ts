@@ -17,7 +17,7 @@ describe("AcceptLanguageResolver", () => {
   test(".resolve() should able to return the default language when the value is asterisk", async () => {
     expect(AcceptLanguageResolver.resolve("*", ["en"], "en").title).toBe("en");
     expect(AcceptLanguageResolver.resolve("*", ["en"], "en-GB").title).toBe(
-      "en-GB"
+      "en-GB",
     );
   });
 
@@ -25,35 +25,35 @@ describe("AcceptLanguageResolver", () => {
     let result = AcceptLanguageResolver.resolve(
       "fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5",
       ["en"],
-      "en"
+      "en",
     );
     expect(result.title).toBe("en");
 
     result = AcceptLanguageResolver.resolve(
       "fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5",
       ["fr", "en"],
-      "en"
+      "en",
     );
     expect(result.title).toBe("fr");
 
     result = AcceptLanguageResolver.resolve(
       "fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5",
       ["fr", "fr-CH", "en"],
-      "en"
+      "en",
     );
     expect(result.title).toBe("fr-CH");
 
     result = AcceptLanguageResolver.resolve(
       "fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5, fr-CH",
       ["fr", "fr-CH", "en"],
-      "en"
+      "en",
     );
     expect(result.title).toBe("fr-CH");
 
     result = AcceptLanguageResolver.resolve(
       "fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5, fr-CH",
       ["tr"],
-      "en"
+      "en",
     );
     expect(result.title).toBe("en");
 
@@ -63,7 +63,7 @@ describe("AcceptLanguageResolver", () => {
     result = AcceptLanguageResolver.resolve(
       "tr-TR,en;q=0.8",
       ["en", "tr"],
-      "en-GB"
+      "en-GB",
     );
     expect(result.title).toBe("tr");
   });

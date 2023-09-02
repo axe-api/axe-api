@@ -29,11 +29,11 @@ class ModelResolver {
     LogService.debug(`[${this.version.name}] Model list has been resolved`);
     await this.setModelRelations(modelList);
     LogService.debug(
-      `[${this.version.name}] Model relations have been resolved`
+      `[${this.version.name}] Model relations have been resolved`,
     );
     await this.setDatabaseColumns(modelList);
     LogService.debug(
-      `[${this.version.name}] Database columns have been bonded with models`
+      `[${this.version.name}] Database columns have been bonded with models`,
     );
     await this.setModelHooks(modelList, Extensions.Hooks);
     LogService.debug(`[${this.version.name}] Model hooks have been loaded`);
@@ -41,11 +41,11 @@ class ModelResolver {
     LogService.debug(`[${this.version.name}] Model events have been loaded`);
     await this.setModelSerializations(modelList);
     LogService.debug(
-      `[${this.version.name}] Model serializers have been loaded`
+      `[${this.version.name}] Model serializers have been loaded`,
     );
     await this.setModelQueryLimits(modelList);
     LogService.debug(
-      `[${this.version.name}] Model query limits have been loaded`
+      `[${this.version.name}] Model query limits have been loaded`,
     );
 
     this.version.modelList = modelList;
@@ -62,7 +62,7 @@ class ModelResolver {
 
         if (typeof relationFunction !== "function") {
           throw new Error(
-            `Model relation definition should be a function: ${model.name}.${relationMethod}`
+            `Model relation definition should be a function: ${model.name}.${relationMethod}`,
           );
         }
 
@@ -78,7 +78,7 @@ class ModelResolver {
     const list: IModelService[] = [];
     const fileResolver = new FileResolver();
     const models = await fileResolver.resolve<Model>(
-      this.version.folders.models
+      this.version.folders.models,
     );
 
     for (const key in models) {
@@ -91,9 +91,8 @@ class ModelResolver {
   private async setDatabaseColumns(modelList: ModelListService) {
     const database = await IoCService.use<Knex>("Database");
 
-    const schemaInspector = await IoCService.use<SchemaInspectorFuction>(
-      "SchemaInspector"
-    );
+    const schemaInspector =
+      await IoCService.use<SchemaInspectorFuction>("SchemaInspector");
 
     const inspector = schemaInspector(database);
     const columns: IColumn[] = [];
@@ -105,19 +104,19 @@ class ModelResolver {
             ...column,
             table_name: table,
           };
-        })
+        }),
       );
     }
 
     for (const model of modelList.get()) {
       const modelColumns = columns.filter(
-        (column) => column.table_name === model.instance.table
+        (column) => column.table_name === model.instance.table,
       );
 
       if (modelColumns.length === 0) {
         throw new AxeError(
           AxeErrorCode.TABLE_DOESNT_HAVE_ANY_COLUMN,
-          `The "${model.instance.table}" table doesn't have any column.`
+          `The "${model.instance.table}" table doesn't have any column.`,
         );
       }
 
@@ -127,7 +126,7 @@ class ModelResolver {
 
   private async setModelHooks(
     modelList: ModelListService,
-    hookType: Extensions
+    hookType: Extensions,
   ) {
     // What kind of hooks that we can have
     const hookList = Object.keys(HookFunctionTypes);
@@ -155,7 +154,7 @@ class ModelResolver {
       if (!currentModel) {
         throw new AxeError(
           AxeErrorCode.UNDEFINED_HOOK_MODEL_RELATION,
-          `Undefined model relation: ${subfolderPath}`
+          `Undefined model relation: ${subfolderPath}`,
         );
       }
 
@@ -168,11 +167,11 @@ class ModelResolver {
           currentModel.setExtensions(
             hookType,
             hookName as HookFunctionTypes,
-            hooks[hookName].default
+            hooks[hookName].default,
           );
         } else {
           LogService.warn(
-            `Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`
+            `Invalid ${hookType} type: "${hookName}" in this folder: "${subfolderPath}"`,
           );
         }
       }
@@ -201,14 +200,14 @@ class ModelResolver {
 
     // If there is any hook or event file in the root level
     const hasHookorEvent = files.some(
-      (file) => file.includes("Hook.ts") || file.includes("Event.ts")
+      (file) => file.includes("Hook.ts") || file.includes("Event.ts"),
     );
 
     // Throwing an exception
     if (hasHookorEvent) {
       throw new AxeError(
         AxeErrorCode.UNACCEPTABLE_HOOK_FILE,
-        `All hook or event files should be located under a model folder: ${source}`
+        `All hook or event files should be located under a model folder: ${source}`,
       );
     }
   }
@@ -216,7 +215,7 @@ class ModelResolver {
   private async setModelSerializations(modelList: ModelListService) {
     const fileResolver = new FileResolver();
     const serializations = await fileResolver.resolveContent(
-      this.version.folders.serialization
+      this.version.folders.serialization,
     );
 
     for (const model of modelList.get()) {
@@ -247,10 +246,10 @@ class ModelResolver {
 
   private getInstanceMethods(obj: IModelService) {
     const properties: string[] = Object.getOwnPropertyNames(
-      obj.instance.constructor.prototype
+      obj.instance.constructor.prototype,
     );
     return properties.filter(
-      (name) => !DEFAULT_METHODS_OF_MODELS.includes(name)
+      (name) => !DEFAULT_METHODS_OF_MODELS.includes(name),
     );
   }
 }

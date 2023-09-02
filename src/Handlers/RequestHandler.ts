@@ -18,13 +18,13 @@ const return404 = (response: ServerResponse) => {
 export default async (
   request: IncomingMessage,
   response: ServerResponse,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   LogService.debug(`📥 ${request.method} ${request.url}`);
 
   const { axeRequest, axeResponse } = toAxeRequestResponsePair(
     request,
-    response
+    response,
   );
   const match = URLService.match(axeRequest);
 

@@ -33,7 +33,7 @@ describe("Multiple version support", () => {
       expect(true).toBe(false, "Sorting feature should not be supported.");
     } catch (error) {
       expect(error.response.data.error).toBe(
-        "Unsupported query feature: sorting [soft_delete_1.name]"
+        "Unsupported query feature: sorting [soft_delete_1.name]",
       );
     }
   });

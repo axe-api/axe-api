@@ -9,7 +9,7 @@ const testRunner = async (fullpath = "") => {
       bail: 1,
       testSequencer: path.join("..", "testSequencer.cjs"),
     },
-    ["."]
+    ["."],
   );
 };
 

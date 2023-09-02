@@ -11,6 +11,6 @@ export default async (context: IContext) => {
     context.version.modelList,
     context.database,
     context.handlerType,
-    context.req
+    context.req,
   );
 };

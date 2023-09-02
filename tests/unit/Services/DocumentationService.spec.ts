@@ -15,7 +15,7 @@ describe("DocumentationService", () => {
       HandlerTypes.PAGINATE,
       HttpMethods.GET,
       "api/users",
-      userService
+      userService,
     );
 
     const items: IRouteDocumentation[] = service.get();

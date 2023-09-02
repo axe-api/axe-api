@@ -23,7 +23,7 @@ class ModelTreeBuilder {
       childModels.push(
         ...model.relations
           .filter((relation) => relation.type === Relationships.HAS_MANY)
-          .map((relation) => relation.model)
+          .map((relation) => relation.model),
       );
     });
 
@@ -58,7 +58,7 @@ class ModelTreeBuilder {
     // We should add recursive models
     this.version.modelList.get().forEach((model) => {
       const recursiveRelations = model.relations.filter(
-        (relation) => relation.model === model.name
+        (relation) => relation.model === model.name,
       );
 
       if (recursiveRelations.length === 2) {

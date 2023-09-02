@@ -22,7 +22,7 @@ class DocumentationService {
     handler: HandlerTypes,
     method: HttpMethods,
     url: string,
-    model: IModelService
+    model: IModelService,
   ) {
     this.routes.push({
       version: version.name,

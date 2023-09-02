@@ -28,7 +28,7 @@ import AxeRequest from "src/Services/AxeRequest";
 export const bindTimestampValues = (
   formData: Record<string, any>,
   model: IModelService,
-  columnTypes: TimestampColumns[] = []
+  columnTypes: TimestampColumns[] = [],
 ) => {
   if (
     columnTypes.includes(TimestampColumns.CREATED_AT) &&
@@ -47,7 +47,7 @@ export const bindTimestampValues = (
 
 export const getMergedFormData = (
   req: AxeRequest,
-  fillables: string[]
+  fillables: string[],
 ): Record<string, any> => {
   const formData: Record<string, any> = {};
 
@@ -62,7 +62,7 @@ export const getMergedFormData = (
 export const callHooks = async (
   model: IModelService,
   type: HookFunctionTypes,
-  params: IContext
+  params: IContext,
 ) => {
   if (model.hooks[type]) {
     const hookFunction: PhaseFunction = model.hooks[type];
@@ -96,7 +96,7 @@ export const getParentColumn = (
 export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
   // We should check the parameter type
   const primaryColumn = model.columns.find(
-    (column) => column.name === model.instance.primaryKey
+    (column) => column.name === model.instance.primaryKey,
   );
 
   if (
@@ -112,7 +112,7 @@ export const addForeignKeyQuery = (
   query: Knex.QueryBuilder,
   model: IModelService,
   relation: IRelation | null,
-  parentModel: IModelService | null
+  parentModel: IModelService | null,
 ) => {
   if (relation && parentModel) {
     const parentColumn = getParentColumn(parentModel, relation);
@@ -124,7 +124,7 @@ export const addForeignKeyQuery = (
 
 const getPrimaryOrForeignKeyByRelation = (
   relation: IRelation,
-  dataField: string
+  dataField: string,
 ) => {
   if (dataField === "primaryKey") {
     return relation.primaryKey;
@@ -143,7 +143,7 @@ const uniqueByMap = <T>(array: T[]): T[] => {
 const serialize = (
   data: any,
   callback: SerializationFunction | null,
-  request: AxeRequest
+  request: AxeRequest,
 ): any => {
   if (!callback) {
     return data;
@@ -160,7 +160,7 @@ const globalSerializer = async (
   version: IVersion,
   itemArray: any,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: AxeRequest,
 ) => {
   if (!version.config.serializers) {
     return itemArray;
@@ -172,7 +172,7 @@ const globalSerializer = async (
     // Serialize data for all requests types.
     if (typeof configSerializer === "function") {
       callbacks.push(
-        configSerializer as unknown as (data: any, request: AxeRequest) => void
+        configSerializer as unknown as (data: any, request: AxeRequest) => void,
       );
       return;
     }
@@ -182,8 +182,8 @@ const globalSerializer = async (
       callbacks.push(
         ...(configSerializer.serializer as unknown as ((
           data: any,
-          request: AxeRequest
-        ) => void)[])
+          request: AxeRequest,
+        ) => void)[]),
       );
     }
   });
@@ -200,7 +200,7 @@ export const serializeData = async (
   itemArray: any,
   modelSerializer: SerializationFunction | null,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: AxeRequest,
 ): Promise<any[]> => {
   itemArray = serialize(itemArray, modelSerializer, request);
   itemArray = await globalSerializer(version, itemArray, handler, request);
@@ -209,7 +209,7 @@ export const serializeData = async (
 
 export const filterHiddenFields = (
   itemArray: any[],
-  hiddens: string[] | null
+  hiddens: string[] | null,
 ) => {
   if (hiddens === null) {
     return;
@@ -231,7 +231,7 @@ export const filterHiddenFields = (
 export const addSoftDeleteQuery = (
   model: IModelService,
   conditions: IQuery | null,
-  query: Knex.QueryBuilder
+  query: Knex.QueryBuilder,
 ) => {
   if (conditions !== null && conditions?.trashed === true) {
     valideteQueryFeature(model, QueryFeature.Trashed);
@@ -251,7 +251,7 @@ export const getRelatedData = async (
   modelList: ModelListService,
   database: Knex | Knex.Transaction,
   handler: HandlerTypes,
-  request: AxeRequest
+  request: AxeRequest,
 ) => {
   if (withArray.length === 0) {
     return;
@@ -263,7 +263,7 @@ export const getRelatedData = async (
     // Find the relation of the model. If the model doesn't have any relationship like the
     // user wants, we can't show anything.
     const definedRelation = model.relations.find(
-      (relation) => relation.name === clientQuery.relationship
+      (relation) => relation.name === clientQuery.relationship,
     );
     if (!definedRelation) {
       throw new ApiError(`Undefined relation: ${clientQuery.relationship}`);
@@ -271,7 +271,7 @@ export const getRelatedData = async (
 
     // Find the foreign model by the relationship
     const foreignModel = models.find(
-      (model) => model.name === definedRelation.model
+      (model) => model.name === definedRelation.model,
     );
     if (!foreignModel) {
       continue;
@@ -282,7 +282,7 @@ export const getRelatedData = async (
       model,
       RelationQueryFeatureMap[definedRelation.type],
       `${model.instance.table}.${definedRelation.name}`,
-      `${model.instance.table}.${definedRelation.name}`
+      `${model.instance.table}.${definedRelation.name}`,
     );
 
     let dataField = "primaryKey";
@@ -294,16 +294,16 @@ export const getRelatedData = async (
 
     const dataFieldKey = getPrimaryOrForeignKeyByRelation(
       definedRelation,
-      dataField
+      dataField,
     );
     const searchFieldKey = getPrimaryOrForeignKeyByRelation(
       definedRelation,
-      searchField
+      searchField,
     );
 
     // We should find the parent Primary Key values.
     const parentPrimaryKeyValues: any[] = data.map(
-      (item) => item[dataFieldKey]
+      (item) => item[dataFieldKey],
     );
 
     // Selecting the special field for the relations
@@ -318,17 +318,17 @@ export const getRelatedData = async (
       // We should check if any select column is a relationship name. If so,
       // we should remove that column name from the select columns
       const possibleThirthLevelRelations = foreignModel.relations.map(
-        (item) => item.name
+        (item) => item.name,
       );
 
       // Removing relationship values from the select column list
       selectColumns = selectColumns.filter(
-        (column) => !possibleThirthLevelRelations.includes(column)
+        (column) => !possibleThirthLevelRelations.includes(column),
       );
 
       // We should check if the column is defined on the table.
       const undefinedColumns = selectColumns.filter(
-        (column) => !foreignModel.columnNames.includes(column)
+        (column) => !foreignModel.columnNames.includes(column),
       );
       if (undefinedColumns.length > 0) {
         throw new ApiError(`Undefined columns: ${undefinedColumns.join(", ")}`);
@@ -347,7 +347,7 @@ export const getRelatedData = async (
     selectColumns = uniqueByMap(selectColumns);
 
     const foreignModelQuery = database(foreignModel.instance.table).select(
-      selectColumns
+      selectColumns,
     );
 
     // If the model is supported soft-delete we should check the data.
@@ -358,7 +358,7 @@ export const getRelatedData = async (
     // Fetching related records by foreignKey and primary key values.
     let relatedRecords = await foreignModelQuery.whereIn(
       searchFieldKey,
-      parentPrimaryKeyValues
+      parentPrimaryKeyValues,
     );
 
     // We should serialize related data if there is any serialization function
@@ -367,7 +367,7 @@ export const getRelatedData = async (
       relatedRecords,
       foreignModel.serialize,
       handler,
-      request
+      request,
     );
 
     // We should hide hidden fields if there is any
@@ -383,14 +383,14 @@ export const getRelatedData = async (
         modelList,
         database,
         handler,
-        request
+        request,
       );
     }
 
     // Binding relation data to the parent rows.
     data.forEach((row) => {
       let values = relatedRecords.filter(
-        (item) => item[searchFieldKey] === row[dataFieldKey]
+        (item) => item[searchFieldKey] === row[dataFieldKey],
       );
       if (definedRelation.type === Relationships.HAS_ONE) {
         values = values.length > 0 ? values[0] : null;

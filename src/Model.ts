@@ -249,7 +249,7 @@ class Model {
   hasMany(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
-        this.constructor.name.toLowerCase()
+        this.constructor.name.toLowerCase(),
       );
       foreignKey = `${currentModelName}_id`;
     }

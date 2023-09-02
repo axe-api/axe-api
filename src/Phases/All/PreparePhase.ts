@@ -7,7 +7,7 @@ export default async (context: IContext) => {
   context.queryParser = new QueryService(
     context.model,
     context.version.modelList.get(),
-    context.version.config
+    context.version.config,
   );
 
   // We should parse URL query string to use as condition in Lucid query
@@ -27,7 +27,7 @@ export default async (context: IContext) => {
     context.req,
     context.query,
     context.relation,
-    context.parentModel
+    context.parentModel,
   );
 
   // Users should be able to filter records
