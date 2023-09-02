@@ -29,6 +29,7 @@ import AxeResponse from "./Services/AxeResponse";
 import App from "./Services/App";
 import { LoggerOptions } from "pino";
 import { IncomingMessage } from "http";
+import { ErrorHandleFunction } from "connect";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -111,6 +112,8 @@ export interface AxeConfig extends IConfig {
   database: Knex.Config;
   pino: LoggerOptions;
   rateLimit: IRateLimitConfig;
+  errorHandler: ErrorHandleFunction;
+  docs: boolean;
 }
 
 export type IApplicationConfig = Partial<AxeConfig>;

@@ -5,7 +5,7 @@ import { IContext } from "../Interfaces";
 import { Knex } from "knex";
 import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "../Exceptions/ApiError";
-import { StatusCodes } from "../Enums";
+import { NextFunction } from "connect";
 
 const api = APIService.getInstance();
 
@@ -15,8 +15,12 @@ const return404 = (response: ServerResponse) => {
   response.end();
 };
 
-export default async (request: IncomingMessage, response: ServerResponse) => {
-  LogService.debug(`${request.method} ${request.url}`);
+export default async (
+  request: IncomingMessage,
+  response: ServerResponse,
+  next: NextFunction
+) => {
+  LogService.debug(`📥 ${request.method} ${request.url}`);
 
   const { axeRequest, axeResponse } = toAxeRequestResponsePair(
     request,
@@ -57,17 +61,17 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   for (const phase of match.phases) {
     // If there is an non-async phase, it should be an Event function
     if (phase.isAsync === false) {
+      LogService.debug(`\t🔄 ${phase.name}()`);
       phase.callback(context);
-      LogService.debug(`\t${phase.name}()✓`);
       continue;
     }
 
     // Middleware and hook calls
     try {
+      LogService.debug(`\t🔄 ${phase.name}()`);
       await phase.callback(context);
-      LogService.debug(`\t✓ ${phase.name}()`);
     } catch (error: any) {
-      LogService.error(`\t${error.message} ${phase.callback}`);
+      LogService.error(error);
 
       // Rollback transaction
       if (match.hasTransaction && trx) {
@@ -82,10 +86,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
           .json({ error: apiError.message });
       }
 
-      // TODO: We need an error handler.
-      axeResponse
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: error.toString() });
+      next(error);
       break;
     }
 
@@ -105,7 +106,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
       break;
     }
 
-    LogService.debug(`\tResponse ${context.res.statusCode()}`);
+    LogService.debug(`\t🟢 Response ${context.res.statusCode()}`);
     // We should brake the for-loop
     break;
   }
