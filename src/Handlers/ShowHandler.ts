@@ -35,7 +35,7 @@ export default async (pack: IRequestPack) => {
   queryParser.applyFields(query, conditions.fields);
 
   // If there is a relation, we should bind it
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   // We should check the parameter type
   const value = req.params[model.instance.primaryKey];

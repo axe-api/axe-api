@@ -35,7 +35,7 @@ export default async (pack: IRequestPack) => {
   }
 
   if (relation && parentModel) {
-    const parentColumn = getParentColumn(relation);
+    const parentColumn = getParentColumn(parentModel, relation);
     if (parentColumn) {
       formData[relation.foreignKey] = req.params[parentColumn];
     }

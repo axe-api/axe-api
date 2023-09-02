@@ -32,7 +32,7 @@ export default async (pack: IRequestPack) => {
   queryParser.applyFields(query, conditions.fields);
 
   // Binding parent id if there is.
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   // Users should be able to filter records
   queryParser.applyWheres(query, conditions.q);

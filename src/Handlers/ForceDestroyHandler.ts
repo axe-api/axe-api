@@ -29,7 +29,7 @@ export default async (pack: IRequestPack) => {
   }
 
   // If there is a relation, we should bind it
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   await callHooks(model, HookFunctionTypes.onBeforeForceDeleteQuery, {
     ...pack,
