@@ -1,5 +1,12 @@
 # Release Notes
 
+## [0.31.5 (2023-09-092)](https://github.com/axe-api/axe-api/compare/0.31.5...0.31.4)
+
+### Fixed
+
+- URL parameter naming issue [#168](https://github.com/axe-api/axe-api/issues/168)
+- `LIKE` operator should not be able to use on non-string columns [#96](https://github.com/axe-api/axe-api/issues/96)
+
 ## [0.31.4 (2023-07-27)](https://github.com/axe-api/axe-api/compare/0.31.4...0.31.3)
 
 ### Fixed
