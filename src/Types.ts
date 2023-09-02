@@ -16,7 +16,7 @@ export type AdaptorType = "redis" | "memory";
 
 export type DefaultResponse = Promise<void> | void | undefined;
 
-export type NextFunction = (error: any) => void;
+export type NextFunction = (error?: any) => void;
 
 export type SchemaInspectorFuction = (database: Knex) => SchemaInspector;
 

@@ -74,6 +74,10 @@ class AxeResponse {
   statusCode() {
     return this.response.statusCode;
   }
+
+  header(key: string, value: string) {
+    this.original.setHeader(key, value);
+  }
 }
 
 export default AxeResponse;

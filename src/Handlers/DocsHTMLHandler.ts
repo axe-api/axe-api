@@ -9,7 +9,7 @@ export default async (req: AxeRequest, res: AxeResponse) => {
     const content = (await result.text())
       .replaceAll(`src="`, `src="${CLOUD_FRONT_DOMAIN}`)
       .replaceAll(`href="`, `href="${CLOUD_FRONT_DOMAIN}`);
-
+    res.header("Content-type", "text/html");
     res.send(content);
   } catch (error) {
     res.send("404");
