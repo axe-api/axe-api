@@ -11,7 +11,7 @@ class GeneralHookResolver {
   public async resolve(): Promise<IGeneralHooks> {
     const fileResolver = new FileResolver();
     const content = await fileResolver.resolveContent(
-      this.version.folders.root
+      this.version.folders.root,
     );
 
     if (content?.init) {

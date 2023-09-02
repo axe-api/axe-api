@@ -41,7 +41,7 @@ class ModelService implements IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: PhaseFunction
+    data: PhaseFunction,
   ) {
     if (type == Extensions.Hooks) {
       this.setHooks(hookFunctionType, data);

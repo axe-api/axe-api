@@ -5,7 +5,7 @@ export default async (context: IContext) => {
     await context.query
       .where(
         context.model.instance.primaryKey,
-        context.item[context.model.instance.primaryKey]
+        context.item[context.model.instance.primaryKey],
       )
       .update(context.formData);
 
@@ -13,7 +13,7 @@ export default async (context: IContext) => {
       .database(context.model.instance.table)
       .where(
         context.model.instance.primaryKey,
-        context.item[context.model.instance.primaryKey]
+        context.item[context.model.instance.primaryKey],
       )
       .first();
   }

@@ -42,7 +42,7 @@ describe("WithQueryResolver", () => {
 
   test("should be able to resolve() complex data", () => {
     const result = resolver.resolve(
-      "posts{comments{id|title|author},likes},logins"
+      "posts{comments{id|title|author},likes},logins",
     );
 
     // "posts" and "logins" should ve resolved
@@ -81,15 +81,15 @@ describe("WithQueryResolver", () => {
 
   test("should be able throw an error undefined expression", () => {
     expect(() =>
-      resolver.resolve("posts{comments{id|title|xxx}}")
+      resolver.resolve("posts{comments{id|title|xxx}}"),
     ).toThrowError("It is not a field or a relation: xxx");
 
     expect(() => resolver.resolve("xxx")).toThrowError(
-      "Unknown expression: xxx"
+      "Unknown expression: xxx",
     );
 
     expect(() => resolver.resolve("posts{xxx}")).toThrowError(
-      "It is not a field or a relation: xxx"
+      "It is not a field or a relation: xxx",
     );
   });
 

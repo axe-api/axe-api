@@ -46,7 +46,7 @@ class SchemaValidatorService {
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
       this.checkModelColumnsOrFail(
         model,
-        this.getModelFormValidationColumns(model)
+        this.getModelFormValidationColumns(model),
       );
       this.checkModelColumnsOrFail(model, this.getModelHiddenColumns(model));
       this.checkModelColumnsOrFail(model, this.getTimestampsColumns(model));
@@ -57,7 +57,7 @@ class SchemaValidatorService {
     });
 
     LogService.debug(
-      `[${this.version.name}] Database schema has been validated.`
+      `[${this.version.name}] Database schema has been validated.`,
     );
   }
 
@@ -79,18 +79,18 @@ class SchemaValidatorService {
     if (reservedKeywords.length > 0) {
       throw new Error(
         `The following keywords are reserved for the framework; "${reservedKeywords.join(
-          ","
-        )}"`
+          ",",
+        )}"`,
       );
     }
   }
 
   private checkModelColumnsOrFail(
     model: IModelService,
-    modelColumns: string[]
+    modelColumns: string[],
   ) {
     const undefinedColumns = modelColumns.filter(
-      (modelColumn) => !model.columnNames.includes(modelColumn)
+      (modelColumn) => !model.columnNames.includes(modelColumn),
     );
     if (undefinedColumns.length > 0) {
       throw new AxeError(
@@ -99,7 +99,7 @@ class SchemaValidatorService {
           model.name
         } model doesn't have the following columns on the database; "${
           model.instance.table
-        }.${undefinedColumns.join(",")}"`
+        }.${undefinedColumns.join(",")}"`,
       );
     }
   }
@@ -115,8 +115,8 @@ class SchemaValidatorService {
         `${
           model.name
         } model doesn't have a valid relation name that is defined in query limits; "${undefinedRelationNames.join(
-          ","
-        )}"`
+          ",",
+        )}"`,
       );
     }
   }
@@ -131,7 +131,7 @@ class SchemaValidatorService {
 
   private getQueryLimitKeyByFilter = (
     model: IModelService,
-    filter: QueryFeature[]
+    filter: QueryFeature[],
   ): string[] => {
     const items = model.queryLimits
       .filter((limit) => limit.key && filter.includes(limit.feature))
@@ -212,7 +212,7 @@ class SchemaValidatorService {
 
   private checkRelationColumnsOrFail(
     modelList: ModelListService,
-    model: IModelService
+    model: IModelService,
   ) {
     for (const relation of model.relations) {
       if (relation.type === Relationships.HAS_MANY) {
@@ -228,14 +228,14 @@ class SchemaValidatorService {
   private checkHasManyRelation = (
     modelList: ModelListService,
     model: IModelService,
-    relation: IRelation
+    relation: IRelation,
   ) => {
     this.checkModelColumnsOrFail(model, [relation.primaryKey]);
     const relatedModel = modelList.find(relation.model);
     if (!relatedModel) {
       throw new AxeError(
         AxeErrorCode.UNDEFINED_RELATION_MODEL,
-        `Undefined related model: ${relation.model} (${model.name}.${relation.name})`
+        `Undefined related model: ${relation.model} (${model.name}.${relation.name})`,
       );
     }
     this.checkModelColumnsOrFail(relatedModel, [relation.foreignKey]);
@@ -244,7 +244,7 @@ class SchemaValidatorService {
   private checkHasOneRelation(
     modelList: ModelListService,
     model: IModelService,
-    relation: IRelation
+    relation: IRelation,
   ) {
     this.checkModelColumnsOrFail(model, [relation.foreignKey]);
     const relatedModel = modelList.find(relation.model);

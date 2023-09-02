@@ -10,7 +10,7 @@ export default async (context: IContext) => {
     context.req,
     context.query,
     context.relation,
-    context.parentModel
+    context.parentModel,
   );
 
   // If there is a deletedAtColumn, it means that this table support soft-delete

@@ -30,7 +30,7 @@ class RouterBuilder {
   async build() {
     const app = await IoCService.use<App>("App");
     const generalHooks: IGeneralHooks = await new GeneralHookResolver(
-      this.version
+      this.version,
     ).resolve();
 
     if (generalHooks.onBeforeInit) {
@@ -57,7 +57,7 @@ class RouterBuilder {
     urlPrefix = "",
     parentModel: IModelService | null = null,
     relation: IRelation | null = null,
-    allowRecursive = true
+    allowRecursive = true,
   ) {
     if (model.instance.ignore) {
       return;
@@ -76,7 +76,7 @@ class RouterBuilder {
         `${await this.getRootPrefix()}/${this.version.name}`,
         urlPrefix,
         resource,
-        model.instance.primaryKey
+        model.instance.primaryKey,
       );
 
       // Creating the middleware list for the route. As default, we support some
@@ -93,7 +93,7 @@ class RouterBuilder {
         middlewares,
         model,
         parentModel,
-        relation
+        relation,
       );
     }
 
@@ -105,7 +105,7 @@ class RouterBuilder {
     model: IModelService,
     allowRecursive: boolean,
     urlPrefix: string,
-    resource: string
+    resource: string,
   ) {
     if (!model.isRecursive || !allowRecursive) {
       return;
@@ -115,7 +115,7 @@ class RouterBuilder {
     const relation = model.relations.find(
       (relation) =>
         relation.model === model.name &&
-        relation.type === Relationships.HAS_MANY
+        relation.type === Relationships.HAS_MANY,
     );
 
     if (relation) {
@@ -125,7 +125,7 @@ class RouterBuilder {
         `${urlPrefix}${resource}/:${paramName}/`,
         model,
         relation,
-        false
+        false,
       );
     }
   }
@@ -133,7 +133,7 @@ class RouterBuilder {
   private async createChildRoutes(
     model: IModelService,
     resource: string,
-    urlPrefix: string
+    urlPrefix: string,
   ) {
     if (model.children.length === 0) {
       return;
@@ -141,7 +141,7 @@ class RouterBuilder {
 
     // We should different parameter name for child routes
     const subRelations = model.relations.filter(
-      (item) => item.type === Relationships.HAS_MANY
+      (item) => item.type === Relationships.HAS_MANY,
     );
     for (const relation of subRelations) {
       const child = model.children.find((item) => item.name === relation.model);
@@ -152,7 +152,7 @@ class RouterBuilder {
           child,
           `${urlPrefix}${resource}/:${paramName}/`,
           model,
-          relation
+          relation,
         );
       }
     }
@@ -164,7 +164,7 @@ class RouterBuilder {
     middlewares: AxeFunction[],
     model: IModelService,
     parentModel: IModelService | null,
-    relation: IRelation | null
+    relation: IRelation | null,
   ) {
     const docs = DocumentationService.getInstance();
 
@@ -181,7 +181,7 @@ class RouterBuilder {
       HANDLER_METHOD_MAP[handlerType],
       url,
       data,
-      middlewares
+      middlewares,
     );
 
     // Documentation
@@ -190,7 +190,7 @@ class RouterBuilder {
       handlerType,
       HANDLER_METHOD_MAP[handlerType],
       url,
-      model
+      model,
     );
   }
 

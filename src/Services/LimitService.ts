@@ -67,7 +67,7 @@ const QueryFeatureMap: Record<QueryFeature, Array<QueryFeature>> = {
 const generatePermission = (
   type: QueryFeatureType,
   feature: QueryFeature,
-  keys: string[] | null[] = []
+  keys: string[] | null[] = [],
 ): IQueryLimitConfig[] => {
   const features = QueryFeatureMap[feature];
 
@@ -99,7 +99,7 @@ const generatePermission = (
  */
 export const allow = (
   feature: QueryFeature,
-  keys: string[] = []
+  keys: string[] = [],
 ): IQueryLimitConfig[] => {
   return generatePermission(QueryFeatureType.Allow, feature, keys);
 };
@@ -115,7 +115,7 @@ export const allow = (
  */
 export const deny = (
   feature: QueryFeature,
-  keys: string[] = []
+  keys: string[] = [],
 ): IQueryLimitConfig[] => {
   return generatePermission(QueryFeatureType.Deny, feature, keys);
 };
@@ -124,24 +124,24 @@ export const valideteQueryFeature = (
   model: IModelService,
   feature: QueryFeature,
   key: string | null = null,
-  errorDescription?: string
+  errorDescription?: string,
 ) => {
   const errorDetail = errorDescription ? ` (${errorDescription})` : "";
 
   const rules = model.queryLimits.filter(
-    (limit) => limit.feature === feature && limit.key === null
+    (limit) => limit.feature === feature && limit.key === null,
   );
 
   if (key) {
     const keyRules = model.queryLimits.filter(
-      (limit) => limit.feature === feature && limit.key === key
+      (limit) => limit.feature === feature && limit.key === key,
     );
 
     if (keyRules.length > 0) {
       const lastKeyRule = keyRules[keyRules.length - 1];
       if (lastKeyRule?.type === QueryFeatureType.Deny) {
         throw new ApiError(
-          `Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`
+          `Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`,
         );
       }
       return;
@@ -150,14 +150,14 @@ export const valideteQueryFeature = (
 
   if (rules.length === 0) {
     throw new ApiError(
-      `Unsupported query feature${errorDetail}: ${feature.toString()}`
+      `Unsupported query feature${errorDetail}: ${feature.toString()}`,
     );
   }
 
   const lastRule = rules[rules.length - 1];
   if (lastRule?.type === QueryFeatureType.Deny) {
     throw new ApiError(
-      `Unsupported query feature${errorDetail}: ${feature.toString()}`
+      `Unsupported query feature${errorDetail}: ${feature.toString()}`,
     );
   }
 };

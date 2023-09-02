@@ -10,7 +10,7 @@ const main = async () => {
     process.argv && process.argv.length > 2 ? process.argv[2] : null;
   if (!database) {
     throw new Error(
-      `You have to select a database. For example; node index.js sqlite`
+      `You have to select a database. For example; node index.js sqlite`,
     );
   }
 
