@@ -16,7 +16,7 @@ let adaptor: ICacheAdaptor;
 
 const checkRateLimit = async function (
   clientKey: string,
-  options: IRateLimitOptions
+  options: IRateLimitOptions,
 ): Promise<IRateLimitResponse> {
   // Getting the last value from cache
   const reply = await adaptor.get(clientKey);
@@ -26,7 +26,7 @@ const checkRateLimit = async function (
     await adaptor.set(
       clientKey,
       (options.maxRequests - 1).toString(),
-      options.windowInSeconds
+      options.windowInSeconds,
     );
     return {
       success: true,
@@ -57,7 +57,7 @@ const checkRateLimit = async function (
 
 const getClientKeyByConfigurations = (
   req: IncomingMessage,
-  config: IRateLimitConfig | undefined
+  config: IRateLimitConfig | undefined,
 ): string => {
   if (config?.keyGenerator) {
     return config?.keyGenerator(req);
@@ -80,7 +80,7 @@ export const setupRateLimitAdaptors = (config: AxeConfig) => {
   adaptor = AdaptorFactory(
     config.rateLimit?.adaptor.type || "memory",
     config.rateLimit?.adaptor.redis,
-    ""
+    "",
   );
 };
 
@@ -112,7 +112,7 @@ export const rateLimit = (options?: IRateLimitOptions) => {
     // Creating a clientkey by the client key configurations
     const clientKey = getClientKeyByConfigurations(
       context.req.original,
-      api.config.rateLimit
+      api.config.rateLimit,
     );
 
     // Developers are able to set different rate limit options
@@ -125,14 +125,14 @@ export const rateLimit = (options?: IRateLimitOptions) => {
     // Checking the rate limit
     const isAllowed = await checkRateLimit(
       `${clientKey}:${id}`,
-      selectedOptions
+      selectedOptions,
     );
 
     // Setting the headers
     context.res.original.setHeader("X-RateLimit-Limit", isAllowed.limit);
     context.res.original.setHeader(
       "X-RateLimit-Remaining",
-      isAllowed.remaining
+      isAllowed.remaining,
     );
 
     // Sending an error message if there is an error
@@ -172,6 +172,6 @@ export default async (req: IncomingMessage, res: ServerResponse, next: any) => {
   res.end(
     JSON.stringify({
       error: "Rate limit exceeded.",
-    })
+    }),
   );
 };

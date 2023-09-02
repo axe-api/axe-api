@@ -86,7 +86,7 @@ describe("QueryService", () => {
     urlSearchParams.append("fields", "name,surname,xxx");
 
     expect(() => service.get(urlSearchParams)).toThrow(
-      "Undefined column names: xxx"
+      "Undefined column names: xxx",
     );
   });
 
@@ -107,7 +107,7 @@ describe("QueryService", () => {
     urlSearchParams.append("sort", "xxx");
 
     expect(() => service.get(urlSearchParams)).toThrow(
-      "Undefined column names: xxx"
+      "Undefined column names: xxx",
     );
   });
 
@@ -132,7 +132,7 @@ describe("QueryService", () => {
     const urlSearchParams = new URLSearchParams();
     urlSearchParams.append(
       "q",
-      `{"name.$like":"*ohn*","$or.surname.$like":"*d*"}`
+      `{"name.$like":"*ohn*","$or.surname.$like":"*d*"}`,
     );
 
     const query: IQuery = service.get(urlSearchParams);
@@ -148,7 +148,7 @@ describe("QueryService", () => {
     const urlSearchParams = new URLSearchParams();
     urlSearchParams.append(
       "q",
-      `[{"name.$like":"*ohn*"},{"$or.surname.$like":"*d*"}]`
+      `[{"name.$like":"*ohn*"},{"$or.surname.$like":"*d*"}]`,
     );
 
     const query: IQuery = service.get(urlSearchParams);

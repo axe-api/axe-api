@@ -40,7 +40,7 @@ describe("ModelListService", () => {
     userService.setExtensions(
       Extensions.Hooks,
       HookFunctionTypes.onAfterAll,
-      hookFunction
+      hookFunction,
     );
 
     expect(userService.hooks.onAfterDelete).toBeUndefined();
@@ -60,7 +60,7 @@ describe("ModelListService", () => {
     userService.setExtensions(
       Extensions.Events,
       HookFunctionTypes.onAfterAll,
-      hookFunction
+      hookFunction,
     );
 
     expect(userService.events.onAfterDelete).toBeUndefined();

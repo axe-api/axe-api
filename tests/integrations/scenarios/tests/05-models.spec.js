@@ -78,7 +78,7 @@ describe("Axe API Models", () => {
     expect(typeof data.pagination).toBe("object");
 
     const { status: suggestedPostStatus } = await axiosGet(
-      `/v1/users/${user.id}/suggested-posts`
+      `/v1/users/${user.id}/suggested-posts`,
     );
     expect(suggestedPostStatus).toBe(200);
   });
@@ -88,7 +88,7 @@ describe("Axe API Models", () => {
       "/v1/categories",
       {
         title: "Main category",
-      }
+      },
     );
 
     expect(rootStatus).toBe(201);
@@ -99,7 +99,7 @@ describe("Axe API Models", () => {
       `/v1/categories/${root.id}/categories`,
       {
         title: "Child category",
-      }
+      },
     );
 
     expect(childStatus).toBe(201);

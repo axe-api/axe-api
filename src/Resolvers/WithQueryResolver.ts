@@ -32,7 +32,7 @@ class WithQueryResolver {
     result: IWith[],
     fields: string[] | null,
     expressions: IExpression[],
-    model: IModelService
+    model: IModelService,
   ) {
     for (const expression of expressions) {
       if (expression.key.trim().length === 0) {
@@ -43,12 +43,12 @@ class WithQueryResolver {
       if (typeof relationFunction === "function") {
         const definition: IRelation = relationFunction.call(model.instance);
         const relationModel = this.models.find(
-          (item) => item.name === definition.model
+          (item) => item.name === definition.model,
         );
 
         if (relationModel === undefined) {
           throw new ApiError(
-            `Undefined relation model: ${definition.model} (${expression.key})`
+            `Undefined relation model: ${definition.model} (${expression.key})`,
           );
         }
 
@@ -64,7 +64,7 @@ class WithQueryResolver {
             data.children,
             data.fields,
             expression.children,
-            relationModel
+            relationModel,
           );
         }
 
@@ -74,7 +74,7 @@ class WithQueryResolver {
           fields.push(expression.key);
         } else {
           throw new ApiError(
-            `It is not a field or a relation: ${expression.key}`
+            `It is not a field or a relation: ${expression.key}`,
           );
         }
       } else {
@@ -103,7 +103,7 @@ class WithQueryResolver {
               key: field,
               children: [],
             } as IExpression;
-          })
+          }),
         );
       }
     }

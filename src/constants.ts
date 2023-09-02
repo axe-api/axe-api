@@ -81,12 +81,12 @@ export const API_ROUTE_TEMPLATES = {
   [HandlerTypes.INSERT]: (
     prefix: string,
     parentUrl: string,
-    resource: string
+    resource: string,
   ) => `/${prefix}/${parentUrl}${resource}`,
   [HandlerTypes.PAGINATE]: (
     prefix: string,
     parentUrl: string,
-    resource: string
+    resource: string,
   ) => `/${prefix}/${parentUrl}${resource}`,
   [HandlerTypes.ALL]: (prefix: string, parentUrl: string, resource: string) =>
     `/${prefix}/${parentUrl}${resource}/all`,
@@ -94,31 +94,31 @@ export const API_ROUTE_TEMPLATES = {
     prefix: string,
     parentUrl: string,
     resource: string,
-    primaryKey: string
+    primaryKey: string,
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
   [HandlerTypes.UPDATE]: (
     prefix: string,
     parentUrl: string,
     resource: string,
-    primaryKey: string
+    primaryKey: string,
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
   [HandlerTypes.PATCH]: (
     prefix: string,
     parentUrl: string,
     resource: string,
-    primaryKey: string
+    primaryKey: string,
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
   [HandlerTypes.DELETE]: (
     prefix: string,
     parentUrl: string,
     resource: string,
-    primaryKey: string
+    primaryKey: string,
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}`,
   [HandlerTypes.FORCE_DELETE]: (
     prefix: string,
     parentUrl: string,
     resource: string,
-    primaryKey: string
+    primaryKey: string,
   ) => `/${prefix}/${parentUrl}${resource}/:${primaryKey}/force`,
 };
 

@@ -22,7 +22,7 @@ execSync(
       console.log(err);
       process.exit();
     }
-  }
+  },
 );
 
 //Moving files to the correct location
@@ -43,7 +43,7 @@ execSync(
       console.log(err);
       process.exit();
     }
-  }
+  },
 );
 
 // Everything is done

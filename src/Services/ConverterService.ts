@@ -17,7 +17,7 @@ import {
 
 export const toAxeRequestResponsePair = (
   request: IncomingMessage,
-  response: ServerResponse
+  response: ServerResponse,
 ): AxeRequestResponsePair => {
   const axeRequest = new AxeRequest(request);
   const axeResponse = new AxeResponse(response, axeRequest.currentLanguage);
@@ -28,11 +28,11 @@ export const toAxeRequestResponsePair = (
 };
 
 export const resolveMiddlewares = (
-  args: GeneralFunction[]
+  args: GeneralFunction[],
 ): MiddlewareResolution => {
   const middlewares: MiddlewareFunction[] = args.slice(
     0,
-    -1
+    -1,
   ) as MiddlewareFunction[];
 
   const handler: HandlerFunction = args.at(-1) as HandlerFunction;
@@ -61,8 +61,8 @@ export const toPhaseFunction = (callback: AxeFunction): PhaseFunction => {
       (callback as MiddlewareFunction)(
         context.req.original,
         context.res.original,
-        next
-      )
+        next,
+      ),
     );
   }
 

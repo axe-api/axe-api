@@ -6,7 +6,7 @@ import { IRedisOptions } from "src/Interfaces";
 export default (
   adaptor: AdaptorType,
   redisOptions: IRedisOptions | undefined,
-  prefix: string
+  prefix: string,
 ) => {
   switch (adaptor) {
     case "redis":

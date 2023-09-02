@@ -26,7 +26,7 @@ class VersionResolver {
     versionFolders.forEach((version) => {
       const validation = new Validator(
         { version },
-        { version: "required|alpha_num" }
+        { version: "required|alpha_num" },
       );
 
       if (validation.fails()) {
@@ -34,7 +34,7 @@ class VersionResolver {
         const [message] = versionError;
         throw new AxeError(
           AxeErrorCode.UNACCEPTABLE_VERSION_NAME,
-          `${message} ("${version}")`
+          `${message} ("${version}")`,
         );
       }
       api.addVersion(version);
@@ -49,12 +49,12 @@ class VersionResolver {
 
   private checkReservedKeys(names: string[]) {
     const reservedName = names.find((name) =>
-      RESERVED_VERSION_FOLDERS.includes(name)
+      RESERVED_VERSION_FOLDERS.includes(name),
     );
     if (reservedName) {
       throw new AxeError(
         AxeErrorCode.RESERVED_VERSION_NAME,
-        `You can not use a reserved name in the app directory: ${reservedName}`
+        `You can not use a reserved name in the app directory: ${reservedName}`,
       );
     }
   }

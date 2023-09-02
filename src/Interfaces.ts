@@ -187,7 +187,7 @@ export interface IModelService {
   setExtensions(
     type: Extensions,
     hookFunctionType: HookFunctionTypes,
-    data: PhaseFunction
+    data: PhaseFunction,
   ): void;
   setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;

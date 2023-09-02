@@ -5,7 +5,7 @@ export default (
   err: any,
   req: IncomingMessage,
   res: ServerResponse,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // Sett the HTTP status code
   res.statusCode = 500;
@@ -14,7 +14,7 @@ export default (
   res.write(
     JSON.stringify({
       error: "Internal server error",
-    })
+    }),
   );
 
   res.end();

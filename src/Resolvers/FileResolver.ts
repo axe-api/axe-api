@@ -13,7 +13,7 @@ class FileResolver {
       .filter((item) => !item.isDirectory())
       .filter(
         (filename) =>
-          filename.name.includes(".ts") || filename.name.includes(".js")
+          filename.name.includes(".ts") || filename.name.includes(".js"),
       )
       .map((item) => item.name);
     for (const file of files) {

@@ -4,7 +4,7 @@ class AcceptLanguageResolver {
   static resolve(
     value: string,
     supportedLanguages: string[],
-    defaultLanguage: string
+    defaultLanguage: string,
   ): ILanguage {
     value = value.trim();
 
@@ -15,11 +15,11 @@ class AcceptLanguageResolver {
     const languages = this.toSortedPreferences(value);
 
     const perfectMatch = languages.find((item) =>
-      supportedLanguages.includes(item.language.title)
+      supportedLanguages.includes(item.language.title),
     );
 
     const anyMatch = languages.find((item) =>
-      supportedLanguages.includes(item.language.language)
+      supportedLanguages.includes(item.language.language),
     );
 
     if (perfectMatch && !anyMatch) {

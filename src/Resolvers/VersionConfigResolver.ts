@@ -20,7 +20,7 @@ class VersionConfigResolver {
     ) {
       throw new AxeError(
         AxeErrorCode.VERSION_CONFIG_NOT_FOUND,
-        `The version file not found: ${versionConfigFile}.ts`
+        `The version file not found: ${versionConfigFile}.ts`,
       );
     }
     // Loading the configuration file

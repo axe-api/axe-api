@@ -8,7 +8,7 @@ export default async (context: IContext) => {
     context.item,
     context.model.serialize,
     context.handlerType,
-    context.req
+    context.req,
   );
 
   // Filtering hidden fields from the response data.

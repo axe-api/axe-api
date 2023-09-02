@@ -68,7 +68,7 @@ describe("Students", () => {
           ]),
           with: "lesson{name},teacher{name}",
         },
-      }
+      },
     );
     expect(response.pagination.total).toBe(1);
 
