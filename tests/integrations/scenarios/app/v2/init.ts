@@ -5,7 +5,7 @@ const onBeforeInit = async (app: App) => {
   app.use(
     cors({
       origin: true,
-    })
+    }),
   );
 };
 

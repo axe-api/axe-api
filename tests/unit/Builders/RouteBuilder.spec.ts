@@ -86,7 +86,7 @@ describe("RouteBuilder", () => {
     IoCService.singleton("App", () => AppMock);
     IoCService.singleton(
       "DocumentationService",
-      () => DocumentationServiceMock
+      () => DocumentationServiceMock,
     );
     IoCService.singleton("HandlerFactory", () => HandlerFactoryMock);
     IoCService.singleton("Database", () => DatabaseMock);

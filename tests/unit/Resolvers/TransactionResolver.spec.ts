@@ -38,7 +38,7 @@ const VersionMock = {
 const resolve = async (service: ModelService, handlerType: HandlerTypes) => {
   return await new TransactionResolver(VersionMock).resolve(
     service,
-    handlerType
+    handlerType,
   );
 };
 

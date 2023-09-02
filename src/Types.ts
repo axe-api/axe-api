@@ -25,12 +25,12 @@ export type SerializationFunction = (item: any, request: AxeRequest) => any;
 export type MiddlewareFunction = (
   req: IncomingMessage,
   res: ServerResponse,
-  next: NextFunction
+  next: NextFunction,
 ) => DefaultResponse;
 
 export type HandlerFunction = (
   request: AxeRequest,
-  response: AxeResponse
+  response: AxeResponse,
 ) => DefaultResponse;
 
 export type PhaseFunction = (context: IContext) => DefaultResponse;

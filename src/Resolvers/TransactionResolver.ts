@@ -14,7 +14,7 @@ class TransactionResolver {
 
   public async resolve(
     model: IModelService,
-    handlerType: HandlerTypes
+    handlerType: HandlerTypes,
   ): Promise<boolean> {
     const global = this.version.config.transaction;
     const local = model.instance.transaction;
@@ -24,7 +24,7 @@ class TransactionResolver {
       privilegedOption = TransactionResolver.resolveTransactionOption(
         global,
         handlerType,
-        privilegedOption
+        privilegedOption,
       );
     }
 
@@ -32,7 +32,7 @@ class TransactionResolver {
       privilegedOption = TransactionResolver.resolveTransactionOption(
         local,
         handlerType,
-        privilegedOption
+        privilegedOption,
       );
     }
 
@@ -45,7 +45,7 @@ class TransactionResolver {
       | IHandlerBasedTransactionConfig
       | IHandlerBasedTransactionConfig[],
     handlerType: HandlerTypes,
-    defaultValue: boolean
+    defaultValue: boolean,
   ): boolean => {
     if (Array.isArray(option)) {
       // If this is an array, we should treat it like an array.
@@ -55,7 +55,7 @@ class TransactionResolver {
       for (const configItem of configs) {
         const value = TransactionResolver.getTransactionConfiguration(
           configItem,
-          handlerType
+          handlerType,
         );
         if (value) {
           defaultValue = configItem.transaction;
@@ -68,7 +68,7 @@ class TransactionResolver {
       const configItem = option;
       const value = TransactionResolver.getTransactionConfiguration(
         configItem,
-        handlerType
+        handlerType,
       );
       if (value) {
         defaultValue = configItem.transaction;
@@ -80,7 +80,7 @@ class TransactionResolver {
 
   private static getTransactionConfiguration(
     configItem: IHandlerBasedTransactionConfig,
-    handlerType: HandlerTypes
+    handlerType: HandlerTypes,
   ): boolean | null {
     const found = configItem.handlers.find((item) => item === handlerType);
 

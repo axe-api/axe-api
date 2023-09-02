@@ -36,7 +36,7 @@ class QueryService {
   constructor(
     model: IModelService,
     models: IModelService[],
-    config: AxeVersionConfig
+    config: AxeVersionConfig,
   ) {
     this.model = model;
     this.models = models;
@@ -73,7 +73,7 @@ class QueryService {
       valideteQueryFeature(
         this.model,
         QueryFeature.Sorting,
-        `${this.model.instance.table}.${item.name}`
+        `${this.model.instance.table}.${item.name}`,
       );
       query.orderBy(item.name, item.type);
     });
@@ -81,7 +81,7 @@ class QueryService {
 
   applyWheresInsideGroup(
     sub: Knex.QueryBuilder,
-    ruleSet: NestedWhere | IWhere
+    ruleSet: NestedWhere | IWhere,
   ) {
     // If there is not any query, we don't have to filter the data.
     if (!ruleSet) {
@@ -131,7 +131,7 @@ class QueryService {
       if (columnName.includes(".")) {
         const [table, splittedColumnName] = columnName.split(".");
         currentModel = this.models.find(
-          (model) => model.instance.table === table
+          (model) => model.instance.table === table,
         );
         realColumName = splittedColumnName;
       }
@@ -141,7 +141,7 @@ class QueryService {
 
     if (undefinedColumns.length > 0) {
       throw new ApiError(
-        `Undefined column names: ${undefinedColumns.join(",")}`
+        `Undefined column names: ${undefinedColumns.join(",")}`,
       );
     }
 
@@ -158,7 +158,7 @@ class QueryService {
 
   private applyConditionRule(
     sub: Knex.QueryBuilder,
-    ruleSet: IWhere
+    ruleSet: IWhere,
   ): Knex.QueryBuilder {
     const method = this.getConditionMethodName(ruleSet);
     const zeroArguments = ["Null", "NotNull"];
@@ -175,7 +175,7 @@ class QueryService {
       const methodName = `${method}${ruleSet.condition}`;
       return (sub as any)[methodName](
         fullFieldPath,
-        ruleSet.value
+        ruleSet.value,
       ) as Knex.QueryBuilder;
     }
 
@@ -184,7 +184,7 @@ class QueryService {
 
   private applyRelatedQueryJoins(
     query: Knex.QueryBuilder,
-    ruleSet: NestedWhere
+    ruleSet: NestedWhere,
   ) {
     if (!ruleSet) {
       return;
@@ -289,7 +289,7 @@ class QueryService {
       content ||
         this.config.query?.defaults?.perPage ||
         DEFAULT_VERSION_CONFIG.query.defaults?.perPage ||
-        10
+        10,
     );
 
     const minPerPage =
@@ -305,7 +305,7 @@ class QueryService {
     if (isNaN(value) || value < minPerPage || value > maxPerPage) {
       throw new ApiError(
         `Unacceptable 'per_page' value! Current value is '${value}'. It should be between ${minPerPage}-${maxPerPage}`,
-        StatusCodes.BAD_REQUEST
+        StatusCodes.BAD_REQUEST,
       );
     }
 
@@ -434,7 +434,7 @@ class QueryService {
       this.applySpecialCondition(
         where,
         "$notBetween",
-        ConditionTypes.NotBetween
+        ConditionTypes.NotBetween,
       );
     }
 
@@ -464,17 +464,17 @@ class QueryService {
 
       const relation = this.model.relations.find(
         (item) =>
-          item.name === relationName && item.type === Relationships.HAS_ONE
+          item.name === relationName && item.type === Relationships.HAS_ONE,
       );
 
       if (!relation) {
         throw new ApiError(
-          `Unacceptable query field: ${relationName}.${field}`
+          `Unacceptable query field: ${relationName}.${field}`,
         );
       }
 
       const relatedModel = this.models.find(
-        (item) => item.name === relation.model
+        (item) => item.name === relation.model,
       );
 
       if (!relatedModel) {
@@ -490,7 +490,7 @@ class QueryService {
     valideteQueryFeature(
       this.model,
       ConditionQueryFeatureMap[where.condition],
-      `${where.table}.${where.field}`
+      `${where.table}.${where.field}`,
     );
 
     this.shouldBeAcceptableColumn(where.field);
@@ -502,7 +502,7 @@ class QueryService {
   private applySpecialCondition(
     where: IWhere,
     structure: string,
-    condition: ConditionTypes
+    condition: ConditionTypes,
   ) {
     structure = `.${structure}`;
     if (this.hasSpecialStructure(where.field, structure)) {
@@ -514,7 +514,7 @@ class QueryService {
   private addRelationColumns(withs: IWith[]) {
     withs.forEach((item) => {
       const relation = this.model.relations.find(
-        (i) => i.name === item.relationship
+        (i) => i.name === item.relationship,
       );
       if (!relation) {
         throw new ApiError(`Undefined relation: ${item.relationship}`);
@@ -561,7 +561,7 @@ class QueryService {
 
     if (field.indexOf(".") === 0 || field.indexOf(".") === field.length - 1) {
       throw new ApiError(
-        `You have to define the column specefically: ${field}`
+        `You have to define the column specefically: ${field}`,
       );
     }
   }

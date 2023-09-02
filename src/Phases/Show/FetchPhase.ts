@@ -18,7 +18,7 @@ export default async (context: IContext) => {
       context.req,
       context.query,
       context.relation,
-      context.parentModel
+      context.parentModel,
     );
 
     // We should check the parameter type

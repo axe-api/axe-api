@@ -25,7 +25,7 @@ import { isMiddlewareFunction, toPhaseFunction } from "./ConverterService";
 const check = (url: string, pattern: string) => {
   // Escape special characters in the pattern and replace parameter placeholders with regular expression groups
   const regexPattern = new RegExp(
-    "^" + pattern.replace(/:[a-zA-Z0-9_]+/g, "([a-zA-Z0-9_-]+)") + "$"
+    "^" + pattern.replace(/:[a-zA-Z0-9_]+/g, "([a-zA-Z0-9_-]+)") + "$",
   );
 
   // Test if the URL matches the pattern
@@ -52,7 +52,7 @@ class URLService {
     method: string,
     pattern: string,
     data: IRouteData,
-    middlewares: AxeFunction[]
+    middlewares: AxeFunction[],
   ) {
     const phases = this.getDefaultPhases(middlewares);
 
@@ -74,7 +74,7 @@ class URLService {
     if (data.version && data.model && data.handlerType) {
       hasTransaction = await new TransactionResolver(data.version).resolve(
         data.model,
-        data.handlerType
+        data.handlerType,
       );
     }
 
@@ -93,7 +93,7 @@ class URLService {
     method: string,
     pattern: string,
     customHandler: HandlerFunction,
-    middlewares: GeneralFunction[]
+    middlewares: GeneralFunction[],
   ) {
     LogService.info(`${method} ${pattern}`);
 
@@ -108,8 +108,8 @@ class URLService {
               (middleware as MiddlewareFunction)(
                 context.req.original,
                 context.res.original,
-                next
-              )
+                next,
+              ),
             );
             await caller(context);
           } else {
@@ -170,7 +170,7 @@ class URLService {
   }
 
   private static getDefaultPhases(
-    middlewares: AxeFunction[]
+    middlewares: AxeFunction[],
   ): IPhaseDefinition[] {
     // We should convert to all AxeFunction functions to PhaseFunctions
     const callbacks: PhaseFunction[] = middlewares.map(toPhaseFunction);
