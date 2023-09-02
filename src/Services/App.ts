@@ -1,4 +1,4 @@
-import connect from "connect";
+import connect, { NextHandleFunction, ErrorHandleFunction } from "connect";
 import bodyParser from "body-parser";
 import { GeneralFunction } from "../Types";
 import URLService from "./URLService";
@@ -48,7 +48,7 @@ class App {
    *    next()
    *  })
    */
-  public use(middleware: connect.NextHandleFunction) {
+  public use(middleware: NextHandleFunction | ErrorHandleFunction) {
     this.connect.use(middleware);
     LogService.debug(`New middleware: ${middleware.name || "anonymous"}()`);
   }
