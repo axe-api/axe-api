@@ -89,4 +89,21 @@ describe("Students", () => {
     // Does not matter the record count. It should not return an error.
     expect(data.pagination.total).toBe(0);
   });
+
+  test("should not be able to use LIKE query in non-string columns", async () => {
+    try {
+      await axios.get(`/v1/students`, {
+        params: {
+          q: JSON.stringify([
+            {
+              "id.$like": "*a*",
+            },
+          ]),
+        },
+      });
+      expect(response.status).not.toBe(200);
+    } catch (error) {
+      expect(error.response.status).toBe(400);
+    }
+  });
 });
