@@ -14,6 +14,7 @@ import { rateLimit } from "./src/Middlewares/RateLimit";
 
 export * from "./src/Enums";
 export * from "./src/Interfaces";
+export * from "./src/Types";
 
 export {
   App,

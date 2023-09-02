@@ -98,18 +98,21 @@ class Server {
 
   private async listen() {
     const app = await IoCService.use<App>("App");
-
-    app.use(RequestHandler);
-
-    const server = http.createServer(app.instance);
     const api = APIService.getInstance();
 
+    // Adding the default handler for auto-created routes
+    app.use(RequestHandler);
+
+    // Setting the error handler
+    app.use(api.config.errorHandler);
+
+    const server = http.createServer(app.instance);
+
     server.on("error", function (e) {
-      // Handle your error here
-      console.log("GENERAL", e);
+      LogService.error(e.message);
     });
 
-    if (api.config.env === "development") {
+    if (api.config.docs) {
       app.get("/metadata", MetadataHandler);
       app.get("/docs", DocsHTMLHandler);
       app.get("/routes", RoutesHandler);

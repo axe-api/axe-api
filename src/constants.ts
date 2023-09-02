@@ -21,6 +21,7 @@ import ForceDelete from "./Phases/ForceDelete";
 import Phase from "./Steps/Phase";
 import Hook from "./Steps/Hook";
 import Event from "./Steps/Event";
+import ErrorHandler from "./Handlers/ErrorHandler";
 
 export const RESERVED_KEYWORDS: string[] = [
   "force",
@@ -277,6 +278,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   prefix: "api",
   env: "production",
   port: 3000,
+  docs: true,
   pino: {
     level: "error",
     transport: {
@@ -298,6 +300,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
       filename: "./axedb.sql",
     },
   },
+  errorHandler: ErrorHandler,
 };
 
 export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {
