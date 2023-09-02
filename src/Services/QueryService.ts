@@ -17,7 +17,11 @@ import {
 import { Knex } from "knex";
 import ApiError from "../Exceptions/ApiError";
 import { WithQueryResolver } from "../Resolvers";
-import { ConditionQueryFeatureMap, DEFAULT_VERSION_CONFIG } from "../constants";
+import {
+  ConditionQueryFeatureMap,
+  DEFAULT_VERSION_CONFIG,
+  STRING_COLUMN_TYPES,
+} from "../constants";
 import { valideteQueryFeature } from "./LimitService";
 import { isBoolean } from "../Handlers/Helpers";
 
@@ -433,6 +437,19 @@ class QueryService {
       where.condition === ConditionTypes.LIKE ||
       where.condition === ConditionTypes["NOT LIKE"]
     ) {
+      const queryColumn = where.model.columns.find(
+        (column) => column.name === where.field
+      );
+
+      if (
+        queryColumn &&
+        !STRING_COLUMN_TYPES.includes(queryColumn.data_type.toLowerCase())
+      ) {
+        throw new ApiError(
+          `Query field need to be string. Unacceptable query field: ${where.field}`
+        );
+      }
+
       where.value = where.value.replace(/\*/g, "%");
     }
 
