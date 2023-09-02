@@ -25,7 +25,7 @@ export default async (pack: IRequestPack) => {
   addSoftDeleteQuery(model, null, query);
 
   // If there is a relation, we should bind it
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   await callHooks(model, HookFunctionTypes.onBeforeDeleteQuery, {
     ...pack,

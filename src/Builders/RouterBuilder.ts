@@ -123,9 +123,10 @@ class RouterBuilder {
     );
 
     if (relation) {
+      const paramName = camelCase(`${model.name}-${relation.primaryKey}`);
       await this.createRouteByModel(
         model,
-        `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
+        `${urlPrefix}${resource}/:${paramName}/`,
         model,
         relation,
         false
@@ -150,9 +151,10 @@ class RouterBuilder {
       const child = model.children.find((item) => item.name === relation.model);
       // It should be recursive
       if (child) {
+        const paramName = camelCase(`${model.name}-${relation.primaryKey}`);
         await this.createRouteByModel(
           child,
-          `${urlPrefix}${resource}/:${camelCase(relation.foreignKey)}/`,
+          `${urlPrefix}${resource}/:${paramName}/`,
           model,
           relation
         );

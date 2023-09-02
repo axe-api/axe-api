@@ -81,12 +81,15 @@ export const callHooks = async (
   }
 };
 
-export const getParentColumn = (relation: IRelation | null) => {
+export const getParentColumn = (
+  model: IModelService,
+  relation: IRelation | null
+) => {
   if (!relation) {
     return null;
   }
 
-  return camelCase(relation.foreignKey);
+  return camelCase(`${model.name}-${relation.primaryKey}`);
 };
 
 export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
@@ -106,11 +109,12 @@ export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
 export const addForeignKeyQuery = (
   request: Request,
   query: Knex.QueryBuilder,
+  model: IModelService,
   relation: IRelation | null,
   parentModel: IModelService | null
 ) => {
   if (relation && parentModel) {
-    const parentColumn = getParentColumn(relation);
+    const parentColumn = getParentColumn(parentModel, relation);
     if (parentColumn) {
       query.where(relation.foreignKey, request.params[parentColumn]);
     }

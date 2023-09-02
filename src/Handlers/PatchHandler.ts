@@ -26,7 +26,7 @@ export default async (pack: IRequestPack) => {
   const query = (database as Knex).from(model.instance.table);
 
   // If there is a relation, we should bind it
-  addForeignKeyQuery(req, query, relation, parentModel);
+  addForeignKeyQuery(req, query, model, relation, parentModel);
 
   // If there is a deletedAtColumn, it means that this table support soft-delete
   addSoftDeleteQuery(model, null, query);
