@@ -8,7 +8,7 @@
     "build:watch": "tsc -w",
     "docker:mysql": "docker compose -f docker-compose.mysql.yml up -d",
     "start": "node index.js",
-    "start:dev": "nodemon serve-dev.js",
+    "start:dev": "nodemon serve-dev.ts",
     "test": "jest --runInBand",
     "test:dev": "jest --watch --runInBand"
   },
