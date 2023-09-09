@@ -28,7 +28,7 @@ export default async (context: IContext) => {
   }
 
   if (context.relation && context.parentModel) {
-    const parentColumn = getParentColumn(context.relation);
+    const parentColumn = getParentColumn(context.parentModel, context.relation);
     if (parentColumn) {
       context.formData[context.relation.foreignKey] =
         context.params[parentColumn];
