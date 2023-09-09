@@ -84,7 +84,7 @@ export const callHooks = async (
 
 export const getParentColumn = (
   model: IModelService,
-  relation: IRelation | null
+  relation: IRelation | null,
 ) => {
   if (!relation) {
     return null;
@@ -110,7 +110,6 @@ export const checkPrimaryKeyValueType = (model: IModelService, value: any) => {
 export const addForeignKeyQuery = (
   request: AxeRequest,
   query: Knex.QueryBuilder,
-  model: IModelService,
   relation: IRelation | null,
   parentModel: IModelService | null,
 ) => {
