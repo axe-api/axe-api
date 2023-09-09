@@ -25,5 +25,5 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-var-requires": "off",
   },
-  ignorePatterns: ["tests/*", "dev-kit/*", "build/*"],
+  ignorePatterns: ["tests/*", "dev-kit/*", "__dev-kit/*", "build/*"],
 };
