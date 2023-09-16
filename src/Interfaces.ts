@@ -227,6 +227,8 @@ export interface IContext extends IRouteData {
 export interface IRouteDocumentation {
   version: string;
   handler: string;
+  modelService: IModelService;
+  parentModel: IModelService | null;
   model: string;
   table: string;
   columns: IColumn[];
@@ -238,6 +240,11 @@ export interface IRouteDocumentation {
   validations: Record<string, string> | null;
   queryLimits: IQueryLimitConfig[];
   queryDefaults: IQueryDefaultConfig;
+}
+
+export interface ICustomRouteDocumentation {
+  method: HttpMethods;
+  url: string;
 }
 
 export interface IRawQuery {

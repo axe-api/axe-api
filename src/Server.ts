@@ -16,8 +16,8 @@ import {
   APIService,
   SchemaValidatorService,
 } from "./Services";
-import MetadataHandler from "./Handlers/MetadataHandler";
-import DocsHTMLHandler from "./Handlers/DocsHTMLHandler";
+import SwaggerHandler from "./Handlers/SwaggerHandler";
+import DocsHandler from "./Handlers/DocsHandler";
 import RoutesHandler from "./Handlers/RoutesHandler";
 import http from "http";
 import RequestHandler from "./Handlers/RequestHandler";
@@ -113,8 +113,8 @@ class Server {
     });
 
     if (api.config.docs) {
-      app.get("/metadata", MetadataHandler);
-      app.get("/docs", DocsHTMLHandler);
+      app.get("/swagger", SwaggerHandler);
+      app.get("/docs", DocsHandler);
       app.get("/routes", RoutesHandler);
     }
 

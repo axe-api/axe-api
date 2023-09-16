@@ -34,6 +34,7 @@ export const RESERVED_KEYWORDS: string[] = [
   "event",
   "events",
   "all",
+  "swagger",
 ];
 
 export const DEFAULT_HANDLERS: HandlerTypes[] = [
