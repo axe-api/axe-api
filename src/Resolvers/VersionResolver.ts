@@ -10,6 +10,7 @@ const RESERVED_VERSION_FOLDERS: string[] = [
   "Hooks",
   "Models",
   "Serialization",
+  "Swagger",
 ];
 
 class VersionResolver {

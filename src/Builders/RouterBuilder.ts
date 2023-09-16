@@ -191,6 +191,7 @@ class RouterBuilder {
       HANDLER_METHOD_MAP[handlerType],
       url,
       model,
+      parentModel,
     );
   }
 
