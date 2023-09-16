@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "1.0.0-rc14",
+  "version": "1.0.0-rc21",
   "description": "AXE API is a simple tool to create Rest APIs quickly.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -33,6 +33,7 @@
     "dev-kit": "ts-node-dev --respawn --clear dev-kit.ts",
     "dev-kit:install": "node ./scripts/dev-kit-install.js",
     "dev-kit:remove": "node ./scripts/dev-kit-remove.js",
+    "dev-kit:docs": "open-swagger-ui http://localhost:3000/swagger",
     "test": "jest --runInBand",
     "test:all": "npm run lint && npm run prettier:check && npm run test && npm run test:sqlite",
     "test:dev": "jest --watch",
@@ -58,6 +59,7 @@
     "change-case": "^4.1.2",
     "connect": "^3.7.0",
     "dotenv": "^16.3.1",
+    "formidable": "^3.5.1",
     "knex": "^2.5.1",
     "knex-paginate": "^3.1.1",
     "knex-schema-inspector": "^3.0.1",
@@ -65,8 +67,7 @@
     "pino": "^8.15.0",
     "pino-pretty": "^10.2.0",
     "pluralize": "^8.0.0",
-    "validatorjs": "^3.22.1",
-    "formidable": "^3.5.1"
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "@babel/core": "^7.22.11",
@@ -99,6 +100,7 @@
     "node-cache": "^5.1.2",
     "node-color-log": "^10.0.2",
     "nodemon": "^3.0.1",
+    "open-swagger-ui": "^1.2.0",
     "pg": "^8.11.3",
     "prettier": "^3.0.3",
     "redis": "^4.6.8",

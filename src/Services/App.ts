@@ -8,11 +8,15 @@ import RateLimitMiddleware, {
 } from "../Middlewares/RateLimit";
 import APIService from "./APIService";
 import { resolveMiddlewares } from "./ConverterService";
+import DocumentationService from "./DocumentationService";
+import { HttpMethods } from "../Enums";
 
 class App {
   private connect: connect.Server;
+  private docs: DocumentationService;
 
   constructor() {
+    this.docs = DocumentationService.getInstance();
     this.connect = connect();
     LogService.debug("Created a new connect() instance");
     this.connect.use(bodyParser.urlencoded({ extended: true }));
@@ -70,6 +74,7 @@ class App {
   public get(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("GET", url, handler, middlewares);
+    this.docs.pushCustom(HttpMethods.GET, url);
   }
 
   /**
@@ -89,6 +94,7 @@ class App {
   public post(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("POST", url, handler, middlewares);
+    this.docs.pushCustom(HttpMethods.POST, url);
   }
 
   /**
@@ -108,6 +114,7 @@ class App {
   public put(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("PUT", url, handler, middlewares);
+    this.docs.pushCustom(HttpMethods.PUT, url);
   }
 
   /**
@@ -127,6 +134,7 @@ class App {
   public patch(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("PATCH", url, handler, middlewares);
+    this.docs.pushCustom(HttpMethods.PATCH, url);
   }
 
   /**
@@ -146,6 +154,7 @@ class App {
   public delete(url: string, ...args: GeneralFunction[]) {
     const { handler, middlewares } = resolveMiddlewares(args);
     URLService.addHandler("DELETE", url, handler, middlewares);
+    this.docs.pushCustom(HttpMethods.DELETE, url);
   }
 }
 
