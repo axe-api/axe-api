@@ -5,6 +5,7 @@ const onBeforeInit = async (app: App) => {
   app.use(
     cors({
       origin: true,
+      exposedHeaders: ["X-Axe-API-Cache"],
     }),
   );
 };

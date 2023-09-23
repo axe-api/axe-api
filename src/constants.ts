@@ -1,4 +1,5 @@
 import {
+  CacheStrategies,
   ConditionTypes,
   HandlerTypes,
   HookFunctionTypes,
@@ -6,7 +7,12 @@ import {
   QueryFeature,
   Relationships,
 } from "./Enums";
-import { AxeConfig, AxeVersionConfig, IStepDefinition } from "./Interfaces";
+import {
+  AxeConfig,
+  AxeVersionConfig,
+  ICacheConfiguration,
+  IStepDefinition,
+} from "./Interfaces";
 import { allow, deny } from "./Services/LimitService";
 import Single from "./Phases/Single";
 import List from "./Phases/List";
@@ -22,6 +28,9 @@ import Phase from "./Steps/Phase";
 import Hook from "./Steps/Hook";
 import Event from "./Steps/Event";
 import ErrorHandler from "./Handlers/ErrorHandler";
+import GetCachePhase from "./Phases/GetCachePhase";
+import CacheTagCleanPhase from "./Phases/CacheTagCleanPhase";
+import { defaultCacheKeyFunction } from "./Handlers/Helpers";
 
 export const RESERVED_KEYWORDS: string[] = [
   "force",
@@ -76,6 +85,7 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "limits",
   "getFillableFields",
   "getValidationRules",
+  "cache",
 ];
 
 export const API_ROUTE_TEMPLATES = {
@@ -178,9 +188,10 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Hook(HookFunctionTypes.onAfterInsert),
     new Event(HookFunctionTypes.onAfterInsert),
     new Phase("insert.serialize", Single.SerializePhase),
-    new Phase("insert.response", Single.ResultPhase),
+    new Phase("insert.response", Store.ResultPhase),
   ],
   [HandlerTypes.PAGINATE]: [
+    new Phase("paginate.cache", GetCachePhase),
     new Phase("paginate.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
@@ -192,6 +203,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("paginate.response", List.ResultPhase),
   ],
   [HandlerTypes.SHOW]: [
+    new Phase("paginate.cache", GetCachePhase),
     new Phase("show.prepareQuery", Show.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeShow),
     new Event(HookFunctionTypes.onBeforeShow),
@@ -215,6 +227,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("update.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
+    new Phase("cache.cleanTags", CacheTagCleanPhase),
     new Phase("update.serialize", Single.SerializePhase),
     new Phase("update.response", Single.ResultPhase),
   ],
@@ -230,6 +243,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("delete.action", Delete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterDelete),
     new Event(HookFunctionTypes.onAfterDelete),
+    new Phase("cache.cleanTags", CacheTagCleanPhase),
     new Phase("delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.FORCE_DELETE]: [
@@ -244,6 +258,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("force-delete.action", ForceDelete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterForceDelete),
     new Event(HookFunctionTypes.onAfterForceDelete),
+    new Phase("cache.cleanTags", CacheTagCleanPhase),
     new Phase("force-delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.PATCH]: [
@@ -259,10 +274,12 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("patch.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
+    new Phase("cache.cleanTags", CacheTagCleanPhase),
     new Phase("patch.serialize", Single.SerializePhase),
     new Phase("patch.response", Single.ResultPhase),
   ],
   [HandlerTypes.ALL]: [
+    new Phase("paginate.cache", GetCachePhase),
     new Phase("all.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
@@ -273,6 +290,16 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("all.serialize", List.SerializePhase),
     new Phase("all.response", List.ResultPhase),
   ],
+};
+
+export const DEFAULT_CACHE_CONFIGURATION: ICacheConfiguration = {
+  enable: false,
+  ttl: 100,
+  invalidation: CacheStrategies.TimeBased,
+  tagPrefix: "tag",
+  cachePrefix: "axe-cache",
+  responseHeader: "X-Axe-API-Cache",
+  cacheKey: defaultCacheKeyFunction,
 };
 
 export const DEFAULT_APP_CONFIG: AxeConfig = {
@@ -288,9 +315,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   },
   rateLimit: {
     enabled: false,
-    adaptor: {
-      type: "memory",
-    },
+    adaptor: "memory",
     maxRequests: 200,
     windowInSeconds: 5,
     trustProxyIP: false,
@@ -302,6 +327,8 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
     },
   },
   errorHandler: ErrorHandler,
+  redis: {},
+  cache: { ...DEFAULT_CACHE_CONFIGURATION },
 };
 
 export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {
@@ -324,4 +351,16 @@ export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {
     },
   },
   formidable: {},
+  cache: null,
 };
+
+export const ALL_HANDLERS = [
+  HandlerTypes.ALL,
+  HandlerTypes.DELETE,
+  HandlerTypes.FORCE_DELETE,
+  HandlerTypes.INSERT,
+  HandlerTypes.PAGINATE,
+  HandlerTypes.PATCH,
+  HandlerTypes.SHOW,
+  HandlerTypes.UPDATE,
+];

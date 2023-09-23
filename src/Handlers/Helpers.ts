@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { camelCase } from "change-case";
 import {
   IModelService,
@@ -6,6 +7,8 @@ import {
   IVersion,
   IWith,
   IContext,
+  ICacheConfiguration,
+  IHandlerBasedCacheConfig,
 } from "../Interfaces";
 import { Knex } from "knex";
 import {
@@ -14,16 +17,19 @@ import {
   HookFunctionTypes,
   TimestampColumns,
   QueryFeature,
+  CacheStrategies,
 } from "../Enums";
 import ApiError from "../Exceptions/ApiError";
-import { IoCService, ModelListService } from "../Services";
+import { IoCService, LogService, ModelListService } from "../Services";
 import { PhaseFunction, SerializationFunction } from "../Types";
 import { valideteQueryFeature } from "../Services/LimitService";
 import {
   NUMERIC_PRIMARY_KEY_TYPES,
+  DEFAULT_CACHE_CONFIGURATION,
   RelationQueryFeatureMap,
 } from "../constants";
-import AxeRequest from "src/Services/AxeRequest";
+import AxeRequest from "../Services/AxeRequest";
+import RedisAdaptor from "../Middlewares/RateLimit/RedisAdaptor";
 
 export const bindTimestampValues = (
   formData: Record<string, any>,
@@ -360,6 +366,15 @@ export const getRelatedData = async (
       parentPrimaryKeyValues,
     );
 
+    // Adding related data source to the request tags to set cache tag values
+    const { primaryKey } = foreignModel.instance;
+    const cacheConfig = foreignModel.getCacheConfiguration(handler);
+    request.original.tags.push(
+      ...relatedRecords.map((i: any) =>
+        toCacheTagKey(foreignModel, i[primaryKey], cacheConfig),
+      ),
+    );
+
     // We should serialize related data if there is any serialization function
     relatedRecords = await serializeData(
       version,
@@ -411,4 +426,156 @@ export const isBoolean = (value: any): boolean => {
   }
 
   return false;
+};
+
+export const getModelCacheConfiguration = (
+  model: IModelService,
+  apiConfig: ICacheConfiguration,
+  versionConfig: ICacheConfiguration | null,
+  handler: string,
+): ICacheConfiguration => {
+  let base: ICacheConfiguration = {
+    ...DEFAULT_CACHE_CONFIGURATION,
+    ...apiConfig,
+  };
+
+  if (model.instance.cache) {
+    const data: any = model.instance.cache;
+
+    if (Array.isArray(data)) {
+      const handlerBasedConfigs = data as IHandlerBasedCacheConfig[];
+      for (const item of handlerBasedConfigs) {
+        const isFound = item.handlers.map((i) => i as string).includes(handler);
+        if (isFound) {
+          base = {
+            ...base,
+            ...item.cache,
+          };
+          return base;
+        }
+      }
+    } else {
+      base = {
+        ...base,
+        ...(data as ICacheConfiguration),
+      };
+      return base;
+    }
+  }
+
+  if (versionConfig) {
+    base = {
+      ...base,
+      ...versionConfig,
+    };
+  }
+
+  return base;
+};
+
+export const defaultCacheKeyFunction = (req: AxeRequest) => {
+  return JSON.stringify({
+    url: req.url,
+    method: req.method,
+    headers: {
+      Accept: req.header("Accept"),
+      "Accept-Encoding": req.header("Accept-Encoding"),
+      "Accept-Language": req.header("Accept-Language"),
+      Authorization: req.header("Authorization"),
+      Host: req.header("Host"),
+      Origin: req.header("Origin"),
+      Referer: req.header("Referer"),
+      "User-Agent": req.header("User-Agent"),
+    },
+  });
+};
+
+export const toCacheTagKey = (
+  model: IModelService,
+  primaryKeyValue: string,
+  config?: ICacheConfiguration | null,
+) => {
+  const prefix = toCachePrefix(config?.cachePrefix);
+  const tagPrefix = config?.tagPrefix ? config?.tagPrefix : "";
+  const modelName = model.name.toLowerCase();
+  return `${prefix}:${tagPrefix}:${modelName}:${primaryKeyValue}`;
+};
+
+export const toCacheKey = (context: IContext) => {
+  const { model, handlerType } = context;
+  const config = model.getCacheConfiguration(handlerType);
+  const keyData = config?.cacheKey
+    ? config.cacheKey(context.req)
+    : defaultCacheKeyFunction(context.req);
+  const key = crypto.createHash("sha256").update(keyData).digest("hex");
+  const prefix = toCachePrefix(config?.cachePrefix);
+  const modelName = model.name.toLowerCase();
+  return `${prefix}:${modelName}:${key}`;
+};
+
+export const putCache = async (context: IContext, data: any) => {
+  // Getting the correct configuration
+  const { model, handlerType } = context;
+  const config = model.getCacheConfiguration(handlerType);
+
+  // Check if the cache enable for this handler
+  if (!config?.enable) {
+    return;
+  }
+
+  // Getting the redis service
+  const redis = await IoCService.use<RedisAdaptor>("Redis");
+
+  // Generating the cache key
+  const key = toCacheKey(context);
+
+  // Setting the tags if the cache configuration of the model has been set as
+  // tag-based cache invalidation strategy. Which means, the key cached value
+  // can be deleted if the tagged items updated/delete
+  if (config.invalidation === CacheStrategies.TagBased) {
+    redis.tags(context.req.original.tags, key);
+  }
+
+  // Putting the cache data
+  redis.set(key, JSON.stringify(data), config.ttl || 1000);
+  if (config.responseHeader) {
+    context.res.header(config.responseHeader, "Missed");
+  }
+
+  // Logging
+  LogService.debug(`\t🔄 redis.cache(${key},${config.ttl})`);
+};
+
+export const deleteCacheTagMembers = async (key: string) => {
+  const redis = await IoCService.use<RedisAdaptor>("Redis");
+  const members = await redis.getTagMemebers(key);
+  await redis.delete(members);
+};
+
+export const cleanRelatedCachedObjectByModel = async (
+  model: IModelService,
+  config?: ICacheConfiguration | null,
+) => {
+  const redis = await IoCService.use<RedisAdaptor>("Redis");
+  const prefix = toCachePrefix(config?.cachePrefix);
+  const tagPrefix = config?.tagPrefix ? config?.tagPrefix : "";
+  const modelName = model.name.toLowerCase();
+  const searchKey = `${prefix}:${tagPrefix}:${modelName}:*`;
+  // Logging
+  LogService.debug(`\t🔄 redis.cleaByTag(${searchKey})`);
+  const { keys } = await redis.searchTags(searchKey);
+  const tasks = keys.map((key) => deleteCacheTagMembers(key));
+  Promise.all(tasks);
+};
+
+export const clearCacheTags = async (tag: string) => {
+  const redis = await IoCService.use<RedisAdaptor>("Redis");
+  const members = await redis.getTagMemebers(tag);
+  if (members.length > 0) {
+    await redis.delete(members);
+  }
+};
+
+export const toCachePrefix = (value: string | undefined | null) => {
+  return value ? value : "";
 };

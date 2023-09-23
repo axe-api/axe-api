@@ -6,6 +6,8 @@ import {
   IQueryLimitConfig,
   IHandlerBaseMiddleware,
   IHandlerBasedTransactionConfig,
+  ICacheConfiguration,
+  IHandlerBasedCacheConfig,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
@@ -234,6 +236,10 @@ class Model {
    */
   get limits(): Array<IQueryLimitConfig[]> {
     return [];
+  }
+
+  get cache(): ICacheConfiguration | IHandlerBasedCacheConfig[] | null {
+    return null;
   }
 
   /**

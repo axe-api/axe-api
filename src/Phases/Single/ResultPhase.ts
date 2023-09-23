@@ -1,15 +1,18 @@
-import { LogService } from "../../Services";
 import { IContext } from "../../Interfaces";
-import { Knex } from "knex";
+import { putCache, toCacheTagKey } from "../../Handlers/Helpers";
 
 export default async (context: IContext) => {
-  const { database, isTransactionOpen, item, res } = context;
+  const { item, res, model, handlerType } = context;
 
-  // If there is a valid transaction, we should commit it
-  if (isTransactionOpen) {
-    LogService.warn("\tDB transaction commit");
-    (database as Knex.Transaction).commit();
-  }
+  // Adding cache tags
+  const { primaryKey } = model.instance;
+  const config = model.getCacheConfiguration(handlerType);
+  context.req.original.tags.push(
+    toCacheTagKey(model, item[primaryKey], config),
+  );
+
+  // Caching the results
+  await putCache(context, item);
 
   res.json(item);
 };

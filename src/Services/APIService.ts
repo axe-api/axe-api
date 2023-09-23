@@ -61,6 +61,7 @@ class APIService {
           limits: [],
         },
         formidable: {},
+        cache: null,
       },
       folders: {
         root,
