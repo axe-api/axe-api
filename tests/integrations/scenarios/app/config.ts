@@ -15,9 +15,7 @@ const config: IApplicationConfig = {
     maxRequests: 200,
     windowInSeconds: 5,
     trustProxyIP: false,
-    adaptor: {
-      type: "memory",
-    },
+    adaptor: "memory",
   },
   database: {
     client: process.env.DB_CLIENT,
@@ -36,6 +34,9 @@ const config: IApplicationConfig = {
     migrations: {
       tableName: "knex_migrations",
     },
+  },
+  cache: {
+    enable: false,
   },
 };
 

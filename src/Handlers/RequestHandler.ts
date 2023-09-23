@@ -7,8 +7,6 @@ import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "../Exceptions/ApiError";
 import { NextFunction } from "connect";
 
-const api = APIService.getInstance();
-
 const return404 = (response: ServerResponse) => {
   response.statusCode = 404;
   response.write(JSON.stringify({ error: "Resource not found" }));
@@ -20,6 +18,7 @@ export default async (
   response: ServerResponse,
   next: NextFunction,
 ) => {
+  const api = APIService.getInstance();
   LogService.debug(`📥 ${request.method} ${request.url}`);
 
   const { axeRequest, axeResponse } = toAxeRequestResponsePair(

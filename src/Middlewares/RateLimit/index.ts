@@ -78,8 +78,8 @@ const getClientKeyByConfigurations = (
 export const setupRateLimitAdaptors = (config: AxeConfig) => {
   // Creating the correct adaptor by the configuration
   adaptor = AdaptorFactory(
-    config.rateLimit?.adaptor.type || "memory",
-    config.rateLimit?.adaptor.redis,
+    config.rateLimit?.adaptor || "memory",
+    config.redis,
     "",
   );
 };

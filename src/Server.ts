@@ -23,6 +23,7 @@ import http from "http";
 import RequestHandler from "./Handlers/RequestHandler";
 import App from "./Services/App";
 import { DEFAULT_APP_CONFIG } from "./constants";
+import RedisAdaptor from "./Middlewares/RateLimit/RedisAdaptor";
 
 class Server {
   /**
@@ -62,6 +63,9 @@ class Server {
       attachPaginate();
       LogService.debug("Added pagination support to the knex");
       return database;
+    });
+    IoCService.singleton("Redis", () => {
+      return new RedisAdaptor(api.config.redis, "");
     });
   }
 

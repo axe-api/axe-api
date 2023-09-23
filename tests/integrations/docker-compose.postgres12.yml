@@ -9,3 +9,8 @@ services:
       POSTGRES_PASSWORD: 123456
     ports:
       - "5433:5432"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

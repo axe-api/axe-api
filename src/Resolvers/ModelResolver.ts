@@ -12,10 +12,12 @@ import {
   LogService,
   IoCService,
   ModelListService,
+  APIService,
 } from "../Services";
-import { DEFAULT_METHODS_OF_MODELS } from "../constants";
+import { ALL_HANDLERS, DEFAULT_METHODS_OF_MODELS } from "../constants";
 import { SchemaInspectorFuction, SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
+import { getModelCacheConfiguration } from "../Handlers/Helpers";
 
 class ModelResolver {
   private version: IVersion;
@@ -50,7 +52,31 @@ class ModelResolver {
 
     this.version.modelList = modelList;
 
+    await this.setCacheOptions(modelList);
+
     LogService.debug(`[${this.version.name}] All models have been resolved.`);
+  }
+
+  private async setCacheOptions(modelList: ModelListService) {
+    const api = APIService.getInstance();
+
+    // For each model should be analyzed
+    for (const model of modelList.get()) {
+      // For each cachable handler, developers are able to set a different
+      // configuration. That's why we should check for each of them.
+      for (const handler of ALL_HANDLERS) {
+        // API configuration, version configuration and the handler type are in
+        // order. The following function gets the correct configuration
+        const configuration = getModelCacheConfiguration(
+          model,
+          api.config.cache,
+          this.version.config.cache,
+          handler,
+        );
+        // We need to set this to use late in action
+        model.setCacheConfiguration(handler, configuration);
+      }
+    }
   }
 
   private async setModelRelations(modelList: ModelListService) {

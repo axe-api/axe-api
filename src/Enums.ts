@@ -183,3 +183,8 @@ export enum StatusCodes {
   USE_PROXY = 305,
   MISDIRECTED_REQUEST = 421,
 }
+
+export enum CacheStrategies {
+  TimeBased = "time-based",
+  TagBased = "tag-based",
+}
