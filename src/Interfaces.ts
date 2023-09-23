@@ -12,6 +12,7 @@ import {
   DependencyTypes,
   QueryFeature,
   QueryFeatureType,
+  CacheStrategies,
 } from "./Enums";
 import Model from "./Model";
 import {
@@ -30,6 +31,7 @@ import App from "./Services/App";
 import { LoggerOptions } from "pino";
 import { IncomingMessage } from "http";
 import { ErrorHandleFunction } from "connect";
+import { RedisClientOptions } from "redis";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -41,6 +43,11 @@ export interface IConfig {}
 export interface IHandlerBasedTransactionConfig {
   handlers: HandlerTypes[];
   transaction: boolean;
+}
+
+export interface IHandlerBasedCacheConfig {
+  handlers: HandlerTypes[];
+  cache: ICacheConfiguration;
 }
 
 interface IHandlerBasedSerializer {
@@ -65,18 +72,6 @@ export interface IQueryConfig {
   defaults?: IQueryDefaultConfig;
 }
 
-export interface IRedisOptions {
-  host?: string;
-  port?: number;
-  password?: string;
-  db?: number;
-}
-
-export interface IRateLimitAdaptorConfig {
-  type: AdaptorType;
-  redis?: IRedisOptions;
-}
-
 export interface IRateLimitOptions {
   maxRequests: number;
   windowInSeconds: number;
@@ -84,7 +79,7 @@ export interface IRateLimitOptions {
 
 export interface IRateLimitConfig extends IRateLimitOptions {
   enabled: boolean;
-  adaptor: IRateLimitAdaptorConfig;
+  adaptor: AdaptorType;
   trustProxyIP: boolean;
   keyGenerator?: (req: IncomingMessage) => string;
 }
@@ -101,9 +96,20 @@ export interface AxeVersionConfig {
   defaultLanguage: string;
   query: IQueryConfig;
   formidable: FormOptions;
+  cache: ICacheConfiguration | null;
 }
 
 export type IVersionConfig = Partial<AxeVersionConfig>;
+
+export interface ICacheConfiguration {
+  enable?: boolean;
+  ttl?: number;
+  invalidation?: CacheStrategies;
+  cachePrefix?: string;
+  tagPrefix?: string;
+  responseHeader?: string | null;
+  cacheKey?: (req: AxeRequest) => string;
+}
 
 export interface AxeConfig extends IConfig {
   env: string;
@@ -114,6 +120,8 @@ export interface AxeConfig extends IConfig {
   rateLimit: IRateLimitConfig;
   errorHandler: ErrorHandleFunction;
   docs: boolean;
+  redis: RedisClientOptions | undefined;
+  cache: ICacheConfiguration;
 }
 
 export type IApplicationConfig = Partial<AxeConfig>;
@@ -191,6 +199,9 @@ export interface IModelService {
   ): void;
   setQueryLimits(limits: IQueryLimitConfig[]): void;
   setSerialization(callback: SerializationFunction): void;
+  setCacheConfiguration(handler: string, cache: ICacheConfiguration): void;
+  getCacheConfiguration(handler: HandlerTypes): ICacheConfiguration | null;
+  setAsRecursive(): void;
 }
 
 export interface IRelation {

@@ -7,8 +7,6 @@ import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "../Exceptions/ApiError";
 import { NextFunction } from "connect";
 
-const api = APIService.getInstance();
-
 const return404 = (response: ServerResponse) => {
   response.statusCode = 404;
   response.write(JSON.stringify({ error: "Resource not found" }));
@@ -20,6 +18,7 @@ export default async (
   response: ServerResponse,
   next: NextFunction,
 ) => {
+  const api = APIService.getInstance();
   LogService.debug(`📥 ${request.method} ${request.url}`);
 
   const { axeRequest, axeResponse } = toAxeRequestResponsePair(
@@ -41,7 +40,7 @@ export default async (
   // Prepare the database by the transaction option
   let trx: Knex.Transaction | null = null;
   if (match.hasTransaction) {
-    LogService.warn("\tDB transaction created");
+    LogService.info("\t🛢 DBTransaction:created()");
     trx = await database.transaction();
   }
 
@@ -75,7 +74,7 @@ export default async (
 
       // Rollback transaction
       if (match.hasTransaction && trx) {
-        LogService.warn("\tDB transaction rollback");
+        LogService.info("\t🛢 DBTransaction:rollback()");
         trx.rollback();
       }
 
@@ -99,11 +98,17 @@ export default async (
     // we should rollback it before the HTTP request end.
     if (context.res.statusCode() >= 400 && context.res.statusCode() < 599) {
       if (match.hasTransaction && trx) {
-        LogService.warn("\tDB transaction rollback");
+        LogService.info("\t🛢 DBTransaction:rollback()");
         trx.rollback();
       }
       LogService.debug(`\tResponse ${context.res.statusCode()}`);
       break;
+    }
+
+    // We should commit the transaction if there is any
+    if (match.hasTransaction && trx) {
+      LogService.info("\t🛢 DBTransaction:commit()");
+      trx.commit();
     }
 
     LogService.debug(`\t🟢 Response ${context.res.statusCode()}`);

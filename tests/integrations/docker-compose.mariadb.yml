@@ -16,3 +16,8 @@ services:
       MARIADB_PASSWORD: 123456
     ports:
       - "3308:3306"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6380:6379"

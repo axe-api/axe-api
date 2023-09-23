@@ -62,11 +62,8 @@ class ModelTreeBuilder {
       );
 
       if (recursiveRelations.length === 2) {
-        tree.push({
-          ...model,
-          isRecursive: true,
-          children: [],
-        });
+        model.setAsRecursive();
+        tree.push(model);
       }
     });
   }

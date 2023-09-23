@@ -8,7 +8,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "3307",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "mysql57": {
     "_title": "MySQL 5.7",
@@ -19,7 +20,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "3307",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "postgres11": {
     "_title": "PostgreSQL 11",
@@ -30,7 +32,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "postgres12": {
     "_title": "PostgreSQL 12",
@@ -41,7 +44,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "postgres13": {
     "_title": "PostgreSQL 13",
@@ -52,7 +56,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "postgres14": {
     "_title": "PostgreSQL 14",
@@ -63,7 +68,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "postgres15": {
     "_title": "PostgreSQL 15",
@@ -74,7 +80,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "5433",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "cockroach": {
     "_title": "Cockroach DB",
@@ -85,7 +92,8 @@
     "DB_USER": "axeapi",
     "DB_PORT": "26257",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "mariadb": {
     "_title": "MariaDB",
@@ -96,12 +104,14 @@
     "DB_USER": "axeapi",
     "DB_PORT": "3308",
     "DB_PASSWORD": "123456",
-    "DB_DATABASE": "axeapi"
+    "DB_DATABASE": "axeapi",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   },
   "sqlite": {
     "_title": "SQLite",
     "NODE_ENV": "development",
     "APP_PORT": "3000",
-    "DB_CLIENT": "sqlite3"
+    "DB_CLIENT": "sqlite3",
+    "REDIS_URL": "redis://127.0.0.1:6380"
   }
 }

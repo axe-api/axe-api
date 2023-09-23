@@ -1,5 +1,6 @@
-import { HookFunctionTypes, Extensions } from "../Enums";
+import { HookFunctionTypes, Extensions, HandlerTypes } from "../Enums";
 import {
+  ICacheConfiguration,
   IColumn,
   IModelService,
   IQueryLimitConfig,
@@ -20,6 +21,7 @@ class ModelService implements IModelService {
   isRecursive: boolean;
   queryLimits: IQueryLimitConfig[];
   serialize: SerializationFunction | null;
+  cacheConfiguration: Record<string, ICacheConfiguration>;
 
   constructor(name: string, instance: Model) {
     this.name = name;
@@ -31,11 +33,20 @@ class ModelService implements IModelService {
     this.isRecursive = false;
     this.queryLimits = [];
     this.serialize = null;
+    this.cacheConfiguration = {};
   }
 
   setColumns(columns: IColumn[]) {
     this.columns = columns;
     this.columnNames = this.columns.map((i) => i.name);
+  }
+
+  setCacheConfiguration(handler: string, cache: ICacheConfiguration) {
+    this.cacheConfiguration[handler] = cache;
+  }
+
+  getCacheConfiguration(handler: HandlerTypes) {
+    return this.cacheConfiguration[handler];
   }
 
   setExtensions(
@@ -58,6 +69,11 @@ class ModelService implements IModelService {
 
   setSerialization(callback: SerializationFunction) {
     this.serialize = callback;
+  }
+
+  setAsRecursive() {
+    this.isRecursive = true;
+    this.children = [];
   }
 
   private setHooks(hookFunctionType: HookFunctionTypes, data: PhaseFunction) {
