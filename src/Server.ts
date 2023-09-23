@@ -54,7 +54,11 @@ class Server {
     IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);
-      LogService.debug("Created a knex connection instance");
+      const { client } = api.config.database;
+      const { database: db, filename } = api.config.database.connection as any;
+      LogService.debug(
+        `Created a knex connection instance: [${client}:${db || filename}]`,
+      );
       attachPaginate();
       LogService.debug("Added pagination support to the knex");
       return database;
