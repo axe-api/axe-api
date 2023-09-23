@@ -14,6 +14,7 @@ class AxeRequest {
 
   constructor(request: IncomingMessage) {
     this.request = request;
+    this.request.tags = [];
     this.urlObject = new URL(request.url || "", "http://127.0.0.1");
 
     // Application configuration is need for the default setting.

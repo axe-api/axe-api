@@ -2,7 +2,7 @@ import path from "path";
 import { Column } from "knex-schema-inspector/lib/types/column";
 import { describe, expect, test, beforeEach, jest } from "@jest/globals";
 import { ModelResolver } from "../../../src/Resolvers";
-import { IoCService, LogService } from "../../../src/Services";
+import { APIService, IoCService, LogService } from "../../../src/Services";
 import { IVersion } from "../../../src/Interfaces";
 
 const DBMock = {};
@@ -55,6 +55,7 @@ const SchemaInspectorMock = () => {
 
 describe("ModelResolver", () => {
   beforeEach(() => {
+    APIService.setInsance(path.join(__dirname, "..", "Models"));
     LogService.setInstance();
     IoCService.singleton("Database", () => DBMock);
     IoCService.singleton("SchemaInspector", () => SchemaInspectorMock);

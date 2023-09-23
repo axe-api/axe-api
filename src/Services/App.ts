@@ -3,9 +3,7 @@ import bodyParser from "body-parser";
 import { GeneralFunction } from "../Types";
 import URLService from "./URLService";
 import LogService from "./LogService";
-import RateLimitMiddleware, {
-  setupRateLimitAdaptors,
-} from "../Middlewares/RateLimit";
+import { setupRateLimitAdaptors } from "../Middlewares/RateLimit";
 import APIService from "./APIService";
 import { resolveMiddlewares } from "./ConverterService";
 import DocumentationService from "./DocumentationService";
@@ -26,11 +24,6 @@ class App {
     // Activate the Rate Limit middleware
     const api = APIService.getInstance();
     setupRateLimitAdaptors(api.config);
-
-    if (api.config.rateLimit?.enabled) {
-      LogService.debug("New middleware: rateLimit()");
-      this.connect.use(RateLimitMiddleware);
-    }
   }
 
   /**

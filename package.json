@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "1.0.0-rc21",
+  "version": "1.0.0-rc29",
   "description": "AXE API is a simple tool to create Rest APIs quickly.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -64,8 +64,8 @@
     "knex-paginate": "^3.1.1",
     "knex-schema-inspector": "^3.0.1",
     "nanoid": "^3.3.6",
-    "pino": "^8.15.0",
-    "pino-pretty": "^10.2.0",
+    "pino": "^8.16.1",
+    "pino-pretty": "^10.2.3",
     "pluralize": "^8.0.0",
     "validatorjs": "^3.22.1"
   },

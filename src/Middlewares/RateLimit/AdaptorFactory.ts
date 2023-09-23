@@ -1,11 +1,11 @@
 import { AdaptorType } from "../../Types";
 import RedisAdaptor from "./RedisAdaptor";
 import MemoryAdaptor from "./MemoryAdaptor";
-import { IRedisOptions } from "src/Interfaces";
+import { RedisClientOptions } from "redis";
 
 export default (
   adaptor: AdaptorType,
-  redisOptions: IRedisOptions | undefined,
+  redisOptions: RedisClientOptions | undefined,
   prefix: string,
 ) => {
   switch (adaptor) {
