@@ -1,6 +1,12 @@
 # Release Notes
 
-## [0.31.5 (2023-09-092)](https://github.com/axe-api/axe-api/compare/0.31.5...0.31.4)
+## [0.31.6 (2023-10-22)](https://github.com/axe-api/axe-api/compare/0.31.6...0.31.5)
+
+### Fixed
+
+- Security updates. ([#40](https://github.com/axe-api/axe-api/security/dependabot/40), [#41](https://github.com/axe-api/axe-api/security/dependabot/41))
+
+## [0.31.5 (2023-09-09)](https://github.com/axe-api/axe-api/compare/0.31.5...0.31.4)
 
 ### Fixed
 
