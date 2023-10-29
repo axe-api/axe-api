@@ -6,6 +6,7 @@ import {
   IModelService,
   IRelation,
   IRouteData,
+  IRouteParentPair,
   IVersion,
 } from "../Interfaces";
 import { API_ROUTE_TEMPLATES, HANDLER_METHOD_MAP } from "../constants";
@@ -48,12 +49,13 @@ class RouterBuilder {
 
   private async createRoutesByModelTree() {
     for (const model of this.version.modelTree) {
-      await this.createRouteByModel(model);
+      await this.createRouteByModel(model, []);
     }
   }
 
   private async createRouteByModel(
     model: IModelService,
+    parentPairs: IRouteParentPair[] = [],
     urlPrefix = "",
     parentModel: IModelService | null = null,
     relation: IRelation | null = null,
@@ -92,12 +94,13 @@ class RouterBuilder {
         url,
         middlewares,
         model,
+        parentPairs,
         parentModel,
         relation,
       );
     }
 
-    await this.createChildRoutes(model, resource, urlPrefix);
+    await this.createChildRoutes(model, resource, urlPrefix, parentPairs);
     await this.createNestedRoutes(model, allowRecursive, urlPrefix, resource);
   }
 
@@ -120,8 +123,13 @@ class RouterBuilder {
 
     if (relation) {
       const paramName = camelCase(`${model.name}-${relation.primaryKey}`);
+      const parentPair: IRouteParentPair = {
+        model,
+        paramName,
+      };
       await this.createRouteByModel(
         model,
+        [parentPair],
         `${urlPrefix}${resource}/:${paramName}/`,
         model,
         relation,
@@ -134,6 +142,7 @@ class RouterBuilder {
     model: IModelService,
     resource: string,
     urlPrefix: string,
+    parentPairs: IRouteParentPair[],
   ) {
     if (model.children.length === 0) {
       return;
@@ -148,8 +157,14 @@ class RouterBuilder {
       // It should be recursive
       if (child) {
         const paramName = camelCase(`${model.name}-${relation.primaryKey}`);
+        // Setting the new parent pair depth
+        const parentPair: IRouteParentPair = {
+          model,
+          paramName,
+        };
         await this.createRouteByModel(
           child,
+          [...parentPairs, parentPair],
           `${urlPrefix}${resource}/:${paramName}/`,
           model,
           relation,
@@ -163,6 +178,7 @@ class RouterBuilder {
     url: string,
     middlewares: AxeFunction[],
     model: IModelService,
+    parentPairs: IRouteParentPair[],
     parentModel: IModelService | null,
     relation: IRelation | null,
   ) {
@@ -182,6 +198,7 @@ class RouterBuilder {
       url,
       data,
       middlewares,
+      parentPairs,
     );
 
     // Documentation

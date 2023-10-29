@@ -15,6 +15,7 @@ import {
   IRouteData,
   IVersion,
   IURLPair,
+  IRouteParentPair,
 } from "../Interfaces";
 import AxeRequest from "./AxeRequest";
 import { TransactionResolver } from "../Resolvers";
@@ -53,6 +54,7 @@ class URLService {
     pattern: string,
     data: IRouteData,
     middlewares: AxeFunction[],
+    parentPairs: IRouteParentPair[],
   ) {
     const phases = this.getDefaultPhases(middlewares);
 
@@ -86,6 +88,7 @@ class URLService {
       data,
       phases,
       hasTransaction,
+      parentPairs,
     });
   }
 
@@ -143,6 +146,7 @@ class URLService {
         parentModel: null,
         relation: null,
       },
+      parentPairs: [],
     });
   }
 

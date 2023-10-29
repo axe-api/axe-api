@@ -351,6 +351,7 @@ export interface IURLPair {
   phases: IPhaseDefinition[];
   hasTransaction: boolean;
   params?: any;
+  parentPairs: IRouteParentPair[];
   customHandler?: HandlerFunction;
 }
 
@@ -362,4 +363,9 @@ export interface BulkTask<DataType, ReturnType> {
 export interface IForeignKeyTask {
   relation: IRelation;
   value: any;
+}
+
+export interface IRouteParentPair {
+  model: IModelService;
+  paramName: string;
 }
