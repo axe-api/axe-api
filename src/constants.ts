@@ -30,6 +30,7 @@ import Event from "./Steps/Event";
 import ErrorHandler from "./Handlers/ErrorHandler";
 import GetCachePhase from "./Phases/GetCachePhase";
 import CacheTagCleanPhase from "./Phases/CacheTagCleanPhase";
+import URLSearchParamPhase from "./Phases/URLSearchParamPhase";
 import { defaultCacheKeyFunction } from "./Handlers/Helpers";
 
 export const RESERVED_KEYWORDS: string[] = [
@@ -192,6 +193,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
   ],
   [HandlerTypes.PAGINATE]: [
     new Phase("paginate.cache", GetCachePhase),
+    new Phase("paginate.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("paginate.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
@@ -203,7 +205,8 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("paginate.response", List.ResultPhase),
   ],
   [HandlerTypes.SHOW]: [
-    new Phase("paginate.cache", GetCachePhase),
+    new Phase("show.cache", GetCachePhase),
+    new Phase("show.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("show.prepareQuery", Show.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeShow),
     new Event(HookFunctionTypes.onBeforeShow),
@@ -215,6 +218,7 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("show.response", Single.ResultPhase),
   ],
   [HandlerTypes.UPDATE]: [
+    new Phase("update.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("update.prepareQuery", Single.PrepareGetPhase),
     new Hook(HookFunctionTypes.onBeforeUpdateQuery),
     new Event(HookFunctionTypes.onBeforeUpdateQuery),
@@ -227,11 +231,12 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("update.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
-    new Phase("cache.cleanTags", CacheTagCleanPhase),
+    new Phase("update.cleanCleanTags", CacheTagCleanPhase),
     new Phase("update.serialize", Single.SerializePhase),
     new Phase("update.response", Single.ResultPhase),
   ],
   [HandlerTypes.DELETE]: [
+    new Phase("delete.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("delete.prepareQuery", Delete.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeDeleteQuery),
     new Event(HookFunctionTypes.onBeforeDeleteQuery),
@@ -243,10 +248,11 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("delete.action", Delete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterDelete),
     new Event(HookFunctionTypes.onAfterDelete),
-    new Phase("cache.cleanTags", CacheTagCleanPhase),
+    new Phase("delete.cleanCleanTags", CacheTagCleanPhase),
     new Phase("delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.FORCE_DELETE]: [
+    new Phase("force-delete.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("force-delete.prepareQuery", ForceDelete.PreparePhase),
     new Hook(HookFunctionTypes.onBeforeForceDeleteQuery),
     new Event(HookFunctionTypes.onBeforeForceDeleteQuery),
@@ -258,10 +264,11 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("force-delete.action", ForceDelete.ActionPhase),
     new Hook(HookFunctionTypes.onAfterForceDelete),
     new Event(HookFunctionTypes.onAfterForceDelete),
-    new Phase("cache.cleanTags", CacheTagCleanPhase),
+    new Phase("force-delete.cleanCleanTags", CacheTagCleanPhase),
     new Phase("force-delete.response", Delete.ResponsePhase),
   ],
   [HandlerTypes.PATCH]: [
+    new Phase("patch.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("patch.prepareQuery", Single.PrepareGetPhase),
     new Hook(HookFunctionTypes.onBeforeUpdateQuery),
     new Event(HookFunctionTypes.onBeforeUpdateQuery),
@@ -274,12 +281,13 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Phase("patch.action", Update.ActionPhase),
     new Hook(HookFunctionTypes.onAfterUpdate),
     new Event(HookFunctionTypes.onAfterUpdate),
-    new Phase("cache.cleanTags", CacheTagCleanPhase),
+    new Phase("patch.cleanCleanTags", CacheTagCleanPhase),
     new Phase("patch.serialize", Single.SerializePhase),
     new Phase("patch.response", Single.ResultPhase),
   ],
   [HandlerTypes.ALL]: [
-    new Phase("paginate.cache", GetCachePhase),
+    new Phase("all.cache", GetCachePhase),
+    new Phase("all.URLSearchParamPhase", URLSearchParamPhase),
     new Phase("all.prepareQuery", Paginate.PreparePhase),
     new Hook(HookFunctionTypes.onBeforePaginate),
     new Event(HookFunctionTypes.onBeforePaginate),
