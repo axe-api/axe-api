@@ -353,3 +353,13 @@ export interface IURLPair {
   params?: any;
   customHandler?: HandlerFunction;
 }
+
+export interface BulkTask<DataType, ReturnType> {
+  data: DataType;
+  promise: Promise<ReturnType>;
+}
+
+export interface IForeignKeyTask {
+  relation: IRelation;
+  value: any;
+}
