@@ -9,6 +9,8 @@ import {
   IContext,
   ICacheConfiguration,
   IHandlerBasedCacheConfig,
+  BulkTask,
+  IForeignKeyTask,
 } from "../Interfaces";
 import { Knex } from "knex";
 import {
@@ -578,4 +580,62 @@ export const clearCacheTags = async (tag: string) => {
 
 export const toCachePrefix = (value: string | undefined | null) => {
   return value ? value : "";
+};
+
+const validateForeignValues = async (
+  database: Knex,
+  version: IVersion,
+  relation: IRelation,
+  value: any,
+): Promise<boolean> => {
+  if (!value) {
+    return true;
+  }
+
+  const foreignModel = version.modelList
+    .get()
+    .find((model) => model.name === relation.model);
+
+  if (!foreignModel) {
+    throw new Error(`The model not found: ${relation.model}`);
+  }
+
+  const found = await database(foreignModel.instance.table)
+    .where(foreignModel.instance.primaryKey, value)
+    .first();
+
+  return !!found;
+};
+
+export const getForeignKeyValueErrors = async (context: IContext) => {
+  const { model, database, version } = context;
+  // Getting all foreign rules.
+  const foreignRelations = model.relations.filter(
+    (relation) => relation.type === Relationships.HAS_ONE,
+  );
+
+  const tasks: BulkTask<IForeignKeyTask, boolean>[] = [];
+  for (const relation of foreignRelations) {
+    const value = context.formData[relation.foreignKey];
+    tasks.push({
+      data: {
+        value,
+        relation,
+      },
+      promise: validateForeignValues(database, version, relation, value),
+    });
+  }
+
+  const results = await Promise.all(tasks.map((promise) => promise.promise));
+  return results
+    .map((result, index) => {
+      if (result) {
+        return null;
+      }
+
+      const data = tasks[index].data;
+
+      return `Invalid value: ${data.relation.foreignKey} = ${data.value}`;
+    })
+    .filter((error) => error);
 };
