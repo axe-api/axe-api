@@ -1,18 +1,18 @@
 /* eslint-disable no-undef */
-import request from "supertest";
-import mysql from "mysql";
-import sqlite3 from "sqlite3";
-import axios from "axios";
-import { Pool } from "pg";
+const request = require("supertest");
+const mysql = require("mysql");
+const sqlite3 = require("sqlite3");
+const axios = require("axios");
+const { Pool } = require("pg");
 
-export const get = async ({ url, status }) => {
+const get = async ({ url, status }) => {
   return await request("localhost:3000")
     .get(url)
     .expect("Content-Type", /json/)
     .expect(status);
 };
 
-export const post = async ({ url, data, status }) => {
+const post = async ({ url, data, status }) => {
   return await request("localhost:3000")
     .post(url)
     .send(data)
@@ -20,7 +20,7 @@ export const post = async ({ url, data, status }) => {
     .expect(status);
 };
 
-export const put = async ({ url, data, status }) => {
+const put = async ({ url, data, status }) => {
   return await request("localhost:3000")
     .put(url)
     .send(data)
@@ -28,7 +28,7 @@ export const put = async ({ url, data, status }) => {
     .expect(status);
 };
 
-export const patch = async ({ url, data, status }) => {
+const patch = async ({ url, data, status }) => {
   try {
     return await request("localhost:3000")
       .patch(url)
@@ -40,7 +40,7 @@ export const patch = async ({ url, data, status }) => {
   }
 };
 
-export const deleteIt = async ({ url, status }) => {
+const deleteIt = async ({ url, status }) => {
   return await request("localhost:3000").delete(url).expect(status);
 };
 
@@ -95,7 +95,7 @@ const truncatePostgres = async (table) => {
   await pool.end();
 };
 
-export const truncate = async (table) => {
+const truncate = async (table) => {
   switch (process.env.DB_CLIENT) {
     case "mysql":
       return await truncateMySQL(table);
@@ -117,13 +117,23 @@ const axiosRequest = async (method, url, data) => {
   }
 };
 
-export const axiosPost = async (url, data) =>
-  await axiosRequest("post", url, data);
-export const axiosGet = async (url, data) =>
-  await axiosRequest("get", url, data);
-export const axiosPut = async (url, data) =>
-  await axiosRequest("put", url, data);
-export const axiosPatch = async (url, data) =>
-  await axiosRequest("patch", url, data);
-export const axiosDelete = async (url, data) =>
+const axiosPost = async (url, data) => await axiosRequest("post", url, data);
+const axiosGet = async (url, data) => await axiosRequest("get", url, data);
+const axiosPut = async (url, data) => await axiosRequest("put", url, data);
+const axiosPatch = async (url, data) => await axiosRequest("patch", url, data);
+const axiosDelete = async (url, data) =>
   await axiosRequest("delete", url, data);
+
+module.exports = {
+  get,
+  post,
+  put,
+  patch,
+  deleteIt,
+  truncate,
+  axiosPost,
+  axiosGet,
+  axiosPut,
+  axiosPatch,
+  axiosDelete,
+};

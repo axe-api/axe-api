@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { get, post, put, patch, deleteIt, truncate } from "./helper.js";
-import axios from "axios";
-import dotenv from "dotenv";
+const { get, post, put, patch, deleteIt, truncate } = require("./helper.js");
+const axios = require("axios");
+const dotenv = require("dotenv");
 let userId = null;
 
 axios.defaults.baseURL = "http://localhost:3000/api";

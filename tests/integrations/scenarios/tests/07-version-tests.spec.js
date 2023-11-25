@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import axios from "axios";
+const axios = require("axios");
 
 jest.useRealTimers();
 

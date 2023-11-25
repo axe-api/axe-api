@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import axios from "axios";
-import { truncate } from "./helper.js";
-import dotenv from "dotenv";
+const axios = require("axios");
+const dotenv = require("dotenv");
+const { truncate } = require("./helper.js");
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";

@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.31.7 (2023-12-01)](https://github.com/axe-api/axe-api/compare/0.31.7...0.31.6)
+
+### Fixed
+
+- Security updates. ([#42](https://github.com/axe-api/axe-api/security/dependabot/42)
+
 ## [0.31.6 (2023-10-22)](https://github.com/axe-api/axe-api/compare/0.31.6...0.31.5)
 
 ### Fixed

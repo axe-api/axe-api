@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import { get, post, put, deleteIt, truncate, patch } from "./helper.js";
-import dotenv from "dotenv";
+const { get, post, put, deleteIt, truncate, patch } = require("./helper.js");
+const dotenv = require("dotenv");
 
 describe("Axe API", () => {
   beforeAll(async () => {
