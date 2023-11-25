@@ -17,6 +17,7 @@ import { allow, deny } from "./Services/LimitService";
 import Single from "./Phases/Single";
 import List from "./Phases/List";
 import Paginate from "./Phases/Paginate";
+import Search from "./Phases/Search";
 import All from "./Phases/All";
 import Show from "./Phases/Show";
 import Store from "./Phases/Store";
@@ -87,6 +88,8 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "getFillableFields",
   "getValidationRules",
   "cache",
+  "search",
+  "getSearchQuery",
 ];
 
 export const API_ROUTE_TEMPLATES = {
@@ -102,6 +105,11 @@ export const API_ROUTE_TEMPLATES = {
   ) => `/${prefix}/${parentUrl}${resource}`,
   [HandlerTypes.ALL]: (prefix: string, parentUrl: string, resource: string) =>
     `/${prefix}/${parentUrl}${resource}/all`,
+  [HandlerTypes.SEARCH]: (
+    prefix: string,
+    parentUrl: string,
+    resource: string,
+  ) => `/${prefix}/${parentUrl}${resource}/search`,
   [HandlerTypes.SHOW]: (
     prefix: string,
     parentUrl: string,
@@ -178,6 +186,7 @@ export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {
   [HandlerTypes.FORCE_DELETE]: HttpMethods.DELETE,
   [HandlerTypes.PATCH]: HttpMethods.PATCH,
   [HandlerTypes.ALL]: HttpMethods.GET,
+  [HandlerTypes.SEARCH]: HttpMethods.GET,
 };
 
 export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
@@ -203,6 +212,19 @@ export const HANDLER_CYLES: Record<HandlerTypes, IStepDefinition[]> = {
     new Event(HookFunctionTypes.onAfterPaginate),
     new Phase("paginate.serialize", List.SerializePhase),
     new Phase("paginate.response", List.ResultPhase),
+  ],
+  [HandlerTypes.SEARCH]: [
+    new Phase("search.cache", GetCachePhase),
+    new Phase("search.URLSearchParamPhase", URLSearchParamPhase),
+    new Phase("search.prepareQuery", Search.PreparePhase),
+    new Hook(HookFunctionTypes.onBeforePaginate),
+    new Event(HookFunctionTypes.onBeforePaginate),
+    new Phase("search.query", Search.FetchPhase),
+    new Phase("search.relational", List.RelationalPhase),
+    new Hook(HookFunctionTypes.onAfterPaginate),
+    new Event(HookFunctionTypes.onAfterPaginate),
+    new Phase("search.serialize", List.SerializePhase),
+    new Phase("search.response", List.ResultPhase),
   ],
   [HandlerTypes.SHOW]: [
     new Phase("show.cache", GetCachePhase),
@@ -337,6 +359,12 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   errorHandler: ErrorHandler,
   redis: {},
   cache: { ...DEFAULT_CACHE_CONFIGURATION },
+  elasticSearch: {
+    node: "http://localhost:9200",
+  },
+  search: {
+    indexPrefix: "axe",
+  },
 };
 
 export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {

@@ -63,6 +63,7 @@ const SUMMARY_TEXTS: Record<string, string> = {
   [HandlerTypes.FORCE_DELETE]: "Force delete a {model}",
   [HandlerTypes.PATCH]: "Apply partial updates to a {model}",
   [HandlerTypes.ALL]: "Get all items on {model}",
+  [HandlerTypes.SEARCH]: "Full-text search on {model}",
 };
 
 const DESCRIPTION_TEXTS: Record<string, string> = {
@@ -74,6 +75,7 @@ const DESCRIPTION_TEXTS: Record<string, string> = {
   [HandlerTypes.FORCE_DELETE]: "Force delete a {model} by primary key",
   [HandlerTypes.PATCH]: "Apply partial updates to a {model} by primary key",
   [HandlerTypes.ALL]: "Get all items on {model}",
+  [HandlerTypes.SEARCH]: "Full-text search on {model} by using ElasticSearch",
 };
 
 const SINGLE_RETURN_ENDPOINTS: string[] = [
@@ -86,6 +88,7 @@ const SINGLE_RETURN_ENDPOINTS: string[] = [
 const ALLOWED_2XX_HANDLERS: string[] = [
   HandlerTypes.ALL,
   HandlerTypes.PAGINATE,
+  HandlerTypes.SEARCH,
   HandlerTypes.PATCH,
   HandlerTypes.SHOW,
   HandlerTypes.UPDATE,
@@ -380,6 +383,61 @@ const toRequestParameters = (endpoint: IRouteDocumentation) => {
           name: "sort",
           in: "query",
           description: "The field to sort the data (ASC: id, DESC: -id)",
+          required: false,
+          schema: {
+            type: "string",
+          },
+        },
+      ],
+    );
+  }
+
+  if (endpoint.handler === HandlerTypes.SEARCH) {
+    parameters.push(
+      ...[
+        {
+          name: "text",
+          in: "query",
+          description: "The search text",
+          required: true,
+          schema: {
+            type: "string",
+            default: "",
+          },
+        },
+        {
+          name: "page",
+          in: "query",
+          description: "The page number to list",
+          required: false,
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+        },
+        {
+          name: "per_page",
+          in: "query",
+          description: "Number of records to list on a page",
+          required: false,
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+        },
+        {
+          name: "fields",
+          in: "query",
+          description: "The model fields that can be fetched",
+          required: false,
+          schema: {
+            type: "string",
+          },
+        },
+        {
+          name: "with",
+          in: "query",
+          description: "Listable related models",
           required: false,
           schema: {
             type: "string",

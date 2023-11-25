@@ -73,6 +73,7 @@
     "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.14",
     "@babel/preset-typescript": "^7.22.11",
+    "@elastic/elasticsearch": "^8.10.0",
     "@types/accept-language-parser": "^1.5.3",
     "@types/aws-lambda": "^8.10.119",
     "@types/cors": "^2.8.13",

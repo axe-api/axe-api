@@ -8,10 +8,12 @@ import {
   IHandlerBasedTransactionConfig,
   ICacheConfiguration,
   IHandlerBasedCacheConfig,
+  IElasticSearchParameters,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
 import { DEFAULT_HANDLERS } from "./constants";
 import { ModelMiddleware, AxeFunction, ModelValidation } from "./Types";
+import { getParentIndexQuery } from "./Handlers/Helpers";
 
 class Model {
   /**
@@ -238,7 +240,38 @@ class Model {
     return [];
   }
 
+  /**
+   * You can set the caching configuration for a specific model or handler.
+   * `NULL` means that there is not a special configuration. In that case, the
+   * inherited configuration will be used.
+   *
+   * @example
+   *  get cache() {
+   *    return {
+   *      enable: false,
+   *      ttl: 300,
+   *      invalidation: CacheStrategies.TimeBased,
+   *    };
+   * }
+   * @type {ICacheConfiguration | IHandlerBasedCacheConfig[] | null>}
+   * @tutorial https://axe-api.com/reference/model-cache.html
+   */
   get cache(): ICacheConfiguration | IHandlerBasedCacheConfig[] | null {
+    return null;
+  }
+
+  /**
+   * You can set which fields should be set to the ElasticSearch for the
+   * full-text search feature.
+   *
+   * @example
+   *  get saerch() {
+   *    return ["name", "surname", "email"]
+   * }
+   * @type {string[] | null>}
+   * @tutorial https://axe-api.com/reference/model-search.html
+   */
+  get search(): string[] | null {
     return null;
   }
 
@@ -369,6 +402,66 @@ class Model {
     }
 
     return results;
+  }
+
+  /**
+   * In this function, you can use your custom Elastic Search query for the
+   * full-text search feature.
+   *
+   * By default, Axe API uses a simple full-text search.
+   *
+   * @example
+   *  get getSearchQuery(params: IElasticSearchParameters) {
+   *    return {
+   *      // your query
+   *    }
+   * }
+   * @tutorial https://axe-api.com/reference/model-get-search-query.html
+   */
+  getSearchQuery(params: IElasticSearchParameters): any {
+    const { req, model, relation, parentModel, text } = params;
+    // Creating the basic search query
+    const query: any = {
+      bool: {
+        must: [
+          {
+            query_string: {
+              query: `*${text}*`,
+              analyze_wildcard: true,
+            },
+          },
+        ],
+      },
+    };
+
+    // If there is any parent query, we should be able to that parent conditions
+    // to the ElasticSearch query.
+    const parentIndexQuery = getParentIndexQuery(req, relation, parentModel);
+    if (Object.keys(parentIndexQuery).length > 0) {
+      query.bool.must.push({
+        term: parentIndexQuery,
+      });
+    }
+
+    // If there is a deletedAtColumn, it means that this table support soft-delete
+    if (model.instance.deletedAtColumn) {
+      query.bool.must_not = {
+        exists: {
+          field: model.instance.deletedAtColumn,
+        },
+      };
+    }
+
+    return {
+      query,
+      sort: [
+        {
+          _score: {
+            order: "desc",
+          },
+        },
+      ],
+    };
   }
 
   private hasStringValue() {

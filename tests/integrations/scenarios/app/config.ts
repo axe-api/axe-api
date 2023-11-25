@@ -41,6 +41,12 @@ const config: IApplicationConfig = {
   cache: {
     enable: false,
   },
+  elasticSearch: {
+    node: "http://127.0.0.1:9200",
+  },
+  search: {
+    indexPrefix: "axe",
+  },
 };
 
 export default config;
