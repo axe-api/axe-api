@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "1.0.0-rc30",
+  "version": "1.0.0-rc31",
   "description": "AXE API is a simple tool to create Rest APIs quickly.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -73,6 +73,7 @@
     "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.14",
     "@babel/preset-typescript": "^7.22.11",
+    "@elastic/elasticsearch": "^8.10.0",
     "@types/accept-language-parser": "^1.5.3",
     "@types/aws-lambda": "^8.10.119",
     "@types/cors": "^2.8.13",

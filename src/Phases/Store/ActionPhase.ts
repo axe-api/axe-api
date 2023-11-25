@@ -1,28 +1,42 @@
+import ElasticService from "../../Services/ElasticService";
 import { StatusCodes } from "../../Enums";
 import { IContext } from "../../Interfaces";
+import { IoCService } from "../../Services";
+import { getSearchData } from "../../Handlers/Helpers";
 
 export default async (context: IContext) => {
+  const { model, res } = context;
   const [returningResult] = await context
-    .database(context.model.instance.table)
+    .database(model.instance.table)
     .insert(context.formData)
-    .returning(context.model.instance.primaryKey);
+    .returning(model.instance.primaryKey);
 
   let insertedPrimaryKeyValue =
     typeof returningResult === "number"
       ? returningResult
-      : returningResult[context.model.instance.primaryKey];
+      : returningResult[model.instance.primaryKey];
 
   // If the user use a special primary key value, we should use that value
   if (insertedPrimaryKeyValue === 0) {
-    insertedPrimaryKeyValue =
-      context.formData[context.model.instance.primaryKey];
+    insertedPrimaryKeyValue = context.formData[model.instance.primaryKey];
   }
 
   context.item = await context
-    .database(context.model.instance.table)
-    .where(context.model.instance.primaryKey, insertedPrimaryKeyValue)
+    .database(model.instance.table)
+    .where(model.instance.primaryKey, insertedPrimaryKeyValue)
     .first();
 
+  // Add index values
+  if (model.instance.search) {
+    const elastic = await IoCService.use<ElasticService>("Elastic");
+    const body: any = getSearchData(model, context.item);
+    await elastic.insert(
+      model.name,
+      context.item[model.instance.primaryKey],
+      body,
+    );
+  }
+
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
-  context.res.status(StatusCodes.CREATED);
+  res.status(StatusCodes.CREATED);
 };

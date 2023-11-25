@@ -32,6 +32,7 @@ import { LoggerOptions } from "pino";
 import { IncomingMessage } from "http";
 import { ErrorHandleFunction } from "connect";
 import { RedisClientOptions } from "redis";
+import { ClientOptions } from "@elastic/elasticsearch";
 
 export interface IColumn extends Column {
   table_name: string;
@@ -111,6 +112,10 @@ export interface ICacheConfiguration {
   cacheKey?: (req: AxeRequest) => string;
 }
 
+export interface ISearchConfigutation {
+  indexPrefix: string;
+}
+
 export interface AxeConfig extends IConfig {
   env: string;
   port: number;
@@ -122,6 +127,8 @@ export interface AxeConfig extends IConfig {
   docs: boolean;
   redis: RedisClientOptions | undefined;
   cache: ICacheConfiguration;
+  elasticSearch: ClientOptions;
+  search: ISearchConfigutation;
 }
 
 export type IApplicationConfig = Partial<AxeConfig>;
@@ -288,6 +295,7 @@ export interface IQuery {
   fields: string[];
   with: IWith[];
   trashed: boolean;
+  text: string | null;
 }
 
 export interface IWhere {
@@ -368,4 +376,12 @@ export interface IForeignKeyTask {
 export interface IRouteParentPair {
   model: IModelService;
   paramName: string;
+}
+
+export interface IElasticSearchParameters {
+  req: AxeRequest;
+  model: IModelService;
+  relation: IRelation | null;
+  parentModel: IModelService | null;
+  text: string;
 }

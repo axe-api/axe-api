@@ -25,6 +25,8 @@ import App from "./Services/App";
 import { DEFAULT_APP_CONFIG } from "./constants";
 import RedisAdaptor from "./Middlewares/RateLimit/RedisAdaptor";
 import RateLimitMiddleware from "./Middlewares/RateLimit";
+import ElasticService from "./Services/ElasticService";
+import IndexBuilder from "./Builders/IndexBuilder";
 
 class Server {
   /**
@@ -68,6 +70,9 @@ class Server {
     IoCService.singleton("Redis", () => {
       return new RedisAdaptor(api.config.redis, "");
     });
+    IoCService.singleton("Elastic", () => {
+      return new ElasticService(api.config.search, api.config.elasticSearch);
+    });
   }
 
   private async analyzeVersions() {
@@ -79,6 +84,7 @@ class Server {
       await new ModelResolver(version).resolve();
       await new SchemaValidatorService(version).validate();
       await new ModelTreeBuilder(version).build();
+      await new IndexBuilder(version).build();
       await new RouterBuilder(version).build();
     }
   }
