@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { get } from "./helper.js";
+const { get } = require("./helper.js");
 
 describe("Axe API", () => {
   test("should be able call the onBeforeInit functions", async () => {

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import axios from "axios";
-import dotenv from "dotenv";
-import { truncate } from "./helper.js";
+const axios = require("axios");
+const dotenv = require("dotenv");
+const { truncate } = require("./helper.js");
 
 jest.useRealTimers();
 
