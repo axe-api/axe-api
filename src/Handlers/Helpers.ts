@@ -129,6 +129,22 @@ export const addForeignKeyQuery = (
   }
 };
 
+export const getParentIndexQuery = (
+  request: AxeRequest,
+  relation: IRelation | null,
+  parentModel: IModelService | null,
+) => {
+  const result: any = {};
+  if (relation && parentModel) {
+    const parentColumn = getParentColumn(parentModel, relation);
+    if (parentColumn) {
+      result[relation.foreignKey] = request.params[parentColumn];
+    }
+  }
+
+  return result;
+};
+
 const getPrimaryOrForeignKeyByRelation = (
   relation: IRelation,
   dataField: string,
@@ -638,4 +654,33 @@ export const getForeignKeyValueErrors = async (context: IContext) => {
       return `Invalid value: ${data.relation.foreignKey} = ${data.value}`;
     })
     .filter((error) => error);
+};
+
+export const getSearchData = (
+  model: IModelService,
+  item: any,
+): Record<string, any> => {
+  const result: Record<string, any> = {};
+
+  if (model.instance.search) {
+    for (const field of model.instance.search) {
+      result[field] = item[field];
+    }
+  }
+
+  // If there is a deleted at column, we should put it to the index data
+  if (model.instance.deletedAtColumn) {
+    result[model.instance.deletedAtColumn] =
+      item[model.instance.deletedAtColumn];
+  }
+
+  // We should add the parent relations if there is any
+  const relations = model.relations.filter(
+    (relation) => relation.type === Relationships.HAS_ONE,
+  );
+  for (const relation of relations) {
+    result[relation.foreignKey] = item[relation.foreignKey];
+  }
+
+  return result;
 };

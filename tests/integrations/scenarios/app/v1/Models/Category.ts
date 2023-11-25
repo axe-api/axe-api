@@ -6,7 +6,11 @@ class Category extends Model {
   }
 
   get handlers() {
-    return [...DEFAULT_HANDLERS, HandlerTypes.ALL];
+    return [...DEFAULT_HANDLERS, HandlerTypes.ALL, HandlerTypes.SEARCH];
+  }
+
+  get search() {
+    return ["title"];
   }
 
   categories() {

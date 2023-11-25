@@ -44,6 +44,7 @@ class SchemaValidatorService {
     this.version.modelList.get().forEach((model) => {
       this.checkModelReservedKeywordsOrFail(model);
       this.checkModelColumnsOrFail(model, this.getModelFillableColumns(model));
+      this.checkModelColumnsOrFail(model, this.getSearchColumns(model));
       this.checkModelColumnsOrFail(
         model,
         this.getModelFormValidationColumns(model),
@@ -163,6 +164,10 @@ class SchemaValidatorService {
       ...(config.PUT || []),
       ...(config.PATCH || []),
     ];
+  };
+
+  private getSearchColumns = (model: IModelService): string[] => {
+    return model.instance.search || [];
   };
 
   private getModelFormValidationColumns = (model: IModelService): string[] => {

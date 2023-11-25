@@ -29,6 +29,7 @@ export enum HandlerTypes {
   FORCE_DELETE = "force_delete",
   PATCH = "patch",
   ALL = "all",
+  SEARCH = "search",
 }
 
 export enum HookFunctionTypes {

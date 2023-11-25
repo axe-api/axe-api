@@ -252,6 +252,7 @@ class QueryService {
       sort: this.parseSortingOptions(sections.get("sort")),
       q: this.parseCondition(q),
       with: withQueryResolver.resolve(sections.get("with") || ""),
+      text: sections.get("text") || null,
       trashed: sections.get("trashed")
         ? isBoolean(sections.get("trashed"))
         : false,
@@ -443,7 +444,7 @@ class QueryService {
       where.condition === ConditionTypes["NOT LIKE"]
     ) {
       const queryColumn = where.model.columns.find(
-        (column) => column.name === where.field
+        (column) => column.name === where.field,
       );
 
       if (
@@ -451,7 +452,7 @@ class QueryService {
         !STRING_COLUMN_TYPES.includes(queryColumn.data_type.toLowerCase())
       ) {
         throw new ApiError(
-          `Query field need to be string. Unacceptable query field: ${where.field}`
+          `Query field need to be string. Unacceptable query field: ${where.field}`,
         );
       }
 
