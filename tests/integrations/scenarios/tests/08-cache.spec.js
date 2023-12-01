@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import axios from "axios";
-import dotenv from "dotenv";
-import { truncate } from "./helper.js";
+const axios = require("axios");
+const dotenv = require("dotenv");
+const { truncate } = require("./helper.js");
 
 jest.useRealTimers();
 jest.setTimeout(10000);
@@ -50,6 +50,8 @@ describe("Cache", () => {
       },
     );
     expect(permissionPatch.title).toBe("Creating user - 1");
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Fetch the roles with permissions AGAIN. It should be missed because we
     // updated the permission value. The cached value should be deleted
