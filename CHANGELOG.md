@@ -1,5 +1,29 @@
 # Release Notes
 
+## [0.1.0 (2023-12-15)](https://github.com/axe-api/axe-api/compare/0.1.0...0.31.7)
+
+### Breaking changes
+
+- Express.js has been removed. Axe API uses the http module instead. [#47](https://github.com/axe-api/axe-api/issues/47)
+
+### Features
+
+- Pino logger integration [#227](https://github.com/axe-api/axe-api/issues/227)
+- Internal rate limiter [#262](https://github.com/axe-api/axe-api/issues/262)
+- JSDocs comments [#242](https://github.com/axe-api/axe-api/issues/242)
+- Swagger integration [#268](https://github.com/axe-api/axe-api/issues/268)
+- DB informations should be logged [#269](https://github.com/axe-api/axe-api/issues/269)
+- Auto-caching support [#153](https://github.com/axe-api/axe-api/issues/153)
+- Full-text search [#276](https://github.com/axe-api/axe-api/issues/276)
+
+### Bugs
+
+- All configurations should have a default value [#154](https://github.com/axe-api/axe-api/issues/154)
+- Creating new record should return 201 status code [#261](https://github.com/axe-api/axe-api/issues/261)
+- Transaction support is not able to used under model middlewares [#175](https://github.com/axe-api/axe-api/issues/175)
+- Checking foreign key values on insert/update [#176](https://github.com/axe-api/axe-api/issues/176)
+- Checking foreignKey value if exists on the table in related queries [#132](https://github.com/axe-api/axe-api/issues/132)
+
 ## [0.31.7 (2023-12-01)](https://github.com/axe-api/axe-api/compare/0.31.7...0.31.6)
 
 ### Fixed
