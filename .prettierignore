@@ -3,3 +3,4 @@ node-modules
 .github
 package.json
 package-lock.json
+benchmark

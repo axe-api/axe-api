@@ -52,7 +52,8 @@
     "test:sqlite": "sh ./scripts/test-sqlite.sh",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "benchmark": "k6 run benchmark/run.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
