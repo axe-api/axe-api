@@ -55,6 +55,9 @@
     "prepare": "husky install",
     "benchmark": "k6 run benchmark/run.js"
   },
+  "engines" : { 
+    "node" : ">=18.0.0"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "change-case": "^4.1.2",
@@ -104,7 +107,7 @@
     "nodemon": "^3.0.2",
     "open-swagger-ui": "^1.2.0",
     "pg": "^8.11.3",
-    "prettier": "^3.1.0",
+    "prettier": "^3.1.1",
     "redis": "^4.6.11",
     "set-value": ">=4.1.0",
     "sqlite3": "^5.1.6",
