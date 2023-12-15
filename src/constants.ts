@@ -357,7 +357,9 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
     },
   },
   errorHandler: ErrorHandler,
-  redis: {},
+  redis: {
+    url: "redis://127.0.0.1:6379",
+  },
   cache: { ...DEFAULT_CACHE_CONFIGURATION },
   elasticSearch: {
     node: "http://localhost:9200",

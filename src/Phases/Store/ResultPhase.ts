@@ -7,7 +7,7 @@ export default async (context: IContext) => {
 
   // Deleting all cached result for the model
   const config = model.getCacheConfiguration(handlerType);
-  if (config?.invalidation === CacheStrategies.TagBased) {
+  if (config?.enable && config?.invalidation === CacheStrategies.TagBased) {
     cleanRelatedCachedObjectByModel(model, config);
   }
 

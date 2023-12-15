@@ -1,6 +1,12 @@
 # Release Notes
 
-## [0.1.0 (2023-12-15)](https://github.com/axe-api/axe-api/compare/0.1.0...0.31.7)
+## [0.1.1 (2023-12-15)](https://github.com/axe-api/axe-api/compare/1.1.1...1.0.0)
+
+### Fixed
+
+- Auto-caching issue [#279](https://github.com/axe-api/axe-api/issues/279)
+
+## [1.0.0 (2023-12-15)](https://github.com/axe-api/axe-api/compare/1.0.0...0.31.7)
 
 ### Breaking changes
 
