@@ -1,16 +1,33 @@
-name: Create Tag
+name: Tag and Push
 
 on:
   push:
     branches:
       - master
-      - rc
 
 jobs:
-  build:
+  tag-and-push:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: butlerlogic/action-autotag@stable
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          GITHUB_TOKEN: "${{ secrets.AUTO_TAG_TOKEN }}"
+          node-version: 20
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Get version from package.json
+        id: version
+        run: echo ::set-output name=version::$(jq -r .version package.json)
+
+      - name: Tag and push to GitHub
+        run: |
+          git config --local user.email "i.ozguradem@gmail.com"
+          git config --local user.name "Özgür Adem Işıklı"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Version ${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
