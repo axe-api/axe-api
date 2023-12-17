@@ -543,6 +543,9 @@ export const putCache = async (context: IContext, data: any) => {
 
   // Getting the redis service
   const redis = await IoCService.use<RedisAdaptor>("Redis");
+  if (!redis.isReady()) {
+    return;
+  }
 
   // Generating the cache key
   const key = toCacheKey(context);
@@ -566,6 +569,10 @@ export const putCache = async (context: IContext, data: any) => {
 
 export const deleteCacheTagMembers = async (key: string) => {
   const redis = await IoCService.use<RedisAdaptor>("Redis");
+  if (!redis.isReady()) {
+    return;
+  }
+
   const members = await redis.getTagMemebers(key);
   await redis.delete(members);
 };
@@ -575,6 +582,10 @@ export const cleanRelatedCachedObjectByModel = async (
   config?: ICacheConfiguration | null,
 ) => {
   const redis = await IoCService.use<RedisAdaptor>("Redis");
+  if (!redis.isReady()) {
+    return;
+  }
+
   const prefix = toCachePrefix(config?.cachePrefix);
   const tagPrefix = config?.tagPrefix ? config?.tagPrefix : "";
   const modelName = model.name.toLowerCase();
@@ -588,6 +599,10 @@ export const cleanRelatedCachedObjectByModel = async (
 
 export const clearCacheTags = async (tag: string) => {
   const redis = await IoCService.use<RedisAdaptor>("Redis");
+  if (!redis.isReady()) {
+    return;
+  }
+
   const members = await redis.getTagMemebers(tag);
   if (members.length > 0) {
     await redis.delete(members);

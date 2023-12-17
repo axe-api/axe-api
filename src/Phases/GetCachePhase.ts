@@ -12,6 +12,10 @@ export default async (context: IContext) => {
   if (config?.enable) {
     // Getting the redis service
     const redis = await IoCService.use<RedisAdaptor>("Redis");
+    if (!redis.isReady()) {
+      return;
+    }
+
     // Generating the cache key
     const key = toCacheKey(context);
     // Try to fetch the value via Redis
