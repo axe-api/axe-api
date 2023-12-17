@@ -18,6 +18,7 @@ import { ALL_HANDLERS, DEFAULT_METHODS_OF_MODELS } from "../constants";
 import { SchemaInspectorFuction, SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
 import { getModelCacheConfiguration } from "../Handlers/Helpers";
+import RedisAdaptor from "src/Middlewares/RateLimit/RedisAdaptor";
 
 class ModelResolver {
   private version: IVersion;
@@ -59,6 +60,7 @@ class ModelResolver {
 
   private async setCacheOptions(modelList: ModelListService) {
     const api = APIService.getInstance();
+    let needRedisConnection = false;
 
     // For each model should be analyzed
     for (const model of modelList.get()) {
@@ -73,9 +75,20 @@ class ModelResolver {
           this.version.config.cache,
           handler,
         );
+
+        // We should try to connect to Redis
+        if (configuration.enable) {
+          needRedisConnection = true;
+        }
+
         // We need to set this to use late in action
         model.setCacheConfiguration(handler, configuration);
       }
+    }
+
+    if (needRedisConnection) {
+      const redis = await IoCService.use<RedisAdaptor>("Redis");
+      redis.connect();
     }
   }
 

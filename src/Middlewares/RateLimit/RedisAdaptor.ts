@@ -1,5 +1,6 @@
 import { createClient } from "redis";
 import { ICacheAdaptor } from "../../Interfaces";
+import { LogService } from "../../Services";
 
 type RedisClientType = ReturnType<typeof createClient>;
 type RedisClientOptions = Parameters<typeof createClient>[0];
@@ -7,11 +8,25 @@ type RedisClientOptions = Parameters<typeof createClient>[0];
 class RedisAdaptor implements ICacheAdaptor {
   private client: RedisClientType;
   private prefix: string;
+  private isConnected: boolean;
 
   constructor(options: RedisClientOptions | undefined, prefix: string) {
     this.client = createClient(options);
     this.prefix = prefix;
-    this.client.connect();
+    this.isConnected = false;
+  }
+
+  isReady() {
+    return this.isConnected;
+  }
+
+  async connect() {
+    try {
+      await this.client.connect();
+      this.isConnected = true;
+    } catch (error: any) {
+      LogService.error(`Redis Connection Error: ${error.message}`);
+    }
   }
 
   async get(key: string) {
