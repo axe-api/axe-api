@@ -1,12 +1,18 @@
 # Release Notes
 
-## [0.1.2 (2023-12-17)](https://github.com/axe-api/axe-api/compare/1.1.2...1.0.1)
+## [1.0.3 (2023-12-17)](https://github.com/axe-api/axe-api/compare/1.0.3...1.0.2)
+
+### Fixed
+
+- Dependabot upgrades.
+
+## [1.0.2 (2023-12-17)](https://github.com/axe-api/axe-api/compare/1.0.2...1.0.1)
 
 ### Fixed
 
 - Redis-related connection issue [#281](https://github.com/axe-api/axe-api/issues/281)
 
-## [0.1.1 (2023-12-15)](https://github.com/axe-api/axe-api/compare/1.1.1...1.0.0)
+## [1.0.1 (2023-12-15)](https://github.com/axe-api/axe-api/compare/1.0.1...1.0.0)
 
 ### Fixed
 
