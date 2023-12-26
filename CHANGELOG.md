@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.0.5 (2023-12-21)](https://github.com/axe-api/axe-api/compare/1.0.5...1.0.4)
+
+### Fixed
+
+- Dependabot upgrades.
+
 ## [1.0.4 (2023-12-21)](https://github.com/axe-api/axe-api/compare/1.0.4...1.0.3)
 
 ### Fixed
