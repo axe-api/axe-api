@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.0.6 (2023-12-31)](https://github.com/axe-api/axe-api/compare/1.0.6...1.0.5)
+
+### Fixed
+
+- Fixed query field need to be string error on postgres table [#305](https://github.com/axe-api/axe-api/issues/305)
+
 ## [1.0.5 (2023-12-21)](https://github.com/axe-api/axe-api/compare/1.0.5...1.0.4)
 
 ### Fixed
