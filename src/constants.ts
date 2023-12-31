@@ -153,6 +153,8 @@ export const ConditionQueryFeatureMap: Record<ConditionTypes, QueryFeature> = {
   [ConditionTypes["<="]]: QueryFeature.WhereLte,
   [ConditionTypes["LIKE"]]: QueryFeature.WhereLike,
   [ConditionTypes["NOT LIKE"]]: QueryFeature.WhereNotLike,
+  [ConditionTypes["ILIKE"]]: QueryFeature.WhereILike,
+  [ConditionTypes["NOT ILIKE"]]: QueryFeature.WhereNotILike,
   [ConditionTypes["In"]]: QueryFeature.WhereIn,
   [ConditionTypes["NotIn"]]: QueryFeature.WhereNotIn,
   [ConditionTypes["Between"]]: QueryFeature.WhereBetween,
@@ -175,6 +177,9 @@ export const STRING_COLUMN_TYPES = [
   "TEXT",
   "ENUM",
   "SET",
+  "character varying",
+  "character",
+  "bpchar",
 ].map((item) => item.toLowerCase());
 
 export const HANDLER_METHOD_MAP: Record<HandlerTypes, HttpMethods> = {

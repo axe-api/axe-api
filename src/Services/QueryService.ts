@@ -429,6 +429,12 @@ class QueryService {
       this.applySpecialCondition(where, "$lte", ConditionTypes["<="]);
       this.applySpecialCondition(where, "$like", ConditionTypes.LIKE);
       this.applySpecialCondition(where, "$notLike", ConditionTypes["NOT LIKE"]);
+      this.applySpecialCondition(where, "$iLike", ConditionTypes.ILIKE);
+      this.applySpecialCondition(
+        where,
+        "$notILike",
+        ConditionTypes["NOT ILIKE"],
+      );
       this.applySpecialCondition(where, "$in", ConditionTypes.In);
       this.applySpecialCondition(where, "$notIn", ConditionTypes.NotIn);
       this.applySpecialCondition(where, "$between", ConditionTypes.Between);
@@ -441,7 +447,9 @@ class QueryService {
 
     if (
       where.condition === ConditionTypes.LIKE ||
-      where.condition === ConditionTypes["NOT LIKE"]
+      where.condition === ConditionTypes["NOT LIKE"] ||
+      where.condition === ConditionTypes.ILIKE ||
+      where.condition === ConditionTypes["NOT ILIKE"]
     ) {
       const queryColumn = where.model.columns.find(
         (column) => column.name === where.field,
