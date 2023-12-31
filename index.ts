@@ -1,6 +1,7 @@
 import Server from "./src/Server";
 import Model from "./src/Model";
 import ApiError from "./src/Exceptions/ApiError";
+import RedisAdaptor from "./src/Middlewares/RateLimit/RedisAdaptor";
 import { DEFAULT_HANDLERS, DEFAULT_VERSION_CONFIG } from "./src/constants";
 import {
   IoCService,
@@ -23,6 +24,7 @@ export {
   Server,
   Model,
   ApiError,
+  RedisAdaptor,
   DEFAULT_HANDLERS,
   DEFAULT_VERSION_CONFIG,
   IoCService,
