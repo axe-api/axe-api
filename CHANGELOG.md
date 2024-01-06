@@ -1,5 +1,12 @@
 # Release Notes
 
+## [1.0.6 (2023-12-31)](https://github.com/axe-api/axe-api/compare/1.0.7...1.0.6)
+
+### Fixed
+
+- Connect middleware errors [#308](https://github.com/axe-api/axe-api/issues/308)
+- Dependabot upgrades.
+
 ## [1.0.6 (2023-12-31)](https://github.com/axe-api/axe-api/compare/1.0.6...1.0.5)
 
 ### Fixed
