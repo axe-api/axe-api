@@ -1,6 +1,6 @@
 # Release Notes
 
-## [1.0.7 (2023-12-31)](https://github.com/axe-api/axe-api/compare/1.0.7...1.0.6)
+## [1.0.7 (2024-01-06)](https://github.com/axe-api/axe-api/compare/1.0.7...1.0.6)
 
 ### Fixed
 
