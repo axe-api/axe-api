@@ -102,8 +102,8 @@ class URLService {
 
     const phases = middlewares.map((middleware) => {
       return {
-        isAsync: false,
-        name: `middleware:test`,
+        isAsync: true,
+        name: middleware.name || `middleware:test`,
         callback: async (context: IContext) => {
           if (isMiddlewareFunction(middleware)) {
             // It should be wrapped
