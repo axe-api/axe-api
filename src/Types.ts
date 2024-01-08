@@ -18,7 +18,7 @@ export type DefaultResponse = Promise<void> | void | undefined;
 
 export type NextFunction = (error?: any) => void;
 
-export type SchemaInspectorFuction = (database: Knex) => SchemaInspector;
+export type SchemaInspectorFunction = (database: Knex) => SchemaInspector;
 
 export type SerializationFunction = (item: any, request: AxeRequest) => any;
 
