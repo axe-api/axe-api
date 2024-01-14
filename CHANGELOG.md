@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.0.9 (2024-01-12)](https://github.com/axe-api/axe-api/compare/1.0.9...1.0.8)
+
+### Fixed
+
+- [serve-static](https://www.npmjs.com/package/serve-static) middleware type error [#326](https://github.com/axe-api/axe-api/issues/326)
+
 ## [1.0.8 (2024-01-12)](https://github.com/axe-api/axe-api/compare/1.0.8...1.0.7)
 
 ### Fixed
