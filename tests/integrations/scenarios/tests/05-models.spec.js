@@ -114,4 +114,14 @@ describe("Axe API Models", () => {
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(2);
   });
+
+  test("should be able get all categories with a query", async () => {
+    const { data, status } = await axiosGet(
+      `/v1/categories/all?q={"title":"xxx"}`,
+    );
+
+    expect(status).toBe(200);
+    expect(Array.isArray(data)).toBe(true);
+    expect(data.length).toBe(0);
+  });
 });
