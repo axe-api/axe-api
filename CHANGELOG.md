@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.0.10 (2024-01-15)](https://github.com/axe-api/axe-api/compare/1.0.10...1.0.9)
+
+### Fixed
+
+- Missing query features on the ALL handler [#330](https://github.com/axe-api/axe-api/issues/330)
+
 ## [1.0.9 (2024-01-14)](https://github.com/axe-api/axe-api/compare/1.0.9...1.0.8)
 
 ### Fixed
