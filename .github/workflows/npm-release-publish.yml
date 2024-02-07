@@ -2,7 +2,7 @@ name: NPM Release Publish
 on:
   push:
     branches:
-      - v1
+      - master
 
 jobs:
   publish:

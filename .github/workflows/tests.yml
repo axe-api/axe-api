@@ -3,7 +3,6 @@ name: Tests
 on:
   pull_request:
     branches:
-      - v1
       - master
       - develop
       - rc 
