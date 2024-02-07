@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.0.11 (2024-02-07)](https://github.com/axe-api/axe-api/compare/1.0.11...1.0.10)
+
+### Fixed
+
+- Dependency upgrades.
+
 ## [1.0.10 (2024-01-15)](https://github.com/axe-api/axe-api/compare/1.0.10...1.0.9)
 
 ### Fixed
