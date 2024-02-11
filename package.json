@@ -51,7 +51,7 @@
     "test:sqlite": "sh ./scripts/test-sqlite.sh",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "benchmark": "k6 run benchmark/run.js"
   },
   "engines": {
@@ -67,8 +67,8 @@
     "knex-paginate": "^3.1.1",
     "knex-schema-inspector": "^3.1.0",
     "nanoid": "^3.3.7",
-    "pino": "^8.16.2",
-    "pino-pretty": "^10.2.3",
+    "pino": "^8.18.0",
+    "pino-pretty": "^10.3.1",
     "pluralize": "^8.0.0",
     "validatorjs": "^3.22.1"
   },
