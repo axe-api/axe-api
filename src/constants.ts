@@ -11,6 +11,7 @@ import {
   AxeConfig,
   AxeVersionConfig,
   ICacheConfiguration,
+  IHasManyOptions,
   IStepDefinition,
 } from "./Interfaces";
 import { allow, deny } from "./Services/LimitService";
@@ -407,3 +408,7 @@ export const ALL_HANDLERS = [
   HandlerTypes.SHOW,
   HandlerTypes.UPDATE,
 ];
+
+export const DEFAULT_HASH_MANY_OPTIONS: IHasManyOptions = {
+  autoRouting: true,
+};

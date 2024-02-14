@@ -50,7 +50,10 @@ class ModelTreeBuilder {
 
   private getChildModelNames(model: IModelService): string[] {
     return model.relations
-      .filter((item) => item.type === Relationships.HAS_MANY)
+      .filter(
+        (item) =>
+          item.type === Relationships.HAS_MANY && item.options.autoRouting,
+      )
       .map((item) => item.model);
   }
 

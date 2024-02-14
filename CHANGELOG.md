@@ -1,5 +1,15 @@
 # Release Notes
 
+## [1.1.0 (2024-?-?)](https://github.com/axe-api/axe-api/compare/1.1.0...1.0.11)
+
+### Features
+
+- Disabling auto-route creation for has-many relations [#366](https://github.com/axe-api/axe-api/pull/366)
+
+### Fixed
+
+- Dependency upgrades.
+
 ## [1.0.11 (2024-02-07)](https://github.com/axe-api/axe-api/compare/1.0.11...1.0.10)
 
 ### Fixed
