@@ -217,6 +217,7 @@ export interface IRelation {
   model: string;
   primaryKey: string;
   foreignKey: string;
+  options: IHasManyOptions;
 }
 
 export interface IRouteData {
@@ -384,4 +385,8 @@ export interface IElasticSearchParameters {
   relation: IRelation | null;
   parentModel: IModelService | null;
   text: string;
+}
+
+export interface IHasManyOptions {
+  autoRouting: boolean;
 }
