@@ -8,6 +8,7 @@ import User from "../__Mocks/app/v1/Models/User";
 import Post from "../__Mocks/app/v1/Models/Post";
 import PostLike from "../__Mocks/app/v1/Models/PostLike";
 import Comment from "../__Mocks/app/v1/Models/Comment";
+import { DEFAULT_HASH_MANY_OPTIONS } from "../../../src/constants";
 
 const userService = new ModelService("User", new User());
 userService.relations = [
@@ -17,6 +18,7 @@ userService.relations = [
     model: "Post",
     primaryKey: "id",
     foreignKey: "user_id",
+    options: DEFAULT_HASH_MANY_OPTIONS,
   } as IRelation,
 ];
 const postService = new ModelService("Post", new Post());
@@ -27,6 +29,7 @@ postService.relations = [
     model: "PostLike",
     primaryKey: "id",
     foreignKey: "post_id",
+    options: DEFAULT_HASH_MANY_OPTIONS,
   } as IRelation,
   {
     type: Relationships.HAS_MANY,
@@ -34,6 +37,7 @@ postService.relations = [
     model: "Comment",
     primaryKey: "id",
     foreignKey: "post_id",
+    options: DEFAULT_HASH_MANY_OPTIONS,
   } as IRelation,
 ];
 const postLikeService = new ModelService("PostLike", new PostLike());
