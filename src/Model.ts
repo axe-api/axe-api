@@ -9,9 +9,10 @@ import {
   ICacheConfiguration,
   IHandlerBasedCacheConfig,
   IElasticSearchParameters,
+  IHasManyOptions,
 } from "./Interfaces";
 import { Relationships, HandlerTypes, HttpMethods } from "./Enums";
-import { DEFAULT_HANDLERS } from "./constants";
+import { DEFAULT_HANDLERS, DEFAULT_HASH_MANY_OPTIONS } from "./constants";
 import { ModelMiddleware, AxeFunction, ModelValidation } from "./Types";
 import { getParentIndexQuery } from "./Handlers/Helpers";
 
@@ -285,19 +286,29 @@ class Model {
    * @type {Array<IQueryLimitConfig[]>}
    * @tutorial https://axe-api.com/learn/routing.html#model-relations
    */
-  hasMany(relatedModel: string, primaryKey = "id", foreignKey = ""): IRelation {
+  hasMany(
+    relatedModel: string,
+    primaryKey = "id",
+    foreignKey = "",
+    options?: Partial<IHasManyOptions>,
+  ): IRelation {
     if (!foreignKey) {
       const currentModelName = pluralize.singular(
         this.constructor.name.toLowerCase(),
       );
       foreignKey = `${currentModelName}_id`;
     }
+
     return {
       name: relatedModel,
       type: Relationships.HAS_MANY,
       model: relatedModel,
       primaryKey,
       foreignKey,
+      options: {
+        ...DEFAULT_HASH_MANY_OPTIONS,
+        ...options,
+      },
     };
   }
 
@@ -322,6 +333,7 @@ class Model {
       model: relatedModel,
       primaryKey,
       foreignKey,
+      options: DEFAULT_HASH_MANY_OPTIONS,
     };
   }
 
