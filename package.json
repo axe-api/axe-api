@@ -112,7 +112,8 @@
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "robust-validator": "^1.1.0"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

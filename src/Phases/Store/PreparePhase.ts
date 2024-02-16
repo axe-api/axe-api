@@ -1,4 +1,3 @@
-import Validator from "validatorjs";
 import { IContext } from "../../Interfaces";
 import {
   bindTimestampValues,
@@ -9,22 +8,19 @@ import {
 import { HttpMethods, StatusCodes, TimestampColumns } from "../../Enums";
 
 export default async (context: IContext) => {
-  const { req, res, model } = context;
+  const { req, res, model, validator } = context;
   const requestMethod: HttpMethods = req.method as unknown as HttpMethods;
   const fillables = model.instance.getFillableFields(requestMethod);
   context.formData = getMergedFormData(req, fillables);
-  const validationRules = model.instance.getValidationRules(requestMethod);
 
-  if (validationRules) {
-    // The validation language should be set
-    Validator.useLang(req.currentLanguage.language);
-
-    // Validate the data
-    const validation = new Validator(context.formData, validationRules);
-    if (validation.fails()) {
-      res.status(StatusCodes.BAD_REQUEST).json(validation.errors);
-      return;
-    }
+  // Form validation
+  const validatorErrors = await validator.validate(
+    req,
+    model,
+    context.formData,
+  );
+  if (validatorErrors) {
+    return res.status(StatusCodes.BAD_REQUEST).json(validatorErrors);
   }
 
   if (context.relation && context.parentModel) {
