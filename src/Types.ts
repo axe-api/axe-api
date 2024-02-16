@@ -14,6 +14,8 @@ export type ModelMiddleware = Array<AxeFunction | IHandlerBaseMiddleware>;
 
 export type AdaptorType = "redis" | "memory";
 
+export type FormValidatorLibrary = "validatorjs" | "robust-validator";
+
 export type DefaultResponse = Promise<void> | void | undefined;
 
 export type NextFunction = (error?: any) => void;

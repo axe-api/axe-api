@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { APIService, IoCService, LogService } from "../Services";
 import URLService from "../Services/URLService";
-import { IContext } from "../Interfaces";
+import { IContext, IValidator } from "../Interfaces";
 import { Knex } from "knex";
 import { toAxeRequestResponsePair } from "../Services/ConverterService";
 import ApiError from "../Exceptions/ApiError";
@@ -25,11 +25,25 @@ export default async (
     request,
     response,
   );
+
   const match = URLService.match(axeRequest);
 
   if (!match) {
     LogService.warn(`The URL is not matched! ${request.method} ${request.url}`);
     return return404(response);
+  }
+
+  // On custom routes, there is not any version config
+  if (match?.data?.version?.config) {
+    // If the requested language is not supported, the default language is used
+    const { supportedLanguages, defaultLanguage } = match.data.version.config;
+    if (!supportedLanguages.includes(axeRequest.currentLanguage.language)) {
+      axeRequest.currentLanguage = {
+        title: defaultLanguage,
+        language: defaultLanguage,
+        region: null,
+      };
+    }
   }
 
   // We should set the params
@@ -44,6 +58,8 @@ export default async (
     trx = await database.transaction();
   }
 
+  const validator = await IoCService.use<IValidator>("Validator");
+
   const context: IContext = {
     ...match.data,
     params: match.params,
@@ -52,6 +68,7 @@ export default async (
     res: axeResponse,
     isTransactionOpen: match.hasTransaction,
     database: match.hasTransaction && trx ? trx : database,
+    validator,
   };
 
   response.setHeader("Content-Type", "application/json");
