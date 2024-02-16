@@ -31,6 +31,20 @@ class IoCService {
   }
 
   /**
+   * Adding a singleton dependency and create the first instance immediately.
+   *
+   * @param name
+   * @param callback
+   * @example
+   *
+   * IoCService.singleton("MySingleton", () => new MySingleton())
+   */
+  static fastSingleton(name: string, callback: any) {
+    this._add(DependencyTypes.SINGLETON, name, callback);
+    this.use(name);
+  }
+
+  /**
    * Getting the service by the name.
    *
    * @param name

@@ -27,6 +27,7 @@ import RedisAdaptor from "./Middlewares/RateLimit/RedisAdaptor";
 import RateLimitMiddleware from "./Middlewares/RateLimit";
 import ElasticService from "./Services/ElasticService";
 import IndexBuilder from "./Builders/IndexBuilder";
+import ValidatorFactory from "./Validators/ValidatorFactory";
 
 class Server {
   /**
@@ -87,6 +88,11 @@ class Server {
       await new IndexBuilder(version).build();
       await new RouterBuilder(version).build();
     }
+
+    // We should initialize the validator with the language support
+    IoCService.fastSingleton("Validator", () => {
+      return ValidatorFactory.resolve(api.config);
+    });
   }
 
   private async loadGeneralConfiguration() {
