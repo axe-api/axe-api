@@ -6,9 +6,10 @@ import {
   getForeignKeyValueErrors,
   getMergedFormData,
 } from "../../Handlers/Helpers";
+import LocaleService from "../../Services/LocaleService";
 
 export default async (context: IContext) => {
-  const { req, res, model } = context;
+  const { req, res, model, version } = context;
   const requestMethod: HttpMethods = req.method as unknown as HttpMethods;
   const fillables = model.instance.getFillableFields(requestMethod);
   context.formData = {
@@ -17,11 +18,12 @@ export default async (context: IContext) => {
   };
   const validationRules = model.instance.getValidationRules(requestMethod);
   if (validationRules) {
-    // The validation language should be set
-    Validator.useLang(req.currentLanguage.language);
-
     // Validate the data
     const validation = new Validator(context.formData, validationRules);
+    validation.lang = req.currentLanguage.language;
+    validation.setAttributeNames(
+      LocaleService.getFields(version, req.currentLanguage.language),
+    );
     if (validation.fails()) {
       return res.status(StatusCodes.BAD_REQUEST).json(validation.errors);
     }

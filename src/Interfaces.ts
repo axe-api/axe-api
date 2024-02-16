@@ -151,6 +151,7 @@ export interface IVersionFolder {
   hooks: string;
   middlewares: string;
   models: string;
+  locales: string;
   serialization: string;
 }
 
@@ -389,4 +390,8 @@ export interface IElasticSearchParameters {
 
 export interface IHasManyOptions {
   autoRouting: boolean;
+}
+
+export interface ILocale {
+  fields: Record<string, string>;
 }

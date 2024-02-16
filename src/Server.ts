@@ -27,6 +27,7 @@ import RedisAdaptor from "./Middlewares/RateLimit/RedisAdaptor";
 import RateLimitMiddleware from "./Middlewares/RateLimit";
 import ElasticService from "./Services/ElasticService";
 import IndexBuilder from "./Builders/IndexBuilder";
+import LocaleService from "./Services/LocaleService";
 
 class Server {
   /**
@@ -86,6 +87,7 @@ class Server {
       await new ModelTreeBuilder(version).build();
       await new IndexBuilder(version).build();
       await new RouterBuilder(version).build();
+      await LocaleService.load(version);
     }
   }
 

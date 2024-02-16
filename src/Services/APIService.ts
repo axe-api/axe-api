@@ -70,6 +70,7 @@ class APIService {
         hooks: path.join(root, "Hooks"),
         middlewares: path.join(root, "Middlewares"),
         models: path.join(root, "Models"),
+        locales: path.join(root, "Locales"),
         serialization: path.join(root, "Serialization"),
       },
       modelList: new ModelListService([]),
