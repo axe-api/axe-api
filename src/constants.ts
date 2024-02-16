@@ -373,6 +373,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   search: {
     indexPrefix: "axe",
   },
+  validator: "validatorjs",
 };
 
 export const DEFAULT_VERSION_CONFIG: AxeVersionConfig = {

@@ -18,6 +18,7 @@ import Model from "./Model";
 import {
   AdaptorType,
   AxeFunction,
+  FormValidatorLibrary,
   GeneralFunction,
   HandlerFunction,
   ModelHooks,
@@ -129,6 +130,7 @@ export interface AxeConfig extends IConfig {
   cache: ICacheConfiguration;
   elasticSearch: ClientOptions;
   search: ISearchConfigutation;
+  validator: FormValidatorLibrary;
 }
 
 export type IApplicationConfig = Partial<AxeConfig>;
@@ -234,6 +236,7 @@ export interface IContext extends IRouteData {
   res: AxeResponse;
   database: Knex | Knex.Transaction;
   isTransactionOpen: boolean;
+  validator: IValidator;
   queryParser?: QueryService;
   conditions?: IQuery;
   query?: Knex.QueryBuilder;
@@ -389,4 +392,16 @@ export interface IElasticSearchParameters {
 
 export interface IHasManyOptions {
   autoRouting: boolean;
+}
+
+export interface IValidator {
+  validate: (
+    req: AxeRequest,
+    model: IModelService,
+    formData: any,
+  ) => Promise<null | IValidationError>;
+}
+
+export interface IValidationError {
+  errors: Record<string, string[]>;
 }
