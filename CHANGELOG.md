@@ -1,10 +1,13 @@
 # Release Notes
 
-## [1.1.0 (2024-?-?)](https://github.com/axe-api/axe-api/compare/1.1.0...1.0.11)
+## [1.1.0 (2024-02-18)](https://github.com/axe-api/axe-api/compare/1.1.0...1.0.11)
 
 ### Features
 
-- Disabling auto-route creation for has-many relations [#366](https://github.com/axe-api/axe-api/pull/366)
+- Disabling auto-route creation for has-many relations [#366](https://github.com/a
+- Supporting robus-validator library [#368](https://github.com/axe-api/axe-api/pull/368)
+- Fixed security issues
+- Dependency upgrades.
 
 ### Fixed
 
