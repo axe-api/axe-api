@@ -6,6 +6,9 @@ on:
       - master
       - develop
       - rc 
+  push:
+    branches:
+      - develop
 jobs:
   units:
     runs-on: ubuntu-latest
