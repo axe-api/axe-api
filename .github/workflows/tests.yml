@@ -6,9 +6,6 @@ on:
       - master
       - develop
       - rc 
-  push:
-    branches:
-      - develop
 jobs:
   units:
     runs-on: ubuntu-latest
@@ -24,8 +21,6 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run test
-      - name: Depraveyard pushing
-        run: npx depraveyard push --orgId ozziest-org-YLASRc --accessId ${{ secrets.DEPRAVEYARD_ACCESS_ID }} --accessToken ${{ secrets.DEPRAVEYARD_TOKEN }}
 
   linting:
     runs-on: ubuntu-latest
