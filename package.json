@@ -29,8 +29,7 @@
   "scripts": {
     "build": "rm -rf build && tsc && rm -rf build/dev-kit",
     "build:watch": "tsc -w",
-    "dev": "ts-node-dev --files --respawn --clear index.ts",
-    "dev-kit": "ts-node-dev --respawn --clear dev-kit.ts",
+    "dev-kit": "tsx watch dev-kit.ts",
     "dev-kit:install": "node ./scripts/dev-kit-install.js",
     "dev-kit:remove": "node ./scripts/dev-kit-remove.js",
     "test": "jest --runInBand",
@@ -107,13 +106,13 @@
     "pg": "^8.11.3",
     "prettier": "^3.2.5",
     "redis": "^4.6.13",
+    "robust-validator": "^1.1.0",
     "serve-static": "^1.15.0",
     "set-value": ">=4.1.0",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3",
-    "robust-validator": "^1.1.0"
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
