@@ -258,9 +258,28 @@ class ModelResolver {
     );
 
     for (const model of modelList.get()) {
-      const fileName = `${model.name}Serialization`;
-      if (serializations[fileName]) {
-        const file = serializations[fileName];
+      // Old serialization
+      const oldName = `${model.name}Serialization`;
+      let isOldNamingUsed = false;
+      if (serializations[oldName]) {
+        isOldNamingUsed = true;
+        const file = serializations[oldName];
+        model.setSerialization(file.default as SerializationFunction);
+        LogService.warn(
+          `'${oldName}.ts' naming is deprecated. You can use '${oldName.replace("Serialization", "")}.ts' instead.`,
+        );
+      }
+
+      // New
+      const newName = `${model.name}`;
+      if (serializations[newName]) {
+        if (isOldNamingUsed) {
+          throw new Error(
+            `You cannot use '${oldName}.ts' and '${newName}.ts' at the same time.`,
+          );
+        }
+
+        const file = serializations[newName];
         model.setSerialization(file.default as SerializationFunction);
       }
     }
