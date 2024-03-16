@@ -238,12 +238,124 @@ export interface IContext extends IRouteData {
   isTransactionOpen: boolean;
   validator: IValidator;
   queryParser?: QueryService;
-  conditions?: IQuery;
-  query?: Knex.QueryBuilder;
   params?: any;
+  /**
+   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
+   */
+  conditions?: IQuery;
+  /**
+   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
+   */
+  query?: Knex.QueryBuilder;
+  /**
+   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
+   */
   result?: any;
+  /**
+   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
+   */
   item?: any;
+  /**
+   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
+   */
   formData?: any;
+}
+
+export interface IBeforeInsertContext extends IContext {
+  formData: any;
+}
+
+export interface IBeforeUpdateQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
+export interface IBeforeUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IBeforeDeleteQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
+export interface IBeforeDeleteContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
+export interface IBeforeForceDeleteQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
+export interface IBeforeForceDeleteContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
+export interface IBeforePaginateContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+}
+
+export interface IBeforeAllContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+}
+
+export interface IBeforeShowContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+}
+
+export interface IAfterInsertContext extends IContext {
+  item: any;
+  formData: any;
+}
+
+export interface IAfterUpdateQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+}
+
+export interface IAfterUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IAfterDeleteQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+}
+
+export interface IAfterDeleteContext extends IContext {
+  item: any;
+}
+
+export interface IAfterForceDeleteQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+}
+
+export interface IAfterForceDeleteContext extends IContext {
+  item: any;
+}
+
+export interface IAfterPaginateContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+  result: any;
+}
+
+export interface IAfterAllContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+  result: any;
+}
+
+export interface IAfterShowContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+  item: any;
 }
 
 export interface IRouteDocumentation {
