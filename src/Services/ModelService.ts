@@ -77,10 +77,21 @@ class ModelService implements IModelService {
   }
 
   private setHooks(hookFunctionType: HookFunctionTypes, data: PhaseFunction) {
+    if (this.hooks[hookFunctionType]) {
+      throw new Error(
+        `You can define only one hook function: ${this.name}.${hookFunctionType}`,
+      );
+    }
     this.hooks[hookFunctionType] = data;
   }
 
   private setEvents(hookFunctionType: HookFunctionTypes, data: PhaseFunction) {
+    if (this.events[hookFunctionType]) {
+      throw new Error(
+        `You can define only one event function: ${this.name}.${hookFunctionType}`,
+      );
+    }
+
     this.events[hookFunctionType] = data;
   }
 }

@@ -197,9 +197,36 @@ class ModelResolver {
         );
       }
 
+      // Loading hooks via index.ts if there is any
+      const indexFilePath = path.join(subfolderPath, "index.ts");
+      if (fs.existsSync(indexFilePath)) {
+        // Importing the file
+        const content = await import(indexFilePath);
+        const keys = Object.keys(content);
+        for (const key of keys) {
+          // The exported function should be a hook function
+          if (hookList.includes(key)) {
+            currentModel.setExtensions(
+              hookType,
+              key as HookFunctionTypes,
+              content[key],
+            );
+          } else {
+            LogService.warn(
+              `Invalid ${hookType} function: "${key}()" in the index.ts: "${indexFilePath}"`,
+            );
+          }
+        }
+      }
+
       // Loading all hooks files in the subfolder
       const hooks = await fileResolver.resolveContent(subfolderPath);
       for (const hookName in hooks) {
+        // We can ignore the index.ts
+        if (hookName === "index") {
+          continue;
+        }
+
         // If we have an acceptable hook
         if (hookList.includes(hookName)) {
           // We bind the hook with the model
