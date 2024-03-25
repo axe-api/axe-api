@@ -67,7 +67,7 @@
     "knex-schema-inspector": "^3.1.0",
     "nanoid": "^3.3.7",
     "pino": "^8.18.0",
-    "pino-pretty": "^10.3.1",
+    "pino-pretty": "^11.0.0",
     "pluralize": "^8.0.0",
     "validatorjs": "^3.22.1"
   },
