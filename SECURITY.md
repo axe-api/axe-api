@@ -4,8 +4,9 @@
 
 | Version  | Supported                 |
 | -------- | ------------------------- |
-| 0.30.\*  | :white_check_mark: STABLE |
-| 0.20.\*  | 👷 MAINTENANCE            |
+| 1.*.\*  | :white_check_mark: STABLE |
+| 0.30.\*  | 👷 MAINTENANCE |
+| 0.20.\*  | ⚰️ EOL            |
 | < 0.20.0 | ⚰️ EOL                    |
 
 ## Reporting a Vulnerability
