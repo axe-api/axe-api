@@ -1,5 +1,12 @@
 # Release Notes
 
+## [1.3.0 (2024-04-08)](https://github.com/axe-api/axe-api/compare/1.3.0...1.2.0)
+
+### Features
+
+- `index.ts` file for hook functions [#400](https://github.com/axe-api/axe-api/issues/400)
+- Dependency upgrades
+
 ## [1.2.0 (2024-03-16)](https://github.com/axe-api/axe-api/compare/1.2.0...1.1.0)
 
 ### Features
