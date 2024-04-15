@@ -1,5 +1,12 @@
 # Release Notes
 
+## [1.3.1 (2024-04-15)](https://github.com/axe-api/axe-api/compare/1.3.1...1.3.0)
+
+### Fixed
+
+- Fixed redis connection issues [#281](https://github.com/axe-api/axe-api/issues/281)
+- Dependency upgrades
+
 ## [1.3.0 (2024-04-08)](https://github.com/axe-api/axe-api/compare/1.3.0...1.2.0)
 
 ### Features
