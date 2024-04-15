@@ -3,19 +3,17 @@ import { ICacheAdaptor } from "src/Interfaces";
 
 class MemoryAdaptor implements ICacheAdaptor {
   private client: NodeCache;
-  private prefix: string;
 
-  constructor(prefix: string) {
+  constructor() {
     this.client = new NodeCache();
-    this.prefix = prefix;
   }
 
   async get(key: string) {
-    return this.client.get<string>(`${this.prefix}${key}`) || null;
+    return this.client.get<string>(`${key}`) || null;
   }
 
   async set(key: string, value: string, ttl: number) {
-    this.client.set(`${this.prefix}${key}`, value, ttl);
+    this.client.set(`${key}`, value, ttl);
   }
 
   async decr(key: string, ttl: number) {

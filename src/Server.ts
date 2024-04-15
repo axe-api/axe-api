@@ -147,7 +147,7 @@ class Server {
 
     server.listen(api.config.port);
 
-    LogService.info(
+    LogService.axe(
       `Axe API listens requests on http://localhost:${api.config.port}`,
     );
   }

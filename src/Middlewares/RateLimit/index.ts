@@ -75,13 +75,9 @@ const getClientKeyByConfigurations = (
   return `axe-api-rate-limit:${req.socket.remoteAddress || ""}`;
 };
 
-export const setupRateLimitAdaptors = (config: AxeConfig) => {
+export const setupRateLimitAdaptors = async (config: AxeConfig) => {
   // Creating the correct adaptor by the configuration
-  adaptor = AdaptorFactory(
-    config.rateLimit?.adaptor || "memory",
-    config.redis,
-    "",
-  );
+  adaptor = await AdaptorFactory(config.rateLimit?.adaptor || "memory");
 };
 
 /**
