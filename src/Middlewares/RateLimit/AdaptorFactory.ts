@@ -1,18 +1,14 @@
 import { AdaptorType } from "../../Types";
 import RedisAdaptor from "./RedisAdaptor";
 import MemoryAdaptor from "./MemoryAdaptor";
-import { RedisClientOptions } from "redis";
+import { IoCService } from "../../Services";
 
-export default (
-  adaptor: AdaptorType,
-  redisOptions: RedisClientOptions | undefined,
-  prefix: string,
-) => {
+export default async (adaptor: AdaptorType) => {
   switch (adaptor) {
     case "redis":
-      return new RedisAdaptor(redisOptions, prefix);
+      return await IoCService.use<RedisAdaptor>("Redis");
     case "memory":
-      return new MemoryAdaptor(prefix);
+      return new MemoryAdaptor();
     default:
       throw new Error(`Adaptor type is not found: ${adaptor}`);
   }
