@@ -42,7 +42,7 @@ const config: IApplicationConfig = {
     enable: false,
   },
   elasticSearch: {
-    node: "http://127.0.0.1:9200",
+    node: "http://127.0.0.1:9201",
   },
   search: {
     indexPrefix: "axe",

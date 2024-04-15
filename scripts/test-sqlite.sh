@@ -8,8 +8,8 @@ docker-compose -f "./tests/integrations/docker-compose.sqlite.yml" up -d --build
 
 npm run build
 
-echo "Waiting for 3 seconds"
-sleep 3
+echo "Waiting for 5 seconds"
+sleep 5
 
 echo "Starting the application and tests"
 cd ./tests/integrations && rm -rf ./build && npm install && npm run build && node index.js sqlite
