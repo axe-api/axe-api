@@ -1,5 +1,11 @@
 # Release Notes
 
+## [1.4.0 (2024-04-20)](https://github.com/axe-api/axe-api/compare/1.4.0...1.3.1)
+
+### Features
+
+- Unified Axe CLI is implemented [#143](https://github.com/axe-api/axe-api/issues/143)
+
 ## [1.3.1 (2024-04-15)](https://github.com/axe-api/axe-api/compare/1.3.1...1.3.0)
 
 ### Fixed
