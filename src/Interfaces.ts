@@ -239,25 +239,10 @@ export interface IContext extends IRouteData {
   validator: IValidator;
   queryParser?: QueryService;
   params?: any;
-  /**
-   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
-   */
   conditions?: IQuery;
-  /**
-   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
-   */
   query?: Knex.QueryBuilder;
-  /**
-   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
-   */
   result?: any;
-  /**
-   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
-   */
   item?: any;
-  /**
-   * @deprecated Use special hook type instead of IContext like IBeforeInsertContext
-   */
   formData?: any;
 }
 

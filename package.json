@@ -5,7 +5,9 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "/build"
+    "/build",
+    "/bin",
+    "/cli"
   ],
   "directories": {
     "test": "tests"
@@ -26,6 +28,9 @@
     }
   ],
   "license": "MIT",
+  "bin": {
+    "axe": "bin/axe"
+  },
   "scripts": {
     "build": "rm -rf build && tsc && rm -rf build/dev-kit",
     "build:watch": "tsc -w",
@@ -69,7 +74,11 @@
     "pino": "^8.18.0",
     "pino-pretty": "^11.0.0",
     "pluralize": "^8.0.0",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "commander": "^12.0.0",
+    "shelljs": "^0.8.5",
+    "rimraf": "^5.0.5",
+    "colors": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
