@@ -142,4 +142,24 @@ describe("Axe API", () => {
 
     expect(validationError).toBe(true);
   });
+
+  test("should be able to execute the simple text query", async () => {
+    const data = {
+      email: `user@long.com`,
+      name: "Some long user name",
+      surname: "Lastname",
+    };
+    await post({ url: "/api/v1/users", data, status: 201 });
+
+    const { data: response } = await axios.get(`/v1/users`, {
+      params: {
+        q: JSON.stringify([
+          {
+            name: "Some long user name",
+          },
+        ]),
+      },
+    });
+    expect(response.pagination.total).toBe(1);
+  });
 });
