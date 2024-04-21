@@ -232,7 +232,7 @@ class QueryService {
     let q = sections.get("q");
 
     if (q) {
-      const queryContent = q.replace(/%20/g, "").replace(/ /g, "");
+      const queryContent = q;
 
       // Users can send an unacceptable query string. We shouldn't allow them to
       // send unacceptable structure because of security reasons.
