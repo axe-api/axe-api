@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- text query issue [#438](https://github.com/axe-api/axe-api/issues/438)
+- Text query issue [#438](https://github.com/axe-api/axe-api/issues/438)
 
 ## [1.4.0 (2024-04-20)](https://github.com/axe-api/axe-api/compare/1.4.0...1.3.1)
 
