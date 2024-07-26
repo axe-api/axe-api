@@ -3,7 +3,7 @@
     "_title": "MySQL 8",
     "NODE_ENV": "development",
     "APP_PORT": "3000",
-    "DB_CLIENT": "mysql",
+    "DB_CLIENT": "mysql2",
     "DB_HOST": "127.0.0.1",
     "DB_USER": "axeapi",
     "DB_PORT": "3307",
