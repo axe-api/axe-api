@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const request = require("supertest");
 const mysql = require("mysql");
+const mysql2 = require("mysql2");
 const sqlite3 = require("sqlite3");
 const axios = require("axios");
 const { Pool } = require("pg");
@@ -68,6 +69,30 @@ const truncateMySQL = async (table) => {
   });
 };
 
+const truncateMySQL2 = async (table) => {
+  const connection = mysql2.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+  });
+
+  return new Promise((resolve) => {
+    connection.connect(function (err) {
+      if (err) throw err;
+      connection.query("SET FOREIGN_KEY_CHECKS = 0;", function (err) {
+        if (err) throw err;
+        const sql = `TRUNCATE TABLE ${table}`; //NOSONAR
+        connection.query(sql, function (err) {
+          if (err) throw err;
+          resolve();
+        });
+      });
+    });
+  });
+};
+
 const truncateSQLite = async (table) => {
   const instance = sqlite3.verbose();
   const connection = new instance.Database("./axedb.sql");
@@ -99,6 +124,8 @@ const truncate = async (table) => {
   switch (process.env.DB_CLIENT) {
     case "mysql":
       return await truncateMySQL(table);
+    case "mysql2":
+      return await truncateMySQL2(table);
     case "sqlite3":
       return await truncateSQLite(table);
     case "postgres":
