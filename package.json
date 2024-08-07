@@ -59,7 +59,7 @@
     "benchmark": "k6 run benchmark/run.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0 <=22.x"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
