@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Start database containers
-        run: docker-compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
+        run: docker compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
       - name: Build the Axe API
         run: npm install && npm run build
       - name: Install integration test dependencies
