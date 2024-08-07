@@ -3,8 +3,8 @@ set -e
 echo "SQLite Tests have been started."
 
 echo "Setting up Docker containers"
-docker-compose -f "./tests/integrations/docker-compose.sqlite.yml" down
-docker-compose -f "./tests/integrations/docker-compose.sqlite.yml" up -d --build
+docker compose -f "./tests/integrations/docker-compose.sqlite.yml" down
+docker compose -f "./tests/integrations/docker-compose.sqlite.yml" up -d --build
 
 npm run build
 
@@ -16,4 +16,4 @@ cd ./tests/integrations && rm -rf ./build && npm install && npm run build && nod
 
 echo "Downing the database container"
 cd ../../
-docker-compose -f "./tests/integrations/docker-compose.sqlite.yml" down
+docker compose -f "./tests/integrations/docker-compose.sqlite.yml" down

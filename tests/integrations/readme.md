@@ -4,7 +4,7 @@ Here, we created a basic application that uses Axe API's latest version as a dep
 
 ```bash
 $ npm install
-$ docker-compose -f "docker-compose.mysql8.yml" up -d --build
+$ docker compose -f "docker-compose.mysql8.yml" up -d --build
 $ knex --esm migrate:latest
 $ npm run start:dev
 ```

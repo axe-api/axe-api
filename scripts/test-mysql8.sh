@@ -3,8 +3,8 @@ set -e
 echo "MySQL-8 Tests have been started."
 
 echo "Setting up MySQL container images"
-docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" down
-docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build
+docker compose -f "./tests/integrations/docker-compose.mysql8.yml" down
+docker compose -f "./tests/integrations/docker-compose.mysql8.yml" up -d --build
 
 npm run build
 
@@ -16,4 +16,4 @@ cd ./tests/integrations && npm install && npm run build && node index.js mysql8
 
 echo "Downing the database container"
 cd ../../
-docker-compose -f "./tests/integrations/docker-compose.mysql8.yml" down
+docker compose -f "./tests/integrations/docker-compose.mysql8.yml" down
