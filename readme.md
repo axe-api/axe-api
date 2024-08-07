@@ -32,7 +32,7 @@ It offers a comprehensive structure for your API, including numerous features an
 <div style="display: flex; justify-content: center;">
 
 <a href="https://www.youtube.com/watch?v=3p4jggsNrJA" target="_blank">
-  <img src="./youtube.png" />
+  <img src="https://raw.githubusercontent.com/axe-api/axe-api/master/youtube.png" />
 </a>
 
 </div>
