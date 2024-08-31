@@ -1,5 +1,12 @@
 # Release Notes
 
+## [1.4.3 (2024-08-31)](https://github.com/axe-api/axe-api/compare/1.4.3...1.4.2)
+
+### Fixed
+
+- Security upgrades
+- Removed `nodemon`.
+
 ## [1.4.2 (2024-07-26)](https://github.com/axe-api/axe-api/compare/1.4.2...1.4.1)
 
 ### Fixed
