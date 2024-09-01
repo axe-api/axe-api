@@ -26,6 +26,7 @@ jobs:
         run: echo ::set-output name=version::$(jq -r .version package.json)
 
       - name: Tag and push to GitHub
+        continue-on-error: true
         run: |
           git config --local user.email "i.ozguradem@gmail.com"
           git config --local user.name "Özgür Adem Işıklı"
