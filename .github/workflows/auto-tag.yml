@@ -1,4 +1,4 @@
-name: Tag and Push
+name: Git Tag 
 
 on:
   push:
