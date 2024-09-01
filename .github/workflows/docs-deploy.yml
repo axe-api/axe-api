@@ -1,0 +1,33 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+      - v1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Yarn Install
+        working-directory: ./docs
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        working-directory: ./docs
+        run: yarn docs:build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: docs/docs/.vitepress/dist
+          external_repository: axe-api/axe-api-v1.github.io
+          publish_branch: master
