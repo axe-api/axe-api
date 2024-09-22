@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.4.4 (2024-09-22)](https://github.com/axe-api/axe-api/compare/1.4.4...1.4.3)
+
+- Security upgrades
+
 ## [1.4.3 (2024-08-31)](https://github.com/axe-api/axe-api/compare/1.4.3...1.4.2)
 
 ### Fixed
