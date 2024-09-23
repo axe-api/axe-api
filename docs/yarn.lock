@@ -181,6 +181,11 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@bufbuild/protobuf@^2.0.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.1.0.tgz"
+  integrity sha512-+2Mx67Y3skJ4NCD/qNSdBJNWtu6x6Qr53jeNg+QcwiL6mt0wK+3jwHH2x1p7xaYH6Ve2JKOVn0OxU35WsmqI9A==
+
 "@docsearch/css@3.6.1", "@docsearch/css@^3.6.1":
   version "3.6.1"
   resolved "https://registry.npmjs.org/@docsearch/css/-/css-3.6.1.tgz"
@@ -963,10 +968,15 @@ birpc@^0.2.17:
 
 braces@^3.0.3:
   version "3.0.3"
-  resolved "https://registry.yarnpkg.com/braces/-/braces-3.0.3.tgz#490332f40919452272d55a8480adc0c441358789"
+  resolved "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz"
   integrity sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==
   dependencies:
     fill-range "^7.1.1"
+
+buffer-builder@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/buffer-builder/-/buffer-builder-0.2.0.tgz"
+  integrity sha512-7VPMEPuYznPSoR21NE1zvd2Xna6c/CloiZCfcMXR1Jny6PjX0N4Nsa38zcBFo/FMK+BlA+FLKbJCQ0i2yxp+Xg==
 
 buffer-from@^1.0.0:
   version "1.1.2"
@@ -1008,6 +1018,11 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+colorjs.io@^0.5.0:
+  version "0.5.2"
+  resolved "https://registry.npmjs.org/colorjs.io/-/colorjs.io-0.5.2.tgz"
+  integrity sha512-twmVoizEW7ylZSN32OgKdXRmo1qg+wT5/6C3xu5b9QsWzSFAhHLn2xd8ro0diCsKfCj1RdaTP/nrcW+vAoQPIw==
 
 combined-stream@^1.0.8:
   version "1.0.8"
@@ -1240,6 +1255,11 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
 
+has-flag@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
+  integrity sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
+
 highlight.js@^9.7.0:
   version "9.18.5"
   resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-9.18.5.tgz"
@@ -1319,6 +1339,11 @@ iconv-lite@0.6.3:
   integrity sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==
   dependencies:
     safer-buffer ">= 2.1.2 < 3.0.0"
+
+immutable@^4.0.0:
+  version "4.3.7"
+  resolved "https://registry.npmjs.org/immutable/-/immutable-4.3.7.tgz"
+  integrity sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==
 
 is-extglob@^2.1.1:
   version "2.1.1"
@@ -1434,7 +1459,7 @@ merge2@^1.3.0:
 
 micromatch@^4.0.2, micromatch@^4.0.4:
   version "4.0.8"
-  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.8.tgz#d66fa18f3a47076789320b9b1af32bd86d9fa202"
+  resolved "https://registry.npmjs.org/micromatch/-/micromatch-4.0.8.tgz"
   integrity sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==
   dependencies:
     braces "^3.0.3"
@@ -1530,10 +1555,10 @@ picocolors@^1.0.1:
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.0.1.tgz"
   integrity sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==
 
-picocolors@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.1.0.tgz#5358b76a78cde483ba5cef6a9dc9671440b27d59"
-  integrity sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==
+picocolors@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.1.1.tgz#3d321af3eab939b083c8f929a1d12cda81c26b6b"
+  integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
 picomatch@^2.0.4, picomatch@^2.3.1:
   version "2.3.1"
@@ -1550,12 +1575,12 @@ postcss@^8.4.40:
     source-map-js "^1.2.0"
 
 postcss@^8.4.43:
-  version "8.4.47"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.47.tgz#5bf6c9a010f3e724c503bf03ef7947dcb0fea365"
-  integrity sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==
+  version "8.4.49"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.49.tgz#4ea479048ab059ab3ae61d082190fabfd994fe19"
+  integrity sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==
   dependencies:
     nanoid "^3.3.7"
-    picocolors "^1.1.0"
+    picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
 preact@^10.0.0:
@@ -1660,10 +1685,151 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
+rxjs@^7.4.0:
+  version "7.8.1"
+  resolved "https://registry.npmjs.org/rxjs/-/rxjs-7.8.1.tgz"
+  integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
+  dependencies:
+    tslib "^2.1.0"
+
 "safer-buffer@>= 2.1.2 < 3.0.0":
   version "2.1.2"
   resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+sass-embedded-android-arm64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-android-arm64/-/sass-embedded-android-arm64-1.79.3.tgz#402228ed3438ab9d7486150f1e1aaed1020ef88c"
+  integrity sha512-Wqm/WKHIDQl7w7eIQRO/GQ7EXfnwNpipCyJL7Xtb15vSAV64J4/0D/esy6GOPlVG+qcu8/XN8NV7Bf5wZ2ExUw==
+
+sass-embedded-android-arm@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-android-arm/-/sass-embedded-android-arm-1.79.3.tgz#e0a1897bc7db24902e9395e44f03c93c1abf33bc"
+  integrity sha512-rrdaVDkKBLUqzdqlBFamUbeuLG+8r/QLXHIgz4qPhIDqceJH6ds0Vzrae9Ef6DhYfMatOg2xiScdatwQ8Yl/hA==
+
+sass-embedded-android-ia32@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-android-ia32/-/sass-embedded-android-ia32-1.79.3.tgz#3d7166db5fefd1e6eca33e677a79310565b4ac54"
+  integrity sha512-6rDmH0O7hjBP04/xBAFzSYYMU/7MrQYCak4541BZIbIfa2uw0x/8+mB7lZjdgFsBrFjcpdVCPhZPUE6Y50c00A==
+
+sass-embedded-android-riscv64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-android-riscv64/-/sass-embedded-android-riscv64-1.79.3.tgz#dc5537d7c1b5bca1561709d2596c0be4204584e2"
+  integrity sha512-B/PgB0AfTCvOlF1g89raJTwTXIUQUM3OXDWqEKIlJEZM1Yao91i8ZkyrFkDMzT4G5sETy4o8pgK+qE9+7bFlug==
+
+sass-embedded-android-x64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-android-x64/-/sass-embedded-android-x64-1.79.3.tgz#3f7d701c54bdb3b233267011ddc85a770a9a1acf"
+  integrity sha512-a5cpo9Yw4xnX32Uo3WfMZLaTVnI/h2n7U3K3eTygyj707yhGkUB0i+qxldzCw8MmKivIu9irG6O4kmnRjW6f7g==
+
+sass-embedded-darwin-arm64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.npmjs.org/sass-embedded-darwin-arm64/-/sass-embedded-darwin-arm64-1.79.3.tgz"
+  integrity sha512-imafD0nlVz5FJhqBqxUbG5rK4E3cu1GxhMZ5VhKm0k4t5jFQo+3OjN7sHT4Ee2Mk1g8sjr5dtq5enDU4fs6lXA==
+
+sass-embedded-darwin-x64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-darwin-x64/-/sass-embedded-darwin-x64-1.79.3.tgz#5512087dea69d21e882f9eccb0ddd0a697de4d23"
+  integrity sha512-pjciT1FcMUMA4rWdpyZYSwMOvxk5JP7R6vy7TzvqkUEqXxP9FTflYnAiwgYUDVTpngHHqRxTjdyW+e+h2L9dHw==
+
+sass-embedded-linux-arm64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-arm64/-/sass-embedded-linux-arm64-1.79.3.tgz#a0dae05580f197976c468b2e70c36443265e1905"
+  integrity sha512-ODo8ghwk6KHxchgwxq4CwgfYwWdreEbsQoukeEgRKxHcuLB9XF6tol9pGlfrc8sYox48Vp5WDCZuzgoo6rJ6tg==
+
+sass-embedded-linux-arm@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-arm/-/sass-embedded-linux-arm-1.79.3.tgz#64c48aff6b12aacfc34871507c3f6556f48a515a"
+  integrity sha512-n0bDtzABPE5YaL9wSLxNPiQMl1zArsGblHJyED6fEHz41m+OkCTopfO8IVjcf+MBrK/j11gonxiIGWO+fNOxvg==
+
+sass-embedded-linux-ia32@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-ia32/-/sass-embedded-linux-ia32-1.79.3.tgz#ea588493212aea4cf658151266a3f8b46b069539"
+  integrity sha512-oC3rUyIE6mEm2etsc4CuNu6IVmB6CoSM4KsubxzCD3S37QFXq8wYbI0t9iiDdTkKb5Iu+vUyhn+tYJRVHg0tvw==
+
+sass-embedded-linux-musl-arm64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-musl-arm64/-/sass-embedded-linux-musl-arm64-1.79.3.tgz#ca2a45b0fb26bd524f339cce4598fec7a05bd791"
+  integrity sha512-Q9/5lsrK/JnQci3DwxZ9PGIIrRxuo/bySv+gbyVp8Kb7gdkZcEsY7HkxaBJfwVEwpZSGAyCviyZDHDMILjliOw==
+
+sass-embedded-linux-musl-arm@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-musl-arm/-/sass-embedded-linux-musl-arm-1.79.3.tgz#4c73298e19e1974665d102b48ca7583923e6c7af"
+  integrity sha512-TOUYMtDs9xoMsJSEEr7NjtcVCqVpg1eSOQHXXruJ1kiYfxwmHrCYTjTLoefbZ29mWqIq8NUaXJG4rZNDK6NzRA==
+
+sass-embedded-linux-musl-ia32@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-musl-ia32/-/sass-embedded-linux-musl-ia32-1.79.3.tgz#b40e1d7d56d86d2bfcdc39428cdb3b76d76d85a8"
+  integrity sha512-T2uERh3gs9eWUzdkDadPuYbelQJQLZyX8myutUd4fxyrQ7ToQRBwcMoynEjl48DBHnM0oRiJUHrV9uFuJ+fmRA==
+
+sass-embedded-linux-musl-riscv64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-musl-riscv64/-/sass-embedded-linux-musl-riscv64-1.79.3.tgz#cae163cd25840c10701d640a61ffba4b46793c68"
+  integrity sha512-XTuYtTBPFeEjydS2GsIUkMztzXIiz13noknE7m1yAbVxOchu9jD9FCLAdK9pVPPki+9BiLSxsutYwOcQn8atqQ==
+
+sass-embedded-linux-musl-x64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-musl-x64/-/sass-embedded-linux-musl-x64-1.79.3.tgz#695af9f598df56a14bbe431fc7542f601062bbc9"
+  integrity sha512-gDHfaPlxT/XQTMbfb2y+U6zDMuI8pfapVXTYlUrgYhKH2KoICclIvahhjFii5i5+1dHpfGzjgYKBqI3nvZsYFg==
+
+sass-embedded-linux-riscv64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-riscv64/-/sass-embedded-linux-riscv64-1.79.3.tgz#761211f8f8d3ddaeac6d2c30bfcc05e8ede80cbb"
+  integrity sha512-NONTa//1ZfxA87+Zjp3rabL+Z9gM67FJBdktRKXXMBAce5i8eCj/eqJGUOGPjYxtvxtQw77cex0qMr9SZnX6ww==
+
+sass-embedded-linux-x64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-x64/-/sass-embedded-linux-x64-1.79.3.tgz#718edbc882ffc748e097e662b416fc466a8d83ab"
+  integrity sha512-drlUqMMw222+f/T5sNrIAv+z0vQwLkO4zAlDmf4biLdWIloPP/3plTodAkMyfagNcvA8jG2jN414pJXBI3zK6w==
+
+sass-embedded-win32-arm64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-win32-arm64/-/sass-embedded-win32-arm64-1.79.3.tgz#e2c0690392c29aa25a07502d06ea010978666803"
+  integrity sha512-gYz0IUb0fLkHUbhq+HR52wvQfG75Zu1s48/v48TqC+b04H/01k2eiawp/Ec1f+lhpIL/pr5+n5jWR6CjkxPdnQ==
+
+sass-embedded-win32-ia32@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-win32-ia32/-/sass-embedded-win32-ia32-1.79.3.tgz#c979ee6dc5308962c342230e0b6be6f76c0fb375"
+  integrity sha512-fbDTyzbqRc+xCWZ+YHSDt2WvGk5PW2K0SjyHuwes/Fls1+wdO4iHIukE/pD+HSWytYrtCqhe7EFq5Ug5HxGTLg==
+
+sass-embedded-win32-x64@1.79.3:
+  version "1.79.3"
+  resolved "https://registry.yarnpkg.com/sass-embedded-win32-x64/-/sass-embedded-win32-x64-1.79.3.tgz#467f89920f46bc04041dc8adb2f1d3ce5b547b15"
+  integrity sha512-vvfr6wyCaHvdQbGS8UkYab6DXc1FKJRYFT5aFE3QTVqbzCqmJ5tf80E4+gvB99nljLtMjwKR1d332iWI9KDLhw==
+
+sass-embedded@^1.79.3:
+  version "1.79.3"
+  resolved "https://registry.npmjs.org/sass-embedded/-/sass-embedded-1.79.3.tgz"
+  integrity sha512-zUve2qCn6uSOMZnZazLzrDWq//OQWFle5G45vJjv3B/ADIA3TXVgqHqN3u7D2vGajOGREz0HN5nhliSoKmQqZA==
+  dependencies:
+    "@bufbuild/protobuf" "^2.0.0"
+    buffer-builder "^0.2.0"
+    colorjs.io "^0.5.0"
+    immutable "^4.0.0"
+    rxjs "^7.4.0"
+    supports-color "^8.1.1"
+    varint "^6.0.0"
+  optionalDependencies:
+    sass-embedded-android-arm "1.79.3"
+    sass-embedded-android-arm64 "1.79.3"
+    sass-embedded-android-ia32 "1.79.3"
+    sass-embedded-android-riscv64 "1.79.3"
+    sass-embedded-android-x64 "1.79.3"
+    sass-embedded-darwin-arm64 "1.79.3"
+    sass-embedded-darwin-x64 "1.79.3"
+    sass-embedded-linux-arm "1.79.3"
+    sass-embedded-linux-arm64 "1.79.3"
+    sass-embedded-linux-ia32 "1.79.3"
+    sass-embedded-linux-musl-arm "1.79.3"
+    sass-embedded-linux-musl-arm64 "1.79.3"
+    sass-embedded-linux-musl-ia32 "1.79.3"
+    sass-embedded-linux-musl-riscv64 "1.79.3"
+    sass-embedded-linux-musl-x64 "1.79.3"
+    sass-embedded-linux-riscv64 "1.79.3"
+    sass-embedded-linux-x64 "1.79.3"
+    sass-embedded-win32-arm64 "1.79.3"
+    sass-embedded-win32-ia32 "1.79.3"
+    sass-embedded-win32-x64 "1.79.3"
 
 sax@^1.2.4:
   version "1.3.0"
@@ -1761,6 +1927,13 @@ superjson@^2.2.1:
   dependencies:
     copy-anything "^3.0.2"
 
+supports-color@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.npmjs.org/supports-color/-/supports-color-8.1.1.tgz"
+  integrity sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==
+  dependencies:
+    has-flag "^4.0.0"
+
 symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"
@@ -1810,7 +1983,7 @@ tr46@^5.0.0:
   dependencies:
     punycode "^2.3.1"
 
-tslib@^2.0.3, tslib@^2.2.0:
+tslib@^2.0.3, tslib@^2.1.0, tslib@^2.2.0:
   version "2.6.2"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
@@ -1848,6 +2021,11 @@ vanilla-cookieconsent@^3.0.1:
   resolved "https://registry.npmjs.org/vanilla-cookieconsent/-/vanilla-cookieconsent-3.0.1.tgz"
   integrity sha512-gqc4x7O9t1I4xWr7x6/jtQWPr4PZK26SmeA0iyTv1WyoECfAGnu5JEOExmMEP+5Fz66AT9OiCBO3GII4wDQHLw==
 
+varint@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/varint/-/varint-6.0.0.tgz"
+  integrity sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==
+
 vite-ssg-sitemap@^0.8.1:
   version "0.8.1"
   resolved "https://registry.npmjs.org/vite-ssg-sitemap/-/vite-ssg-sitemap-0.8.1.tgz"
@@ -1869,9 +2047,9 @@ vite-ssg@^0.23.8:
     yargs "^17.7.2"
 
 vite@^5.4.1:
-  version "5.4.6"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-5.4.6.tgz#85a93a1228a7fb5a723ca1743e337a2588ed008f"
-  integrity sha512-IeL5f8OO5nylsgzd9tq4qD2QqI0k2CQLGrWD0rCN0EQJZpBK5vJAx0I+GDkMOXxQX/OfFHMuLIx6ddAxGX/k+Q==
+  version "5.4.11"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-5.4.11.tgz#3b415cd4aed781a356c1de5a9ebafb837715f6e5"
+  integrity sha512-c7jFQRklXua0mTzneGW9QVyxFjUgwcihC4bXEtujIo2ouWCe1Ajt/amn2PCxYnhYfd5k09JX3SB7OYWFKYqj8Q==
   dependencies:
     esbuild "^0.21.3"
     postcss "^8.4.43"
