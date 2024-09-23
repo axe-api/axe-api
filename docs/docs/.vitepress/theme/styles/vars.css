@@ -16,7 +16,7 @@ img.logo {
   margin: unset;
 }
 
-:root {
+/* :root {
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
     #6c5ce7 30%,
@@ -29,7 +29,7 @@ img.logo {
     #e84393 50%
   );
   --vp-home-hero-image-filter: blur(40px);
-}
+} */
 
 @media (min-width: 640px) {
   :root {
