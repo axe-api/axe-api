@@ -336,6 +336,8 @@ export default defineConfig({
 
   lastUpdated: false,
 
+  appearance: "force-dark",
+
   themeConfig: {
     logo: "/axe.png",
 

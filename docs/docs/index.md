@@ -8,16 +8,16 @@ hero:
   name: Axe API
   text: Next Generation Rest API Framework
   tagline: You can quickly create a Rest API by simply defining models and relationships.
-  image:
-    src: /axe.png
-    alt: Axe API
-  actions:
-    - theme: brand
-      text: Learn
-      link: /learn/quick-start
-    - theme: alt
-      text: API Reference
-      link: /reference/api-configs
+  # image:
+  #   src: /axe.png
+  #   alt: Axe API
+  # actions:
+  #   - theme: brand
+  #     text: Learn
+  #     link: /learn/quick-start
+  #   - theme: alt
+  #     text: API Reference
+  #     link: /reference/api-configs
 
 features:
   - icon: ✍
