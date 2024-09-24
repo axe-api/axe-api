@@ -12,6 +12,7 @@
   },
   "keywords": [],
   "dependencies": {
+    "animate.css": "^4.1.1",
     "dayjs": "^1.11.12",
     "floating-vue": "^5.2.2",
     "global": "^4.4.0",

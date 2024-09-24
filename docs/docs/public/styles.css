@@ -1,3 +1,9 @@
+:root {
+  --vp-c-yellow-4: #fef9c3;
+  --vp-c-yellow-5: #ffef89;
+  --vp-c-yellow-6: #ffe542;
+}
+
 img {
   left: 0px;
   right: 0px;
