@@ -1,6 +1,7 @@
 <script setup>
 import DefaultTheme from "vitepress/theme";
 import ModelFeature from "./components/ModelFeature.vue";
+import TestAnimation from "./components/TestAnimation.vue";
 
 const { Layout } = DefaultTheme;
 </script>
@@ -69,7 +70,7 @@ const { Layout } = DefaultTheme;
       <h2 class="h2">It's design is based on <br />best-practices</h2>
 
       <div>
-        <ModelFeature />
+        <TestAnimation />
       </div>
     </template>
   </Layout>
