@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.4.5 (2024-09-30)](https://github.com/axe-api/axe-api/compare/1.4.5...1.4.4)
+
+- Recursive model route-creation bug [#549](https://github.com/axe-api/axe-api/issues/549)
+
 ## [1.4.4 (2024-09-22)](https://github.com/axe-api/axe-api/compare/1.4.4...1.4.3)
 
 - Security upgrades
