@@ -64,7 +64,19 @@ class ModelTreeBuilder {
         (relation) => relation.model === model.name,
       );
 
-      if (recursiveRelations.length === 2) {
+      const hasManyCount = recursiveRelations.filter(
+        (item) => item.type === Relationships.HAS_MANY,
+      ).length;
+
+      const hasOneCount = recursiveRelations.filter(
+        (item) => item.type === Relationships.HAS_ONE,
+      ).length;
+
+      if (
+        recursiveRelations.length === 2 &&
+        hasManyCount === 1 &&
+        hasOneCount === 1
+      ) {
         model.setAsRecursive();
         tree.push(model);
       }
