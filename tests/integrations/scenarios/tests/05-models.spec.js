@@ -124,4 +124,9 @@ describe("Axe API Models", () => {
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(0);
   });
+
+  test("should be able create child routes when the parent has multiple relations to itself", async () => {
+    const { data } = await axios.get("/../routes");
+    expect(data.includes("POST /api/v1/feeds/:feedId/views")).toBe(true);
+  });
 });
