@@ -27,7 +27,7 @@ describe("RobustValidator", () => {
     const result = await validator.validate(axeRequest, authorService, {});
     expect(result).not.toBe(null);
     expect(Array.isArray(result?.errors.name)).toBe(true);
-    expect(result?.errors.name[0]).toBe("The field field is required.");
+    expect(result?.errors.name[0]).toBe("The field is required.");
   });
 
   test(".validate() should be able to use different languages", async () => {
