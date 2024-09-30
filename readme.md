@@ -27,7 +27,7 @@
 
 It offers a comprehensive structure for your API, including numerous features and best practices that will save you time.
 
-## Video Introduction
+## 🎥 Video Introduction
 
 <div style="display: flex; justify-content: center;">
 
@@ -37,10 +37,18 @@ It offers a comprehensive structure for your API, including numerous features an
 
 </div>
 
-## Documentation
+## 📚 Documentation
 
 Axe API has great documentation. Please [check it out in here](https://axe-api.com/).
 
-## License
+## 👥 Contributors
+
+<a href="https://github.com/axe-api/axe-api/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=axe-api/axe-api" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+## 📜 License
 
 [MIT License](LICENSE)
