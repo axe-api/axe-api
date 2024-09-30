@@ -125,7 +125,7 @@
     "pg": "^8.13.0",
     "prettier": "^3.3.3",
     "redis": "^4.7.0",
-    "robust-validator": "^1.1.1",
+    "robust-validator": "^2.0.1",
     "serve-static": "^1.16.2",
     "set-value": ">=4.1.0",
     "sqlite3": "^5.1.7",
