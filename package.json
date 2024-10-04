@@ -112,7 +112,7 @@
     "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.6.0",
-    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unicorn": "^56.0.0",
     "eslint-watch": "^8.0.0",
     "glob": "^11.0.0",
     "husky": "^9.1.6",
