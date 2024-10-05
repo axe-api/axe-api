@@ -150,7 +150,8 @@ class RouterBuilder {
 
     // We should different parameter name for child routes
     const subRelations = model.relations.filter(
-      (item) => item.type === Relationships.HAS_MANY,
+      (item) =>
+        item.type === Relationships.HAS_MANY && item.options.autoRouting,
     );
     for (const relation of subRelations) {
       const child = model.children.find((item) => item.name === relation.model);
