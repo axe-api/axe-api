@@ -12,6 +12,10 @@ class Feed extends Model {
   views() {
     return this.hasMany("FeedView", "id", "feed_id");
   }
+
+  another() {
+    return this.hasMany("FeedView", "id", "feed_id", { autoRouting: false });
+  }
 }
 
 export default Feed;
