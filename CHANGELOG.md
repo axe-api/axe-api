@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.4.6 (2024-10-05)](https://github.com/axe-api/axe-api/compare/1.4.6...1.4.5)
+
+- `autoRouting` doesn't work when the model file has a relation to two different submodels [#557](https://github.com/axe-api/axe-api/issues/557)
+
 ## [1.4.5 (2024-09-30)](https://github.com/axe-api/axe-api/compare/1.4.5...1.4.4)
 
 - Recursive model route-creation bug [#549](https://github.com/axe-api/axe-api/issues/549)
