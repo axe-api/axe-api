@@ -25,6 +25,7 @@ postService.relations = [
     model: "PostLike",
     primaryKey: "id",
     foreignKey: "post_id",
+    options: { autoRouting: true },
   } as IRelation,
 ];
 const commentService = new ModelService("Comment", new Comment());
