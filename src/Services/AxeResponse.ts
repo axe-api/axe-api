@@ -75,7 +75,7 @@ class AxeResponse {
   }
 
   header(key: string, value: string) {
-    this.original.setHeader(key, value);
+    this.response.setHeader(key, value);
   }
 }
 
