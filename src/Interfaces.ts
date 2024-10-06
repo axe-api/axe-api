@@ -74,6 +74,12 @@ export interface IQueryConfig {
   defaults?: IQueryDefaultConfig;
 }
 
+export interface IRateLimitMiddleware {
+  name: string;
+  clientKey: string;
+  setResponseHeaders?: boolean;
+}
+
 export interface IRateLimitOptions {
   maxRequests: number;
   windowInSeconds: number;
