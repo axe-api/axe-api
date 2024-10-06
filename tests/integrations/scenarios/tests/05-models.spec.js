@@ -134,4 +134,13 @@ describe("Axe API Models", () => {
     const { data } = await axios.get("/../routes");
     expect(data.includes("POST /api/v1/feeds/:feedId/another")).toBe(false);
   });
+
+  test("should not be able see the route when the auto-routing feauture is disabled", async () => {
+    const response = await fetch("http://localhost:3000/api/v1/feeds/all");
+
+    expect(response.status).toBe(403);
+
+    const data = await response.json();
+    expect(data.error).toBe("Testing onBeforeAll() hooks");
+  });
 });

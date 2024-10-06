@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "axe-api": "file:./../../",
-    "axios": "^1.7.4",
+    "axios": "^1.7.7",
     "babel-jest": "^29.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

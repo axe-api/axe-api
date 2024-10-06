@@ -1,4 +1,4 @@
-import { Model } from "axe-api";
+import { DEFAULT_HANDLERS, HandlerTypes, Model } from "axe-api";
 
 class Feed extends Model {
   parent() {
@@ -15,6 +15,10 @@ class Feed extends Model {
 
   another() {
     return this.hasMany("FeedView", "id", "feed_id", { autoRouting: false });
+  }
+
+  get handlers() {
+    return [...DEFAULT_HANDLERS, HandlerTypes.ALL];
   }
 }
 

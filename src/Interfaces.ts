@@ -281,6 +281,11 @@ export interface IBeforePaginateContext extends IContext {
   conditions: IQuery;
 }
 
+export interface IBeforeSearchContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+}
+
 export interface IBeforeAllContext extends IContext {
   query: Knex.QueryBuilder;
   conditions: IQuery;
@@ -332,6 +337,12 @@ export interface IAfterPaginateContext extends IContext {
 }
 
 export interface IAfterAllContext extends IContext {
+  query: Knex.QueryBuilder;
+  conditions: IQuery;
+  result: any;
+}
+
+export interface IAfterSearchContext extends IContext {
   query: Knex.QueryBuilder;
   conditions: IQuery;
   result: any;

@@ -235,6 +235,10 @@ const sidebarReference = [
       },
       { text: "onBeforeAll()", link: "/reference/hooks-events-on-before-all" },
       {
+        text: "onBeforeSearch()",
+        link: "/reference/hooks-events-on-before-search",
+      },
+      {
         text: "onBeforeShow()",
         link: "/reference/hooks-events-on-before-show",
       },
@@ -271,6 +275,10 @@ const sidebarReference = [
         link: "/reference/hooks-events-on-after-paginate",
       },
       { text: "onAfterAll()", link: "/reference/hooks-events-on-after-all" },
+      {
+        text: "onAfterSearch()",
+        link: "/reference/hooks-events-on-after-search",
+      },
       { text: "onAfterShow()", link: "/reference/hooks-events-on-after-show" },
     ],
   },
