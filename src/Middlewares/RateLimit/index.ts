@@ -7,7 +7,7 @@ import {
   IContext,
   ICacheAdaptor,
   IRateLimitResponse,
-  IRateLimitMiddleware,
+  IRateLimitIdentifier,
 } from "../../Interfaces";
 import { APIService, LogService } from "../../Services";
 import { nanoid } from "nanoid";
@@ -154,19 +154,18 @@ export const rateLimit = (options?: IRateLimitOptions) => {
  * @returns
  */
 export const createRateLimitter = async (
-  middleware: IRateLimitMiddleware,
-  options: IRateLimitOptions,
+  identifier: IRateLimitIdentifier,
   req: IncomingMessage,
   res: ServerResponse,
   next: any,
 ) => {
   // Checking the rate limits.
-  const isAllowed = await checkRateLimit(middleware.clientKey, options);
+  const isAllowed = await checkRateLimit(identifier.clientKey, identifier);
 
   // Setting the HTTP Response headers.
-  if (middleware.setResponseHeaders) {
-    res.setHeader(`X-${middleware.name}-Limit`, isAllowed.limit);
-    res.setHeader(`X-${middleware.name}-Remaining`, isAllowed.remaining);
+  if (identifier.setResponseHeaders) {
+    res.setHeader(`X-${identifier.name}-Limit`, isAllowed.limit);
+    res.setHeader(`X-${identifier.name}-Remaining`, isAllowed.remaining);
   }
 
   // If it is allowed, the next function would be called.
