@@ -11,4 +11,16 @@ describe("Axe API rate limitting feature", () => {
     expect(response.headers.get("x-ratelimit-limit")).toBe("2");
     expect(response.headers.get("x-ratelimit-remaining")).toBe("1");
   });
+
+  test("should be able to apply custom check limits", async () => {
+    let response = await fetch(`${DOMAIN}/v1/custom-rate-limit`);
+    expect(response.headers.get("x-ratelimit-limit")).toBe("1");
+    expect(response.headers.get("x-ratelimit-remaining")).toBe("0");
+
+    response = await fetch(`${DOMAIN}/v1/custom-rate-limit`);
+    expect(response.status).toBe(429);
+
+    const data = await response.json();
+    expect(data.error).toBe("Rate limit exceeded.");
+  });
 });

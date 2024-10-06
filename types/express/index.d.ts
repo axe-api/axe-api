@@ -5,4 +5,8 @@ declare module "http" {
     body: any;
     tags: string[];
   }
+
+  interface ServerResponse {
+    isResponded?: boolean;
+  }
 }
