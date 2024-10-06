@@ -1,4 +1,4 @@
-import { DEFAULT_HANDLERS, HandlerTypes, Model } from "axe-api";
+import { DEFAULT_HANDLERS, HandlerTypes, Model, rateLimit } from "axe-api";
 
 class Feed extends Model {
   parent() {
@@ -19,6 +19,18 @@ class Feed extends Model {
 
   get handlers() {
     return [...DEFAULT_HANDLERS, HandlerTypes.ALL];
+  }
+
+  get middlewares() {
+    return [
+      {
+        handler: [HandlerTypes.PAGINATE],
+        middleware: rateLimit({
+          maxRequests: 2,
+          windowInSeconds: 5,
+        }),
+      },
+    ];
   }
 }
 
