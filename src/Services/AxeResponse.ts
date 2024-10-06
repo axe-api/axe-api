@@ -4,7 +4,6 @@ import { ILanguage } from "src/Interfaces";
 
 class AxeResponse {
   private response: ServerResponse;
-  private responseStatus = false;
   private language: ILanguage;
 
   constructor(response: ServerResponse, language: ILanguage) {
@@ -44,7 +43,7 @@ class AxeResponse {
     this.response.setHeader("Content-Language", this.language.language);
     this.response.write(JSON.stringify(data));
     this.response.end();
-    this.responseStatus = true;
+    this.response.isResponded = true;
   }
 
   /**
@@ -55,7 +54,7 @@ class AxeResponse {
   send(content: string) {
     this.response.write(content);
     this.response.end();
-    this.responseStatus = true;
+    this.response.isResponded = true;
   }
 
   /**
@@ -64,11 +63,11 @@ class AxeResponse {
   noContent() {
     this.response.statusCode = 204;
     this.response.end();
-    this.responseStatus = true;
+    this.response.isResponded = true;
   }
 
-  isResponded() {
-    return this.responseStatus;
+  isResponded(): boolean {
+    return !!this.response.isResponded;
   }
 
   statusCode() {
