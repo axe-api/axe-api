@@ -121,6 +121,12 @@ class Server {
     const app = await IoCService.use<App>("App");
     const api = APIService.getInstance();
 
+    // Rate limitting should be added before init() functions
+    if (api.config.rateLimit?.enabled) {
+      LogService.debug("New middleware: rateLimit()");
+      app.use(RateLimitMiddleware);
+    }
+
     // Adding the default handler for auto-created routes
     app.use(RequestHandler);
 
@@ -137,12 +143,6 @@ class Server {
       app.get("/swagger", SwaggerHandler);
       app.get("/docs", DocsHandler);
       app.get("/routes", RoutesHandler);
-    }
-
-    // Rate limitting should be added after init() functions.
-    if (api.config.rateLimit?.enabled) {
-      LogService.debug("New middleware: rateLimit()");
-      app.use(RateLimitMiddleware);
     }
 
     server.listen(api.config.port);
