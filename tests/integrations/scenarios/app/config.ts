@@ -11,8 +11,8 @@ const config: IApplicationConfig = {
     },
   },
   rateLimit: {
-    enabled: false,
-    maxRequests: 200,
+    enabled: true,
+    maxRequests: 10000,
     windowInSeconds: 5,
     trustProxyIP: false,
     adaptor: "memory",
