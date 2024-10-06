@@ -1,5 +1,11 @@
 import cors from "cors";
-import { App, AxeRequest, AxeResponse } from "axe-api";
+import {
+  App,
+  AxeRequest,
+  AxeResponse,
+  createRateLimitMiddleware,
+} from "axe-api";
+import { IncomingMessage, ServerResponse } from "http";
 
 const onBeforeInit = async (app: App) => {
   app.use(
@@ -10,6 +16,24 @@ const onBeforeInit = async (app: App) => {
   app.get("/health/before", async (req: AxeRequest, res: AxeResponse) => {
     res.json({ health: true });
   });
+
+  const curstomRateLimit = (
+    req: IncomingMessage,
+    res: ServerResponse,
+    next: any,
+  ) =>
+    createRateLimitMiddleware(req, res, next, "key", {
+      maxRequests: 1,
+      windowInSeconds: 10,
+    });
+
+  app.get(
+    "/api/v1/custom-rate-limit",
+    curstomRateLimit,
+    async (req: AxeRequest, res: AxeResponse) => {
+      res.json({ health: true });
+    },
+  );
 };
 
 const onAfterInit = async (app: App) => {
