@@ -43,6 +43,7 @@ export enum HookFunctionTypes {
   onBeforeForceDeleteQuery = "onBeforeForceDeleteQuery",
   onBeforeForceDelete = "onBeforeForceDelete",
   onBeforePaginate = "onBeforePaginate",
+  onBeforeSearch = "onBeforeSearch",
   onBeforeAll = "onBeforeAll",
   onBeforeShow = "onBeforeShow",
   onAfterInsert = "onAfterInsert",
@@ -53,6 +54,7 @@ export enum HookFunctionTypes {
   onAfterForceDeleteQuery = "onAfterForceDeleteQuery",
   onAfterForceDelete = "onAfterForceDelete",
   onAfterPaginate = "onAfterPaginate",
+  onAfterSearch = "onAfterSearch",
   onAfterAll = "onAfterAll",
   onAfterShow = "onAfterShow",
 }
