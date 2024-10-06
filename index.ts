@@ -11,7 +11,7 @@ import {
   AxeRequest,
   AxeResponse,
 } from "./src/Services";
-import { rateLimit } from "./src/Middlewares/RateLimit";
+import { rateLimit, createRateLimitter } from "./src/Middlewares/RateLimit";
 
 export * from "./src/Enums";
 export * from "./src/Interfaces";
@@ -31,4 +31,5 @@ export {
   allow,
   deny,
   rateLimit,
+  createRateLimitter,
 };

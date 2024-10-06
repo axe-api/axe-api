@@ -7,6 +7,7 @@ import {
   IContext,
   ICacheAdaptor,
   IRateLimitResponse,
+  IRateLimitIdentifier,
 } from "../../Interfaces";
 import { APIService, LogService } from "../../Services";
 import { nanoid } from "nanoid";
@@ -133,12 +134,53 @@ export const rateLimit = (options?: IRateLimitOptions) => {
 
     // Sending an error message if there is an error
     if (isAllowed.success === false) {
-      LogService.warn(`Rate limit exceeded: ${context.req.url}`);
+      LogService.info(`Rate limit exceeded: ${context.req.url}`);
       context.res
         .status(StatusCodes.TOO_MANY_REQUESTS)
         .json({ error: "Rate limit exceeded." });
     }
   };
+};
+
+/**
+ * Create a rate-limitter middleware (a connect middleware) with a middleware
+ * configurations
+ *
+ * @param middleware IRateLimitMiddleware
+ * @param options IRateLimitOptions
+ * @param req IncomingMessage
+ * @param res ServerResponse
+ * @param next NextFunction
+ * @returns
+ */
+export const createRateLimitter = async (
+  identifier: IRateLimitIdentifier,
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: any,
+) => {
+  // Checking the rate limits.
+  const isAllowed = await checkRateLimit(identifier.clientKey, identifier);
+
+  // Setting the HTTP Response headers.
+  if (identifier.setResponseHeaders) {
+    res.setHeader(`X-${identifier.name}-Limit`, isAllowed.limit);
+    res.setHeader(`X-${identifier.name}-Remaining`, isAllowed.remaining);
+  }
+
+  // If it is allowed, the next function would be called.
+  if (isAllowed.success) {
+    return next();
+  }
+
+  // Sending an error message.
+  LogService.info(`Rate limit exceeded: ${req.url}`);
+  res.writeHead(429, { "Content-Type": "application/json" });
+  res.end(
+    JSON.stringify({
+      error: "Rate limit exceeded.",
+    }),
+  );
 };
 
 export default async (req: IncomingMessage, res: ServerResponse, next: any) => {
@@ -163,7 +205,7 @@ export default async (req: IncomingMessage, res: ServerResponse, next: any) => {
   }
 
   // Sending an error message.
-  LogService.warn(`Rate limit exceeded: ${req.url}`);
+  LogService.info(`Rate limit exceeded: ${req.url}`);
   res.writeHead(429, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({

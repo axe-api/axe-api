@@ -79,6 +79,12 @@ export interface IRateLimitOptions {
   windowInSeconds: number;
 }
 
+export interface IRateLimitIdentifier extends IRateLimitOptions {
+  name: string;
+  clientKey: string;
+  setResponseHeaders?: boolean;
+}
+
 export interface IRateLimitConfig extends IRateLimitOptions {
   enabled: boolean;
   adaptor: AdaptorType;
@@ -126,6 +132,7 @@ export interface AxeConfig extends IConfig {
   rateLimit: IRateLimitConfig;
   errorHandler: ErrorHandleFunction;
   docs: boolean;
+  disableXPoweredByHeader: boolean;
   redis: RedisClientOptions | undefined;
   cache: ICacheConfiguration;
   elasticSearch: ClientOptions;
