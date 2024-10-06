@@ -7,6 +7,7 @@ import {
   IContext,
   ICacheAdaptor,
   IRateLimitResponse,
+  IRateLimitMiddleware,
 } from "../../Interfaces";
 import { APIService, LogService } from "../../Services";
 import { nanoid } from "nanoid";
@@ -80,36 +81,6 @@ export const setupRateLimitAdaptors = async (config: AxeConfig) => {
   adaptor = await AdaptorFactory(config.rateLimit?.adaptor || "memory");
 };
 
-export const createRateLimitMiddleware = async (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: () => void,
-  key: string,
-  options: IRateLimitOptions,
-) => {
-  // Checking the rate limit
-  const isAllowed = await checkRateLimit(key, options);
-
-  // Setting the headers
-  res.setHeader("X-RateLimit-Limit", isAllowed.limit);
-  res.setHeader("X-RateLimit-Remaining", isAllowed.remaining);
-
-  // Sending an error message if there is an error
-  if (isAllowed.success === false) {
-    LogService.warn(`Rate limit exceeded: ${req.url}`);
-    res.statusCode = StatusCodes.TOO_MANY_REQUESTS;
-    res.write(
-      JSON.stringify({
-        error: "Rate limit exceeded.",
-      }),
-    );
-    res.isResponded = true;
-    res.end();
-  }
-
-  next();
-};
-
 /**
  * Add a rate limit with the `IRateLimitOptions`
  *
@@ -131,34 +102,86 @@ export const rateLimit = (options?: IRateLimitOptions) => {
   // For each model middleware, we should use a different ID for the cache key
   const id = nanoid();
 
-  // API configuration fetching
-  const api = APIService.getInstance();
+  return async (context: IContext) => {
+    // API configuration fetching
+    const api = APIService.getInstance();
 
-  // Developers are able to set different rate limit options
-  // in model files. That's why we should create a new option object.
-  const selectedOptions: IRateLimitConfig = {
-    ...api.config.rateLimit,
-    ...options,
-  };
-
-  return async (context: IContext): Promise<void> => {
     // Creating a clientkey by the client key configurations
     const clientKey = getClientKeyByConfigurations(
       context.req.original,
       api.config.rateLimit,
     );
-    const key = `${clientKey}:${id}`;
 
-    return new Promise((resolve) => {
-      createRateLimitMiddleware(
-        context.req.original,
-        context.res.original,
-        resolve,
-        key,
-        selectedOptions,
-      );
-    });
+    // Developers are able to set different rate limit options
+    // in model files. That's why we should create a new option object.
+    const selectedOptions: IRateLimitConfig = {
+      ...api.config.rateLimit,
+      ...options,
+    };
+
+    // Checking the rate limit
+    const isAllowed = await checkRateLimit(
+      `${clientKey}:${id}`,
+      selectedOptions,
+    );
+
+    // Setting the headers
+    context.res.original.setHeader("X-RateLimit-Limit", isAllowed.limit);
+    context.res.original.setHeader(
+      "X-RateLimit-Remaining",
+      isAllowed.remaining,
+    );
+
+    // Sending an error message if there is an error
+    if (isAllowed.success === false) {
+      LogService.warn(`Rate limit exceeded: ${context.req.url}`);
+      context.res
+        .status(StatusCodes.TOO_MANY_REQUESTS)
+        .json({ error: "Rate limit exceeded." });
+    }
   };
+};
+
+/**
+ * Create a rate-limitter middleware (a connect middleware) with a middleware
+ * configurations
+ *
+ * @param middleware IRateLimitMiddleware
+ * @param options IRateLimitOptions
+ * @param req IncomingMessage
+ * @param res ServerResponse
+ * @param next NextFunction
+ * @returns
+ */
+export const createRateLimitter = async (
+  middleware: IRateLimitMiddleware,
+  options: IRateLimitOptions,
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: any,
+) => {
+  // Checking the rate limits.
+  const isAllowed = await checkRateLimit(middleware.clientKey, options);
+
+  // Setting the HTTP Response headers.
+  if (middleware.setResponseHeaders) {
+    res.setHeader(`X-${middleware.name}-Limit`, isAllowed.limit);
+    res.setHeader(`X-${middleware.name}-Remaining`, isAllowed.remaining);
+  }
+
+  // If it is allowed, the next function would be called.
+  if (isAllowed.success) {
+    return next();
+  }
+
+  // Sending an error message.
+  LogService.warn(`Rate limit exceeded: ${req.url}`);
+  res.writeHead(429, { "Content-Type": "application/json" });
+  res.end(
+    JSON.stringify({
+      error: "Rate limit exceeded.",
+    }),
+  );
 };
 
 export default async (req: IncomingMessage, res: ServerResponse, next: any) => {
