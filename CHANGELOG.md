@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.4.7 (2024-10-06)](https://github.com/axe-api/axe-api/compare/1.4.7...1.4.6)
+
+- `onBeforeAll` and `onAfterAll` hooks/events are not working on `HandlerTypes.ALL` handler. [#560](https://github.com/axe-api/axe-api/issues/560)
+
 ## [1.4.6 (2024-10-05)](https://github.com/axe-api/axe-api/compare/1.4.6...1.4.5)
 
 - `autoRouting` doesn't work when the model file has a relation to two different submodels [#557](https://github.com/axe-api/axe-api/issues/557)
