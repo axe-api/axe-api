@@ -1,8 +1,8 @@
 # Release Notes
 
-## [1.5 (2024-XX-XX)](https://github.com/axe-api/axe-api/compare/1.5.0...1.4.9)
+## [1.5.0 (2024-XX-XX)](https://github.com/axe-api/axe-api/compare/1.5.0...1.4.9)
 
-- `createRateLimitMiddleware` function has been added to created rate limit middleware with custom configuration.
+- `createRateLimitMiddleware` function has been added to created rate limit middleware with custom configuration. [#566](https://github.com/axe-api/axe-api/issues/566)
 
 ## [1.4.8 (2024-10-06)](https://github.com/axe-api/axe-api/compare/1.4.8...1.4.7)
 
