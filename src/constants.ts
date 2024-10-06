@@ -343,6 +343,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   env: "production",
   port: 3000,
   docs: true,
+  disableXPoweredByHeader: false,
   pino: {
     level: "error",
     transport: {
