@@ -73,7 +73,10 @@ export default async (
 
   if (!response.isResponded) {
     response.setHeader("Content-Type", "application/json");
-    response.setHeader("x-powered-by", "Axe API");
+
+    if (api.config.disableXPoweredByHeader === false) {
+      response.setHeader("x-powered-by", "Axe API");
+    }
   }
 
   for (const phase of match.phases) {

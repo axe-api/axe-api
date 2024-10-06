@@ -126,6 +126,7 @@ export interface AxeConfig extends IConfig {
   rateLimit: IRateLimitConfig;
   errorHandler: ErrorHandleFunction;
   docs: boolean;
+  disableXPoweredByHeader: boolean;
   redis: RedisClientOptions | undefined;
   cache: ICacheConfiguration;
   elasticSearch: ClientOptions;
