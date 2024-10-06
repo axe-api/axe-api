@@ -134,7 +134,7 @@ export const rateLimit = (options?: IRateLimitOptions) => {
 
     // Sending an error message if there is an error
     if (isAllowed.success === false) {
-      LogService.warn(`Rate limit exceeded: ${context.req.url}`);
+      LogService.info(`Rate limit exceeded: ${context.req.url}`);
       context.res
         .status(StatusCodes.TOO_MANY_REQUESTS)
         .json({ error: "Rate limit exceeded." });
@@ -175,7 +175,7 @@ export const createRateLimitter = async (
   }
 
   // Sending an error message.
-  LogService.warn(`Rate limit exceeded: ${req.url}`);
+  LogService.info(`Rate limit exceeded: ${req.url}`);
   res.writeHead(429, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({
@@ -206,7 +206,7 @@ export default async (req: IncomingMessage, res: ServerResponse, next: any) => {
   }
 
   // Sending an error message.
-  LogService.warn(`Rate limit exceeded: ${req.url}`);
+  LogService.info(`Rate limit exceeded: ${req.url}`);
   res.writeHead(429, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({
