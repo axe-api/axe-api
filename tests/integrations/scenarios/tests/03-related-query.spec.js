@@ -45,6 +45,23 @@ describe("Students", () => {
       teacher_id: teacher.id,
       hour_per_month: 10,
     });
+
+    await axios.post(`/v1/students/${studentId}/lessons`, {
+      lesson_id: lesson.id,
+      teacher_id: teacher.id,
+      hour_per_month: 20,
+    });
+  });
+
+  test("should be get related data while applying custom onBeforeQuery hook", async () => {
+    const { data } = await axios.get("/v1/students?with=lessons");
+    // Let's get the first student
+    const [student] = data.data;
+    // Get the lessons
+    const [lesson1, lesson2] = student.lessons;
+    // Lesson1's ID should be greater than lesson2. Because in the onBeforeQuery
+    // hook, we change the query by using .orderBy() function.
+    expect(lesson1.id > lesson2.id).toBe(true);
   });
 
   /**
@@ -70,7 +87,7 @@ describe("Students", () => {
         },
       },
     );
-    expect(response.pagination.total).toBe(1);
+    expect(response.pagination.total).toBe(2);
 
     const studentLesson = response.data[0];
     expect(studentLesson.student_id).toBe(studentId);
