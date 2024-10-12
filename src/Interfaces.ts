@@ -507,6 +507,7 @@ export interface IElasticSearchParameters {
 
 export interface IHasManyOptions {
   autoRouting: boolean;
+  onBeforeQuery?: (req: AxeRequest, query: Knex.QueryBuilder) => Promise<void>;
 }
 
 export interface IValidator {
