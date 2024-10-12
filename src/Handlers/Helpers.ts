@@ -374,11 +374,6 @@ export const getRelatedData = async (
     );
 
     // Call the onBeforeQuery function if there is a defined one!
-    console.log(
-      "QUERRRRY",
-      foreignModel.instance.table,
-      definedRelation.options,
-    );
     if (definedRelation.options.onBeforeQuery) {
       await definedRelation.options.onBeforeQuery(request, foreignModelQuery);
     }
