@@ -1,4 +1,5 @@
-import { Model } from "axe-api";
+import { Model, AxeRequest } from "axe-api";
+import { Knex } from "knex";
 
 class Student extends Model {
   get fillable() {
@@ -6,7 +7,11 @@ class Student extends Model {
   }
 
   lessons() {
-    return this.hasMany("StudentLesson", "id", "student_id");
+    return this.hasMany("StudentLesson", "id", "student_id", {
+      onBeforeQuery: async (req: AxeRequest, query: Knex.QueryBuilder) => {
+        query.orderBy("id", "desc");
+      },
+    });
   }
 }
 
