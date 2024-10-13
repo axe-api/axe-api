@@ -79,6 +79,12 @@ export interface IRateLimitOptions {
   windowInSeconds: number;
 }
 
+export interface IRateLimitIdentifier extends IRateLimitOptions {
+  name: string;
+  clientKey: string;
+  setResponseHeaders?: boolean;
+}
+
 export interface IRateLimitConfig extends IRateLimitOptions {
   enabled: boolean;
   adaptor: AdaptorType;
@@ -126,6 +132,7 @@ export interface AxeConfig extends IConfig {
   rateLimit: IRateLimitConfig;
   errorHandler: ErrorHandleFunction;
   docs: boolean;
+  disableXPoweredByHeader: boolean;
   redis: RedisClientOptions | undefined;
   cache: ICacheConfiguration;
   elasticSearch: ClientOptions;
@@ -254,7 +261,17 @@ export interface IBeforeUpdateQueryContext extends IContext {
   query: Knex.QueryBuilder;
 }
 
+export interface IBeforePatchQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
 export interface IBeforeUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IBeforePatchContext extends IContext {
   query: Knex.QueryBuilder;
   item: any;
   formData: any;
@@ -307,6 +324,17 @@ export interface IAfterUpdateQueryContext extends IContext {
 }
 
 export interface IAfterUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IAfterPatchQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+}
+
+export interface IAfterPatchContext extends IContext {
   query: Knex.QueryBuilder;
   item: any;
   formData: any;
@@ -500,6 +528,7 @@ export interface IElasticSearchParameters {
 
 export interface IHasManyOptions {
   autoRouting: boolean;
+  onBeforeQuery?: (req: AxeRequest, query: Knex.QueryBuilder) => Promise<void>;
 }
 
 export interface IValidator {

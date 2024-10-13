@@ -373,6 +373,11 @@ export const getRelatedData = async (
       selectColumns,
     );
 
+    // Call the onBeforeQuery function if there is a defined one!
+    if (definedRelation.options.onBeforeQuery) {
+      await definedRelation.options.onBeforeQuery(request, foreignModelQuery);
+    }
+
     // If the model is supported soft-delete we should check the data.
     if (foreignModel.instance.deletedAtColumn) {
       foreignModelQuery.whereNull(foreignModel.instance.deletedAtColumn);
