@@ -214,6 +214,14 @@ const sidebarReference = [
         link: "/reference/hooks-events-on-before-update",
       },
       {
+        text: "onBeforePatchQuery()",
+        link: "/reference/hooks-events-on-before-patch-query",
+      },
+      {
+        text: "onBeforePatch()",
+        link: "/reference/hooks-events-on-before-patch",
+      },
+      {
         text: "onBeforeDeleteQuery()",
         link: "/reference/hooks-events-on-before-delete-query",
       },
@@ -253,6 +261,14 @@ const sidebarReference = [
       {
         text: "onAfterUpdate()",
         link: "/reference/hooks-events-on-after-update",
+      },
+      {
+        text: "onAfterPatchQuery()",
+        link: "/reference/hooks-events-on-after-patch-query",
+      },
+      {
+        text: "onAfterPatch()",
+        link: "/reference/hooks-events-on-after-patch",
       },
       {
         text: "onAfterDeleteQuery()",
