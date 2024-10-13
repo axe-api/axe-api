@@ -261,7 +261,17 @@ export interface IBeforeUpdateQueryContext extends IContext {
   query: Knex.QueryBuilder;
 }
 
+export interface IBeforePatchQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+}
+
 export interface IBeforeUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IBeforePatchContext extends IContext {
   query: Knex.QueryBuilder;
   item: any;
   formData: any;
@@ -314,6 +324,17 @@ export interface IAfterUpdateQueryContext extends IContext {
 }
 
 export interface IAfterUpdateContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+  formData: any;
+}
+
+export interface IAfterPatchQueryContext extends IContext {
+  query: Knex.QueryBuilder;
+  item: any;
+}
+
+export interface IAfterPatchContext extends IContext {
   query: Knex.QueryBuilder;
   item: any;
   formData: any;
