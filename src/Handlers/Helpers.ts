@@ -324,10 +324,13 @@ export const getRelatedData = async (
       searchField,
     );
 
-    // We should find the parent Primary Key values.
-    const parentPrimaryKeyValues: any[] = data.map(
-      (item) => item[dataFieldKey],
-    );
+    // We should find the parent Primary Key values. We shouldn't allow NULL or
+    // undefined as the primary key value. NULL or undefined cannot be used as a
+    // key between relations. Also, there is no need to have duplicated values
+    // in the array.
+    const parentPrimaryKeyValues: any[] = [
+      ...new Set(data.map((item) => item[dataFieldKey]).filter((item) => item)),
+    ];
 
     // Selecting the special field for the relations
     let selectColumns: string[] = ["*"];
@@ -384,10 +387,16 @@ export const getRelatedData = async (
     }
 
     // Fetching related records by foreignKey and primary key values.
-    let relatedRecords = await foreignModelQuery.whereIn(
-      searchFieldKey,
-      parentPrimaryKeyValues,
-    );
+    let relatedRecords: any[] = [];
+
+    // If there is not any parentPrimaryKeyValues, that means the relationship
+    // query would return empty. So no need to execute those query at this phase.
+    if (parentPrimaryKeyValues.length > 0) {
+      relatedRecords = await foreignModelQuery.whereIn(
+        searchFieldKey,
+        parentPrimaryKeyValues,
+      );
+    }
 
     // Adding related data source to the request tags to set cache tag values
     const { primaryKey } = foreignModel.instance;
