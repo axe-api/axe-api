@@ -145,10 +145,11 @@ class Server {
       app.get("/routes", RoutesHandler);
     }
 
-    server.listen(api.config.port);
+    const hostname = api.config.hostname || "localhost";
+    server.listen(api.config.port, hostname);
 
     LogService.axe(
-      `Axe API listens requests on http://localhost:${api.config.port}`,
+      `Axe API listens requests on http://${hostname}:${api.config.port}`,
     );
   }
 }

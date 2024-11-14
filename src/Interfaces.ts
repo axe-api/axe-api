@@ -126,6 +126,7 @@ export interface ISearchConfigutation {
 export interface AxeConfig extends IConfig {
   env: string;
   port: number;
+  hostname: string;
   prefix: string;
   database: Knex.Config;
   pino: LoggerOptions;
