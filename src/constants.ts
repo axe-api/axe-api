@@ -342,6 +342,7 @@ export const DEFAULT_APP_CONFIG: AxeConfig = {
   prefix: "api",
   env: "production",
   port: 3000,
+  hostname: "localhost",
   docs: true,
   disableXPoweredByHeader: false,
   pino: {
