@@ -67,8 +67,6 @@ class QueryService {
       return;
     }
 
-    valideteQueryFeature(this.model, QueryFeature.Sorting);
-
     sort.forEach((item) => {
       valideteQueryFeature(
         this.model,
