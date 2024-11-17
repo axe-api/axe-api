@@ -8,6 +8,7 @@
 - `onBeforePatch` and `onAfterPatch` hooks/events are not working on `HandlerTypes.PATCH` [#573](https://github.com/axe-api/axe-api/issues/573)
 - `hostname` parameter has been added to configurations. [#584](https://github.com/axe-api/axe-api/issues/584)
 - Fixed performance issues on related-data queries. [#585](https://github.com/axe-api/axe-api/issues/585)
+- Fixed query limit issue [#587](https://github.com/axe-api/axe-api/issues/587)
 
 ## [1.4.8 (2024-10-06)](https://github.com/axe-api/axe-api/compare/1.4.8...1.4.7)
 
