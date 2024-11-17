@@ -147,7 +147,7 @@ export const valideteQueryFeature = (
       const lastKeyRule = keyRules[keyRules.length - 1];
       if (lastKeyRule?.type === QueryFeatureType.Deny) {
         throw new ApiError(
-          `Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`,
+          `[ERR-1] Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`,
         );
       }
       return;
@@ -156,14 +156,14 @@ export const valideteQueryFeature = (
 
   if (rules.length === 0) {
     throw new ApiError(
-      `Unsupported query feature${errorDetail}: ${feature.toString()}`,
+      `[ERR-2] Unsupported query feature${errorDetail}: ${feature.toString()}`,
     );
   }
 
   const lastRule = rules[rules.length - 1];
   if (lastRule?.type === QueryFeatureType.Deny) {
     throw new ApiError(
-      `Unsupported query feature${errorDetail}: ${feature.toString()}`,
+      `[ERR-3] Unsupported query feature${errorDetail}: ${feature.toString()}`,
     );
   }
 };
