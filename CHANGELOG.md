@@ -9,6 +9,7 @@
 - `hostname` parameter has been added to configurations. [#584](https://github.com/axe-api/axe-api/issues/584)
 - Fixed performance issues on related-data queries. [#585](https://github.com/axe-api/axe-api/issues/585)
 - Fixed query limit issue [#587](https://github.com/axe-api/axe-api/issues/587)
+- Fixed model serialization function doesn't work on ALL handlers issue. [#588](https://github.com/axe-api/axe-api/issues/588)
 
 ## [1.4.8 (2024-10-06)](https://github.com/axe-api/axe-api/compare/1.4.8...1.4.7)
 
