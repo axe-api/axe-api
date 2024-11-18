@@ -108,7 +108,12 @@ describe("Axe API Models", () => {
   });
 
   test("should be able get all categories", async () => {
-    const { data, status } = await axiosGet(`/v1/categories/all`);
+    const response = await axiosGet(`/v1/categories/all`);
+
+    console.log(response);
+
+    const { data, status } = response;
+    console.log(data);
 
     expect(status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
