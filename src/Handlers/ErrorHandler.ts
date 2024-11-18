@@ -10,6 +10,8 @@ export default (
   // Sett the HTTP status code
   res.statusCode = 500;
 
+  console.log(err);
+
   // Set the default HTTP message
   res.write(
     JSON.stringify({

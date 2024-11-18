@@ -8,7 +8,9 @@ export default async (context: IContext) => {
   const { primaryKey } = model.instance;
   const config = model.getCacheConfiguration(handlerType);
   context.req.original.tags.push(
-    ...result.data.map((i: any) => toCacheTagKey(model, i[primaryKey], config)),
+    ...(result?.data || result || []).map((i: any) =>
+      toCacheTagKey(model, i[primaryKey], config),
+    ),
   );
 
   // Caching the results
