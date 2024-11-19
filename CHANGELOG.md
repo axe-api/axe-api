@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.5.1 (2024-11-19)](https://github.com/axe-api/axe-api/compare/1.5.1...1.5.0)
+
+- Fixed `console.log` bug.
+
 ## [1.5.0 (2024-11-19)](https://github.com/axe-api/axe-api/compare/1.5.0...1.4.8)
 
 - `createRateLimitMiddleware` function has been added to created rate limit middleware with custom configuration. [#566](https://github.com/axe-api/axe-api/issues/566)
