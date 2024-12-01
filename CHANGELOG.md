@@ -1,5 +1,12 @@
 # Release Notes
 
+## [1.5.2 (2024-12-01)](https://github.com/axe-api/axe-api/compare/1.5.2...1.5.1)
+
+- Fixed custom endpoints auto-generated docs [#602](https://github.com/axe-api/axe-api/issues/602)
+- Fixed types in auto-generated docs [#603](https://github.com/axe-api/axe-api/issues/603)
+- Fixed trashed parameter docs [#604](https://github.com/axe-api/axe-api/issues/604)
+- Added Event interfaces that don't have `res` object. [#590](https://github.com/axe-api/axe-api/issues/590)
+
 ## [1.5.1 (2024-11-19)](https://github.com/axe-api/axe-api/compare/1.5.1...1.5.0)
 
 - Fixed `console.log` bug.
