@@ -1,7 +1,5 @@
 <script setup>
 import DefaultTheme from "vitepress/theme";
-import ModelFeature from "./components/ModelFeature.vue";
-import TestAnimation from "./components/TestAnimation.vue";
 
 const { Layout } = DefaultTheme;
 </script>
