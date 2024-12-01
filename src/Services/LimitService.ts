@@ -126,14 +126,11 @@ export const deny = (
   return generatePermission(QueryFeatureType.Deny, feature, keys);
 };
 
-export const valideteQueryFeature = (
+export const isQueryFeatureEnabled = (
   model: IModelService,
   feature: QueryFeature,
   key: string | null = null,
-  errorDescription?: string,
-) => {
-  const errorDetail = errorDescription ? ` (${errorDescription})` : "";
-
+): boolean => {
   const rules = model.queryLimits.filter(
     (limit) => limit.feature === feature && limit.key === null,
   );
@@ -146,24 +143,36 @@ export const valideteQueryFeature = (
     if (keyRules.length > 0) {
       const lastKeyRule = keyRules[keyRules.length - 1];
       if (lastKeyRule?.type === QueryFeatureType.Deny) {
-        throw new ApiError(
-          `[ERR-1] Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`,
-        );
+        return false;
       }
-      return;
+
+      return true;
     }
   }
 
   if (rules.length === 0) {
-    throw new ApiError(
-      `[ERR-2] Unsupported query feature${errorDetail}: ${feature.toString()}`,
-    );
+    return false;
   }
 
   const lastRule = rules[rules.length - 1];
   if (lastRule?.type === QueryFeatureType.Deny) {
+    return false;
+  }
+
+  return true;
+};
+
+export const valideteQueryFeature = (
+  model: IModelService,
+  feature: QueryFeature,
+  key: string | null = null,
+  errorDescription?: string,
+) => {
+  const errorDetail = errorDescription ? ` (${errorDescription})` : "";
+
+  if (isQueryFeatureEnabled(model, feature, key) === false) {
     throw new ApiError(
-      `[ERR-3] Unsupported query feature${errorDetail}: ${feature.toString()}`,
+      `[ERR-1] Unsupported query feature${errorDetail}: ${feature.toString()} [${key}]`,
     );
   }
 };
