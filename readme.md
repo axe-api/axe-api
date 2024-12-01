@@ -1,7 +1,7 @@
 <h1 align="center">
   <br>
   <a href="https://axe-api.com/">
-    <img src="https://axe-api.com/axe.png" alt="Markdownify" width="200">
+    <img src="https://axe-api.com/viking.png" alt="Markdownify" width="200">
   </a>
   <br>
   Axe API
