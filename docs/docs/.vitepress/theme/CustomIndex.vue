@@ -206,13 +206,12 @@ const { Layout } = DefaultTheme;
 }
 
 img.viking {
-  width: 300px;
   height: 300px;
 }
 
 @media only screen and (max-width: 600px) {
   img.viking {
-    width: 200px;
+    height: 200px;
   }
 
   .main-brand {
