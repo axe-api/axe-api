@@ -380,10 +380,6 @@ export default defineConfig({
         link: "/reference/api-configs",
       },
       {
-        text: "Rest API",
-        link: "/rest-api",
-      },
-      {
         text: "Blog",
         link: "/blog/index",
       },
