@@ -10,6 +10,8 @@ const { Layout } = DefaultTheme;
   <Layout>
     <template #home-hero-info>
       <div class="container">
+        <img src="/viking.png" class="viking" />
+        <h2 class="main-brand yellow">Axe API</h2>
         <h1 class="text title">
           A <span class="indigo">framework</span> to build
           <span class="indigo">Rest API</span>
@@ -22,7 +24,18 @@ const { Layout } = DefaultTheme;
             API References
           </a>
         </div>
+        <a
+          href="https://www.producthunt.com/posts/axe-api?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-axe&#0045;api"
+          target="_blank"
+          ><img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=404818&theme=light"
+            alt="Axe&#0032;API - The&#0032;next&#0045;generation&#0032;Rest&#0032;API&#0032;framework | Product Hunt"
+            style="width: 250px; height: 54px"
+            width="250"
+            height="54"
+        /></a>
       </div>
+
       <div class="description-section">
         <div class="description-box">
           "This is the framework that is missing to build Rest API with best
@@ -67,11 +80,7 @@ const { Layout } = DefaultTheme;
         </div>
       </div>
 
-      <h2 class="h2">It's design is based on <br />best-practices</h2>
-
-      <div>
-        <TestAnimation />
-      </div>
+      <h2 class="h2">Features</h2>
     </template>
   </Layout>
 </template>
@@ -79,20 +88,34 @@ const { Layout } = DefaultTheme;
 <style scoped lang="scss">
 .container {
   padding-bottom: 160px;
+  height: 100dvh;
+}
+
+.main-brand {
+  font-family: var(--vp-font-family-base);
+  text-align: center;
+  font-size: 74px;
+  font-weight: bold;
+  padding-bottom: 25px;
+  color: #f7e363;
 }
 
 .title {
-  line-height: 90px;
-  font-size: 74px;
+  line-height: 70px;
+  font-size: 60px;
   font-weight: bold;
   text-align: center;
   font-family: var(--vp-font-family-base);
   color: var(--vp-c-white);
-  padding: 100px 0px 20px 0px;
+  padding: 0px 0px 50px 0px;
 }
 
 .indigo {
   color: var(--vp-c-indigo-1);
+}
+
+.yellow {
+  color: #f7e363;
 }
 
 .button-container {
@@ -102,10 +125,10 @@ const { Layout } = DefaultTheme;
 }
 
 .button {
-  padding: 8px 20px;
+  padding: 12px 24px;
   border-radius: 24px;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .primary {
@@ -181,6 +204,36 @@ const { Layout } = DefaultTheme;
   font-weight: 600;
   letter-spacing: -0.04;
   font-family: var(--vp-font-family-base);
-  padding: 40px 0px 40px 0px;
+  padding: 40px 0px 0px 0px;
+}
+
+img.viking {
+  width: 300px;
+  height: 300px;
+}
+
+@media only screen and (max-width: 600px) {
+  img.viking {
+    width: 200px;
+  }
+
+  .main-brand {
+    font-size: 40px;
+    padding-bottom: 10px;
+  }
+
+  .title {
+    font-size: 30px;
+    line-height: 38px;
+    padding-bottom: 20px;
+  }
+
+  .button-container {
+    flex-direction: column;
+
+    .button {
+      text-align: center;
+    }
+  }
 }
 </style>
