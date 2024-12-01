@@ -42,6 +42,7 @@ const DATA_TYPE_MAP = [
       "int",
       "integer",
       "bigint",
+      "bigint unsigned",
       "float",
       "double",
       "decimal",
