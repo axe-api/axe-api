@@ -383,6 +383,58 @@ export interface IAfterShowContext extends IContext {
   item: any;
 }
 
+export interface IBeforeInsertEventContext
+  extends Omit<IBeforeInsertContext, "res"> {}
+export interface IBeforeUpdateQueryEventContext
+  extends Omit<IBeforeUpdateQueryContext, "res"> {}
+export interface IBeforePatchQueryEventContext
+  extends Omit<IBeforePatchQueryContext, "res"> {}
+export interface IBeforeUpdateEventContext
+  extends Omit<IBeforeUpdateContext, "res"> {}
+export interface IBeforePatchEventContext
+  extends Omit<IBeforePatchContext, "res"> {}
+export interface IBeforeDeleteQueryEventContext
+  extends Omit<IBeforeDeleteQueryContext, "res"> {}
+export interface IBeforeDeleteEventContext
+  extends Omit<IBeforeDeleteContext, "res"> {}
+export interface IBeforeForceDeleteQueryEventContext
+  extends Omit<IBeforeForceDeleteQueryContext, "res"> {}
+export interface IBeforeForceDeleteEventContext
+  extends Omit<IBeforeForceDeleteContext, "res"> {}
+export interface IBeforePaginateEventContext
+  extends Omit<IBeforePaginateContext, "res"> {}
+export interface IBeforeSearchEventContext
+  extends Omit<IBeforeSearchContext, "res"> {}
+export interface IBeforeAllEventContext
+  extends Omit<IBeforeAllContext, "res"> {}
+export interface IBeforeShowEventContext
+  extends Omit<IBeforeShowContext, "res"> {}
+export interface IAfterInsertEventContext
+  extends Omit<IAfterInsertContext, "res"> {}
+export interface IAfterUpdateQueryEventContext
+  extends Omit<IAfterUpdateQueryContext, "res"> {}
+export interface IAfterUpdateEventContext
+  extends Omit<IAfterUpdateContext, "res"> {}
+export interface IAfterPatchQueryEventContext
+  extends Omit<IAfterPatchQueryContext, "res"> {}
+export interface IAfterPatchEventContext
+  extends Omit<IAfterPatchContext, "res"> {}
+export interface IAfterDeleteQueryEventContext
+  extends Omit<IAfterDeleteQueryContext, "res"> {}
+export interface IAfterDeleteEventContext
+  extends Omit<IAfterDeleteContext, "res"> {}
+export interface IAfterForceDeleteQueryEventContext
+  extends Omit<IAfterForceDeleteQueryContext, "res"> {}
+export interface IAfterForceDeleteEventContext
+  extends Omit<IAfterForceDeleteContext, "res"> {}
+export interface IAfterPaginateEventContext
+  extends Omit<IAfterPaginateContext, "res"> {}
+export interface IAfterAllEventContext extends Omit<IAfterAllContext, "res"> {}
+export interface IAfterSearchEventContext
+  extends Omit<IAfterSearchContext, "res"> {}
+export interface IAfterShowEventContext
+  extends Omit<IAfterShowContext, "res"> {}
+
 export interface IRouteDocumentation {
   version: string;
   handler: string;
