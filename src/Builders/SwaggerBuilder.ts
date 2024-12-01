@@ -2,10 +2,11 @@
 import path from "path";
 import fs from "fs";
 import { pascalCase } from "change-case";
-import { HandlerTypes, HttpMethods } from "../Enums";
+import { HandlerTypes, HttpMethods, QueryFeature } from "../Enums";
 import { IModelService, IRouteDocumentation } from "../Interfaces";
 import NodeCache from "node-cache";
 import { APIService, DocumentationService } from "../Services";
+import { isQueryFeatureEnabled } from "src/Services/LimitService";
 
 const cache = new NodeCache();
 
@@ -40,11 +41,15 @@ const DATA_TYPE_MAP = [
       "smallint",
       "mediumint",
       "int",
+      "int unsigned",
+      "integer unsigned",
       "integer",
       "bigint",
       "bigint unsigned",
       "float",
+      "float unsigned",
       "double",
+      "double unsigned",
       "decimal",
       "numeric",
     ],
@@ -329,7 +334,10 @@ const toRequestBody = (endpoint: IRouteDocumentation) => {
   };
 };
 
-const toRequestParameters = (endpoint: IRouteDocumentation) => {
+const toRequestParameters = (
+  endpoint: IRouteDocumentation,
+  modelService: IModelService,
+) => {
   const parameters: any = [
     {
       in: "header",
@@ -470,16 +478,6 @@ const toRequestParameters = (endpoint: IRouteDocumentation) => {
           },
         },
         {
-          name: "trashed",
-          in: "query",
-          description: "List of deleted data with soft-delete",
-          required: false,
-          schema: {
-            type: "integer",
-            default: 0,
-          },
-        },
-        {
           name: "q",
           in: "query",
           description: "JSON query to filter data",
@@ -490,6 +488,22 @@ const toRequestParameters = (endpoint: IRouteDocumentation) => {
         },
       ],
     );
+
+    if (
+      modelService.instance.deletedAtColumn &&
+      isQueryFeatureEnabled(modelService, QueryFeature.Trashed)
+    ) {
+      parameters.push({
+        name: "trashed",
+        in: "query",
+        description: "List of deleted data with soft-delete",
+        required: false,
+        schema: {
+          type: "integer",
+          default: 0,
+        },
+      });
+    }
   }
 
   return parameters;
@@ -612,7 +626,7 @@ const generateDocumentation = async () => {
       description: toEndpointDescription(endpoint),
       operationId: `${endpoint.handler}${endpoint.model}`,
       responses: toEndpointResponse(endpoint),
-      parameters: toRequestParameters(endpoint),
+      parameters: toRequestParameters(endpoint, endpoint.modelService),
     };
 
     const requestBody = toRequestBody(endpoint);
