@@ -595,11 +595,15 @@ const generateDocumentation = async () => {
     }
   }
 
+  const modelPatterns: Record<string, string> = {};
+
   const paths: any = {};
   for (const endpoint of docs.get()) {
     if (paths[endpoint.url] === undefined) {
       paths[endpoint.url] = {};
     }
+
+    modelPatterns[endpoint.url] = endpoint.model;
 
     const path: any = {
       tags: [endpoint.model],
@@ -618,13 +622,24 @@ const generateDocumentation = async () => {
     paths[endpoint.url][endpoint.method.toLowerCase()] = path;
   }
 
+  const modelPatternsKeys = Object.keys(modelPatterns);
+
   // Added custom endpoint
   for (const custom of docs.getCustoms()) {
     if (paths[custom.url] === undefined) {
       paths[custom.url] = {};
     }
 
+    const samePattern = modelPatternsKeys.find((key) =>
+      custom.url.startsWith(key),
+    );
+    const tags = [];
+    if (samePattern) {
+      tags.push(modelPatterns[samePattern]);
+    }
+
     paths[custom.url][custom.method.toLowerCase()] = {
+      tags,
       description: "Custom endpoint",
     };
   }
