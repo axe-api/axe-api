@@ -6,7 +6,7 @@ import { HandlerTypes, HttpMethods, QueryFeature } from "../Enums";
 import { IModelService, IRouteDocumentation } from "../Interfaces";
 import NodeCache from "node-cache";
 import { APIService, DocumentationService } from "../Services";
-import { isQueryFeatureEnabled } from "src/Services/LimitService";
+import { isQueryFeatureEnabled } from "../Services/LimitService";
 
 const cache = new NodeCache();
 
