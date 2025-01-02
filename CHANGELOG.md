@@ -1,5 +1,10 @@
 # Release Notes
 
+## [1.6.0 (2024-01-02)](https://github.com/axe-api/axe-api/compare/1.6.0...1.5.2)
+
+- Node.js v22 support [#500](https://github.com/axe-api/axe-api/issues/500)
+- Security upgrades
+
 ## [1.5.2 (2024-12-01)](https://github.com/axe-api/axe-api/compare/1.5.2...1.5.1)
 
 - Fixed custom endpoints auto-generated docs [#602](https://github.com/axe-api/axe-api/issues/602)
