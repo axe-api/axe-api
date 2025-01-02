@@ -2,6 +2,11 @@
 const posts = [
   {
     time: "19 November, 2024",
+    title: "Axe API v1.6 is out!",
+    url: "/blog/2025-01-02-axe-api-v1-6-is-out",
+  },
+  {
+    time: "19 November, 2024",
     title: "Axe API v1.5 is out!",
     url: "/blog/2024-11-19-axe-api-v1-5-is-out",
   },
