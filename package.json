@@ -76,7 +76,7 @@
     "body-parser": "^1.20.3",
     "change-case": "^4.1.2",
     "colors": "^1.4.0",
-    "commander": "^12.1.0",
+    "commander": "^13.0.0",
     "connect": "^3.7.0",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.2",
