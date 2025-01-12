@@ -8,36 +8,6 @@ If you're new to Axe API, make sure you've checked out our documentation and [FA
 
 [FAQs Link](/ecosystem/faq)
 
-## 1-1 Onboarding Meeting <Badge type="success" text="FREE" />
-
-<div class="superpeer">
-
-<div>
-You can get a <b>FREE</b> onboarding meeting from the Axe API creator  (<a href="https://superpeer.com/iozguradem/-/axe-api-onboarding" target="_blank">Ozgur Isikli</a>) to bootstrap your project!
-
-In this meeting, we can help you to create your own project with Axe API. The following topics can be discussed:
-
-- Fundamentals of Axe API
-- Understanding your project structure
-- Creating your project
-- Best practices
-- Suggestions and pitfalls
-- QA
-
-In a one-hour meeting, we can talk about your project.
-
-No obligation about anything!
-
-[Book a meeting!](https://superpeer.com/iozguradem/-/axe-api-onboarding)
-
-</div>
-
-<a href="https://superpeer.com/iozguradem/-/axe-api-onboarding" target="_blank">
-  <img src="./superpeer.png" />
-</a>
-
-</div>
-
 ## Issue Tracker
 
 If you've encountered a bug, have a feature request, or want to report an issue, please visit our [GitHub Issues](https://github.com/axe-api/axe-api/issues) page. Before submitting a new issue, search the existing issues to see if your problem has already been reported or discussed.
