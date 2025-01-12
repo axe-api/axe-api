@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.6.1 (2025-01-12)](https://github.com/axe-api/axe-api/compare/1.6.1...1.6.0)
+
+- Dependency upgrades
+
 ## [1.6.0 (2024-01-02)](https://github.com/axe-api/axe-api/compare/1.6.0...1.5.2)
 
 - Node.js v22 support [#500](https://github.com/axe-api/axe-api/issues/500)
