@@ -1,5 +1,5 @@
-import { IStepDefinition } from "src/Interfaces";
-import { PhaseFunction } from "src/Types";
+import { IStepDefinition } from "@/Interfaces";
+import { PhaseFunction } from "@/Types";
 
 class Phase implements IStepDefinition {
   private callback: PhaseFunction;

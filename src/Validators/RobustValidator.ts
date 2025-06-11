@@ -1,13 +1,14 @@
-import { HttpMethods } from "../Enums";
-import { IModelService, IValidator } from "../Interfaces";
-import { AxeRequest, LogService } from "../Services";
+import { HttpMethods } from "@/Enums";
+import { IModelService, IValidator } from "@/Interfaces";
+import AxeRequest from "../Services/AxeRequest";
+import LogService from "../Services/LogService";
 import { validate, setLocales, LanguageType, ILocale } from "robust-validator";
 
 class RobustValidator implements IValidator {
   constructor(supportedLanguages: string[]) {
     import("robust-validator").then((pkg) => {
       for (const language of supportedLanguages) {
-        const languagePack = pkg[language];
+        const languagePack = (pkg as any)[language as any];
 
         if (!languagePack) {
           throw new Error(

@@ -1,87 +1,65 @@
 import { DependencyTypes } from "../Enums";
 import { IDependency } from "../Interfaces";
 
+type DependencyCallback<T = any> = () => T | Promise<T>;
+
 class IoCService {
   private static items: Record<string, IDependency> = {};
 
-  /**
-   * Adding a dependency creator function.
-   *
-   * @param name
-   * @param callback
-   * @example
-   *
-   * IoCService.bind("MailService", () => new MyMailService())
-   */
-  static bind(name: string, callback: any) {
+  static bind<T = any>(name: string, callback: DependencyCallback<T>) {
     this._add(DependencyTypes.BIND, name, callback);
   }
 
-  /**
-   * Adding a singleton dependency creator function.
-   *
-   * @param name
-   * @param callback
-   * @example
-   *
-   * IoCService.singleton("MySingleton", () => new MySingleton())
-   */
-  static singleton(name: string, callback: any) {
+  static singleton<T = any>(name: string, callback: DependencyCallback<T>) {
     this._add(DependencyTypes.SINGLETON, name, callback);
   }
 
-  /**
-   * Adding a singleton dependency and create the first instance immediately.
-   *
-   * @param name
-   * @param callback
-   * @example
-   *
-   * IoCService.singleton("MySingleton", () => new MySingleton())
-   */
-  static fastSingleton(name: string, callback: any) {
+  static fastSingleton<T = any>(name: string, callback: DependencyCallback<T>) {
     this._add(DependencyTypes.SINGLETON, name, callback);
-    this.use(name);
+    void this.use(name); // fire and forget
   }
 
-  /**
-   * Getting the service by the name.
-   *
-   * @param name
-   * @param callback
-   * @example
-   *
-   * await IoCService.use<MySingleton>("MySingleton")
-   */
-  static async use<T>(name: string): Promise<T> {
-    const result = await IoCService.getByName(name);
+  static async use<T = any>(name: string): Promise<T> {
+    const result = await this.getByName(name);
     return result as T;
   }
 
   private static async getByName(name: string): Promise<any> {
-    const item = IoCService.items[name];
+    const item = this.items[name];
     if (!item) {
-      throw new Error(`Dependency is not found ${name}`);
+      throw new Error(`Dependency is not found: ${name}`);
     }
 
     if (item.type === DependencyTypes.BIND) {
-      return await item.callback();
+      return await this.resolve(item.callback);
     }
 
     if (item.instance) {
       return item.instance;
     }
 
-    item.instance = await item.callback();
+    item.instance = await this.resolve(item.callback);
     return item.instance;
   }
 
-  private static _add(type: DependencyTypes, name: string, callback: any) {
-    IoCService.items[name] = {
+  private static _add(
+    type: DependencyTypes,
+    name: string,
+    callback: DependencyCallback,
+  ) {
+    this.items[name] = {
       type,
       callback,
       instance: null,
     };
+  }
+
+  private static async resolve(callback: DependencyCallback): Promise<any> {
+    try {
+      return await callback();
+    } catch (error) {
+      throw new Error(`Failed to resolve dependency: ${error}`);
+    }
   }
 }
 

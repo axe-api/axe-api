@@ -569,7 +569,7 @@ const generateDocumentation = async () => {
 
   const schemas: any = {};
   const requestBodies: any = {};
-  const firstVersion = api.versions.at(0);
+  const firstVersion = api.versions[0];
 
   if (!firstVersion) {
     throw new Error("The version is not found!");

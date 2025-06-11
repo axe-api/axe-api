@@ -15,10 +15,11 @@ import {
   APIService,
 } from "../Services";
 import { ALL_HANDLERS, DEFAULT_METHODS_OF_MODELS } from "../constants";
-import { SchemaInspectorFunction, SerializationFunction } from "../Types";
+import { SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
 import { getModelCacheConfiguration } from "../Handlers/Helpers";
 import RedisAdaptor from "src/Middlewares/RateLimit/RedisAdaptor";
+import * as Inspector from "knex-schema-inspector";
 
 class ModelResolver {
   private version: IVersion;
@@ -130,10 +131,7 @@ class ModelResolver {
   private async setDatabaseColumns(modelList: ModelListService) {
     const database = await IoCService.use<Knex>("Database");
 
-    const schemaInspector =
-      await IoCService.use<SchemaInspectorFunction>("SchemaInspector");
-
-    const inspector = schemaInspector(database);
+    const inspector = Inspector.SchemaInspector(database);
     const columns: IColumn[] = [];
     for (const table of await inspector.tables()) {
       const dbColumns: Column[] = await inspector.columnInfo(table);

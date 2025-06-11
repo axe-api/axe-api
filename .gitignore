@@ -1,5 +1,6 @@
 node_modules
 build
+dist
 *.tgz
 ./test/integrations/build
 ./test/integrations/node_modules

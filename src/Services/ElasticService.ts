@@ -1,4 +1,4 @@
-import { Client, ClientOptions } from "@elastic/elasticsearch";
+import { Client, ClientOptions, estypes } from "@elastic/elasticsearch";
 import LogService from "./LogService";
 import { ISearchConfigutation } from "src/Interfaces";
 
@@ -42,7 +42,12 @@ class ElasticService {
     return result;
   }
 
-  async search(modelName: string, page: number, size: number, body: any) {
+  async search(
+    modelName: string,
+    page: number,
+    size: number,
+    body: any,
+  ): Promise<estypes.SearchResponse<any>> {
     const index = this.toIndex(modelName);
 
     LogService.debug(`\t🔄 ES.search(${index}) => ${JSON.stringify(body)}`);

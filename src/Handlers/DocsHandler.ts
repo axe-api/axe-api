@@ -28,7 +28,7 @@ const CONTENT = `<!DOCTYPE html>
 </html>
 `;
 
-export default async (req: AxeRequest, res: AxeResponse) => {
+export default async (_req: AxeRequest, res: AxeResponse) => {
   res.header("Content-Type", "text/html");
   res.send(CONTENT);
 };

@@ -2,8 +2,8 @@ import { IncomingMessage, ServerResponse } from "http";
 import { NextFunction } from "../Types";
 
 export default (
-  err: any,
-  req: IncomingMessage,
+  _err: any,
+  _req: IncomingMessage,
   res: ServerResponse,
   next: NextFunction,
 ) => {

@@ -3,7 +3,7 @@ import AxeResponse from "../Services/AxeResponse";
 import swaggerBuilder from "../Builders/SwaggerBuilder";
 import { LogService } from "../Services";
 
-export default async (req: AxeRequest, res: AxeResponse) => {
+export default async (_req: AxeRequest, res: AxeResponse) => {
   try {
     res.json(await swaggerBuilder());
   } catch (error: any) {

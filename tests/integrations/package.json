@@ -9,8 +9,8 @@
     "docker:mysql": "docker compose -f docker-compose.mysql.yml up -d",
     "start": "node index.js",
     "start:dev": "nodemon serve-dev.ts",
-    "test": "jest --runInBand",
-    "test:dev": "jest --watch --runInBand"
+    "test": "vitest run",
+    "test:dev": "vitest"
   },
   "dependencies": {
     "axe-api": "file:./../../",
@@ -44,6 +44,7 @@
     "jest-cli": "^29.7.0",
     "nodemon": "^3.1.7",
     "set-value": ">=4.1.0",
-    "supertest": "^6.3.4"
+    "supertest": "^6.3.4",
+    "vitest": "^3.2.3"
   }
 }

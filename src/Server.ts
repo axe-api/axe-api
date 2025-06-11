@@ -7,7 +7,6 @@ import { AxeConfig, IApplicationConfig } from "./Interfaces";
 import dotenv from "dotenv";
 import path from "path";
 import knex from "knex";
-import schemaInspector from "knex-schema-inspector";
 import { attachPaginate } from "knex-paginate";
 import { ModelTreeBuilder, RouterBuilder } from "./Builders";
 import {
@@ -55,7 +54,6 @@ class Server {
 
   private async bindDependencies() {
     const api = APIService.getInstance();
-    IoCService.singleton("SchemaInspector", () => schemaInspector);
     IoCService.singleton("App", () => new App());
     IoCService.singleton("Database", async () => {
       const database = knex(api.config.database);

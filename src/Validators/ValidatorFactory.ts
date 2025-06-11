@@ -1,5 +1,4 @@
 import { AxeConfig, IValidator } from "../Interfaces";
-import Validatorjs from "./Validatorjs";
 import RobustValidator from "./RobustValidator";
 import { APIService } from "../Services";
 
@@ -15,7 +14,7 @@ class ValidatorFactory {
 
     switch (config.validator) {
       case "validatorjs":
-        return new Validatorjs(supportedLanguages);
+        throw new Error("validatorjs is not supported anymore.");
       case "robust-validator":
         return new RobustValidator(supportedLanguages);
       default:

@@ -2,10 +2,17 @@
   "name": "axe-api",
   "version": "1.6.1",
   "description": "AXE API is a simple tool to create Rest APIs quickly.",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "files": [
-    "/build",
+    "/dist",
     "/bin",
     "/cli"
   ],
@@ -44,7 +51,7 @@
     "axe-api"
   ],
   "scripts": {
-    "build": "rm -rf build && tsc && rm -rf build/dev-kit",
+    "build": "rm -rf dist && tsc && rm -rf dist/dev-kit",
     "build:watch": "tsc -w",
     "dev-kit": "tsx watch dev-kit.ts",
     "dev-kit:install": "node ./scripts/dev-kit-install.js",
@@ -132,7 +139,7 @@
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
+    "typescript": "^5.8.3",
     "vitest": "^3.2.3"
   },
   "lint-staged": {

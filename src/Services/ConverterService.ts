@@ -35,7 +35,8 @@ export const resolveMiddlewares = (
     -1,
   ) as MiddlewareFunction[];
 
-  const handler: HandlerFunction = args.at(-1) as HandlerFunction;
+  // todo: might be -2??
+  const handler: HandlerFunction = args[args.length - 1] as HandlerFunction;
 
   return {
     middlewares,

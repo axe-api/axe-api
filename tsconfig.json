@@ -1,16 +1,40 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    // ✅ Modern JS output
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler", // modern resolution for ESM
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": ".", // zorunlu
+    "paths": {
+      "@/*": ["src/*"] // alias tanımı
+    },
     "declaration": true,
-    "outDir": "./build",
+    "declarationDir": "./dist/types",
+    "emitDeclarationOnly": false,
+    "sourceMap": false,
+    "importHelpers": false,
+
+    // ✅ Type-safe and strict
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // ✅ ES Modules
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "skipLibCheck": true,
-    "typeRoots": ["./types"],
-    "baseUrl": ".",
-    "lib": ["ESNext", "dom"]
+
+    // ✅ Exported types
+    "composite": false,
+    "isolatedModules": true,
+
+    "typeRoots": ["./types"]
+    // "lib": ["ESNext", "dom"]
   },
-  "include": ["src/**/*", "index.ts", "dev-kit.ts", "dev-kit/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["dist/**/*", "node_modules", "dev-kit"]
 }
