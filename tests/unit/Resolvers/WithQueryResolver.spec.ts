@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, test, expect, beforeEach } from "vitest";
 import { IModelService } from "../../../src/Interfaces";
 import { ModelService } from "../../../src/Services";
 import WithQueryResolver from "../../../src/Resolvers/WithQueryResolver";

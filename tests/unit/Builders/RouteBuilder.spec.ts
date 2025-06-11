@@ -1,5 +1,5 @@
 import path from "path";
-import { describe, expect, jest, test, beforeAll } from "@jest/globals";
+import { describe, test, expect, beforeAll, vi } from "vitest";
 import { RouterBuilder } from "../../../src/Builders";
 import {
   APIService,
@@ -31,14 +31,14 @@ postService.relations = [
 const commentService = new ModelService("Comment", new Comment());
 
 const AppMock = {
-  post: jest.fn(),
-  get: jest.fn(),
-  put: jest.fn(),
-  patch: jest.fn(),
-  delete: jest.fn(),
+  post: vi.fn(),
+  get: vi.fn(),
+  put: vi.fn(),
+  patch: vi.fn(),
+  delete: vi.fn(),
 };
 const LogServiceMock = {
-  info: jest.fn(),
+  info: vi.fn(),
 };
 const ModelTreeMock: IModelService[] = [
   userService,
@@ -55,14 +55,14 @@ const ConfigMock = {
   },
 };
 const DocumentationServiceMock = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
-const handlerFunctionMock = jest.fn();
+const handlerFunctionMock = vi.fn();
 const HandlerFactoryMock = {
-  get: jest.fn(() => handlerFunctionMock),
+  get: vi.fn(() => handlerFunctionMock),
 };
 const DatabaseMock = {
-  transaction: jest.fn(),
+  transaction: vi.fn(),
 };
 
 const VersionMock = {

@@ -1,5 +1,5 @@
 import path from "path";
-import { describe, expect, test } from "@jest/globals";
+import { describe, test, expect } from "vitest";
 import { FileResolver } from "../../../src/Resolvers";
 import Model from "../../../src/Model";
 

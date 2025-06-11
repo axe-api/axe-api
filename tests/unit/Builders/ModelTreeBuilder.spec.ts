@@ -1,5 +1,5 @@
 import path from "path";
-import { describe, expect, jest, test, beforeAll } from "@jest/globals";
+import { describe, test, expect, beforeAll } from "vitest";
 import { ModelTreeBuilder } from "../../../src/Builders";
 import { IoCService, LogService, ModelService } from "../../../src/Services";
 import { IModelService, IRelation, IVersion } from "../../../src/Interfaces";
@@ -50,9 +50,6 @@ const modelList: IModelService[] = [
   commentService,
 ];
 
-const LogServiceMock = {
-  info: jest.fn(),
-};
 const ModelListServiceMock = {
   get: () => modelList,
 };

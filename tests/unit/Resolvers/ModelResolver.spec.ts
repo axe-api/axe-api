@@ -1,6 +1,6 @@
 import path from "path";
 import { Column } from "knex-schema-inspector/lib/types/column";
-import { describe, expect, test, beforeEach, jest } from "@jest/globals";
+import { describe, test, expect, vi, beforeEach } from "vitest";
 import { ModelResolver } from "../../../src/Resolvers";
 import { APIService, IoCService, LogService } from "../../../src/Services";
 import { IVersion } from "../../../src/Interfaces";
@@ -28,7 +28,7 @@ const VersionMock = {
 
 const SchemaInspectorMock = () => {
   return {
-    tables: jest.fn(() => [
+    tables: vi.fn(() => [
       "users",
       "posts",
       "comments",
@@ -36,7 +36,7 @@ const SchemaInspectorMock = () => {
       "logins",
       "post_likes",
     ]),
-    columnInfo: jest.fn((table) => {
+    columnInfo: vi.fn((table) => {
       return [
         {
           name: "id",

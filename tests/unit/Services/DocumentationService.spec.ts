@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, test, expect } from "vitest";
 import { HandlerTypes, HttpMethods } from "../../../src/Enums";
 import { IRouteDocumentation, IVersion } from "../../../src/Interfaces";
 import { DocumentationService, ModelService } from "../../../src/Services";
@@ -16,6 +16,7 @@ describe("DocumentationService", () => {
       HttpMethods.GET,
       "api/users",
       userService,
+      null,
     );
 
     const items: IRouteDocumentation[] = service.get();

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, test, expect } from "vitest";
 import { isBoolean } from "../../../src/Handlers/Helpers";
 
 describe("Helpers", () => {

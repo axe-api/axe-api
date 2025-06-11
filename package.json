@@ -49,9 +49,9 @@
     "dev-kit": "tsx watch dev-kit.ts",
     "dev-kit:install": "node ./scripts/dev-kit-install.js",
     "dev-kit:remove": "node ./scripts/dev-kit-remove.js",
-    "test": "jest --runInBand",
+    "test": "vitest run",
     "test:all": "npm run lint && npm run prettier:check && npm run test && npm run test:sqlite",
-    "test:dev": "jest --watch",
+    "test:dev": "vitest",
     "lint": "eslint --max-warnings=0 .",
     "lint:watch": "esw --watch --color",
     "test:postgres11": "sh ./scripts/test-postgres11.sh",
@@ -129,9 +129,11 @@
     "serve-static": "^1.16.2",
     "set-value": ">=4.1.0",
     "sqlite3": "^5.1.7",
+    "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

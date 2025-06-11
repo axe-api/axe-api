@@ -1,7 +1,7 @@
-import { describe, expect, jest, test } from "@jest/globals";
+import { describe, test, expect, vi } from "vitest";
 import { Extensions, HookFunctionTypes } from "../../../src/Enums";
 import { ModelService } from "../../../src/Services";
-import { IColumn, IHookParameter } from "../../../src/Interfaces";
+import { IColumn, IContext } from "../../../src/Interfaces";
 import User from "../__Mocks/app/v1/Models/User";
 
 const user = new User();
@@ -36,7 +36,7 @@ describe("ModelListService", () => {
   });
 
   test(".setExtensions() should be able to set hooks", async () => {
-    const hookFunction = jest.fn();
+    const hookFunction = vi.fn();
     userService.setExtensions(
       Extensions.Hooks,
       HookFunctionTypes.onAfterAll,
@@ -48,7 +48,7 @@ describe("ModelListService", () => {
     expect(userService.events.onAfterDelete).toBeUndefined();
 
     const myParams = {};
-    userService.hooks.onAfterAll(myParams as IHookParameter);
+    userService.hooks.onAfterAll(myParams as IContext);
     expect(userService.hooks.onAfterAll).not.toBeUndefined();
 
     expect(hookFunction.mock.calls.length).toBe(1);
@@ -56,7 +56,7 @@ describe("ModelListService", () => {
   });
 
   test(".setExtensions() should be able to set events", async () => {
-    const hookFunction = jest.fn();
+    const hookFunction = vi.fn();
     userService.setExtensions(
       Extensions.Events,
       HookFunctionTypes.onAfterAll,

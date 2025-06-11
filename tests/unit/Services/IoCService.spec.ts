@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, test, expect } from "vitest";
 import { IoCService } from "../../../src/Services";
 import User from "../__Mocks/app/v1/Models/User";
 
