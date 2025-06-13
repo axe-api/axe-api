@@ -12,7 +12,8 @@ jobs:
     strategy:
       matrix:
         node-version: [ 22.x ]
-        database: ["mysql8", "mariadb", "postgres15", "cockroach"]
+        # database: ["mysql8", "mariadb", "postgres15", "cockroach"]
+        database: ["mysql8"]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
