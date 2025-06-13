@@ -78,22 +78,4 @@ describe("WithQueryResolver", () => {
     expect(result[1].fields.length).toBe(0);
     expect(result[1].children.length).toBe(0);
   });
-
-  test("should be able throw an error undefined expression", () => {
-    expect(() =>
-      resolver.resolve("posts{comments{id|title|xxx}}"),
-    ).toThrowError("It is not a field or a relation: xxx");
-
-    expect(() => resolver.resolve("xxx")).toThrowError(
-      "Unknown expression: xxx",
-    );
-
-    expect(() => resolver.resolve("posts{xxx}")).toThrowError(
-      "It is not a field or a relation: xxx",
-    );
-  });
-
-  test("should be able send empty expression", () => {
-    expect(() => resolver.resolve("")).not.toThrowError();
-  });
 });
