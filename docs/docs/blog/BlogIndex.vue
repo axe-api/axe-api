@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const posts = [
   {
+    time: "13 June, 2025",
+    title: "Axe API v1.7 is out!",
+    url: "/blog/2025-06-13-axe-api-v1-7-is-out",
+  },
+  {
     time: "01 January, 2025",
     title: "Axe API v1.6 is out!",
     url: "/blog/2025-01-02-axe-api-v1-6-is-out",
