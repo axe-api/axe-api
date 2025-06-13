@@ -79,3 +79,7 @@ div.superpeer > a > img:hover {
     display: none;
   }
 }
+
+#VPContent > .VPFeatures.VPHomeFeatures > div > article > p {
+  color: red !important;
+}

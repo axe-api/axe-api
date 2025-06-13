@@ -363,7 +363,7 @@ export default defineConfig({
   appearance: "force-dark",
 
   themeConfig: {
-    logo: "/axe.png",
+    logo: "/viking.png",
 
     editLink: {
       pattern: "https://github.com/axe-api/docs/edit/master/docs/:path",
@@ -465,7 +465,7 @@ export default defineConfig({
   },
 
   head: [
-    ["link", { rel: "icon", href: `/logo.png` }],
+    ["link", { rel: "icon", href: `/viking.png` }],
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
     ["link", { rel: "stylesheet", href: "/styles.css" }],
