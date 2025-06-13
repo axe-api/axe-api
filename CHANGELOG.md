@@ -1,5 +1,10 @@
 # Release Notes
 
+## [1.7.0 (2025-06-13)](https://github.com/axe-api/axe-api/compare/1.7.0...1.6.1)
+
+- Dependency upgrades
+- Dropped Node.js 18 support
+
 ## [1.6.1 (2025-01-12)](https://github.com/axe-api/axe-api/compare/1.6.1...1.6.0)
 
 - Dependency upgrades
