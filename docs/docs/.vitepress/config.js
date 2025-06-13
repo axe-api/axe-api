@@ -493,8 +493,14 @@ export default defineConfig({
           "Axe API is the next generation rest API framework. You can quickly create a Rest API by simply defining models and relationships.",
       },
     ],
-    ["meta", { name: "image", content: "https://axe-api.com/social.png" }],
-    ["meta", { name: "og:image", content: "https://axe-api.com/social.png" }],
+    [
+      "meta",
+      {
+        name: "image",
+        property: "og:image",
+        content: "https://axe-api.com/social.png",
+      },
+    ],
     ["meta", { name: "twitter:card", content: "summary" }],
     ["meta", { name: "twitter:title", content: "Axe API" }],
     ["meta", { name: "author", content: "Axe API Development Team" }],
