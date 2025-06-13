@@ -7,28 +7,27 @@ on:
       - rc
 
 jobs:
-  # rdbms:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [ 22.x ]
-  #       # database: ["mysql8", "mariadb", "postgres15", "cockroach"]
-  #       database: ["mysql8"]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - name: Start database containers
-  #       run: docker compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
-  #     - name: Build the Axe API
-  #       run: npm install && npm run build
-  #     - name: Install integration test dependencies
-  #       run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
-  #     - run: npm ci
-  #     - name: Testing all scenarions
-  #       run: npm run test:${{ matrix.database }}
+  rdbms:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 22.x ]
+        database: ["mysql8", "mariadb", "postgres15", "cockroach"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Start database containers
+        run: docker compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
+      - name: Build the Axe API
+        run: npm install && npm run build
+      - name: Install integration test dependencies
+        run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
+      - run: npm ci
+      - name: Testing all scenarions
+        run: npm run test:${{ matrix.database }}
 
   sqlite:
     runs-on: ubuntu-latest
