@@ -1,5 +1,9 @@
 # Release Notes
 
+## [1.7.1 (2025-06-13)](https://github.com/axe-api/axe-api/compare/1.7.1...1.7.0)
+
+- Security upgrades
+
 ## [1.7.0 (2025-06-13)](https://github.com/axe-api/axe-api/compare/1.7.0...1.6.1)
 
 - Dependency upgrades
