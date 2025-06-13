@@ -44,6 +44,6 @@
     "jest-cli": "^30.0.0",
     "nodemon": "^3.1.7",
     "set-value": ">=4.1.0",
-    "supertest": "^6.3.4"
+    "supertest": "^7.1.1"
   }
 }
