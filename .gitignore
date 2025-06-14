@@ -6,3 +6,4 @@ build
 packages/dev-kit/migrations
 .env
 .DS_Store
+axedb.sql
