@@ -1,4 +1,4 @@
-name: Git Tag 
+name: Git Tag
 
 on:
   push:
@@ -8,6 +8,9 @@ on:
 jobs:
   tag-and-push:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/axe-api
 
     steps:
       - name: Checkout repository
