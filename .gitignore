@@ -3,8 +3,6 @@ build
 *.tgz
 ./test/integrations/build
 ./test/integrations/node_modules
-dev-kit
-__dev-kit
+packages/dev-kit/migrations
 .env
-dev-kit.ts
 .DS_Store
