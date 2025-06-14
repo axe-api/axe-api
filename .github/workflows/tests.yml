@@ -5,13 +5,16 @@ on:
     branches:
       - master
       - develop
-      - rc 
+      - rc
 jobs:
   units:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/axe-api
     strategy:
       matrix:
-        node-version: [ 20.x, 22.x, 23.x, 24.x ]
+        node-version: [20.x, 22.x, 23.x, 24.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -24,9 +27,12 @@ jobs:
 
   linting:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/axe-api
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [22.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
