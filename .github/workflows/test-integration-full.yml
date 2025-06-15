@@ -48,6 +48,6 @@ jobs:
       # - name: Install integration test dependencies
       #   run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
       - name: Install dependencies
-        run: npm ci
+        run: npm ci & npm install -g knex
       - name: Testing all scenarions
         run: sh run-tests.sh sqlite 5
