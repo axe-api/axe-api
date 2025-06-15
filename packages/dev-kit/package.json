@@ -1,10 +1,10 @@
 {
-  "name": "dev-kit",
+  "name": "axe-api-dev-kit",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Özgür Adem IŞIKLI <i.ozguradem@gmail.com>",
   "homepage": "https://github.com/axe-api/axe-api#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "index.ts",
   "directories": {
     "app": "app"

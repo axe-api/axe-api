@@ -1,10 +1,10 @@
 {
-  "name": "integrations",
+  "name": "axe-api-integrations",
   "version": "0.0.0",
-  "description": "> TODO: description",
+  "description": "This package contains the integrations for Axe API.",
   "author": "Özgür Adem IŞIKLI <i.ozguradem@gmail.com>",
   "homepage": "https://github.com/axe-api/axe-api#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "index.ts",
   "directories": {
     "app": "app"
