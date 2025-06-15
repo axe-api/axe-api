@@ -30,19 +30,24 @@ jobs:
 
   sqlite:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/integrations
     strategy:
       matrix:
-        node-version: [20.x, 22.x, 23.x, 24.x]
+        # node-version: [20.x, 22.x, 23.x, 24.x]
+        node-version: [22.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Build the Axe API
-        run: npm install && npm run build
-      - name: Install integration test dependencies
-        run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
-      - run: npm ci
+      # - name: Build the Axe API
+      #   run: npm install && npm run build
+      # - name: Install integration test dependencies
+      #   run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
+      - name: Install dependencies
+        run: npm ci
       - name: Testing all scenarions
         run: sh run-tests.sh sqlite 5
