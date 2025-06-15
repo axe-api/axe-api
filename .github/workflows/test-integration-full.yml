@@ -45,4 +45,4 @@ jobs:
         run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
       - run: npm ci
       - name: Testing all scenarions
-        run: npm run test:sqlite
+        run: sh run-tests.sh sqlite 5
