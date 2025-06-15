@@ -87,3 +87,5 @@ npm run test
 
 echo "🧹 Shutting down any previous containers"
 docker compose -f "$COMPOSE_FILE" down
+
+exit 0
