@@ -6,34 +6,41 @@ on:
       - master
 
 jobs:
-  # rdbms:
-  #   strategy:
-  #     matrix:
-  #       node-version: [ 20.x, 22.x, 23.x, 24.x ]
-  #       database: ["mysql8", "mysql57", "mariadb", "postgres11", "postgres12", "postgres13", "postgres14", "postgres15", "cockroach"]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - name: Start database containers
-  #       run: docker compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
-  #     - name: Build the Axe API
-  #       run: npm install && npm run build
-  #     - name: Install integration test dependencies
-  #       run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
-  #     - run: npm ci
-  #     - name: Testing all scenarions
-  #       run: npm run test:${{ matrix.database }}
+  rdbms:
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 23.x, 24.x]
+        database:
+          [
+            "mysql8",
+            "mysql57",
+            "mariadb",
+            "postgres11",
+            "postgres12",
+            "postgres13",
+            "postgres14",
+            "postgres15",
+            "cockroach",
+          ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Install knex
+        run: npm install -g knex
+      - name: Testing all scenarions
+        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 10
 
   sqlite:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # node-version: [20.x, 22.x, 23.x, 24.x]
-        node-version: [22.x]
+        node-version: [20.x, 22.x, 23.x, 24.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
