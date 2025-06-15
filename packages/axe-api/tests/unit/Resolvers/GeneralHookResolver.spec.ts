@@ -1,5 +1,5 @@
 import path from "path";
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, expect, test, beforeEach } from "vitest";
 import { GeneralHookResolver } from "../../../src/Resolvers";
 import { App, IoCService } from "../../../src/Services";
 import { IVersion } from "../../../src/Interfaces";

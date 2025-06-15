@@ -46,9 +46,9 @@
   "scripts": {
     "build": "rm -rf build && tsc && rm -rf build/dev-kit",
     "build:watch": "tsc -w",
-    "test": "jest --runInBand",
+    "test": "vitest run",
     "test:all": "npm run lint && npm run prettier:check && npm run test && npm run test:sqlite",
-    "test:dev": "jest --watch",
+    "test:dev": "vitest",
     "lint": "eslint --max-warnings=0 .",
     "lint:watch": "esw --watch --color",
     "prettier:check": "prettier --check .",
@@ -92,7 +92,6 @@
     "@types/validatorjs": "^3.15.5",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "babel-jest": "^30.0.0",
     "cors": "^2.8.5",
     "eslint": "^8.57.1",
     "eslint-config-standard": "^17.1.0",
@@ -103,7 +102,6 @@
     "eslint-watch": "^8.0.0",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
-    "jest": "^30.0.0",
     "lint-staged": "^16.1.0",
     "multer": "^2.0.1",
     "mysql": "^2.18.1",
@@ -118,7 +116,8 @@
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

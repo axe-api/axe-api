@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeAll } from "@jest/globals";
+import { describe, expect, test, beforeAll } from "vitest";
 import RobustValidator from "../../../src/Validators/RobustValidator";
 import Author from "../__Mocks/app/v1/Models/Author";
 import {

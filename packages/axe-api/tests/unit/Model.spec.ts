@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { HandlerTypes, HttpMethods, Relationships } from "../../src/Enums";
 import { IRelation } from "../../src/Interfaces";
 import User from "./__Mocks/app/v1/Models/User";

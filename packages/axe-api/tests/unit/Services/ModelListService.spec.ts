@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { ModelListService, ModelService } from "../../../src/Services";
 import { IModelService } from "../../../src/Interfaces";
 import User from "../__Mocks/app/v1/Models/User";

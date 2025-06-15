@@ -1,5 +1,5 @@
 import path from "path";
-import { describe, expect, test, beforeEach } from "@jest/globals";
+import { describe, expect, test, beforeEach } from "vitest";
 import { TransactionResolver } from "../../../src/Resolvers";
 import { ModelService, IoCService, APIService } from "../../../src/Services";
 import { HandlerTypes } from "../../../src/Enums";

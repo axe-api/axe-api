@@ -1,5 +1,5 @@
 import { StatusCodes } from "../../../src/Enums";
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import ApiError from "../../../src/Exceptions/ApiError";
 
 describe("ApiError", () => {

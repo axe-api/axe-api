@@ -1,4 +1,4 @@
-import { describe, expect, jest, test, beforeEach } from "@jest/globals";
+import { describe, expect, test, beforeEach } from "vitest";
 import {
   ConditionTypes,
   QueryFeature,
