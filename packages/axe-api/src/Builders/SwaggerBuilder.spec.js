@@ -81,7 +81,7 @@ describe("generateDocumentation (default export)", () => {
         },
       ],
       config: { prefix: "/api/" },
-      appFolder: "/tmp/app",
+      appFolder: "/app",
     };
 
     APIService.getInstance.mockReturnValue(getInstanceMock);
