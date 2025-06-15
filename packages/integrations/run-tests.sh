@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# Load environment variables from .env file if it exists
+if [[ -f ".env" ]]; then
+  echo "📄 Loading environment variables from .env"
+  set -a
+  source .env
+  set +a
+fi
+
 DB_PROVIDER=$1
 SLEEP=$2
 

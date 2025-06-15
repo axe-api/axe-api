@@ -23,6 +23,10 @@ jobs:
             "cockroach",
           ]
     runs-on: ubuntu-latest
+    env:
+      TEST_USER: ${{ secrets.TEST_USER }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      TEST_DATABASE: ${{ secrets.TEST_DATABASE }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
