@@ -75,7 +75,7 @@ knex migrate:latest --knexfile $KNEX_CONFIG
 
 
 echo "🚀 Starting application"
-npm run dev & SERVER_PID=$!
+tsx index.ts & SERVER_PID=$!
 
 echo "🌐 Waiting for server to be ready..."
 until curl -s http://localhost:3000/docs > /dev/null; do
@@ -85,7 +85,10 @@ done
 echo "🧪 Running tests..."
 npm run test
 
+kill $SERVER_PID || true
+wait $SERVER_PID 2>/dev/null || true
+echo "🧹 The API has been stopped."
+
 echo "🧹 Shutting down any previous containers"
 docker compose -f "$COMPOSE_FILE" down
 
-exit 0
