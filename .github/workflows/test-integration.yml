@@ -11,39 +11,39 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [22.x]
         database: ["mysql8", "mariadb", "postgres15", "cockroach"]
+    env:
+      TEST_USER: ${{ secrets.TEST_USER }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      TEST_DATABASE: ${{ secrets.TEST_DATABASE }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Start database containers
-        run: docker compose -f "./tests/integrations/docker-compose.${{ matrix.database }}.yml" up -d --build
-      - name: Build the Axe API
-        run: npm install && npm run build
-      - name: Install integration test dependencies
-        run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
-      - run: npm ci
+      - name: Install dependencies
+        run: npm install
+      - name: Install cli tools
+        run: npm install -g knex tsx
       - name: Testing all scenarions
-        run: npm run test:${{ matrix.database }}
+        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 10
 
   sqlite:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 22.x ]
+        node-version: [22.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Build the Axe API
-        run: npm install && npm run build
-      - name: Install integration test dependencies
-        run: cd tests/integrations && npm install && npm run build && cp -R scenarios/tests build/scenarios/tests && ls -all
-      - run: npm ci
+      - name: Install dependencies
+        run: npm install
+      - name: Install cli tools
+        run: npm install -g knex tsx
       - name: Testing all scenarions
-        run: npm run test:sqlite
+        run: cd packages/integrations && sh ./run-tests.sh sqlite 5

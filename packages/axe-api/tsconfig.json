@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "typeRoots": ["./types"],
+    "baseUrl": ".",
+    "lib": ["ESNext", "dom"]
+  },
+  "include": ["src/**/*", "index.ts"]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "axe-api-integrations",
+  "version": "0.0.0",
+  "description": "This package contains the integrations for Axe API.",
+  "author": "Özgür Adem IŞIKLI <i.ozguradem@gmail.com>",
+  "homepage": "https://github.com/axe-api/axe-api#readme",
+  "license": "MIT",
+  "main": "index.ts",
+  "directories": {
+    "app": "app"
+  },
+  "files": [
+    "app"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axe-api/axe-api.git"
+  },
+  "scripts": {
+    "dev": "tsx index.ts",
+    "dev:sqlite": "DB_PROVIDER=sqlite tsx index.ts",
+    "dev:mysql8": "DB_PROVIDER=mysql8 tsx index.ts",
+    "test": "vitest run",
+    "test:sqlite": "DB_CLIENT=sqlite vitest run"
+  },
+  "bugs": {
+    "url": "https://github.com/axe-api/axe-api/issues"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "concurrently": "^9.1.2",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7",
+    "supertest": "^7.1.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  }
+}
