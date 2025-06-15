@@ -3,9 +3,9 @@ module.exports = async () => {
     client: "cockroachdb",
     connection: {
       host: "127.0.0.1",
-      user: "axeapi",
-      password: "123456",
-      database: "axeapi",
+      user: process.env.TEST_USER,
+      password: process.env.TEST_PASSWORD,
+      database: process.env.TEST_DATABASE,
       port: 26257,
       searchPath: ["axeapi", "public"],
       filename: "./axedb.sql",
