@@ -14,7 +14,7 @@ case "$DB_PROVIDER" in
   mysql57) DB_CLIENT="mysql" ;;
   postgres11|postgres12|postgres13|postgres14|postgres15) DB_CLIENT="postgres" ;;
   cockroach) DB_CLIENT="cockroachdb" ;;
-  mariadb) DB_CLIENT="mysql" ;;
+  mariadb) DB_CLIENT="mariadb" ;;
   sqlite) DB_CLIENT="sqlite3" ;;
   *)
     echo "❌ Unsupported DB_PROVIDER: $DB_PROVIDER"
