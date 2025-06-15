@@ -95,7 +95,7 @@ export default async (
       // Rollback transaction
       if (match.hasTransaction && trx) {
         LogService.info("\t🛢 DBTransaction:rollback()");
-        trx.rollback();
+        await trx.rollback();
       }
 
       if (error.type === "ApiError") {
@@ -119,7 +119,7 @@ export default async (
     if (context.res.statusCode() >= 400 && context.res.statusCode() < 599) {
       if (match.hasTransaction && trx) {
         LogService.info("\t🛢 DBTransaction:rollback()");
-        trx.rollback();
+        await trx.rollback();
       }
       LogService.debug(`\tResponse ${context.res.statusCode()}`);
       break;
@@ -128,7 +128,7 @@ export default async (
     // We should commit the transaction if there is any
     if (match.hasTransaction && trx) {
       LogService.info("\t🛢 DBTransaction:commit()");
-      trx.commit();
+      await trx.commit();
     }
 
     LogService.debug(`\t🟢 Response ${context.res.statusCode()}`);
