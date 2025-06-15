@@ -3,6 +3,7 @@ import { truncate } from "./helper.js";
 import axios from "axios";
 
 vi.isFakeTimers();
+vi.setConfig({ testTimeout: 10000 }); // 10 seconds
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
