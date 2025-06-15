@@ -1,14 +1,12 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { truncate, axiosPost, axiosPut, axiosGet } = require("./helper.js");
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { truncate, axiosPost, axiosPut, axiosGet } from "./helper.js";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 describe("Axe API Models", () => {
   beforeAll(async () => {
-    dotenv.config();
     await truncate("users");
     await truncate("categories");
     return await truncate("units");
@@ -40,55 +38,66 @@ describe("Axe API Models", () => {
   });
 
   test("should be able use POST validation definitions", async () => {
-    const { data, status } = await axiosPost("/v1/units", {
-      uuid: "f551f598-1fe9-453d-b5a3-37fcb1505d93",
-    });
+    const { data, status } = await axiosPost(
+      "http://localhost:3000/api/v1/units",
+      {
+        uuid: "f551f598-1fe9-453d-b5a3-37fcb1505d93",
+      }
+    );
     expect(status).toBe(400);
     expect(data.errors?.title[0]).toBe("The title field is required.");
   });
 
   test("should be able use PUT validation definitions", async () => {
     const uuid = "43a1e149-58c4-497f-ad82-9098a5d64b03";
-    await axiosPost("/v1/units", {
+    await axiosPost("http://localhost:3000/api/v1/units", {
       uuid,
       title: "Meter",
     });
 
-    const { status, data } = await axiosPut(`/v1/units/${uuid}`, {
-      title: "a",
-    });
+    const { status, data } = await axiosPut(
+      `http://localhost:3000/api/v1/units/${uuid}`,
+      {
+        title: "a",
+      }
+    );
     expect(status).toBe(200);
     expect(data.title).toBe("a");
   });
 
   test("should not be able use undefined handlers", async () => {
-    const { status } = await axiosGet("/v1/units");
+    const { status } = await axiosGet("http://localhost:3000/api/v1/units");
     expect(status).toBe(404);
   });
 
   test("should be able use custom-named relations", async () => {
-    const { data: user } = await axiosPost("/v1/users", {
-      email: "foo@bar.com",
-      name: "John",
-      surname: "Doe",
-    });
+    const { data: user } = await axiosPost(
+      "http://localhost:3000/api/v1/users",
+      {
+        email: "foo@bar.com",
+        name: "John",
+        surname: "Doe",
+      }
+    );
 
-    const { data, status } = await axiosGet(`/v1/users/${user.id}/owned-posts`);
+    const { data, status } = await axiosGet(
+      `http://localhost:3000/api/v1/users/${user.id}/owned-posts`
+    );
     expect(status).toBe(200);
     expect(typeof data.pagination).toBe("object");
 
     const { status: suggestedPostStatus } = await axiosGet(
-      `/v1/users/${user.id}/suggested-posts`,
+      `http://localhost:3000/api/v1/users/${user.id}/suggested-posts`
     );
     expect(suggestedPostStatus).toBe(200);
   });
 
   test("should be able use recursive models", async () => {
     const { data: root, status: rootStatus } = await axiosPost(
-      "/v1/categories",
+      "http://localhost:3000/api/v1/categories",
       {
         title: "Main category",
-      },
+      }
     );
 
     expect(rootStatus).toBe(201);
@@ -96,10 +105,10 @@ describe("Axe API Models", () => {
     expect(root.parent_id).toBe(null);
 
     const { data: child, status: childStatus } = await axiosPost(
-      `/v1/categories/${root.id}/categories`,
+      `http://localhost:3000/api/v1/categories/${root.id}/categories`,
       {
         title: "Child category",
-      },
+      }
     );
 
     expect(childStatus).toBe(201);
@@ -108,13 +117,11 @@ describe("Axe API Models", () => {
   });
 
   test("should be able get all categories", async () => {
-    const response = await axiosGet(`/v1/categories/all`);
-
-    console.log(response);
+    const response = await axiosGet(
+      `http://localhost:3000/api/v1/categories/all`
+    );
 
     const { data, status } = response;
-    console.log(data);
-
     expect(status).toBe(200);
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBe(2);
@@ -122,7 +129,7 @@ describe("Axe API Models", () => {
 
   test("should be able get all categories with a query", async () => {
     const { data, status } = await axiosGet(
-      `/v1/categories/all?q={"title":"xxx"}`,
+      `http://localhost:3000/api/v1/categories/all?q={"title":"xxx"}`
     );
 
     expect(status).toBe(200);

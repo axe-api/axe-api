@@ -4,7 +4,6 @@ import { Server } from "axe-api";
 import { setEnvSettings } from "./envSettings";
 
 dotenv.config();
-
 setEnvSettings();
 
 const server = new Server();

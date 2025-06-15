@@ -1,7 +1,6 @@
-/* eslint-disable no-undef */
-const { get, post, put, patch, deleteIt, truncate } = require("./helper.js");
-const axios = require("axios");
-const dotenv = require("dotenv");
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { get, post, put, patch, deleteIt, truncate } from "./helper.js";
+import axios from "axios";
 let userId = null;
 
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -9,7 +8,6 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 describe("Axe API", () => {
   beforeAll(async () => {
-    dotenv.config();
     return await truncate("users");
   });
 
@@ -128,14 +126,14 @@ describe("Axe API", () => {
           headers: {
             "Accept-Language": "de;q=0.9, en;q=0.8",
           },
-        },
+        }
       );
     } catch (error) {
       validationError = true;
       expect(error?.response?.data?.errors?.email).not.toBe(undefined);
       expect(error.response.data.errors.email.length).toBe(1);
       expect(error.response.data.errors.email[0]).toBe(
-        "Das email Feld muss ausgefüllt sein.",
+        "Das email Feld muss ausgefüllt sein."
       );
       expect(error.response.headers["content-language"]).toBe("de");
     }

@@ -1,17 +1,15 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { truncate } = require("./helper.js");
+import { describe, test, expect, beforeAll, vi } from "vitest";
+import { truncate } from "./helper.js";
+import axios from "axios";
 
-jest.useRealTimers();
-jest.setTimeout(10000);
+vi.isFakeTimers();
+vi.setConfig({ testTimeout: 10000 }); // 10 seconds
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 describe("Cache", () => {
   beforeAll(async () => {
-    dotenv.config();
     await truncate("role_permissions");
     return await truncate("roles");
   });
@@ -28,7 +26,7 @@ describe("Cache", () => {
       `/v2/roles/${role.id}/permissions`,
       {
         title: "Creating user",
-      },
+      }
     );
     expect(permission.title).toBe("Creating user");
 
@@ -47,7 +45,7 @@ describe("Cache", () => {
       `/v2/roles/${role.id}/permissions/${permission.id}`,
       {
         title: "Creating user - 1",
-      },
+      }
     );
     expect(permissionPatch.title).toBe("Creating user - 1");
 

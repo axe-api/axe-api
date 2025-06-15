@@ -1,7 +1,6 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { truncate } = require("./helper.js");
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { truncate } from "./helper.js";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -10,7 +9,6 @@ let studentId = null;
 
 describe("Students", () => {
   beforeAll(async () => {
-    dotenv.config();
     await truncate("student_lessons");
     await truncate("lessons");
     await truncate("teachers");
@@ -85,7 +83,7 @@ describe("Students", () => {
           ]),
           with: "lesson{name},teacher{name}",
         },
-      },
+      }
     );
     expect(response.pagination.total).toBe(2);
 

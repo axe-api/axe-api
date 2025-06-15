@@ -1,10 +1,8 @@
-/* eslint-disable no-undef */
-const { get, post, put, deleteIt, truncate, patch } = require("./helper.js");
-const dotenv = require("dotenv");
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { get, post, put, deleteIt, truncate, patch } from "./helper.js";
 
 describe("Axe API", () => {
   beforeAll(async () => {
-    dotenv.config();
     await truncate("posts");
     return await truncate("users");
   });

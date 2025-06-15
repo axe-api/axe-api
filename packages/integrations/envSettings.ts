@@ -1,4 +1,4 @@
-const SETTINGS = {
+const SETTINGS: Record<string, Record<string, string>> = {
   mysql8: {
     NODE_ENV: "development",
     APP_PORT: "3000",
@@ -106,7 +106,7 @@ const SETTINGS = {
   },
 };
 
-const getEnvSettings = (dbType) => {
+export const getEnvSettings = (dbType: string) => {
   const settings = SETTINGS[dbType];
   if (!settings) {
     throw new Error(`Unsupported database type: ${dbType}`);
@@ -114,17 +114,11 @@ const getEnvSettings = (dbType) => {
   return settings;
 };
 
-const setEnvSettings = () => {
-  const args = process.argv.slice(2);
-  const dbType = args[0];
+export const setEnvSettings = () => {
+  const dbType: string = process.env.DB_PROVIDER || "sqlite";
   const settings = getEnvSettings(dbType);
   for (const [key, value] of Object.entries(settings)) {
-    process.env[key] = value;
+    (process.env as any)[key] = value;
   }
   return settings;
-};
-
-module.exports = {
-  getEnvSettings,
-  setEnvSettings,
 };

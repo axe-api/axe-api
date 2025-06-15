@@ -5,7 +5,9 @@ class CustomSequencer extends Sequencer {
   sort(tests) {
     // Test structure information
     const copyTests = Array.from(tests);
-    return copyTests.sort((testA, testB) => (testA.path > testB.path ? 1 : -1));
+    return copyTests.sort((testA: any, testB: any) =>
+      testA.path > testB.path ? 1 : -1
+    );
   }
 }
 

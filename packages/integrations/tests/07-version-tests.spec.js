@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-
-jest.useRealTimers();
+import { describe, test, expect } from "vitest";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -33,7 +31,7 @@ describe("Multiple version support", () => {
       expect(true).toBe(false, "Sorting feature should not be supported.");
     } catch (error) {
       expect(error.response.data.error).toBe(
-        "[ERR-1] Unsupported query feature: sorting [soft_delete_1.name]",
+        "[ERR-1] Unsupported query feature: sorting [soft_delete_1.name]"
       );
     }
   });

@@ -23,6 +23,9 @@ class RedisAdaptor implements ICacheAdaptor {
   async connect() {
     try {
       await this.client.connect();
+      this.client.on("error", (err) => {
+        LogService.error(`Redis Client Error: ${err.message}`);
+      });
       LogService.info("Redis connection done!");
       this.isConnected = true;
     } catch (error: any) {

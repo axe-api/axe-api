@@ -140,6 +140,7 @@ const axiosRequest = async (method, url, data) => {
   try {
     return await axios[method](url, data);
   } catch (error) {
+    console.log(`Error in axios ${method.toUpperCase()} request:`, url);
     return error.response;
   }
 };

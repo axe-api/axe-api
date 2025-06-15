@@ -1,7 +1,6 @@
-/* eslint-disable no-undef */
-const { post, truncate } = require("./helper.js");
-const axios = require("axios");
-const dotenv = require("dotenv");
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { post, truncate } from "./helper.js";
+import axios from "axios";
 let userId = null;
 
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -9,7 +8,6 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 describe("Hooks", () => {
   beforeAll(async () => {
-    dotenv.config();
     return await truncate("users");
   });
 

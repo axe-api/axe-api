@@ -1,9 +1,6 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { truncate } = require("./helper.js");
-
-jest.useRealTimers();
+import { describe, test, expect, beforeAll, afterAll } from "vitest";
+import { truncate } from "./helper.js";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -16,7 +13,7 @@ const testOnSoftDeleteRecord = async (request, url) => {
     expect(true).tobe(false, "This should not be happend.");
   } catch (error) {
     expect(error.response.data.error).toBe(
-      "The item is not found on Employee.",
+      "The item is not found on Employee."
     );
     expect(error.response.status).toBe(404);
   }
@@ -24,7 +21,6 @@ const testOnSoftDeleteRecord = async (request, url) => {
 
 describe("Axe API Soft Delete", () => {
   beforeAll(async () => {
-    dotenv.config();
     await truncate("soft_delete_1");
     await truncate("soft_delete_2");
     return await truncate("soft_delete_3");
@@ -43,7 +39,7 @@ describe("Axe API Soft Delete", () => {
     // Child data
     const response2 = await axios.post(
       `/v1/customers/${response1.data.id}/children`,
-      DATA,
+      DATA
     );
     await axios.post(`/v1/customers/${response1.data.id}/children`, {
       name: "Item 2",
@@ -51,24 +47,24 @@ describe("Axe API Soft Delete", () => {
 
     // Soft delete
     const response3 = await axios.delete(
-      `/v1/customers/${response1.data.id}/children/${response2.data.id}`,
+      `/v1/customers/${response1.data.id}/children/${response2.data.id}`
     );
     expect(response3.status).toBe(204);
 
     // pagination
     const response4 = await axios.get(
-      `/v1/customers/${response1.data.id}/children`,
+      `/v1/customers/${response1.data.id}/children`
     );
     expect(response4.data.pagination.total).toBe(1);
 
     const trashedResponse = await axios.get(
-      `/v1/customers/${response1.data.id}/children?trashed=true`,
+      `/v1/customers/${response1.data.id}/children?trashed=true`
     );
     expect(trashedResponse.data.pagination.total).toBe(2);
 
     // all
     const response5 = await axios.get(
-      `/v1/customers/${response1.data.id}/children/all`,
+      `/v1/customers/${response1.data.id}/children/all`
     );
     expect(response5.data.length).toBe(1);
 
@@ -85,12 +81,12 @@ describe("Axe API Soft Delete", () => {
     expect(parentResponse.data.data.length).toBe(1);
     expect(parentResponse.data.data[0].children.length).toBe(1);
     expect(parentResponse.data.data[0].children[0].id).not.toBe(
-      response2.data.id,
+      response2.data.id
     );
 
     // We should be able to use force delete
     const response7 = await axios.delete(
-      `/v1/customers/${response1.data.id}/children/${response2.data.id}/force`,
+      `/v1/customers/${response1.data.id}/children/${response2.data.id}/force`
     );
     expect(response7.status).toBe(204);
   });
@@ -102,39 +98,39 @@ describe("Axe API Soft Delete", () => {
     // Child data
     const response2 = await axios.post(
       `/v1/customers/${response1.data.id}/children`,
-      DATA,
+      DATA
     );
 
     // Child data
     const response3 = await axios.post(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}/children`,
-      DATA,
+      DATA
     );
 
     // Should be able to see undeleted parent data
     let addressResponse = await axios.get(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}/children/${response3.data.id}?with=parent`,
-      DATA,
+      DATA
     );
     expect(addressResponse.data.parent).not.toBe(null);
 
     // Deleting second level child
     await axios.delete(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}`,
-      DATA,
+      DATA
     );
 
     // Fetching 3. level item when the 2. level has been soft delete
     addressResponse = await axios.get(
       `/v1/customers/${response1.data.id}/children/${response2.data.id}/children/${response3.data.id}?with=parent`,
-      DATA,
+      DATA
     );
     expect(addressResponse.data.parent).toBe(null);
 
     // Testing force delete hooks
     try {
       await axios.delete(
-        `/v1/customers/${response1.data.id}/children/${response2.data.id}/children/${response3.data.id}/force`,
+        `/v1/customers/${response1.data.id}/children/${response2.data.id}/children/${response3.data.id}/force`
       );
       expect(true).toBe(false, "Force delete hooks are not working.");
     } catch (error) {

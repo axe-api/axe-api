@@ -1,4 +1,20 @@
 services:
+  database:
+    image: mysql:8
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_general_ci",
+        "--mysql-native-password=ON",
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: axeapi
+      MYSQL_USER: axeapi
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3307:3306"
+
   redis:
     image: redis:latest
     ports:

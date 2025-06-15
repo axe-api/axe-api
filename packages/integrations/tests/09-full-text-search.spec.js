@@ -1,7 +1,8 @@
-/* eslint-disable no-undef */
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { truncate } = require("./helper.js");
+import { describe, test, expect, beforeAll, afterAll, vi } from "vitest";
+import { truncate } from "./helper.js";
+import axios from "axios";
+
+vi.isFakeTimers();
 
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -9,7 +10,6 @@ axios.defaults.headers.get["Content-Type"] = "application/json";
 
 describe("Axe API Full-text search", () => {
   beforeAll(async () => {
-    dotenv.config();
     return await truncate("categories");
   });
 
@@ -28,7 +28,7 @@ describe("Axe API Full-text search", () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const { data: result2 } = await axios.get(
-      "/v1/categories/search?text=category",
+      "/v1/categories/search?text=category"
     );
     expect(result2.data.length).toBe(1);
     expect(result2.data[0].title).toBe("Testable category title");
