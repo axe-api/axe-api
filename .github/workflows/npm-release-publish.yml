@@ -22,4 +22,5 @@ jobs:
           npm run build
       - uses: JS-DevTools/npm-publish@v1
         with:
+          package: packages/axe-api
           token: ${{ secrets.NPM_TOKEN }}
