@@ -1,0 +1,33 @@
+{
+  "name": "axe-api-dev-kit",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Özgür Adem IŞIKLI <i.ozguradem@gmail.com>",
+  "homepage": "https://github.com/axe-api/axe-api#readme",
+  "license": "MIT",
+  "main": "index.ts",
+  "directories": {
+    "app": "app"
+  },
+  "files": [
+    "app"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axe-api/axe-api.git"
+  },
+  "scripts": {
+    "dev": "tsx watch index.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/axe-api/axe-api/issues"
+  },
+  "dependencies": {
+    "axe-api": "file:../axe-api",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}

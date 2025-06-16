@@ -7,14 +7,19 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/axe-api
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 22
-      - run: npm install
-      - run: npm test
-      - run: npm run build
+      - name: Build the app
+        run: |
+          npm install
+          npm test
+          npm run build
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}

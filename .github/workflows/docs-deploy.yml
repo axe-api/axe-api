@@ -12,22 +12,23 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - uses: actions/setup-node@v3
         with:
           node-version: 22
 
       - name: Yarn Install
-        working-directory: ./docs
+        working-directory: ./packages/docs
         run: yarn install --frozen-lockfile
 
       - name: Build
-        working-directory: ./docs
+        working-directory: ./packages/docs
         run: yarn docs:build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.ACCESS_TOKEN }}
-          publish_dir: docs/docs/.vitepress/dist
+          publish_dir: packages/docs/docs/.vitepress/dist
           external_repository: axe-api/axe-api-v1.github.io
           publish_branch: master
