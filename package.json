@@ -124,7 +124,7 @@
     "node-cache": "^5.1.2",
     "pg": "^8.16.0",
     "prettier": "^3.5.3",
-    "redis": "^4.7.1",
+    "redis": "^5.5.6",
     "robust-validator": "^2.2.1",
     "serve-static": "^2.2.0",
     "set-value": ">=4.1.0",
