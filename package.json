@@ -95,7 +95,7 @@
     "@babel/core": "^7.27.4",
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-typescript": "^7.27.1",
-    "@elastic/elasticsearch": "^8.18.2",
+    "@elastic/elasticsearch": "^9.0.2",
     "@types/accept-language-parser": "^1.5.8",
     "@types/aws-lambda": "^8.10.149",
     "@types/cors": "^2.8.19",
