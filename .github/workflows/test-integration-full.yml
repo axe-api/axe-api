@@ -9,7 +9,6 @@ jobs:
   rdbms:
     strategy:
       matrix:
-        node-version: [20.x, 22.x, 23.x, 24.x]
         database:
           [
             "mysql8",
@@ -23,6 +22,7 @@ jobs:
             "cockroach",
             "sqlite",
           ]
+        node-version: [20.x, 22.x, 23.x, 24.x]
     runs-on: ubuntu-latest
     env:
       TEST_USER: ${{ secrets.TEST_USER }}
@@ -39,7 +39,7 @@ jobs:
       - name: Install cli tools
         run: npm install -g knex tsx
       - name: Testing all scenarions
-        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 10
+        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 20
 
   # sqlite:
   #   runs-on: ubuntu-latest
