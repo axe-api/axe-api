@@ -25,8 +25,8 @@ describe("Axe API Full-text search", () => {
 
     expect(result1.title).toBe("Testable category title");
 
-    // wait a second for index completed.
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // wait for index completed.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const { data: result2 } = await axios.get(
       "/v1/categories/search?text=category"
