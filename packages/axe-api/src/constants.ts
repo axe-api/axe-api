@@ -91,6 +91,7 @@ export const DEFAULT_METHODS_OF_MODELS: string[] = [
   "cache",
   "search",
   "getSearchQuery",
+  "query",
 ];
 
 export const API_ROUTE_TEMPLATES = {

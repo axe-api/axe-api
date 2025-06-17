@@ -17,7 +17,7 @@
     "url": "git+https://github.com/axe-api/axe-api.git"
   },
   "scripts": {
-    "dev": "tsx watch index.ts"
+    "dev": "tsx watch test.ts"
   },
   "bugs": {
     "url": "https://github.com/axe-api/axe-api/issues"
@@ -27,6 +27,7 @@
     "cors": "^2.8.5"
   },
   "devDependencies": {
+    "prettyjson": "^1.2.5",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }

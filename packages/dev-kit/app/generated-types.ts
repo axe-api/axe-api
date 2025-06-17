@@ -1,0 +1,3 @@
+export namespace users {
+  export type Columns = 'account_visibility' | 'bio' | 'block_until_at' | 'created_at' | 'deleted_at' | 'email' | 'id' | 'is_email_confirmed' | 'is_push_notification_on' | 'location' | 'name' | 'password' | 'push_notification_auth' | 'push_notification_endpoint' | 'push_notification_p256dh' | 'stats_follower' | 'stats_following' | 'stats_post' | 'updated_at' | 'username';
+}
