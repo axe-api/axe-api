@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "prettyjson": "^1.2.5",
+    "robust-validator": "^2.2.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }

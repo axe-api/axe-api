@@ -45,7 +45,7 @@ export interface ResourceHooks {
 
 export interface ResourceHandler<T> {
   fillables?: Array<keyof T>;
-  rules?: Partial<Record<keyof T, string>>;
+  rules?: Partial<Record<keyof T, string[]>>;
   hooks: ResourceHooks;
 }
 
@@ -54,6 +54,7 @@ export interface ResourceConfig<T> {
   columns: string[];
   primaryKey: string;
   handlers: Record<HandlerTypes, ResourceHandler<T>>;
+  middlewares: MiddlewareFunction[];
 }
 
 export interface ResourceMutation<T> {
@@ -61,10 +62,11 @@ export interface ResourceMutation<T> {
   primaryKey: (column: keyof T) => void;
   insert: HandlerMutation<T>;
   update: HandlerMutation<T>;
+  middlewares: (...middlewares: MiddlewareFunction[]) => void;
 }
 
 export interface HandlerMutation<T> {
-  validation: (rules: Partial<Record<keyof T, string>>) => void;
+  validation: (rules: Partial<Record<keyof T, string[]>>) => void;
   fillable: (columns: Array<keyof T>) => void;
   hooks: HookMutation<T>;
 }
@@ -87,7 +89,7 @@ const defineHook = <T>(handler: ResourceHandler<T>) => {
 
 const defineHandler = <T>(handler: ResourceHandler<T>) => {
   return {
-    validation: (rules: Partial<Record<keyof T, string>>) => {
+    validation: (rules: Partial<Record<keyof T, string[]>>) => {
       handler.rules = rules;
     },
     fillable: (columns: Array<keyof T>) => {
@@ -96,6 +98,8 @@ const defineHandler = <T>(handler: ResourceHandler<T>) => {
     hooks: defineHook(handler),
   };
 };
+
+type MiddlewareFunction = () => void;
 
 export const defineResource = <
   TSchema extends { table: string; model: any; columns: readonly string[] },
@@ -108,6 +112,7 @@ export const defineResource = <
     tabneName: schema.table,
     primaryKey: "id",
     columns: schema.columns as string[],
+    middlewares: [],
     handlers: {
       insert: {
         hooks: {
@@ -131,6 +136,9 @@ export const defineResource = <
     },
     insert: defineHandler(config.handlers.insert),
     update: defineHandler(config.handlers.update),
+    middlewares(...middlewares: MiddlewareFunction[]) {
+      config.middlewares.push(...middlewares);
+    },
   };
 
   return resource;
@@ -144,7 +152,7 @@ export const useHandler = <T>(
     fillable: (columns: Array<keyof T>) => {
       resource.config.handlers[handler].fillables = columns;
     },
-    validation: (rules: Partial<Record<keyof T, string>>) => {
+    validation: (rules: Partial<Record<keyof T, string[]>>) => {
       resource.config.handlers[handler].rules = rules;
     },
   };
