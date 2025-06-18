@@ -1,9 +1,8 @@
 import server from "./server";
-import { models } from "./models";
 import { relations } from "./relations";
-import { ModelList } from "./resource";
+import { resources } from "./resources";
 
-server(models as ModelList, relations).listen(3000);
+server(resources, relations).listen(3000);
 
 // const resource = defineResource(Schema.Users);
 // resource.primaryKey("id");

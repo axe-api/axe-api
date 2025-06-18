@@ -30,9 +30,9 @@ export type RelationTree = {
   [K in LowerModelName]?: RelationTree; // recursive type
 };
 
-export type SharedModel = ResourceConfig<Record<string, string>>;
-
-export type ModelList = ResourceConfig<SharedModel>[];
+export const createResources = <T extends readonly ResourceMutation<any>[]>(
+  ...args: T
+) => args;
 
 type HandlerTypes = "insert" | "update";
 

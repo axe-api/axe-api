@@ -1,7 +1,8 @@
 import { render } from "prettyjson";
-import { ModelList, RelationTree } from "./resource";
+import { RelationTree } from "./resource";
+import { type resources } from "./resources";
 
-export default (models: ModelList, relations: RelationTree) => {
+export default (models: typeof resources, relations: RelationTree) => {
   console.log(render(models));
 
   return {
