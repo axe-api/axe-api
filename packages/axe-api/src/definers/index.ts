@@ -1,4 +1,4 @@
-import { defineResource } from "./defineResource";
+import { useResource } from "./useResource";
 import { useInsertHandler } from "./useInsertHandler";
 
-export { defineResource, useInsertHandler };
+export { useResource, useInsertHandler };

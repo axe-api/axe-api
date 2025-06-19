@@ -1,4 +1,4 @@
-export const defineResource = <
+export const useResource = <
   TSchema extends {
     table: string;
     primaryKey: string;

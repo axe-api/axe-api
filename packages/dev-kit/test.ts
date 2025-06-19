@@ -1,9 +1,9 @@
 import { Schema } from "./resource";
-import { defineResource, useInsertHandler } from "axe-api";
+import { useResource, useInsertHandler } from "axe-api";
 
 console.log("dev-kit");
 
-const resource = defineResource(Schema.Users);
+const resource = useResource(Schema.Users);
 resource.primaryKey("id");
 
 const insert = useInsertHandler(resource);

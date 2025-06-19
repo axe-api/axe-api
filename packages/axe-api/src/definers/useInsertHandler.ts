@@ -1,4 +1,4 @@
-import { Resource } from "./defineResource";
+import { Resource } from "./useResource";
 
 type ExtractModel<T> = T;
 
