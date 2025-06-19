@@ -17,6 +17,8 @@ import { generateTypes } from "./src/generator";
 export * from "./src/Enums";
 export * from "./src/Interfaces";
 export * from "./src/Types";
+export * from "./src/definers";
+export * from "./src/newTypes";
 
 export {
   App,

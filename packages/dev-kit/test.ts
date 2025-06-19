@@ -1,23 +1,12 @@
-import server from "./server";
-import { relations } from "./relations";
-import { resources } from "./resources";
+import { Schema } from "./resource";
+import { defineResource, useInsertHandler } from "axe-api";
 
-server(resources, relations).listen(3000);
+console.log("dev-kit");
 
-// const resource = defineResource(Schema.Users);
-// resource.primaryKey("id");
+const resource = defineResource(Schema.Users);
+resource.primaryKey("id");
 
-// const shouldBeLoggedIn = () => {};
-// const shouldBeAdmin = () => {};
+const insert = useInsertHandler(resource);
+insert.fillable(["name", "email"]);
 
-// resource.insert.hooks.onBefore([shouldBeLoggedIn, shouldBeAdmin]);
-// resource.insert.fillable(["name", "email"]);
-// resource.insert.validation({ email: "required|mail", name: "required" });
-
-// resource.update.fillable(["name"]);
-// resource.update.validation({ name: "required" });
-
-// const insert = useInsertHandler(resource);
-// insert.fillable(["id", "email", "name"]);
-
-// console.log(render(resource.config));
+console.log(resource.config);

@@ -12,11 +12,13 @@ export type Posts = {
 export const Schema = {
   Users: {
     table: "users",
+    primaryKey: "id",
     model: {} as Users,
     columns: ["id", "name", "email"] as const,
   },
   Posts: {
     table: "posts",
+    primaryKey: "id",
     model: {} as Posts,
     columns: ["id", "title"] as const,
   },
