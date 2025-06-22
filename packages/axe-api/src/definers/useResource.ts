@@ -22,6 +22,7 @@ export const useResource = <
     primaryKey(column: keyof T) {
       config.primaryKey = column as string;
     },
+    bind: () => {},
   } as Resource<T>;
 };
 
@@ -37,4 +38,5 @@ export type ResourceConfig<T> = {
 export type Resource<T> = {
   config: ResourceConfig<T>;
   primaryKey: (column: keyof T) => void;
+  bind: () => void;
 };

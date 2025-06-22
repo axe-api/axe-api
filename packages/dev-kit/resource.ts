@@ -9,28 +9,21 @@ export type Posts = {
   title: string;
 };
 
-export const Schema = {
-  Users: {
-    table: "users",
-    primaryKey: "id",
-    model: {} as Users,
-    columns: ["id", "name", "email"] as const,
-  },
-  Posts: {
-    table: "posts",
-    primaryKey: "id",
-    model: {} as Posts,
-    columns: ["id", "title"] as const,
-  },
+export const UserSchema = {
+  table: "users",
+  primaryKey: "id",
+  model: {} as Users,
+  columns: ["id", "name", "email"] as const,
+};
+
+export const PostSchema = {
+  table: "posts",
+  primaryKey: "id",
+  model: {} as Posts,
+  columns: ["id", "title"] as const,
 };
 
 export type ExtractModel<T> = T extends { model: infer M } ? M : never;
-
-export type LowerModelName = Lowercase<keyof typeof Schema>;
-
-export type RelationTree = {
-  [K in LowerModelName]?: RelationTree; // recursive type
-};
 
 export const createResources = <T extends readonly ResourceMutation<any>[]>(
   ...args: T

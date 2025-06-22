@@ -10,9 +10,9 @@ export const useInsertHandler = <Model>(resource: Resource<Model>) => {
       resource.config.fillables = columns;
       return this;
     },
-  } as Return<T>;
+  } as InserHandler<T>;
 };
 
-type Return<T> = {
-  fillable: (columns: Array<keyof T>) => Return<T>;
+type InserHandler<T> = {
+  fillable: (columns: Array<keyof T>) => InserHandler<T>;
 };
