@@ -1,4 +1,25 @@
 import { useResource } from "./useResource";
-import { useInsertHandler } from "./useInsertHandler";
+import {
+  useStoreHandler,
+  usePaginateHandler,
+  useShowHandler,
+  useUpdateHandler,
+  useDestroyHandler,
+  useForceDeleteHandler,
+  usePatchHandler,
+  useAllHandler,
+  useSearchHandler,
+} from "./useHandler";
 
-export { useResource, useInsertHandler };
+export {
+  useResource,
+  useStoreHandler,
+  usePaginateHandler,
+  useShowHandler,
+  useUpdateHandler,
+  useDestroyHandler,
+  useForceDeleteHandler,
+  usePatchHandler,
+  useAllHandler,
+  useSearchHandler,
+};

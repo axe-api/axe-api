@@ -1,11 +1,17 @@
 import { UserSchema } from "./resource";
-import { useResource, useInsertHandler } from "axe-api";
+import { useResource, useStoreHandler, usePaginateHandler } from "axe-api";
+import { render } from "prettyjson";
 
-console.log("dev-kit");
+console.log("Axe API dev-kit");
 
 const resource = useResource(UserSchema);
 
-const insert = useInsertHandler(resource);
-insert.fillable(["name", "email"]);
+const store = useStoreHandler(resource);
+store.fillable(["name", "email"]);
 
-console.log(resource.config);
+const paginate = usePaginateHandler(resource);
+paginate.setDefaultPerPage(10);
+
+resource.bind(store, paginate);
+
+console.log(render(resource.getConfig()));

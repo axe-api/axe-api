@@ -1,3 +1,6 @@
+import { removeFunctions } from "../utils/config";
+import { BaseHandler } from "./useHandler";
+
 export const useResource = <
   TSchema extends {
     table: string;
@@ -14,7 +17,7 @@ export const useResource = <
     tableName: schema.table,
     primaryKey: schema.primaryKey,
     columns: schema.columns as string[],
-    fillables: [],
+    handers: [],
   };
 
   return {
@@ -22,7 +25,12 @@ export const useResource = <
     primaryKey(column: keyof T) {
       config.primaryKey = column as string;
     },
-    bind: () => {},
+    bind(...handers: Array<BaseHandler<T>>) {
+      config.handers.push(...handers);
+    },
+    getConfig() {
+      return JSON.parse(JSON.stringify(config, removeFunctions, 2));
+    },
   } as Resource<T>;
 };
 
@@ -32,11 +40,12 @@ export type ResourceConfig<T> = {
   tableName: string;
   columns: string[];
   primaryKey: keyof T;
-  fillables: Array<keyof T>;
+  handers: Array<BaseHandler<T>>;
 };
 
 export type Resource<T> = {
   config: ResourceConfig<T>;
   primaryKey: (column: keyof T) => void;
-  bind: () => void;
+  bind: (...handers: Array<BaseHandler<T>>) => void;
+  getConfig: () => unknown;
 };
