@@ -1,6 +1,6 @@
 {
   "name": "axe-api",
-  "version": "2.0.0-alfa-1",
+  "version": "2.0.0-alpha-1",
   "description": "AXE API is a simple tool to create Rest APIs quickly.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
