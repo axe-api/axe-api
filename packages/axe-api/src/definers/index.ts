@@ -1,25 +1,7 @@
 import { useResource } from "./useResource";
-import {
-  useStoreHandler,
-  usePaginateHandler,
-  useShowHandler,
-  useUpdateHandler,
-  useDestroyHandler,
-  useForceDeleteHandler,
-  usePatchHandler,
-  useAllHandler,
-  useSearchHandler,
-} from "./useHandler";
+import { uPaginate } from "./uPaginate";
 
-export {
-  useResource,
-  useStoreHandler,
-  usePaginateHandler,
-  useShowHandler,
-  useUpdateHandler,
-  useDestroyHandler,
-  useForceDeleteHandler,
-  usePatchHandler,
-  useAllHandler,
-  useSearchHandler,
-};
+export * from "./useHandler";
+export * from "./xxx";
+
+export { useResource, uPaginate };

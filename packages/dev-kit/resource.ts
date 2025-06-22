@@ -1,3 +1,7 @@
+export type BaseTable = {
+  id: number;
+};
+
 export type Users = {
   id: number;
   name: string;
@@ -7,6 +11,19 @@ export type Users = {
 export type Posts = {
   id: number;
   title: string;
+};
+
+export const BaseSchema = {
+  table: "_base",
+  primaryKey: "id",
+  model: {} as BaseTable,
+  columns: ["id"] as const,
+};
+
+export const TestSchema = {
+  table: "users",
+  primaryKey: "id",
+  columns: ["id", "name", "email"] as const,
 };
 
 export const UserSchema = {

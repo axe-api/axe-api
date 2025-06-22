@@ -1,17 +1,18 @@
 import { UserSchema } from "./resource";
-import { useResource, useStoreHandler, usePaginateHandler } from "axe-api";
+import { uPaginate, uResource } from "axe-api";
+import { UResource } from "axe-api/build/src/definers/xTypes";
 import { render } from "prettyjson";
 
-console.log("Axe API dev-kit");
+const resource = uResource(UserSchema);
+resource.primaryKey("id");
 
-const resource = useResource(UserSchema);
+const defaultPagination = <Model>(resource: UResource<Model>) => {
+  const pagination = uPaginate(resource);
+  pagination.setDefaultPerPage(25);
+  return pagination;
+};
 
-const store = useStoreHandler(resource);
-store.fillable(["name", "email"]);
+const paginate = defaultPagination(resource);
+paginate.fields(["name", "email"]);
 
-const paginate = usePaginateHandler(resource);
-paginate.setDefaultPerPage(10);
-
-resource.bind(store, paginate);
-
-console.log(render(resource.getConfig()));
+console.log(render(resource));

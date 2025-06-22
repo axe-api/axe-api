@@ -1,7 +1,7 @@
 import { NewHandlerTypes } from "src/newTypes";
 import { Resource } from "./useResource";
 
-type ExtractModel<T> = T;
+export type ExtractModel<T> = T;
 
 export interface BaseHandler<T> {
   /**
@@ -78,72 +78,72 @@ export const usePaginateHandler = <Model>(resource: Resource<Model>) => {
   return handler;
 };
 
-export const useShowHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useShowHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "show",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "show",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const useUpdateHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useUpdateHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "update",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "update",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const useDestroyHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useDestroyHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "destroy",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "destroy",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const useForceDeleteHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useForceDeleteHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "force_delete",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "force_delete",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const usePatchHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const usePatchHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "patch",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "patch",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const useAllHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useAllHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "all",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "all",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };
 
-export const useSearchHandler = <Model>(resource: Resource<Model>) => {
-  type T = ExtractModel<Model>;
+// export const useSearchHandler = <Model>(resource: Resource<Model>) => {
+//   type T = ExtractModel<Model>;
 
-  const handler: BaseHandler<T> = {
-    type: "search",
-  };
+//   const handler: BaseHandler<T> = {
+//     type: "search",
+//   };
 
-  return handler;
-};
+//   return handler;
+// };

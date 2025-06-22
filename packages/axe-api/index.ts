@@ -18,6 +18,7 @@ export * from "./src/Enums";
 export * from "./src/Interfaces";
 export * from "./src/Types";
 export * from "./src/definers";
+export * from "./src/defaults";
 export * from "./src/newTypes";
 
 export {
