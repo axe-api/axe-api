@@ -13,7 +13,7 @@ export type Resource<ResourceType> = {
    * Set the primary key for the resource. The default value used via the schema.
    */
   primaryKey(id: keyof ResourceType): void;
-  bind(...handlers: Array<DefaultHandler<ResourceType>>): void;
+  handlers(...handlers: Array<DefaultHandler<ResourceType>>): void;
   getConfig(): unknown;
 };
 
@@ -43,7 +43,7 @@ export const useResource = <TSchema extends SchemaDefinition>(
       config.primaryKey = column;
     },
 
-    bind(...handlers: Array<DefaultHandler<ResourceType>>) {
+    handlers(...handlers: Array<DefaultHandler<ResourceType>>) {
       config.handlers.push(...handlers.map((handler) => handler.config));
     },
 
