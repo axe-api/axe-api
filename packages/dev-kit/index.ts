@@ -1,14 +1,6 @@
-// import dotenv from "dotenv";
-// import path from "path";
-// import { generateTypes, Server } from "axe-api";
+import { createServer } from "axe-api";
+import router from "./router";
 
-// console.log("Axe API dev-kit (1.0.1)");
-// dotenv.config();
-
-// const main = async () => {
-//   const server = new Server();
-//   await server.start(path.join(process.cwd()));
-//   await generateTypes();
-// };
-
-// main();
+const server = createServer();
+server.setRouter(router);
+server.listen(3000);
