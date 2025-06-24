@@ -6,7 +6,7 @@ import { tmpdir } from "os";
 
 const showChangedFile = (filename: string) => {
   const relativePath = relative(process.cwd(), filename);
-  console.log(`\n🔥 ${relativePath}`);
+  console.log(`\n🔥 You just changed ${relativePath}`);
 };
 
 const defaultHinter = (filename: string) => {
