@@ -5,12 +5,7 @@ export type Version = {
   resources: Resource<unknown>[];
 };
 
-export type GroupRouter = {
-  use(middleware: unknown): GroupRouter;
-  mount(resource: Resource<any>): GroupRouter;
-};
-
-export type VersionGroup = (router: GroupRouter) => void;
+export type RouteGrouper = (router: Router) => void;
 
 export type Router = {
   /**
@@ -18,37 +13,57 @@ export type Router = {
    */
   config: Version[];
 
-  group(name: string, callback: VersionGroup): Router;
+  /**
+   * @internal
+   */
+  children: Router[];
+
+  /**
+   * @internal
+   */
+  prefix: string;
+
+  /**
+   * @internal
+   */
+  middlewares: unknown[];
+
+  /**
+   * @internal
+   */
+  reosurces: Resource<unknown>[];
+
+  group(name: string, callback: RouteGrouper): Router;
+  use(middleware: unknown): Router;
+  mount(resource: Resource<any>): Router;
 };
 
 export const createRouter = (prefix: string) => {
   const config: Version[] = [];
+  const children: Router[] = [];
+  const middlewares: unknown[] = [];
+  const reosurces: Resource<unknown>[] = [];
 
   return {
     config,
+    children,
+    prefix,
+    middlewares,
+    reosurces,
 
-    group(name: string, callback: VersionGroup) {
-      const subrouter: GroupRouter = {
-        use(middleware) {
-          console.log("use", middleware);
-          return this;
-        },
-        mount(resource) {
-          console.log("mount", resource);
-          return this;
-        },
-      };
-
-      callback(subrouter);
-
-      const version: Version = {
-        prefix: `${prefix}/${name}`,
-        resources: [],
-      };
-
-      config.push(version);
-
+    use(middleware) {
+      middlewares.push(middleware);
       return this;
+    },
+    mount(resource) {
+      reosurces.push(resource);
+      return this;
+    },
+    group(name: string, callback: RouteGrouper) {
+      const subRouter: Router = createRouter(`${prefix}/${name}`);
+      children.push(subRouter);
+      callback(subRouter);
+      return subRouter;
     },
   } as Router;
 };
