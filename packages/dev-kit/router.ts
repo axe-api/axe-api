@@ -4,8 +4,12 @@ import posts from "./app/v1/resources/posts";
 
 const router = createRouter("/api");
 
-router.version("v1", () => {
-  return [users, posts];
+const shouldBeAdmin = () => {};
+
+router.group("v1", (group) => {
+  group.use(shouldBeAdmin);
+  group.mount(users);
+  group.mount(posts);
 });
 
 export default router;

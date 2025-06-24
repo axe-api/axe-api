@@ -5,7 +5,12 @@ export type Version = {
   resources: Resource<unknown>[];
 };
 
-export type VersionGroup = () => Resource<any>[];
+export type GroupRouter = {
+  use(middleware: unknown): GroupRouter;
+  mount(resource: Resource<any>): GroupRouter;
+};
+
+export type VersionGroup = (router: GroupRouter) => void;
 
 export type Router = {
   /**
@@ -13,7 +18,7 @@ export type Router = {
    */
   config: Version[];
 
-  version(name: string, callback: VersionGroup): Router;
+  group(name: string, callback: VersionGroup): Router;
 };
 
 export const createRouter = (prefix: string) => {
@@ -22,10 +27,23 @@ export const createRouter = (prefix: string) => {
   return {
     config,
 
-    version(name: string, callback: VersionGroup) {
+    group(name: string, callback: VersionGroup) {
+      const subrouter: GroupRouter = {
+        use(middleware) {
+          console.log("use", middleware);
+          return this;
+        },
+        mount(resource) {
+          console.log("mount", resource);
+          return this;
+        },
+      };
+
+      callback(subrouter);
+
       const version: Version = {
         prefix: `${prefix}/${name}`,
-        resources: callback() as Resource<unknown>[],
+        resources: [],
       };
 
       config.push(version);
