@@ -1,10 +1,10 @@
 import { usePaginateHandler, useResource } from "axe-api";
 import { PostSchema } from "../../schema";
 
-const users = useResource(PostSchema);
+const posts = useResource(PostSchema);
 
-const paginate = usePaginateHandler(users);
+const paginate = usePaginateHandler(posts);
 
-users.handlers(paginate);
+posts.handlers(paginate);
 
-export default users;
+export default posts;
