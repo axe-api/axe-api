@@ -1,5 +1,7 @@
-import { createServer } from "axe-api";
+import { createServer, showHint } from "axe-api";
 import router from "./router";
+
+showHint(__dirname);
 
 const server = createServer();
 server.setRouter(router);

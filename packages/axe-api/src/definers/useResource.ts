@@ -1,3 +1,4 @@
+import { Hint } from "../Types";
 import { removeFunctions } from "../utils/config";
 import {
   DefaultHandler,
@@ -7,6 +8,7 @@ import {
 } from "./xTypes";
 
 export type Resource<ResourceType> = {
+  hint: Hint;
   config: ResourceConfig<ResourceType>;
 
   /**
@@ -37,6 +39,8 @@ export const useResource = <TSchema extends SchemaDefinition>(
   };
 
   return {
+    hint: "resource",
+
     config,
 
     primaryKey(column: keyof ResourceType) {
