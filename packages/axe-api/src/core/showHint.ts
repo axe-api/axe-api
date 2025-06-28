@@ -52,7 +52,7 @@ export const showHint = async (root: string) => {
     unlinkSync(hintFile);
 
     const mod = await import(fullPath);
-    if (mod.default.hint) {
+    if (mod.default?.hint) {
       const hintFunction = HINT_MAP[mod.default.hint as Hint];
       hintFunction(fullPath, mod.default);
     } else {

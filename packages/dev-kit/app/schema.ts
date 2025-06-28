@@ -9,6 +9,12 @@ export type Posts = {
   title: string;
 };
 
+export type Comments = {
+  id: number;
+  post_id: number;
+  title: string;
+};
+
 export const UserSchema = {
   table: "users",
   primaryKey: "id",
@@ -21,4 +27,11 @@ export const PostSchema = {
   primaryKey: "id",
   model: {} as Posts,
   columns: ["id", "title"] as const,
+};
+
+export const CommentsSchema = {
+  table: "comments",
+  primaryKey: "id",
+  model: {} as Posts,
+  columns: ["id", "post_id", "title"] as const,
 };

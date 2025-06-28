@@ -1,15 +1,15 @@
 import { createRouter } from "axe-api";
-import users from "./app/v1/resources/users";
 import posts from "./app/v1/resources/posts";
+import comments from "./app/v1/resources/comments";
 
 const router = createRouter("/api");
 
-const shouldBeAdmin = () => {};
-
 router.group("v1", (group) => {
-  group.use(shouldBeAdmin);
-  group.mount(users);
-  group.mount(posts);
+  group.group("sub", (subgroup) => {
+    subgroup.root(posts).with(comments);
+  });
 });
+
+// console.log(JSON.stringify(router, null, 2));
 
 export default router;

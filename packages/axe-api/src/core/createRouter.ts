@@ -1,69 +1,51 @@
 import { Resource } from "src/definers";
 
-export type Version = {
-  prefix: string;
-  resources: Resource<unknown>[];
-};
-
-export type RouteGrouper = (router: Router) => void;
-
 export type Router = {
-  /**
-   * @internal
-   */
-  config: Version[];
-
-  /**
-   * @internal
-   */
-  children: Router[];
-
-  /**
-   * @internal
-   */
   prefix: string;
-
-  /**
-   * @internal
-   */
+  resource?: Resource<unknown>;
   middlewares: unknown[];
-
-  /**
-   * @internal
-   */
-  reosurces: Resource<unknown>[];
-
-  group(name: string, callback: RouteGrouper): Router;
+  children: Router[];
   use(middleware: unknown): Router;
-  mount(resource: Resource<any>): Router;
+  root(resource: Resource<any>): Router;
+  with(resource: Resource<any>): Router;
+  group(name: string, callback: (group: Router) => void): Router;
 };
 
-export const createRouter = (prefix: string) => {
-  const config: Version[] = [];
-  const children: Router[] = [];
+export const createRouter = (prefix = ""): Router => {
   const middlewares: unknown[] = [];
-  const reosurces: Resource<unknown>[] = [];
+  const children: Router[] = [];
 
-  return {
-    config,
-    children,
+  const current: Router = {
     prefix,
+    children,
     middlewares,
-    reosurces,
 
     use(middleware) {
-      middlewares.push(middleware);
+      this.middlewares.push(middleware);
       return this;
     },
-    mount(resource) {
-      reosurces.push(resource);
-      return this;
+
+    root(resource: Resource<unknown>) {
+      const child = createRouter(`${this.prefix}/${resource.config.tableName}`);
+      child.resource = resource;
+      this.children.push(child);
+      return child;
     },
-    group(name: string, callback: RouteGrouper) {
-      const subRouter: Router = createRouter(`${prefix}/${name}`);
-      children.push(subRouter);
-      callback(subRouter);
-      return subRouter;
+
+    with(resource: Resource<unknown>) {
+      const child = createRouter(`${this.prefix}/${resource.config.tableName}`);
+      child.resource = resource;
+      this.children.push(child);
+      return child;
     },
-  } as Router;
+
+    group(name, callback) {
+      const subGroup = createRouter(`${this.prefix}/${name}`);
+      this.children.push(subGroup);
+      callback(subGroup);
+      return subGroup;
+    },
+  };
+
+  return current;
 };
