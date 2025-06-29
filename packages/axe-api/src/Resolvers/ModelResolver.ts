@@ -29,12 +29,14 @@ class ModelResolver {
 
   async resolve() {
     const modelList = new ModelListService(await this.getModelList());
+
     LogService.debug(`[${this.version.name}] Model list has been resolved`);
     await this.setModelRelations(modelList);
     LogService.debug(
       `[${this.version.name}] Model relations have been resolved`,
     );
     await this.setDatabaseColumns(modelList);
+
     LogService.debug(
       `[${this.version.name}] Database columns have been bonded with models`,
     );

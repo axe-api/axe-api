@@ -40,3 +40,5 @@ export type PhaseFunction = (context: IContext) => DefaultResponse;
 export type GeneralFunction = MiddlewareFunction | HandlerFunction;
 
 export type AxeFunction = GeneralFunction | PhaseFunction;
+
+export type Hint = "router" | "resource";

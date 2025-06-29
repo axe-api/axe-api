@@ -476,6 +476,8 @@ class Model {
     };
   }
 
+  query() {}
+
   private hasStringValue() {
     const tester: Record<string, any> = this.validations;
     let status = false;

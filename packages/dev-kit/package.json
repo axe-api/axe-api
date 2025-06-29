@@ -1,7 +1,7 @@
 {
   "name": "axe-api-dev-kit",
   "version": "0.0.0",
-  "description": "> TODO: description",
+  "description": "Axe API dev-kit",
   "author": "Özgür Adem IŞIKLI <i.ozguradem@gmail.com>",
   "homepage": "https://github.com/axe-api/axe-api#readme",
   "license": "MIT",
@@ -27,6 +27,9 @@
     "cors": "^2.8.5"
   },
   "devDependencies": {
+    "@types/prettyjson": "^0.0.33",
+    "prettyjson": "^1.2.5",
+    "robust-validator": "^2.2.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }

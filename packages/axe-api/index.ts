@@ -12,10 +12,13 @@ import {
   AxeResponse,
 } from "./src/Services";
 import { rateLimit, createRateLimitter } from "./src/Middlewares/RateLimit";
+import { generateTypes } from "./src/generator";
 
 export * from "./src/Enums";
 export * from "./src/Interfaces";
 export * from "./src/Types";
+export * from "./src/definers";
+export * from "./src/core";
 
 export {
   App,
@@ -32,4 +35,5 @@ export {
   deny,
   rateLimit,
   createRateLimitter,
+  generateTypes,
 };

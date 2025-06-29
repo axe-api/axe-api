@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
-import path from "path";
-import { Server } from "axe-api";
+import { createServer, showHint } from "axe-api";
+import routes from "./routes";
 
-console.log("Axe API dev-kit (1.0.1)");
-dotenv.config();
+showHint(__dirname);
 
-const server = new Server();
-server.start(path.join(process.cwd()));
+const server = createServer();
+server.setRoutes(routes);
+server.listen(3000);
