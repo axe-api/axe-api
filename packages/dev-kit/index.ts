@@ -1,8 +1,8 @@
 import { createServer, showHint } from "axe-api";
-import router from "./router";
+import routes from "./routes";
 
 showHint(__dirname);
 
 const server = createServer();
-server.setRouter(router);
+server.setRoutes(routes);
 server.listen(3000);

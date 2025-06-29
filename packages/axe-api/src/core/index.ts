@@ -1,5 +1,5 @@
-import { createRouter } from "./createRouter";
+import { createRoutes } from "./createRoutes";
 import { createServer } from "./createServer";
 import { showHint } from "./showHint";
 
-export { createRouter, createServer, showHint };
+export { createRoutes, createServer, showHint };
