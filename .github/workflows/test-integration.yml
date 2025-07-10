@@ -28,7 +28,7 @@ jobs:
       - name: Install cli tools
         run: npm install -g knex tsx
       - name: Testing all scenarions
-        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 10
+        run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 20
 
   sqlite:
     runs-on: ubuntu-latest
