@@ -566,6 +566,16 @@ export default defineConfig({
     [
       "script",
       {
+        defer: true,
+        type: "text/plain",
+        src: "https://analytics.ozgur.works/script.js",
+        "data-cookiecategory": "analytics",
+        "data-website-id": "c15b94fc-d99b-453a-b513-715358f290df",
+      },
+    ],
+    [
+      "script",
+      {
         type: "text/plain",
         "data-cookiecategory": "analytics",
       },
