@@ -557,15 +557,6 @@ export default defineConfig({
     [
       "script",
       {
-        async: true,
-        type: "text/plain",
-        "data-cookiecategory": "analytics",
-        src: "https://www.googletagmanager.com/gtag/js?id=G-1HBM031QWE",
-      },
-    ],
-    [
-      "script",
-      {
         defer: true,
         type: "text/plain",
         src: "https://analytics.ozgur.works/script.js",
