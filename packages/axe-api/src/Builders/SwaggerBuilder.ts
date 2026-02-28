@@ -641,19 +641,20 @@ const generateDocumentation = async () => {
 
   // Added custom endpoint
   for (const custom of docs.getCustoms()) {
-    if (paths[custom.url] === undefined) {
-      paths[custom.url] = {};
+    const normalizePath = custom.url.replace(/:([^/]+)/g, "{$1}");
+    if (paths[normalizePath] === undefined) {
+      paths[normalizePath] = {};
     }
 
     const samePattern = modelPatternsKeys.find((key) =>
-      custom.url.startsWith(key),
+      normalizePath.startsWith(key),
     );
     const tags = [];
     if (samePattern) {
       tags.push(modelPatterns[samePattern]);
     }
 
-    paths[custom.url][custom.method.toLowerCase()] = {
+    paths[normalizePath][custom.method.toLowerCase()] = {
       tags,
       description: "Custom endpoint",
     };
