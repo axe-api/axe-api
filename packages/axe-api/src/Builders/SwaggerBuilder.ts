@@ -614,12 +614,12 @@ const generateDocumentation = async () => {
 
   const paths: any = {};
   for (const endpoint of docs.get()) {
-    if (paths[endpoint.url] === undefined) {
-      paths[endpoint.url] = {};
+    const normalizePath = endpoint.url.replace(/:([^/]+)/g, "{$1}");
+    if (paths[normalizePath] === undefined) {
+      paths[normalizePath] = {};
     }
 
-    modelPatterns[endpoint.url] = endpoint.model;
-
+    modelPatterns[normalizePath] = endpoint.model;
     const path: any = {
       tags: [endpoint.model],
       summary: toEndpointSummary(endpoint),
@@ -634,7 +634,7 @@ const generateDocumentation = async () => {
       path.requestBody = requestBody;
     }
 
-    paths[endpoint.url][endpoint.method.toLowerCase()] = path;
+    paths[normalizePath][endpoint.method.toLowerCase()] = path;
   }
 
   const modelPatternsKeys = Object.keys(modelPatterns);
