@@ -542,6 +542,10 @@ const deepMerge = (base: any, source: any) => {
   return merged;
 };
 
+const normalizeSwaggerPath = (path: string) => {
+  return path.replace(/:([^/]+)/g, "{$1}");
+}
+
 const generateDocumentation = async () => {
   const docs = DocumentationService.getInstance();
   const api = APIService.getInstance();
@@ -614,7 +618,7 @@ const generateDocumentation = async () => {
 
   const paths: any = {};
   for (const endpoint of docs.get()) {
-    const normalizePath = endpoint.url.replace(/:([^/]+)/g, "{$1}");
+    const normalizePath = normalizeSwaggerPath(endpoint.url);
     if (paths[normalizePath] === undefined) {
       paths[normalizePath] = {};
     }
@@ -641,7 +645,7 @@ const generateDocumentation = async () => {
 
   // Added custom endpoint
   for (const custom of docs.getCustoms()) {
-    const normalizePath = custom.url.replace(/:([^/]+)/g, "{$1}");
+    const normalizePath = normalizeSwaggerPath(custom.url);
     if (paths[normalizePath] === undefined) {
       paths[normalizePath] = {};
     }
