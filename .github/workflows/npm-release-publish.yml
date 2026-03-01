@@ -24,3 +24,4 @@ jobs:
         with:
           package: packages/axe-api/package.json
           token: ${{ secrets.NPM_TOKEN }}
+          ignore-scripts: true
