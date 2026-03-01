@@ -13,20 +13,20 @@
   "keywords": [],
   "dependencies": {
     "animate.css": "^4.1.1",
-    "dayjs": "^1.11.12",
+    "dayjs": "^1.11.19",
     "floating-vue": "^5.2.2",
     "global": "^4.4.0",
-    "gsap": "^3.12.5",
+    "gsap": "^3.14.2",
     "markdown-it-task-lists": "^2.1.1",
-    "sitemap-ts": "^1.8.0",
-    "vanilla-cookieconsent": "^3.0.1"
+    "sitemap-ts": "^1.10.1",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@vuepress/plugin-google-analytics": "^1.9.10",
-    "sass-embedded": "^1.79.3",
-    "vite-ssg": "^27.0.1",
-    "vite-ssg-sitemap": "^0.9.0",
-    "vitepress": "1.6.3",
-    "vue": "^3.4.38"
+    "sass-embedded": "^1.97.3",
+    "vite-ssg": "^27.1.0",
+    "vite-ssg-sitemap": "^0.10.0",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.29"
   }
 }
