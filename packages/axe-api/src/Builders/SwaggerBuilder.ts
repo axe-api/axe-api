@@ -542,6 +542,10 @@ const deepMerge = (base: any, source: any) => {
   return merged;
 };
 
+const normalizeSwaggerPath = (path: string) => {
+  return path.replaceAll(/:([^/]+)/g, "{$1}");
+};
+
 const generateDocumentation = async () => {
   const docs = DocumentationService.getInstance();
   const api = APIService.getInstance();
@@ -614,12 +618,12 @@ const generateDocumentation = async () => {
 
   const paths: any = {};
   for (const endpoint of docs.get()) {
-    if (paths[endpoint.url] === undefined) {
-      paths[endpoint.url] = {};
+    const normalizedPath = normalizeSwaggerPath(endpoint.url);
+    if (paths[normalizedPath] === undefined) {
+      paths[normalizedPath] = {};
     }
 
-    modelPatterns[endpoint.url] = endpoint.model;
-
+    modelPatterns[normalizedPath] = endpoint.model;
     const path: any = {
       tags: [endpoint.model],
       summary: toEndpointSummary(endpoint),
@@ -634,26 +638,27 @@ const generateDocumentation = async () => {
       path.requestBody = requestBody;
     }
 
-    paths[endpoint.url][endpoint.method.toLowerCase()] = path;
+    paths[normalizedPath][endpoint.method.toLowerCase()] = path;
   }
 
   const modelPatternsKeys = Object.keys(modelPatterns);
 
   // Added custom endpoint
   for (const custom of docs.getCustoms()) {
-    if (paths[custom.url] === undefined) {
-      paths[custom.url] = {};
+    const normalizedPath = normalizeSwaggerPath(custom.url);
+    if (paths[normalizedPath] === undefined) {
+      paths[normalizedPath] = {};
     }
 
     const samePattern = modelPatternsKeys.find((key) =>
-      custom.url.startsWith(key),
+      normalizedPath.startsWith(key),
     );
     const tags = [];
     if (samePattern) {
       tags.push(modelPatterns[samePattern]);
     }
 
-    paths[custom.url][custom.method.toLowerCase()] = {
+    paths[normalizedPath][custom.method.toLowerCase()] = {
       tags,
       description: "Custom endpoint",
     };
