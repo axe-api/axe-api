@@ -543,8 +543,8 @@ const deepMerge = (base: any, source: any) => {
 };
 
 const normalizeSwaggerPath = (path: string) => {
-  return path.replace(/:([^/]+)/g, "{$1}");
-}
+  return path.replaceAll(/:([^/]+)/g, "{$1}");
+};
 
 const generateDocumentation = async () => {
   const docs = DocumentationService.getInstance();
@@ -618,12 +618,12 @@ const generateDocumentation = async () => {
 
   const paths: any = {};
   for (const endpoint of docs.get()) {
-    const normalizePath = normalizeSwaggerPath(endpoint.url);
-    if (paths[normalizePath] === undefined) {
-      paths[normalizePath] = {};
+    const normalizedPath = normalizeSwaggerPath(endpoint.url);
+    if (paths[normalizedPath] === undefined) {
+      paths[normalizedPath] = {};
     }
 
-    modelPatterns[normalizePath] = endpoint.model;
+    modelPatterns[normalizedPath] = endpoint.model;
     const path: any = {
       tags: [endpoint.model],
       summary: toEndpointSummary(endpoint),
@@ -638,27 +638,27 @@ const generateDocumentation = async () => {
       path.requestBody = requestBody;
     }
 
-    paths[normalizePath][endpoint.method.toLowerCase()] = path;
+    paths[normalizedPath][endpoint.method.toLowerCase()] = path;
   }
 
   const modelPatternsKeys = Object.keys(modelPatterns);
 
   // Added custom endpoint
   for (const custom of docs.getCustoms()) {
-    const normalizePath = normalizeSwaggerPath(custom.url);
-    if (paths[normalizePath] === undefined) {
-      paths[normalizePath] = {};
+    const normalizedPath = normalizeSwaggerPath(custom.url);
+    if (paths[normalizedPath] === undefined) {
+      paths[normalizedPath] = {};
     }
 
     const samePattern = modelPatternsKeys.find((key) =>
-      normalizePath.startsWith(key),
+      normalizedPath.startsWith(key),
     );
     const tags = [];
     if (samePattern) {
       tags.push(modelPatterns[samePattern]);
     }
 
-    paths[normalizePath][custom.method.toLowerCase()] = {
+    paths[normalizedPath][custom.method.toLowerCase()] = {
       tags,
       description: "Custom endpoint",
     };

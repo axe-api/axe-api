@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import generateDocs from "./SwaggerBuilder";
 import { APIService, DocumentationService } from "../Services";
+import { HandlerTypes, HttpMethods } from "../Enums";
 
 // ✅ fs mock (correct)
 vi.mock("fs", async (importActual) => {
@@ -104,5 +105,46 @@ describe("generateDocumentation (default export)", () => {
     getInstanceMock.versions = [];
 
     await expect(generateDocs()).rejects.toThrow("The version is not found!");
+  });
+
+  it("normalizes parameterized URLs to curly braces and adds path parameters", async () => {
+    const bookModel = createModel("Book");
+    getDocsMock.get.mockReturnValue([
+      {
+        version: "v1",
+        handler: HandlerTypes.SHOW,
+        modelService: bookModel,
+        parentModel: null,
+        model: "Book",
+        table: "books",
+        columns: [],
+        hiddens: [],
+        relations: [],
+        method: HttpMethods.GET,
+        url: "/api/v1/books/:id",
+        fillables: [],
+        validations: null,
+        queryLimits: [],
+        queryDefaults: {},
+      },
+    ]);
+
+    const result = await generateDocs();
+
+    // verify normalization
+    expect(result.paths["/api/v1/books/{id}"]).toBeDefined();
+
+    const params = result.paths["/api/v1/books/{id}"].get.parameters;
+    expect(params.some((p) => p.in === "path" && p.name === "id")).toBe(true);
+  });
+
+  it("normalizes custom routes with params as well", async () => {
+    getDocsMock.get.mockReturnValue([]);
+    getDocsMock.getCustoms.mockReturnValue([
+      { method: HttpMethods.GET, url: "/api/v1/custom/:id" },
+    ]);
+
+    const result = await generateDocs();
+    expect(result.paths["/api/v1/custom/{id}"]).toBeDefined();
   });
 });
