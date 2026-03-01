@@ -11,8 +11,8 @@ jobs:
       run:
         working-directory: packages/axe-api
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
       - name: Build the app
@@ -20,7 +20,7 @@ jobs:
           npm ci
           npm test
           npm run build
-      - uses: JS-DevTools/npm-publish@v1
+      - uses: JS-DevTools/npm-publish@v3
         with:
           package: packages/axe-api/package.json
           token: ${{ secrets.NPM_TOKEN }}
