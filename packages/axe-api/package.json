@@ -100,7 +100,7 @@
     "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-unicorn": "^56.0.1",
     "eslint-watch": "^8.0.0",
-    "glob": "^11.1.0",
+    "glob": "^13.0.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.1",
     "multer": "^2.1.0",
