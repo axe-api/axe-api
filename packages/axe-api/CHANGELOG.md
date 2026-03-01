@@ -1,5 +1,10 @@
 # Release Notes
 
+## [1.7.3 (2026-03-01)](https://github.com/axe-api/axe-api/compare/1.7.3...1.7.2)
+
+- Dependency upgrades
+- Dynamic Path Parameters Not Functioning in Auto-Generated Swagger Documentation (#703). (Thanks to @mahendra7041)
+
 ## [1.7.2 (2025-07-10)](https://github.com/axe-api/axe-api/compare/1.7.2...1.7.1)
 
 - Dependency upgrades
