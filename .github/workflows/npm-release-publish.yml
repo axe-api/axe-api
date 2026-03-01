@@ -17,7 +17,7 @@ jobs:
           node-version: 22
       - name: Build the app
         run: |
-          npm install
+          npm ci
           npm test
           npm run build
       - uses: JS-DevTools/npm-publish@v1
