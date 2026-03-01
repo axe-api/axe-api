@@ -9,8 +9,8 @@ if [[ -f ".env" ]]; then
   set +a
 fi
 
-DB_PROVIDER=$1
-SLEEP=$2
+DB_PROVIDER=${1:-$DB_PROVIDER}
+SLEEP=${2:-$SLEEP}
 
 if [[ -z "$DB_PROVIDER" ]]; then
   echo "❌ Please provide a database client (e.g. sqlite, mysql, postgres)."
