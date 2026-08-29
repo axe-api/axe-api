@@ -11,7 +11,7 @@ Axe API had a separate tool called `axe-magic` to provide some CLI functionaliti
 You can install the `axe-api` framework as a CLI tool if you wish.
 
 ```bash
-$ npm install -g axe-api
+$ npm install -g axe-api --ignore-scripts
 ```
 
 You can start to use the `axe` CLI command after the installation.

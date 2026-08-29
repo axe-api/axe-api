@@ -219,7 +219,7 @@ class RouterBuilder {
       : kebabCase(pluralize.plural(model.name)).toLowerCase();
   }
 
-  private getRootPrefix = async (): Promise<string> => {
+  private readonly getRootPrefix = async (): Promise<string> => {
     const api = APIService.getInstance();
     let prefix = api.config.prefix;
 

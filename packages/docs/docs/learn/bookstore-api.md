@@ -141,7 +141,7 @@ The next step is to create the database tables. Axe API uses the [knex.js](https
 Therefore, you should install the knex CLI on your machine.
 
 ```bash
-$ npm install -g knex
+$ npm install -g knex --ignore-scripts
 ```
 
 To create a migration file for each table, you can execute the following command:

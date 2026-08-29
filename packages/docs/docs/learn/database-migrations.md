@@ -21,7 +21,7 @@ First of all, we are using the `./migrations` directory to keep the migration fi
 To execute the migrations, you need to install the **Knex CLI** in your development environment;
 
 ```bash
-$ npm install -g knex
+$ npm install -g knex --ignore-scripts
 ```
 
 To test **knex CLI** is accessible, you can use the following command;
