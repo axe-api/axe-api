@@ -19,7 +19,7 @@ jobs:
 
       - name: Yarn Install
         working-directory: ./packages/docs
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
 
       - name: Build
         working-directory: ./packages/docs

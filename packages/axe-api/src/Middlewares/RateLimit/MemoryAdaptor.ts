@@ -2,7 +2,7 @@ import NodeCache from "node-cache";
 import { ICacheAdaptor } from "@/Interfaces";
 
 class MemoryAdaptor implements ICacheAdaptor {
-  private client: NodeCache;
+  private readonly client: NodeCache;
 
   constructor() {
     this.client = new NodeCache();

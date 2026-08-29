@@ -17,7 +17,7 @@ jobs:
           node-version: 26
       - name: Build the app
         run: |
-          npm ci
+          npm ci --ignore-scripts
           npm test
           npm run build
       - uses: JS-DevTools/npm-publish@v3

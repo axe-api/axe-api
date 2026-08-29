@@ -21,7 +21,7 @@ import { getModelCacheConfiguration } from "../Handlers/Helpers";
 import RedisAdaptor from "@/Middlewares/RateLimit/RedisAdaptor";
 
 class ModelResolver {
-  private version: IVersion;
+  private readonly version: IVersion;
 
   constructor(version: IVersion) {
     this.version = version;

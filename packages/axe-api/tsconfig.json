@@ -11,7 +11,7 @@
     "typeRoots": ["./types"],
     "lib": ["ESNext", "dom"],
     "paths": {
-      "@/*": ["./src/*"] // ← sadece bunu değiştir
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "index.ts", "types/**/*"]

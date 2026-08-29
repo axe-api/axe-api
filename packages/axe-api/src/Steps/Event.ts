@@ -3,7 +3,7 @@ import { IModelService, IStepDefinition } from "@/Interfaces";
 import { PhaseFunction } from "@/Types";
 
 class Event implements IStepDefinition {
-  private hookFunctionType: HookFunctionTypes;
+  private readonly hookFunctionType: HookFunctionTypes;
 
   constructor(hookFunctionType: HookFunctionTypes) {
     this.hookFunctionType = hookFunctionType;

@@ -8,7 +8,9 @@ import {
 
 const CustomSequencer: TestSequencerConstructor = class extends BaseSequencer {
   async sort(files: TestSpecification[]) {
-    return files.sort((a, b) => a.moduleId.localeCompare(b.moduleId)).reverse();
+    return files
+      .toSorted((a, b) => a.moduleId.localeCompare(b.moduleId))
+      .reverse();
   }
 };
 

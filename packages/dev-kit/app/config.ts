@@ -5,7 +5,7 @@ import ErrorHandler from "./v1/Handlers/ErrorHandler";
 const config: IApplicationConfig = {
   prefix: "api",
   env: process.env.NODE_ENV || "production",
-  port: process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000,
+  port: process.env.APP_PORT ? Number.parseInt(process.env.APP_PORT) : 3000,
   // hostname: "127.0.0.1",
   errorHandler: ErrorHandler,
   pino: {

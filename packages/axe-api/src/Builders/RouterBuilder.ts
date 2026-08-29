@@ -22,7 +22,7 @@ import { AxeFunction } from "@/Types";
 import App from "../Services/App";
 
 class RouterBuilder {
-  private version: IVersion;
+  private readonly version: IVersion;
 
   constructor(version: IVersion) {
     this.version = version;

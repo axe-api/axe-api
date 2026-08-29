@@ -24,9 +24,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: Install cli tools
-        run: npm install -g knex tsx
+        run: npm install -g knex@3.3.0 tsx@4.23.12
       - name: Testing all scenarions
         run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 20
 
@@ -42,8 +42,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: Install cli tools
-        run: npm install -g knex tsx
+        run: npm install -g knex@3.3.0 tsx@4.23.12
       - name: Testing all scenarions
         run: cd packages/integrations && sh ./run-tests.sh sqlite 5

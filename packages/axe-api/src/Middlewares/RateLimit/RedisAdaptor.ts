@@ -6,8 +6,8 @@ type RedisClientType = ReturnType<typeof createClient>;
 type RedisClientOptions = Parameters<typeof createClient>[0];
 
 class RedisAdaptor implements ICacheAdaptor {
-  private client: RedisClientType;
-  private prefix: string;
+  private readonly client: RedisClientType;
+  private readonly prefix: string;
   private isConnected: boolean;
 
   constructor(options: RedisClientOptions | undefined, prefix: string) {
