@@ -1,6 +1,6 @@
 import { Client, ClientOptions } from "@elastic/elasticsearch";
 import LogService from "./LogService";
-import { ISearchConfigutation } from "src/Interfaces";
+import { ISearchConfigutation } from "@/Interfaces";
 
 class ElasticService {
   private config: ISearchConfigutation;

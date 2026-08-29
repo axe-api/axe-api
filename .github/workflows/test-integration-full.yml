@@ -22,7 +22,7 @@ jobs:
             "cockroach",
             "sqlite",
           ]
-        node-version: [20.x, 22.x, 23.x, 24.x]
+        node-version: [24.x, 26.x]
     runs-on: ubuntu-latest
     env:
       TEST_USER: ${{ secrets.TEST_USER }}

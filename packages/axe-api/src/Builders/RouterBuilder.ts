@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import { paramCase, camelCase } from "change-case";
+import { kebabCase, camelCase } from "change-case";
 import { GeneralHookResolver } from "../Resolvers";
 import {
   IGeneralHooks,
@@ -18,7 +18,7 @@ import {
   APIService,
 } from "../Services";
 import URLService from "../Services/URLService";
-import { AxeFunction } from "src/Types";
+import { AxeFunction } from "@/Types";
 import App from "../Services/App";
 
 class RouterBuilder {
@@ -215,8 +215,8 @@ class RouterBuilder {
 
   private getResourcePath(model: IModelService, relation: IRelation | null) {
     return relation
-      ? paramCase(relation.name)
-      : paramCase(pluralize.plural(model.name)).toLowerCase();
+      ? kebabCase(relation.name)
+      : kebabCase(pluralize.plural(model.name)).toLowerCase();
   }
 
   private getRootPrefix = async (): Promise<string> => {

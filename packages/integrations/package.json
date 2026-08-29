@@ -29,15 +29,18 @@
   "dependencies": {
     "cors": "^2.8.6"
   },
+  "engines": {
+    "node": ">=26.0.0"
+  },
   "devDependencies": {
-    "@types/node": "^24.11.0",
-    "concurrently": "^9.2.1",
-    "knex": "^3.1.0",
-    "sqlite3": "^5.1.7",
+    "@types/node": "^26.4.0",
+    "concurrently": "^10.0.5",
+    "knex": "^3.3.0",
+    "sqlite3": "^6.0.1",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
   }
 }

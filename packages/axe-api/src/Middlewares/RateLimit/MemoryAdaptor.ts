@@ -1,5 +1,5 @@
 import NodeCache from "node-cache";
-import { ICacheAdaptor } from "src/Interfaces";
+import { ICacheAdaptor } from "@/Interfaces";
 
 class MemoryAdaptor implements ICacheAdaptor {
   private client: NodeCache;

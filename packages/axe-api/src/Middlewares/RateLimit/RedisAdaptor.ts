@@ -60,8 +60,9 @@ class RedisAdaptor implements ICacheAdaptor {
   }
 
   async searchTags(pattern: string) {
-    return await this.client.scan(0, {
+    return await this.client.scan("0", {
       MATCH: pattern,
+      COUNT: 100,
     });
   }
 }

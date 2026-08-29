@@ -9,8 +9,10 @@
     "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["./types"],
-    "baseUrl": ".",
-    "lib": ["ESNext", "dom"]
+    "lib": ["ESNext", "dom"],
+    "paths": {
+      "@/*": ["./src/*"] // ← sadece bunu değiştir
+    }
   },
-  "include": ["src/**/*", "index.ts"]
+  "include": ["src/**/*", "index.ts", "types/**/*"]
 }

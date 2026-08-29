@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import AxeError from "./AxeError";
-import { AxeErrorCode } from "src/Enums";
+import { AxeErrorCode } from "@/Enums";
 
 describe("AxeError", () => {
   it("should create an instance with provided code and message", () => {

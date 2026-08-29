@@ -9,7 +9,6 @@
     "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["./types"],
-    "baseUrl": ".",
     "lib": ["ESNext", "dom"]
   },
   "include": ["src/**/*", "index.ts", "dev-kit.ts", "dev-kit/**/*"]

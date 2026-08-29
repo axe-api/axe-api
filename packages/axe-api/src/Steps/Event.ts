@@ -1,6 +1,6 @@
-import { HookFunctionTypes } from "src/Enums";
-import { IModelService, IStepDefinition } from "src/Interfaces";
-import { PhaseFunction } from "src/Types";
+import { HookFunctionTypes } from "@/Enums";
+import { IModelService, IStepDefinition } from "@/Interfaces";
+import { PhaseFunction } from "@/Types";
 
 class Event implements IStepDefinition {
   private hookFunctionType: HookFunctionTypes;
