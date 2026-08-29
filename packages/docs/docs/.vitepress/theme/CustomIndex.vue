@@ -9,73 +9,11 @@ const { Layout } = DefaultTheme;
     <template #home-hero-info>
       <div class="container">
         <img src="/viking.png" class="viking" />
-        <h2 class="main-brand yellow">Axe API</h2>
+        <h2 class="main-brand indigo">Axe API</h2>
         <h1 class="text title">
-          A <span class="indigo">framework</span> to build
-          <span class="indigo">Rest API</span>
+          It's <span class="yellow">deprecated!</span> <br />
+          Find something else.
         </h1>
-        <div class="button-container">
-          <a class="button primary" href="/learn/quick-start">
-            Getting started
-          </a>
-          <a class="button secondary" href="/reference/api-configs">
-            API References
-          </a>
-        </div>
-        <a
-          href="https://www.producthunt.com/posts/axe-api?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-axe&#0045;api"
-          target="_blank"
-          ><img
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=404818&theme=light"
-            alt="Axe&#0032;API - The&#0032;next&#0045;generation&#0032;Rest&#0032;API&#0032;framework | Product Hunt"
-            style="width: 250px; height: 54px"
-            width="250"
-            height="54"
-        /></a>
-      </div>
-
-      <div class="description-section">
-        <div class="description-box">
-          "This is the framework that is missing to build Rest API with best
-          practices. It's build on <span class="important">TypeScript</span>.
-          Supports all major RDBMS such as
-          <span class="important">PostgreSQL</span>,
-          <span class="important">MSSQL</span>,
-          <span class="important">MySQL</span>,
-          <span class="important">MariaDB</span>,
-          <span class="important">Oracle</span> and
-          <span class="important">Amazon Redshift</span>."
-        </div>
-      </div>
-
-      <div class="box-sections">
-        <div class="box">
-          <p>Frontend developers are going crazy!</p>
-          <p>
-            Many APIs are out there with a lack of documentation and
-            inconsistent design. Yet you can find millions of blog posts
-            discussing the Best Practices of APIs! Backend developers claim they
-            know how to design a high-quality API, but finding a good example is
-            not easy.
-          </p>
-
-          <p>It is a total mess!</p>
-
-          <p>
-            Think about how many times you've seen stale API documentation.
-            Nobody has time to maintain it! What about inconsistency in routes?
-            Or, <b>over-fetching</b> and <b>under-fetching</b> issues?
-          </p>
-
-          <p class="oversize">It should NOT be that hard!</p>
-          <p>
-            Instead, building a Rest API should be easy. We know how to build
-            very well. But the missing part is a framework that is designed to
-            build API.
-          </p>
-
-          <p>That’s where <span class="brand">Axe API</span> comes in.</p>
-        </div>
       </div>
 
       <h2 class="h2">Features</h2>
