@@ -16,7 +16,7 @@ vi.mock("fs", async (importActual) => {
 const memoryCache = {};
 vi.mock("node-cache", () => {
   return {
-    default: vi.fn().mockImplementation(() => {
+    default: vi.fn().mockImplementation(function () {
       return {
         get: vi.fn((key) => memoryCache[key]),
         set: vi.fn((key, val) => {

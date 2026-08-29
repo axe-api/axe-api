@@ -5,13 +5,19 @@ import { API_ROUTE_TEMPLATES } from "../constants";
 import { LogService, IoCService, DocumentationService } from "../Services";
 import URLService from "../Services/URLService";
 
-vi.mock("../Resolvers/GeneralHookResolver", () => ({
-  default: vi.fn().mockImplementation(() => ({
-    resolve: vi
-      .fn()
-      .mockResolvedValue({ onBeforeInit: null, onAfterInit: null }),
-  })),
-}));
+vi.mock("../Resolvers", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    GeneralHookResolver: vi.fn().mockImplementation(function () {
+      return {
+        resolve: vi
+          .fn()
+          .mockResolvedValue({ onBeforeInit: null, onAfterInit: null }),
+      };
+    }),
+  };
+});
 
 vi.mock("../Services", () => ({
   LogService: {
