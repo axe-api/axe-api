@@ -7,8 +7,8 @@ This is a documentation of Axe API build on VuePress.
 ```bash
 $ git clone git@github.com:axe-api/docs.git
 $ cd docs
-$ yarn
-$ yarn start
+$ npm
+$ npm run start
 ```
 
 ## Issues

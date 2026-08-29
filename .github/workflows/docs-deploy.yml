@@ -17,13 +17,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Yarn Install
+      - name: npm Install
         working-directory: ./packages/docs
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: npm ci --ignore-scripts
 
       - name: Build
         working-directory: ./packages/docs
-        run: yarn docs:build
+        run: npm run docs:build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
