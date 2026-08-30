@@ -20,7 +20,7 @@ jobs:
           npm ci --ignore-scripts
           npm test
           npm run build
-      - uses: JS-DevTools/npm-publish@v3
+      - uses: JS-DevTools/npm-publish@v4
         with:
           package: packages/axe-api/package.json
           token: ${{ secrets.NPM_TOKEN }}
