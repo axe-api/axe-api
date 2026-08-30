@@ -1,11 +1,15 @@
 <script setup>
 import DefaultTheme from "vitepress/theme";
+import DeprecationBanner from "./DeprecationBanner.vue";
 
 const { Layout } = DefaultTheme;
 </script>
 
 <template>
   <Layout>
+    <template #layout-top>
+      <DeprecationBanner />
+    </template>
     <template #home-hero-info>
       <div class="container">
         <img src="/viking.png" class="viking" />

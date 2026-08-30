@@ -23,6 +23,18 @@
   </a>
 </h1>
 
+# ⚠️ DEPRECATED
+
+> **This package is no longer maintained.**
+
+Version **v2** is the final release. No future versions will be published.
+
+## Why?
+
+This package has reached the end of its life. Thank you to everyone who used and contributed to it.
+
+## Axe API
+
 **Axe API** is a **TypeScript-based** **Node.js** framework designed to eliminate the need for repetitive tasks associated with common elements while allowing developers to focus on custom logic.
 
 It offers a comprehensive structure for your API, including numerous features and best practices that will save you time.
