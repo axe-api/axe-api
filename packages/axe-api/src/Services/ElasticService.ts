@@ -1,10 +1,10 @@
 import { Client, ClientOptions } from "@elastic/elasticsearch";
 import LogService from "./LogService";
-import { ISearchConfigutation } from "src/Interfaces";
+import { ISearchConfigutation } from "@/Interfaces";
 
 class ElasticService {
-  private config: ISearchConfigutation;
-  private client: Client;
+  private readonly config: ISearchConfigutation;
+  private readonly client: Client;
 
   constructor(config: ISearchConfigutation, options: ClientOptions) {
     this.config = config;

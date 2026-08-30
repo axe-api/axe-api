@@ -1,10 +1,10 @@
 import { ServerResponse } from "http";
-import { StatusCodes } from "src/Enums";
-import { ILanguage } from "src/Interfaces";
+import { StatusCodes } from "@/Enums";
+import { ILanguage } from "@/Interfaces";
 
 class AxeResponse {
-  private response: ServerResponse;
-  private language: ILanguage;
+  private readonly response: ServerResponse;
+  private readonly language: ILanguage;
 
   constructor(response: ServerResponse, language: ILanguage) {
     this.response = response;

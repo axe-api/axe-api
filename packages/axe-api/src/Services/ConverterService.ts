@@ -13,7 +13,7 @@ import {
   MiddlewareFunction,
   PhaseFunction,
   AxeFunction,
-} from "src/Types";
+} from "@/Types";
 
 export const toAxeRequestResponsePair = (
   request: IncomingMessage,

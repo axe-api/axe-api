@@ -18,10 +18,10 @@ import { ALL_HANDLERS, DEFAULT_METHODS_OF_MODELS } from "../constants";
 import { SchemaInspectorFunction, SerializationFunction } from "../Types";
 import AxeError from "../Exceptions/AxeError";
 import { getModelCacheConfiguration } from "../Handlers/Helpers";
-import RedisAdaptor from "src/Middlewares/RateLimit/RedisAdaptor";
+import RedisAdaptor from "@/Middlewares/RateLimit/RedisAdaptor";
 
 class ModelResolver {
-  private version: IVersion;
+  private readonly version: IVersion;
 
   constructor(version: IVersion) {
     this.version = version;

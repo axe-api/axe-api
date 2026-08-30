@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import { snakeCase } from "snake-case";
+import { snakeCase } from "change-case";
 import {
   IRelation,
   IMethodBaseConfig,

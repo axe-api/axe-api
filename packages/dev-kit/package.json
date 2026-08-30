@@ -22,12 +22,15 @@
   "bugs": {
     "url": "https://github.com/axe-api/axe-api/issues"
   },
+  "engines": {
+    "node": ">=26.0.0"
+  },
   "dependencies": {
     "axe-api": "file:../axe-api",
     "cors": "^2.8.6"
   },
   "devDependencies": {
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
   }
 }

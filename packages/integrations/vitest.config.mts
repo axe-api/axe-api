@@ -1,10 +1,16 @@
 // vitest.config.ts
 import { defineConfig } from "vitest/config";
-import { BaseSequencer, TestSequencerConstructor } from "vitest/node";
+import {
+  BaseSequencer,
+  TestSequencerConstructor,
+  TestSpecification,
+} from "vitest/node";
 
 const CustomSequencer: TestSequencerConstructor = class extends BaseSequencer {
-  async sort(files) {
-    return files.sort((a, b) => a["1"].localeCompare(b["1"])).reverse();
+  async sort(files: TestSpecification[]) {
+    return files
+      .toSorted((a, b) => a.moduleId.localeCompare(b.moduleId))
+      .reverse();
   }
 };
 
@@ -21,10 +27,7 @@ export default defineConfig({
     },
     pool: "forks",
     fileParallelism: false,
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    maxWorkers: 1,
+    isolate: false,
   },
 });

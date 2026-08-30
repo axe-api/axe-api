@@ -22,7 +22,7 @@ jobs:
             "cockroach",
             "sqlite",
           ]
-        node-version: [20.x, 22.x, 23.x, 24.x]
+        node-version: [24.x, 26.x]
     runs-on: ubuntu-latest
     env:
       TEST_USER: ${{ secrets.TEST_USER }}
@@ -35,8 +35,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
+      - name: Build native modules
+        run: npm rebuild sqlite3
       - name: Install cli tools
-        run: npm install -g knex tsx
+        run: npm install -g knex@3.3.0 tsx@4.23.12 --ignore-scripts
       - name: Testing all scenarions
         run: cd packages/integrations && sh ./run-tests.sh ${{ matrix.database }} 20

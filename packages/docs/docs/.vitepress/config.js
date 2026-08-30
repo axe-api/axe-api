@@ -365,6 +365,11 @@ export default defineConfig({
   themeConfig: {
     logo: "/viking.png",
 
+    banner: {
+      key: "deprecated",
+      text: "⚠️ This package is deprecated. v2 is the final release and no future versions will be published.",
+    },
+
     editLink: {
       pattern: "https://github.com/axe-api/docs/edit/master/docs/:path",
       text: "Edit this page on GitHub",

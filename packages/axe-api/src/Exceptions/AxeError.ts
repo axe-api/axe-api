@@ -1,4 +1,4 @@
-import { AxeErrorCode } from "src/Enums";
+import { AxeErrorCode } from "@/Enums";
 
 class AxeError extends Error {
   type: string;
