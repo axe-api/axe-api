@@ -86,7 +86,7 @@
     "@types/accept-language-parser": "^1.5.8",
     "@types/aws-lambda": "^8.10.161",
     "@types/cors": "^2.8.19",
-    "@types/formidable": "^3.4.7",
+    "@types/formidable": "^3.5.1",
     "@types/multer": "^1.4.13",
     "@types/pluralize": "^0.0.33",
     "@types/validatorjs": "^3.15.5",
